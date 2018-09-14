@@ -4,14 +4,13 @@ include::_attributes.adoc[]
 endif::[]
 :keywords: mule, sdk, sources, listener, triggers, lifecycle
 
-Unlike operations which lifecycle is tied to that of the owning Flow, sources can be started or stopped
-separately through the Runtime manager.
+Unlike operations, where the lifecycle is tied to the owning Flow, sources can be started or stopped separately through Runtime Manager.
 
-To support that, The `Source` class forces you to implement two methods, `onStart()` and `onStop()`
+To support that, the `Source` class forces you to implement the `onStart()` and `onStop()` methods.
 
 == On Start
 
-Let's look at an example from the VM connector to see how the `onStart()` method actually looks like:
+This example from the VM connector shows the `onStart()` method:
 
 [source,java,linenums]
 ----
@@ -21,16 +20,15 @@ public void onStart(SourceCallback<Serializable, VMMessageAttributes> sourceCall
 }
 ----
 
-In this method, you have to initialize all the resources (such as threads, schedulers, connections, etc) you need in order to produce messages. If an exception or error
-condition is found trying to do that, then you have to:
+In this method, you have to initialize all the resources (such as threads, schedulers, connections, and so on) that you need so that you can produce messages. If an exception or error condition is found trying to do that, then you have to:
 
-* Release any resources you did got to allocate
-* Throw an exception with a meaningful message
+* Release any resources you did got to allocate.
+* Throw an exception with a meaningful message.
 
-If the source fails to start, so does the application that contains it.
+If the source fails to start, the app that contains it will fail to start.
 
 [TIP]
-All of the source parameters values that were defined through the `@Parameter` annotation are already resolved and available at this point.
+All of the source parameters values that defined through the `@Parameter` annotation are resolved and available at this point.
 
 === SourceCallback
 

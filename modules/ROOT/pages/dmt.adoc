@@ -1,0 +1,132 @@
+= DevKit Migration Tool
+ifndef::env-site,env-github[]
+include::_attributes.adoc[]
+endif::[]
+:keywords: mule, sdk, devkit, migration, migrate, connector
+
+The DevKit Migration Tool (DMT) helps you migrate from a Connector built with DevKit that runs on Mule 3.x to a project that is compatible with Mule 4 SDK.
+
+Anypoint Connector DevKit is not compatible with Mule 4. If you developed your own DevKit project for Mule 3, you’ll need to migrate it to the new SDK in order to use it in a Mule 4 application.
+
+== Compatibility Rules
+
+When migrating a connector, be aware of the compatibility rules:
+
+* Migration is guaranteed only for the latest DevKit versions (3.8.0 or higher).
+* Connectors that do not respect the latest verifications or that use deprecated components or annotations won't be taken into account if any problem occurs while migrating.
+* Some concepts don't exist in Mule 4. This tool won't migrate pieces which are affected by unsupported components, and might migrate code that fails to follow the best practices that MuleSoft enforces in the SDK.
+* Some features are very different in Mule 4, such as the DataSense model.
+
+Features that won't be migrated include:
+
+  * Inbound/outbound message properties
+  * The ability to directly manipulate the Mule Message/Event
+  * Ability to change or query variables
+
+After the migration, you might need to change the code or behavior in your module for the features that are no longer supported.
+
+== Migrating a DevKit Connector
+
+DMT migrates your project, performing the heavy
+lifting for you. However, you must review and adjust the migration results.
+
+*Manual work is required to make your project work properly*.
+
+The DMT performs these tasks for you:
+
+* Generates new source code compatible with the new SDK extension model, which wraps the current connector code as it would any other Java library
+* Delegates responsibility for the code to the already-tested connector code
+* Marks errors with inline comments in the generated code and points you to documentation that explains next steps to resolve the errors
+
+== Running DMT
+
+. Open the connector's `pom.xml` file and find the `parent` artifact:
+
++
+[source,xml,linenums]
+----
+<parent>
+  <groupId>org.mule.tools.devkit</groupId>
+  <artifactId>mule-devkit-parent</artifactId>
+  <version>3.9.4</version>
+</parent>
+----
+
+. Change the values of `artifactId` and `version`:
+
++
+[source,xml,linenums]
+----
+<parent>
+  <groupId>org.mule.tools.dmt</groupId>
+  <artifactId>mule-dmt</artifactId>
+  <version>1.0.0</version>
+</parent>
+----
+
+. Now that the `parent` has been changed, build your connector from the IDE or the command line:
+
++
+----
+mvn clean package
+----
+
++
+Test classes aren't run, migrated, or copied because they won't compile using the SDK. If you
+want to keep test classes in the migrated project, build the connector with the property `-DexcludeTests=false`.
+
++
+----
+mvn clean package -DexcludeTests=false
+----
+
+Once the process finishes, a `Build Success` message is displayed.
+The generated extension project is placed under the `_{rootdir}/target/generated-sources/extension_` folder.
+
+image::dmt.png[folder structure]
+
+== Supported Components
+
+The following elements of a DevKit connector are ported to the new extension representation.
+
+* Processors
++
+All the processors are migrated to Operations, all within the same class.
+Parameters of the Processor should be reflected in the Operation parameters and
+also elements as Config or injected fields present in the old Connector that should
+be set up are passed in as parameters.
++
+See xref:operations.adoc[SDK Operations Documentation Reference] to learn more about extension operations.
+
+* Sources
++
+Both polling and triggered sources are migrated to a new Source class.
++
+By default, code for Sources compiles and runs, but comments are added to the generated sources classes so you can improve the usability of your recently migrated connector.
++
+See: xref:sources.adoc[SDK Sources Documentation Reference] to learn more about extension sources.
+
+* Connection Strategies
++
+Both @Configuration and @ConnectionManagement strategies are migrated.
++
+See: xref:connections.adoc[Connections in the SDK] to learn more about connections.
+
+* Configuration
++
+@Configuration strategies are migrated to a CachedConnectionProvider, which provides a single connection instance for all operations until that connection is stopped.
+
+* Connection Management
++
+@ConnectionManagement strategies are migrated to a PoolingConnectionProvider, so the generated
+connections are pooled. A cache of connections is maintained so that they can be reused when future requests require one.
++
+If the @ConnectionManagement connect method is marked as "Single Instance," it is migrated to a CachedConnectionProvider, as @Configuration strategies are migrated.
+
+These elements are also supported:
+
+* xref:object-streaming.adoc[Paged Operations]
+* xref:metadata.adoc[Metadata] (MetaData Objects are not migrated, manual migration to the MetadataTypes is required)
+* xref:connections.adoc[OAuth Connection Strategy]
+* xref:parameter-layout.adoc[Display Annotations]
+* xref:errors.adoc[OnException Handlers]

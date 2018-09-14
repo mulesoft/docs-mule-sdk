@@ -42,7 +42,7 @@ public class SingleConfigModule {
 
 ----
 
-The example above shows the full skeleton of a module with one single configuration.
+The example above shows the full skeleton of a module with a single configuration.
 You can see how the same class that declares the extension with all its operations,
 sources, connections, and so on, is also enriched with `@Parameter` annotated fields,
 which will translate into the configuration's parameters.

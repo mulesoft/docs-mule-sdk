@@ -64,7 +64,7 @@ The example above uses the `MetadataContext` only to obtain the `typeLoader` for
 
 == Using the OutputTypeResolver
 
-After you have a `TypesKeysResolver` and an `OutputTypeResolver`, you can add output DataSense support to our Operations and Sources. The main restriction to using an `OutputTypeResolver` with a given `TypesKeysResolver` is that both must belong to the same `category`, which guarantees that the `MetadataKey` provided by the `TypesKeysResolver` can be resolved to a `MetadataType` by the `OutputTypeResolver`:
+After you have a `TypeKeysResolver` and an `OutputTypeResolver`, you can add output DataSense support to our Operations and Sources. The main restriction to using an `OutputTypeResolver` with a given `TypeKeysResolver` is that both must belong to the same `category`, which guarantees that the `MetadataKey` provided by the `TypeKeysResolver` can be resolved to a `MetadataType` by the `OutputTypeResolver`:
 
 === Adding DataSense for the Result Payload
 

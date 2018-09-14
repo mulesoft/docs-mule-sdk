@@ -73,5 +73,5 @@ Whenever you want to obtain a dynamic element for DataSense, you implement a met
 
 * Resolver Name: Name that uniquely identifies a given metadata resolver. Different resolvers can belong to the same `category` but _must_ have different resolver names.
 
-* Metadata Context: Provides access to the all the configuration and connection
-elements used during the metadata fetch invocation, along with a set of utility components, such as a `TypeLoader` and a `TypeBuilder`. Is important to always use the implementations provided by the context when creating a dynamic type.
+* Metadata Context: Provides access to all the configuration and connection
+elements used during the metadata fetch invocation, along with a set of utility components, such as a `TypeLoader` and a `TypeBuilder`. It is important to always use the implementations provided by the context when creating a dynamic type.

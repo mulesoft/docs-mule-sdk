@@ -166,3 +166,22 @@ This example uses features explained above:
 @Text
 private String biography;
 ----
+
+== @ClassValue
+*Available since version 1.1*
+
+Indicates that a parameter is a reference to a class name.
+
+Note that this annotation should only be used in parameters of `String` type.
+
+Besides hinting to the tooling that the parameter is a class, it also allows you to specify restrictions on the classes that can be
+referenced. It can indicate that the assigned values must extend or implement (`extendsOrImplements`) specific classes or interfaces.
+
+Consider a Database connector that requires the end user to provide the class name of the JDBC Driver to be used, for example:
+
+[source,java,linenums]
+----
+@Parameter
+@ClassValue(extendsOrImplements = "java.sql.Driver")
+private String driverClassName;
+----

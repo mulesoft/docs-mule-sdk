@@ -8,6 +8,7 @@ In Mule, errors are a way of communicating that something went wrong and providi
 
 See xref:4.1@mule4-runtime::error-handling.adoc[About Error Handling] for more detail.
 
+
 == Defining Module Errors
 
 The first step is to define all the errors that can be thrown by a Module. To do so, you define an `enum` that implements the `ErrorTypeDefinition` interface.
@@ -18,7 +19,7 @@ Each value defined in this `enum` is considered to be an Error.
 public enum SimpleError implements ErrorTypeDefinition<SimpleError> {
       INVALID_PARAMETER,
       TIME_OUT,
-      NOT ALLOWED
+      NOT_ALLOWED
 }
 ----
 

@@ -45,7 +45,7 @@ For any new SDK feature, the documentation includes the version in which it was 
 [TIP]
 The recommended approach is to start all your projects using version `1.0.0` and only upgrade the versions as you face the need for particular features.
 
-Following these guidelines will make your module compatible with a wider number of Mule Runtime versions, so more people will be able to use your module. If you do require features from newer versions, then there is no good reason for you to use the newer versions.
+Following these guidelines will make your module compatible with a wider number of Mule Runtime versions, so more people will be able to use your module. If you do not require features from newer versions, then there is no good reason for you to use the newer versions.
 
 
 == What If There Is a Bug in the SDK?

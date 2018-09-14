@@ -64,7 +64,7 @@ or access an static resource present in the Configuration like an schema.
 Now that we have a `TypesKeysResolver` and an `InputTypeResolver` we can add input
 DataSense support on our Operations and Sources.
 The main restriction to use an `InputTypeResolver` along with a given `TypesKeysResolver` is that both
-have to belong to the same `category`, so we can can guarantee that the `MetadataKey` provided by the
+have to belong to the same `category`, so we can guarantee that the `MetadataKey` provided by the
 `TypesKeysResolver` can be resolved to a `MetadataType` by the `InputTypeResolver`:
 
 [source,java,linenums]

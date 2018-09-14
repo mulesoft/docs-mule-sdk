@@ -1,0 +1,29 @@
+= Advanced Sources Settings
+ifndef::env-site,env-github[]
+include::_attributes.adoc[]
+endif::[]
+
+== @ClusterSupport
+
+*Available since version 1.1*
+
+You can use this annotation to indicate how the Source behaves when the Mule Runtime is running in Cluster mode, for example:
+
+[source,java,linenums]
+----
+@ClusterSupport(DEFAULT_PRIMARY_NODE_ONLY)
+public class JmsListener extends Source<Object, JmsAttributes> {
+// ...
+}
+----
+
+The `@ClusterSupport` annotation takes a parameter of type `SourceClusterSupport`, which can take the following values:
+
+* NOT_SUPPORTED: The source does not support cluster mode, so it only runs on the primary node. If the primary node crashes, a new primary node will be designated, and the source will be started on it.
+* DEFAULT_ALL_NODES: Runs on all the cluster nodes by default, but the user can choose to only run on the primary one.
+* DEFAULT_PRIMARY_NODE_ONLY: Only runs on the primary node by default, but the user can choose to run on all the nodes.
+
+When the selected value is other than `NOT_SUPPORTED`, a parameter named `primaryNodeOnly` is automatically added so you can configure whether the source should run in all nodes or just the primary ones.
+
+[TIP]
+Notice that when this parameter is added, it will be optional, and its default value will depend on the selected cluster support mode.

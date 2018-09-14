@@ -1,0 +1,165 @@
+= Custom Static Metadata
+ifndef::env-site,env-github[]
+include::_attributes.adoc[]
+endif::[]
+
+*Available since version 1.1*
+
+We’ll use Static Metadata to reference the Metadata that is known at compile time an
+available from the types in the connector’s jar. Simple java types are part of this
+static Metadata, as well as custom POJOs defined by the developer in its model. The
+relevant part is that the structure is well known or can be introspected, without depending on other Parameters.
+
+The advantage of static metadata over dynamic is that, because it does not change,
+there is no need to recalculate its structure. This means that the resolution is
+already done when developing an application.
+
+
+When working with simple java types or POJOs as return or parameter types the SDK will create
+a proper static type for the element, but when your type is not defined as a java object (e.g. Json Schema, XSD, etc)
+you know exactly the structure of the type you are working with, you need to use the
+custom static metadata capabilities that the SDK provides.
+
+== XML and JSON Types
+
+Operations may require parameters to be JSON or XML types that follow a certain structure (schema).
+It is possible to signal this to DataSense using the proper XSD or JSON schemas.
+
+NOTE: this will only work for `InputStream` and `String` java type parameters.
+
+=== JSON Type
+
+To determine the structure of a JSON type, a JSON schema must be provided.
+
+* `@OutputJsonType`
+
+[source,java,linenums]
+----
+@OutputJsonType(schema = "person-schema.json")
+public Result<InputStream, RetrieveAttributes> retrievePerson() {
+  // ...
+}
+----
+
+* `@AttributesJsonType`
+
+[source,java,linenums]
+----
+@AttributesJsonType(schema = "resolution-attributes-schema.json")
+public Result<Integer, InputStream> getSolution() {
+  // ...
+}
+----
+
+* @`InputJsonType`
+
+[source,java,linenums]
+----
+public void addPerson(@InputJsonType(schema = "person-schema.json") InputStream person) {
+  // ...
+}
+----
+
+=== XML Type
+
+To determine the structure of an XML, you must provide an XSD file and the qualified name
+that is used to reference the element to be loaded.
+
+* `@OutputXmlType`
+
+[source,java,linenums]
+----
+@OutputXmlType(schema = "order.xsd", qname = "shiporder")
+public Result<InputStream, OrderAttributes> retrieveOrder() {
+  // ...
+}
+----
+
+* `@AttributesXmlType`
+
+[source,java,linenums]
+----
+@AttributesXmlType(schema = "order-attributes.xsd", qname = "attributes")
+public Result<Integer, InputStream> getOrderStatistics() {
+  // ...
+}
+----
+
+* `@InputXmlType`
+
+[source,java,linenums]
+----
+public void createOrder(@InputXmlType(schema = "order.xsd", qname = "shiporder") InputStream order) {
+  // ...
+}
+----
+
+== Static Type Resolvers
+
+The way to resolve custom static metadata for input parameters, output payload or output attributes
+is very similar and it is shown on the next examples:
+
+On each example, the resolvers extends of an abstract class that implements `StaticResolver`.
+`getStaticMetadata` is the method that has to be implemented in order to resolve the metadata.
+
+=== InputStaticTypeResolver
+
+To use custom static metadata resolution on the input parameters of an operation, you
+must annotate the parameter with `@TypeResolver` and the value for the annotation must be
+a `InputStaticTypeResolver`.
+
+This is an example of a `InputStaticTypeResolver`, it must implement the method `getStaticMetadata`:
+
+[source,java,linenums]
+----
+public class JsonPersonInputStaticTypeResolver extends InputStaticTypeResolver {
+  @Override
+  public MetadataType getStaticMetadata() {
+    ObjectTypeBuilder object = BaseTypeBuilder.create(MetadataFormat.JSON).objectType();
+    object.id("json-object");
+    object.addField().key("name").value().stringType();
+    object.addField().key("last-name").value().stringType();
+    return object.build();
+  }
+}
+----
+
+=== OutputStaticTypeResolver
+
+to use custom static metadata resolution on the output payload of an operation, you
+must annotate the method with `@OutputResolver` and the output value for the annotation must be
+a `OutputStaticTypeResolver`.
+
+This is an example of a `OutputStaticTypeResolver`, it must implement the method `getStaticMetadata`:
+
+[source,java,linenums]
+----
+public class CsvOutputStaticTypeResolver extends OutputStaticTypeResolver {
+  @Override
+  public MetadataType getStaticMetadata() {
+    return BaseTypeBuilder.create(MetadataFormat.CSV).objectType().id("csv-object").build();
+  }
+}
+----
+
+=== AttributesStaticTypeResolver
+
+to use custom static metadata resolution on the output attributes of an operation, you
+must annotate the method with `@OutputResolver` and the attributes value for the annotation must be
+a `OutputStaticTypeResolver`.
+
+This is an example of a `AttributesStaticTypeResolver`, it must implement the method `getStaticMetadata`:
+
+[source,java,linenums]
+----
+public class CsvAttributesStaticTypeResolver extends AttributesStaticTypeResolver {
+
+  @Override
+  public MetadataType getStaticMetadata() {
+    ObjectTypeBuilder object = BaseTypeBuilder.create(MetadataFormat.CSV).objectType();
+    object.addField().key("location").value().stringType();
+    object.addField().key("size").value().numberType();
+    return object.build();
+  }
+}
+----

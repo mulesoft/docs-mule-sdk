@@ -1,0 +1,284 @@
+= Technical Guidelines for Connector Certifications
+ifndef::env-site,env-github[]
+include::_attributes.adoc[]
+endif::[]
+:keywords: connector, certification, sdk, program guidelines
+
+. Set up your development environment using these sections from _Getting Started with the Mule SDK_:
++
+* xref:getting-started.adoc#setup[Setting Up Your Development Environment]
+* xref:getting-started.adoc#setup_ide[Setting Up Your IDE]
++
+////
+*  Install this software:
++
+* Java Development Kit 8 (JDK 8) to compile and build your Java code.
+* Apache Maven (version 3.3.9 or higher) to manage your project’s build
++
+. Set up your IDE.
++
+////
++
+. Create or migrate your connector:
++
+* If you are a partner or developer, create a Mule 4 connector.
+.. Run this command:
++
+`mvn org.mule.extensions:mule-extensions-archetype-maven-plugin:generate`
++
+.. Complete the configuration through the console:
++
+** Provide the name of your extension, for example: `cookbook`
+** When you receive a request for the `groupId`, accept the default.
+** Specify the `artifactId` of _your_ extension, for example: `cookbook-connector`
+** Specify the version of your extension.
++
+If this is your first connector, use `1.0.0`. If not, create the major version from your last connector. For example, the latest version of AS/400 Connector is `v1.0.2` for Mule 3. For Mule 4, the connector version is `v2.0.0`.
+** When you receive a request for the main package of your extension, accept the default.
++
+* If you want to migrate existing Mule 3 connectors to Mule 4, use a migration tool:
++
+.. Change your Devkit `version` as follows:
++
+----
+<parent>
+  <groupId>org.mule.tools.dmt</groupId>
+  <artifactId>mule-dmt</artifactId>
+  <version>1.0.0</version>
+</parent>
+----
++
+Note that `0.9.0` is a beta version of the Migration tool. See the <<question_1, FAQ>> for details.
++
+.. Use the `mvn clean package -Dmaven.test.skip` command.
++
+The generated Mule 4 extension appears in the target folder.
++
+.. If the migration tool reports errors indicating that it cannot auto-migrate parts of your connector, resolve these errors before continuing.
+. Update your `pom.xml` file:
++
+* Locate these `<parent/>` settings:
++
+----
+<parent>
+  <groupId>org.mule.extensions</groupId>
+  <artifactId>mule-modules-parent</artifactId>
+  <version>1.0.0</version>
+</parent>
+----
++
+* Change the settings to this:
++
+----
+<parent>
+  <groupId>org.mule.connectors</groupId>
+  <artifactId>mule-certified-parent</artifactId>
+  <version>1.1.0</version>
+</parent>
+----
++
+. Add one of the following sets of annotations to your `Extension.java`:
++
+* For MuleSoft Certified Connectors (Free):
++
+.Example: Annotations for Azure Storage
+[sounce,annotations,linenums]
+----
+@Extension(name = “Azure Storage”, category = CERTIFIED, vendor = “Whishworks")
+@RequiresEnterpriseLicense(allowEvaluationLicense = true)
+----
+* For MuleSoft Certified Connectors (Additional Fee):
++
+.Example: Annotations for SAP Hybris
+[sounce,annotations,linenums]
+----
+@Extension(name = “SAP Hybris”, category = CERTIFIED, vendor = “Admios")
+@RequiresEnterpriseLicense
+@RequiresEntitlement(name = “sap-hybris-connector")
+----
++
+. Add folders for `doc`, `icon`, and `demo`.
++
+* Connector Icon (SVG format): `connector_root_project/icon/icon.svg`
+* Add the following docs (https://drive.google.com/file/d/1jB4uDCjOFhPtEttmnTxYERktdzd0AwSF/view[user-manual.adoc] and https://drive.google.com/file/d/1ZzJGJAN8pIOx_mI9d2xKTAXt-tubcwSS/view?usp=sharing[release-notes.adoc]) to the `doc` folder.
++
+. Add `License.md` if it is not in the root folder already:
++
+[source,text,linenums]
+----
+About MuleSoft Certified Connectors
+
+MuleSoft Certified Connectors are developed by MuleSoft’s partners and developer community. These connectors have been reviewed and certified by MuleSoft. To purchase the [Connector Name] Connector or to receive assistance or support for it, contact [Partner Name] directly at [Contact Information]. MuleSoft disclaims any support obligation for MuleSoft Certified Connectors.
+
+By installing this connector, you consent to MuleSoft sharing your contact information with the developer of this connector so that you can receive more information about it directly from the developer.
+
+Your license terms
+----
++
+You can develop or add operations to your connector by following the <<index, Mule SDK documentation>>.
++
+After you complete the preceding steps, the structure of your connector is ready for Mule 4.
++
+. Add unit, functional, and integration test cases for your connectors by following xref:testing.adoc[Testing Your Module].
++
+Note that your connector needs test coverage of at least 65%.
++
+. Add your connector to Connectivity Assets Manager.
++
+You can use your existing account for Connectivity Assets Manager. If you do not have an account, contact MuleSoft.
+
+== FAQ
+
+[[question_1]]
+*Is there a kit or tool for migrating DevKit to Mule 4 SDK?*
+
+* Yes. The migration tool will be available for its GA in Q2, 2018. You can use the beta version in the meantime.
++
+----
+<parent>
+  <groupId>org.mule.tools.dmt</groupId>
+  <artifactId>mule-dmt</artifactId>
+  <version>1.0.0</version>
+</parent>
+----
+
+[[question_2]]
+*Where is a sample SDK connector project?*
+
+* The steps described in this guide let you create a structure of a connector project. Until Cookbook Connector is updated, you can use Slack Connector as an example. See https://github.com/mulesoft/slack-connector/tree/develop-4.x[mulesoft/slack-connector].
+
+[[question_3]]
+*How can I import a project into Studio 7, and how can I test and add it to Studio?*
+
+* Functionality for importing a connector project into Studio 7 is not available at this time.
++
+You can install your connector to Studio 7 using this command to create a connector for use in Studio 7:
+`mvn clean install`
++
+See <<local_install, Installation Example>> for detailed steps.
+
+[[question_4]]
+*How can I make a connector available in Anypoint Design Center?*
+
+* To test your connector in Design Center, publish your connector into your organization in Exchange.
++
+You should see a `pom.xml` something like this once you are done:
++
+----
+<modelVersion>4.0.0</modelVersion>
+<groupId>org.mule.extension</groupId>
+<artifactId>cookbook-connector</artifactId>
+<version>1.0.0</version>
+<packaging>mule-extension</packaging>
+<name>Cookbook Extension</name>
+----
++
+Follow these steps:
++
+. Create an Anypoint Platform account.
++
+Note that this account must be different from the account you use with Connectivity Assets Manager.
++
+. Add Anypoint credentials to the local Maven `settings.xml` file with the `private-exchange` server ID.
+. Rename `groupid` in the connector to your business group ID.
+. Run this Maven `deploy` command with your business group ID :
++
+[source,text,linenums]
+----
+mvn clean deploy -DaltDeploymentRepository=private-exchange::default::https://maven.anypoint.mulesoft.com/api/v1/organizations/<business_group_id>/maven
+----
+
+*Can a module recognize that it is being executed from Studio as opposed to on premises or in Runtime Manager, or are there any related concerns?*
+
+Background: If a connector has a custom license code based on the target AS/400 server serial numbers, the license check is performed dynamically as the connection is established. MuleSoft allows customers to evaluate the connector within Studio without a license. However, the connector does not work when running on premises or in Runtime Manager.
+
+Answer:
+
+* Custom license code will not be enforced in Runtime Manager. MuleSoft recommends that you use the license validation supported natively by Mule 4 SDK. You can find more information in xref:license.adoc[Module Licensing].
++
+////
+TODO: REMOVED THIS PER NATHAN
+If the connector needs to fail based on configuration parameters, the License mechanism provided by MuleSoft will not work because it is validated based on the connector and license file data only. Not using the License mechanism provided by MuleSoft implies that they won't have be able to differentiate Design-time vs Execution-time.
+////
++
+* In your `xxxExtension.java`, add the following annotations to use the license validation from Mule 4 SDK. This example uses SAP Hybris Connector built by Admios:
++
+.Example: MuleSoft Certified Connectors (Additional Fee)
+[source,text,linenums]
+----
+@RequiresEnterpriseLicense
+@RequiresEntitlement(name = “sap-hybris-connector")
+----
+
+[[installation_example]]
+== Installation Example
+
+This example supplements the FAQ, <<question_3, How can I import a project into Studio 7, and how can I test and add it to Studio?>>.
+
+You can install your connector to Studio 7 using this command to create a connector for use in Studio 7:
+
+. Run `mvn clean install`.
++
+This example shows the `cookbook` connector installation to a local Maven repository:
++
+[source,console,linenums]
+----
+[INFO] No primary artifact to install, installing attached artifacts instead.
+[INFO] Installing /Users/me/Downloads/mule4SampleConnector/cookbook-connector/pom.xml to /Users/me/.m2/repository/org/mule/extension/cookbook-connector/1.0.0/cookbook-connector-1.0.0.pom
+[INFO] Installing /Users/me/Downloads/mule4SampleConnector/cookbook-connector/target/temporal-extension-model.json to /Users/me/.m2/repository/org/mule/extension/cookbook-connector/1.0.0/cookbook-connector-1.0.0-extension-model-4.0.0.json
+[INFO] Installing /Users/me/Downloads/mule4SampleConnector/cookbook-connector/target/cookbook-connector-1.0.0-mule-plugin.jar to /Users/me/.m2/repository/org/mule/extension/cookbook-connector/1.0.0/cookbook-connector-1.0.0-mule-plugin.jar
+[NOTE]
+---
+[INFO] BUILD SUCCESS
+[NOTE]
+---
+[INFO] Total time: 35.057 s
+[INFO] Finished at: 2018-01-11T17:10:50-08:00
+[INFO] Final Memory: 49M/476M
+[NOTE]
+---
+----
++
+. Create a Mule project in Studio 7, and open `pom.xml` for this project in Studio 7.
++
+image::pom-file.png[pom.xml file example]
++
++
+. Add a dependency setting (`<dependency/>`) for your connector to the `pom.xml`.
++
+For example, the following `<dependency/>` enables Studio 7 to find the `cookbook-connector` installed in a local Maven repository:
++
+----
+<dependency>
+  <groupId>org.mule.extension</groupId>
+  <artifactId>cookbook-connector</artifactId>
+  <version>1.0.0</version>
+  <classifier>mule-plugin</classifier>
+</dependency>
+----
++
+Your connector will now appear the palette. This example shows a Cookbook connector in the Studio palette:
++
+image::ex-connector-in-palette.png[Example: Cookbook connector in Studio palette]
+
+== See Also
+
+https://www.mulesoft.com/webinars/api/intro-to-anypoint-design-center-flow-designer[Intro to Anypoint Design Center - Flow Designer]
+
+xref:4.1@mule4-runtime::index.adoc[About Mule Runtime]
+
+xref:index.adoc[Mule SDKs]
+
+https://youtu.be/qdOXKj8V9Lc[Mule 4 SDK] (video)
+
+https://forums.mulesoft.com/spaces/14/anypoint-connectors.html[Connector/DevKit/SDK Forum]
+
+xref:best-practices.adoc[Best Practices]
+
+https://github.com/mulesoft/slack-connector/tree/develop-4.x[Slack Connector]
+
+https://github.com/mulesoft/mule-http-connector/tree/1.2.0[HTTP Connector]
+
+https://github.com/mulesoft/mule-db-connector/tree/1.3.1[Database Connector]
+
+xref:dmt.adoc[DevKit Migration Tool]

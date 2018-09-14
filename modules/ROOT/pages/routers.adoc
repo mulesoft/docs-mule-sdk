@@ -80,10 +80,22 @@ Using the router consists of configuring the router parameters and then adding e
 
 This will execute the `http:request` operation contained by the `when` route every time the `payload` is not null. If a null `payload` arrives, the fallback `otherwise` is executed.
 
-== Config-less and Connection-less
+== Void Routers
+
+*Available since version 1.1*
+
+You might need to create a router that at the end of its execution leaves the event and message the same as it was before the execution of the router. This type of router is called Void Router.
+
+To implement a Void Router, the method needs to have an argument of the `VoidCompletionCallback` type instead of `RouterCompletionCallback`. You use this callback the same was as before (with the `success` and `error` methods), except in this case, `success` does not receive any parameter.
+
+== Restrictions
+
+The following restrictions apply.
+
+=== Config-less and Connection-less
 
 Routers have some restrictions that differentiate them from <<operations#, operations>>. By definition, routers are not allowed to depend on or receive a particular configuration or connection.
 
-== Always Non-Blocking
+=== Always Non-Blocking
 
 All routers have to be defined as a `void` method receiving a `RouterCompletionCallback` for communicating its result. This means that all routers are non-blocking by default.

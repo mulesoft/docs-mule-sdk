@@ -1,4 +1,4 @@
-= Modules Licensing
+= Module Licensing
 ifndef::env-site,env-github[]
 include::_attributes.adoc[]
 endif::[]
@@ -47,7 +47,7 @@ Before submitting the developed connector to MuleSoft for certification, the pro
 
 . Include the following information for MuleSoft to use before generating a partner key and keystore:
 +
-* Company Name (also known as "Provider Name")
+* Company Name (also known as "Vendor Name")
 * Contact Email
 * Contact Message
 * Connector Name
@@ -63,11 +63,11 @@ After obtaining the key and keystore:
 . The partner adjusts the connector project code by applying the `@RequiresEntitlement` annotation and entering values for all requested attributes.
 +
 * `name` must be the name of the connector.
-* `provider` attribute must be the part before the `.key` suffix. For example, if MuleSoft generated a vendor key `prov-name.key`, the partner puts `prov-name` as the provider.
+* `vendor` attribute must be the part before the `.key` suffix. For example, if MuleSoft generated a vendor key `prov-name.key`, the partner puts `prov-name` as the vendor.
 +
 [source,java,linenums]
 ----
-@Extension(name="connector-name", provider="prov-name")
+@Extension(name="connector-name", vendor="prov-name")
 @RequiresEntitlement(name="connector-name")
 public class LicensedConnector {
   ...

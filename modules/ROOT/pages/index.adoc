@@ -1,10 +1,10 @@
-= Mule SDK for Java
+= Mule SDKs
 ifndef::env-site,env-github[]
 include::_attributes.adoc[]
 endif::[]
 :keywords: mule, sdk
 
-The Mule SDK is for extending the Mule 4 Runtime by creating new modules that you can install in Mule apps. Examples of modules include connectors, such as HTTP, or modules with custom functionality, such as the Validations Module.
+Use the Mule SDK for Java or XML to extend the Mule 4 Runtime by creating new modules that you can install in Mule apps. Examples of modules include connectors, such as HTTP, or modules with custom functionality, such as the Validations Module.
 
 The SDK provides an API that:
 
@@ -12,9 +12,11 @@ The SDK provides an API that:
 * Decouples modules from the Mule Runtime internals.
 * Assures consistency across Mule components and other modules, such as cloud connectors.
 
+You can use either the advanced, feature-rich Java Mule SDK or the simpler XML SDK, which provides only outbound operations and doesn't support recursive calls.
+
 == Differences from DevKit
 
-The Mule SDK is the Mule 4 evolution of DevKit. It replaces Devkit and provides the canonical way of extending the Mule Runtime. DevKit is not available for Mule 4.
+The Mule SDK for Java is the Mule 4 evolution of DevKit. It replaces Devkit and provides the canonical way of extending the Mule Runtime. DevKit is not available for Mule 4.
 
 Although the SDK builds on the same idea of annotated Java classes, internally it works differently:
 
@@ -27,4 +29,9 @@ Although the SDK builds on the same idea of annotated Java classes, internally i
   ** Non-blocking operations
   ** Classloading isolation
   ** Enhanced interoperability with runtime services
-  ** Much, much more
+
+== See Also
+
+* xref:dmt.adoc[DevKit to SDK Migration Tool]
+* xref:getting-started.adoc[Mule SDK for Java]
+* xref:xml-sdk.adoc[XML SDK]

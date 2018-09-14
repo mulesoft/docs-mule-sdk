@@ -1,54 +1,42 @@
-= Getting Started with the Mule SDK
+= Getting Started with the Mule SDK for Java
 ifndef::env-site,env-github[]
 include::_attributes.adoc[]
 endif::[]
 :keywords: mule, sdk, create, new, project, getting, started
 
-This section can help you start developing Mule SDK projects.
+Create your first Mule SDK project in just a few steps:
 
-== Set Up Your Development Environment
+* Install required software
+* Generate a project using Maven and explore it
+* Set up your IDE
+* Build the project you generated
+* Develop a connector or module
+* Run the connector or module in Anypoint Studio
 
-You must have the following components installed and working in your local environment:
+The SDK provides a Maven plugin and a Maven archetype to create new projects. The archetype is a project template; use it to ensure your new project has a consistent structure, employs recommended practices, and contains a few elements for you to experiment with.
+
+[[setup]]
+== Install the Required Software
+
+Install and verify that the following tools are working in your local environment:
 
 * Java Development Kit 8 (JDK 8) to compile and build your Java code.
 
 * Apache Maven, version 3.3.9 or higher, to manage your project’s build.
 
-=== Set Up Your IDE
+[[setup_ide]]
 
-For the SDK to work, you must pass the command line parameter `-parameters` to the Java compiler.
+== Generate a Project Using the Maven Plugin
 
-==== For Development in Studio or Eclipse
-
-If you use Anypoint Studio or Eclipse:
-
-. Right-click the project.
-. Go to `Java Compiler`, and enable `Store information about method parameters (usable via reflection)`.
-
-image::eclipse-config.gif[600,600]
-
-==== For Development in IntelliJ
-
-If you are using IntelliJ:
-
-. Go to `Preferences > Build, Execution, Deployment > Compiler > Java Compiler`.
-. Add `-parameters` in the `Additional command line parameters` section.
-
-image::intellij-config.gif[600,600]
-
-== Create Your First SDK project.
-
-The SDK provides a Maven Plugin and a Maven Archetype to create new projects. An archetype is defined as an original pattern or model from which all other things of the same kind are made.
-
-=== Generate a Project Using the Maven Plugin
-
-There is a Maven plugin with steps and descriptions of the fields that are required to create a new Extension Project. You can run this command to get prompted for these values:
+Run the `generate` command to create an extension project based on the Maven archetype:
 
 ----
 mvn org.mule.extensions:mule-extensions-archetype-maven-plugin:generate
 ----
 
-=== The Generated Project
+You are prompted to provide required field values, then a new project is generated.
+
+== Explore the Generated Project
 
 The generated project contains the basic Mule <<module-structure#, module structure>> with some basic classes, a dummy implementation, and two running tests that use the generated module.
 
@@ -63,20 +51,66 @@ Because this project is a Maven project, it contains a `pom.xml` file that conta
 </parent>
 ----
 
+== Set Up Your IDE
+
+For the SDK to work, you must pass the command line parameter `-parameters` to the Java compiler.
+
+=== For Development in Studio or Eclipse
+
+If you use Anypoint Studio or Eclipse:
+
+. Right-click the project.
+. Go to `Java Compiler`, and enable `Store information about method parameters (usable via reflection)`.
+
+image::eclipse-config.gif[600,600]
+
+=== For Development in IntelliJ
+
+If you are using IntelliJ:
+
+. Go to `Preferences > Build, Execution, Deployment > Compiler > Java Compiler`.
+. Add `-parameters` in the `Additional command line parameters` section.
+
+image::intellij-config.gif[600,600]
+
 == Build the Project
 
-Once your project is generated, you can build it by running the following command:
+Once your project is generated, build it:
 
 ----
 mvn clean install
 ----
 
-You run this command to compile your project, run the tests, and install the project in your local Maven repository.
+This command compiles your project, runs the tests, and installs the project in your local Maven repository.
 
-== Start Developing
+== Develop Custom Module Code
 
-Now you are ready to add your custom module code.
+Find the `@Extension` annotated class and
+ examine <<module-structure#, module structure>> and the different
+elements that you can add to a module. Use these elements to modify a connector.
 
-You need to find the `@Extension` annotated class and then
-examine <<module-structure#, module structure>> and the different
-elements that you can add to a module.
+== Add Your Connector to Studio
+
+Once your connector is working, you can try it in Anypoint Studio.
+
+Go to your Mule app `pom.xml` file and add the connector as a `<dependency>` with
+its `groupId`, `artifactId`, and `version`.
+
+.Example: Dependency
+[source,xml,linenums]
+----
+...
+<dependencies>
+  ...
+  <dependency>
+    <groupId>org.mule.connector</groupId>
+    <artifactId>mule-connector</artifactId>
+    <version>1.0.0</version>
+    <classifier>mule-plugin</classifier>
+  </dependency>
+  ...
+</dependencies>
+...
+----
+
+NOTE: Different features are available in different vesions of the SDK for Java. See xref:choosing-version.adoc[Choosing the SDK version] to pick the right version for your connector.

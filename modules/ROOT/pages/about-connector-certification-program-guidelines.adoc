@@ -1,0 +1,75 @@
+= About MuleSoft Connector Certification Program Guidelines
+ifndef::env-site,env-github[]
+include::_attributes.adoc[]
+endif::[]
+:keywords: connector, certification, sdk, program guidelines
+
+This document pertains to connector certification for Mule 4. For Mule 3 certification, see xref:3.9@connector-devkit::connector-certification-program-guidelines.adoc[DevKit documentation].
+
+MuleSoft’s connector certification program guides you through the process of creating an enterprise-grade connector that is ready for certification by MuleSoft. Once certified, the connector is made available through Anypoint Exchange for discovery and use by customers and developers.
+
+== Before You Begin
+
+Before embarking on the certification program, consider the following and make sure you can adhere to these requirements:
+
+* The connector must be kept current and secure, and it must get re-certified at least once a year.
+* The connector must be built and distributed for the enterprise version of the MuleSoft Software or MuleSoft Service.
+* All transactions for the connector must take place between the customer and the partner, not through MuleSoft.
+* The connector must be a fully functional, production-ready, enterprise-grade application and protocol connector. That is, it’s a connector that connects Mule with an external system.
+* Code must be ready for deployment into a continuous integration environment. Code should be compilable from the command line without the need to import private repositories. Credentials should be provided separately and be capable of getting set at compile time. In addition, sandbox credentials for your connector are required for certification.
+* The connector must only use third-party libraries that are open source or owned by you. No third-party, non-distributable libraries are accepted.
+* If a similar connector already exists on Anypoint Exchange, you can still submit your connector if it provides additional functionality that is superior to the existing connector.
+
+== Providing Support
+
+Partners or developers are required to provide full support for each of their connectors on Anypoint Exchange. For support inquiries received by MuleSoft, MuleSoft provides a commercially reasonable level of first-tier telephone, web-based and/or email support directly to customers. MuleSoft takes and resolves any issues that are linked to commercial MuleSoft products. Any issues specific to the partner connector are escalated to the partner.
+
+* Partner responds to all support queries escalated from MuleSoft within one business day.
+* Partner makes a best effort to resolve technical support issues for customers within five business days.
+
+== Pricing For Your Connector
+
+Partners or developers have sole discretion to decide whether to make your connectors available for free or for a fee. However, all connectors must be available at no cost within Anypoint Studio. While not mandatory, we recommend providing customers a trial of your connector for design and deployment.
+
+For more information, see the <<see_also, Custom Module License>> link below.
+
+[%header,cols="20a,80a"]
+|===
+|Category |Details
+| Free |Connector is available for download and use for free to customers through Anypoint Exchange.
+| Paid |Paid connectors can be used in Mule apps at design time in Anypoint Studio. In deployment, the connector cannot run without a license. Customers need to purchase the connector directly from the partner and should manage the use of the paid connector using a generated license key provided by MuleSoft. The pricing of the connector is determined by the partner.
+|===
+
+== License Terms
+
+Add the following legal terms before your license terms in `LICENSE.md`:
+****
+*About MuleSoft Certified Connectors*
+
+MuleSoft Certified Connectors are developed by MuleSoft’s partners and developer community. These connectors have been reviewed and certified by MuleSoft. To purchase the Connector Name Connector, if required, or to receive assistance or support for it, contact _Partner Name_ directly at _Contact Information_. MuleSoft disclaims any support obligation for MuleSoft Certified Connectors.
+
+By installing this connector, you consent to MuleSoft sharing your contact information with the developer of this connector so that you can receive more information about it directly from the developer.
+
+_Your own license terms._
+****
+
+== Export Compliance
+
+****
+You may not use or otherwise export or re-export any MuleSoft Confidential Information or MuleSoft Documentation received from MuleSoft or your materials (including but not limited to Partner Documentation and Partner Connector) except as authorized by United States laws. In particular, but without limitation, MuleSoft Confidential Information, MuleSoft Documentation and your materials may not be exported or re-exported (a) into any U.S. embargoed countries or (b) to anyone on the U.S. Treasury Department's list of Specially Designated Nationals or the U.S. Department of Commerce Denied Person's List or Entity List.
+You represent and warrant that you are not located in any such country or on any such list. You also agree that you will not use or re-export any MuleSoft Confidential Information or MuleSoft Documentation and your materials for any purposes prohibited by United States law, including, without limitation, the development, design, manufacture or production of nuclear, chemical or biological weapons.
+
+You are solely responsible for ensuring that your provision of your materials to users through Anypoint Exchange comply with any and all regulations regarding export and import of technology in relevant jurisdictions. (Capitalized terms shall have same definition as in the Certified Connector Partner Agreement.)
+****
+
+== Development and Certification
+
+Tell MuleSoft about the connector you want to develop, and get certified by contacting mailto:isv@mulesoft.com[MuleSoft]. MuleSoft will contact you with further information.
+
+[[see_also]]
+== See Also
+
+* xref:certification-guidelines-for-connectors.adoc[Technical Guidelines for Connector Certifications]
+* xref:license.adoc#custom-module-license[Custom Module License]
+* https://forums.mulesoft.com[MuleSoft Forum]
+* mailto:isv@mulesoft.com[Contact MuleSoft]

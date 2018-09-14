@@ -1,0 +1,144 @@
+= Notifications
+ifndef::env-site,env-github[]
+include::_attributes.adoc[]
+endif::[]
+:keywords: notification, sdk, operations, sources
+
+*Available since version 1.1*
+
+Notifications in Mule are a way of communicating actions to other components. They are mostly used for monitoring.
+
+// TODO add link to mule notification docs
+// For more information about how notifications works in Mule, please refer
+// to the _
+
+== Defining Notifications
+
+The first step is to define all the notifications that can be fired by a Module. You do this by defining an `Enum` that implements the `NotificationActionDefinition` interface.
+Each value defined in the `Enum` is considered to be notification action.
+
+Since you can include data within a notification, you must provide each associated `DataType`.
+
+In the example below, `NEW_EVENT` and `FINISHED_EVENT` actions are declared.
+They have an `Integer` and a custom object (`SimpleObject`) as data.
+
+[source,java,linenums]
+----
+public enum SimpleNotificationAction implements NotificationActionDefinition<SimpleNotificationAction> {
+
+  NEW_EVENT(DataType.fromType(Integer.class)),
+
+  FINISHED_EVENT(DataType.fromType(SimpleObject.class));
+
+  private final DataType dataType;
+
+  SimpleNotificationAction(DataType dataType) {
+    this.dataType = dataType;
+  }
+
+  @Override
+  public DataType getDataType() {
+    return dataType;
+  }
+
+}
+----
+
+=== Registering Notifications in the Module
+
+To identify the notifications that a Module fires, the `@Extension`
+annotated class should be annotated with `@NotificationActions`, which references a `NotificationActionDefinition` enum that contains the defined notifications. Any custom data types you define there will need to be exported, as well.
+
+[source,java,linenums]
+----
+@Extension(name = "Foo")
+@NotificationActions(SimpleNotificationAction.class)
+@Export(classes = {SimpleObject.class})
+@Xml(prefix = "test-connector")
+public class FooExtension {
+  // Content
+}
+----
+
+== Communicating Which Notifications are Fired
+
+After declaring all the possible notifications in a Module, you need to provide the information that binds the notifications with the Operations and Sources that fire them.
+
+To do that, you need to implement a `NotificationActionProvider` class that identifies the notifications that are fired by an Operation or Source.
+
+[source,java,linenums]
+----
+public class ExecuteNotificationActionProvider implements NotificationActionProvider {
+    @Override
+    public Set<NotificationActionDefinition> getNotificationActions() {
+        HashSet<NotificationActionDefinition> errors = new HashSet<>();
+        errors.add(SimpleNotificationAction.NEW_EVENT);
+        errors.add(SimpleNotificationAction.FINISHED_EVENT);
+        return errors;
+    }
+}
+----
+
+After defining the `NotificationActionProvider`, you can bind it to the proper
+Operation or Source using the `@Fires` annotation:
+
+[source,java,linenums]
+----
+@Fires(ExecuteNotificationActionProvider.class)
+public void execute(){
+  // operation body
+}
+----
+
+== Firing Notifications
+
+WARNING: Firing a notification action that is not declared in the `NotificationActionProvider` of an
+Operation or Source will result in a failure. Firing a notification using data
+that does not match the declared type will also result in a failure.
+
+=== Operations
+
+To fire a notification from an Operation, you must add a `NotificationEmitter`
+parameter. You can then use it to fire notifications with a given `NotificationActionDefinition`
+and the associated data, as a `TypedValue`.
+
+[source,java,linenums]
+----
+@Fires(ExecuteNotificationActionProvider.class)
+public void execute(NotificationEmitter notificationEmitter){
+  notificationEmitter.fire(NEW_EVENT, TypedValue.of(4));
+  // operation body
+  notificationEmitter.fire(FINISHED_EVENT, TypedValue.of(new SimpleObject()));
+}
+----
+
+=== Sources
+
+Unlike Operations, Sources not only execute when receiving or generating a new message to be processed but also when one completes, whether successfully or with a failure.
+
+You can fire notifications from `@OnSuccess`, `@OnError`, and `@OnTerminate` methods by adding a `NotificationEmitter` parameter, just like you can in Operations.
+
+//TODO: Add `@OnBackPressure` once documented
+
+[source,java,linenums]
+----
+@OnSuccess
+  public void onSuccess(@ParameterGroup(name = "Success Info", showInDsl = true) PersonalInfo successInfo,
+                        NotificationEmitter notificationEmitter) {
+
+    // on sucess body
+    notificationEmitter.fire(FINISHED_EVENT, TypedValue.of(successInfo.getSimpleObject()));
+  }
+----
+
+When receiving or generating a message, however, you can only indicate that you want certain notifications to be fired once the message is handled by using the `SourceCallbackContext`.
+
+[source,java,linenums]
+----
+@Override
+  public void onStart(SourceCallback<String, Object> sourceCallback) throws MuleException {
+    // source body
+    context.fireOnHandle(NEW_EVENT, TypedValue.of(7));
+    sourceCallback.handle(result, context);
+  }
+----

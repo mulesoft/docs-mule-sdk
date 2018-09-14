@@ -1,4 +1,4 @@
-= Non Blocking Operations
+= Non-Blocking Operations
 ifndef::env-site,env-github[]
 include::_attributes.adoc[]
 endif::[]

@@ -42,3 +42,32 @@ public class HttpListener extends Source<InputStream, HttpRequestAttributes> {
 // ...
 }
 ----
+
+== Tracking an Event
+
+*Available since version 1.1*
+
+To be able to trace an event through logs, you can use a `CorrelationInfo` parameter in your operations and source callback. This correlation info provides the event ID and correlation ID of the event that is processed.
+
+You simply need to add a `CorrelationInfo` parameter to your operation method or source callback. The instance will be populated with the event information the method or callback runs.
+
+This simplified example shows how to use `CorrelationInfo`:
+
+[source,java,linenums]
+----
+public class ObjectStoreOperations {
+  private static final Logger LOGGER = getLogger(ObjectStoreOperations.class);
+// ...
+  @Throws(StoreErrorTypeProvider.class)
+  public void store(String key,
+                    @Content TypedValue<Serializable> value,
+                    ObjectStore objectStore,
+                    CorrelationInfo correlationInfo) {
+      objectStore.store(key, value);
+      if (LOGGER.isDebugEnabled()) {
+        LOGGER.debug("Object stored with key: %s .The event id is: %s", key, correlationInfo.getEventId());
+      }
+  }
+// ...
+}
+----

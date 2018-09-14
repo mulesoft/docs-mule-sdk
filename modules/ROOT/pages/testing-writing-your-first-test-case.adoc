@@ -86,6 +86,7 @@ public class ModuleTestCase extends MuleArtifactFunctionalTestCase {
 
 At this stage, everything is set up to start writing the module test cases. The first test to write tests a simple operation that executes the flow, retrieves the output, and makes an assertion over it.
 
+[[testing-flowrunner]]
 === 4.1 Executing a flow
 
 You use the `flowRunner("flowName")` utility method to create an instance of `FlowRunner`, a utility that can execute flows. The `FlowRunner` instance is configured to run the flow identified in the parameter.

@@ -4,35 +4,23 @@ include::_attributes.adoc[]
 endif::[]
 :keywords: mule, sdk, classloading, isolation
 
-To introduce the new classloading schema in Mule 4 we need to understand the classloading problems
-that we had in Mule 3.
+The Mule 4 classloading schema isolates the runtime, apps and modules from each other. Each specifies the packages (rather than the classes) to export as part of its API, making those specific packages visible.
+
+Mule 3 classloading issues:
 
 * Modules were not isolated from each other.
-* Modules were not isolated from the runtime.
-* Modules were not isolated from the applications.
+* Modules were not isolated from the Mule runtime.
+* Modules were not isolated from Mule apps.
 
-This means that modules that used to use a some library could conflict with other modules, applications, or
-runtimes that used another version of the same library, causing classloading problems
-with errors like `ClassNotFoundException` or `NoSuchMethodException`, and confusing app developers, as well as producing runtime errors that were hard to troubleshoot.
-
-In Mule 4, to tackle this problem, there is a brand new classloading schema that
-isolates the runtime, applications, and modules from each other. Each one of them
-specifies which *packages* (filtering is made by package and *not* made by class)
-will be export as part of their API, making those specific packages visible.
+In Mule 3, modules that used some library could conflict with other modules, apps, or runtimes that used another version of the same library. This conflict led to classloading problems with confusing error messages like `ClassNotFoundException` or `NoSuchMethodException` that were hard to troubleshoot.
 
 == Modules Classloading Isolation
 
-As said before, in Mule 4 classloading filtering is done by package and not by class,
-this means that the modules need to specify which packages is going to export for others to
-see. Lucky for you, the SDK makes all this work for you, but it's pretty important that
-you, as a module developer, understands this rule.
+Classloading is automatically filtered by package and not by class, meaning that modules need to specify which packages to export and make visible to the Mule app.
 
-It's simple, the way that the SDK knows what packages to export is by introspecting
-each configuration, connection, and component return and input types, then getting their packages. This means
-that you never want to share a package between an exported class and another class that
-you *don't* want to export.
+To determine what packages to export, the SDK introspects each configuration, connection, and component return and input types to get their packages. So you need to make sure that any classes that you _do not_ want to export are kept out of exported packages. Exported classes should not share a package with classes that you do not want to export.
 
-The suggested package hierarchy (the one that we use for our modules) is:
+The suggested package hierarchy (used internally for MuleSoft modules):
 
 ----
 org.mule.module
@@ -40,29 +28,24 @@ org.mule.module
 \--> .internal.*
 ----
 
-Where _api.*_ contains all the classes that are going to be exported and seen by
-the application (Return Types, Subtypes, Input Types, Connection interfaces) and
- _internal.*_ contains all the classes that contains the specific behavior of the module
-(Annotated classes, `Connection` and `Operation implementations`; and internal classes).
+* `.api.*` contains all the classes that to be exported and seen by the Mule app: Return Types, Subtypes, Input Types, and Connection interfaces.
+* `.internal.*` contains all the classes used for specific behavior of the module: Annotated classes, `Connection` and `Operation` implementations, and internal classes.
 
-=== Knowing the Exported packages and return types.
+=== Knowing the Exported Packages and Return Types.
 
-It is recommended that *all* exported classes belongs to the module, it s highly discouraged
-and *never* recommended to return or receive objects from classes that belongs to a library
-that the module is using, because could end up in a library clash resulting in a
-module incompatible with other modules, app dependencies or even runtimes.
+MuleSoft recommends that that *all* exported classes belong to the module.
 
-For example, think the next scenarios:
+To avoid library clashes that make a module incompatible with other modules, app dependencies, or even runtimes, it is _highly recommended_ that you:
 
-==== First Scenario: Exporting the same packages
+* _Never_ return or receive objects from classes that belong to a library that a module is using.
 
-We have two modules with two very different operations, both of them uses the same library for example _GSON_
-which parses a json and returns an instance of a `JsonObject` class. One of them uses _GSON_ version `1.1` and
-the other one _GSON_ version `2.3`. The `JsonObject` class lives in the same package in both
-versions but the implementation is *very* different between each other, which made them incompatible.
+Consider the scenarios in the next sections.
 
-The developers of the modules decided that it was a good idea to expose the `JsonObject`
-class as the return type of their operation:
+==== First Scenario: Exporting the Same Packages
+
+This scenario includes two modules with two very different operations. Both use the same library (GSON) to parse JSON and _return_ an instance of a `JsonObject` class. One of them uses GSON version `1.1`, and the other uses GSON version `2.3`. The `JsonObject` class lives in the same package in both versions, but the different implementations of each version make the classes incompatible.
+
+This example exposes the `JsonObject` class as the return type of the operation:
 
 
 .First Module Operation
@@ -81,14 +64,11 @@ public JsonObject getAllProducts(@Connection ProductsServiceConnection connectio
 }
 ----
 
-But now when deploying a mule application, and the mule developer tries to use both modules
-that exports the same packages, mule will fail since you can't have two different plugins exporting
-the same package.
+When you deploy a Mule app and try to use two modules that export the same packages, Mule will fail because two modules cannot export the same package.
 
-==== Second Scenario: Returning two instances of the same Class in different versions.
+==== Second Scenario: Returning Two Instances of the Same Class in Different Versions
 
-Let's grab the example above, but this time both operations won't export the _GSON_ packages, instead
-they return a `java.lang.Object`.
+Building on the previous example, assume that the operations do not export the _GSON_ packages. Instead, they return a `java.lang.Object`.
 
 .First Module Operation
 [source,java,linenums]
@@ -108,18 +88,13 @@ public Object getAllProducts() {
 }
 ----
 
-Now when the mule developer tries to use both modules and run the application, only one of the 2
-versions will be loaded for the app, because both classes have exactly the same
-fully qualified name, so the fully qualified names will clash, resulting in different behavior in one of the modules (the one that did not get its verfion of the package loaded), or resulting in errors such as
-`ClassCastException`, `NoSuchMethodException`.
+If you use both modules in an app, only one of the two versions will be loaded for the app because both classes have exactly the same fully qualified name. So the fully qualified names will clash, and the module that needs the _unloaded_ version of the package will behave differently and be prone to errors such as `ClassCastException` or `NoSuchMethodException`.
 
 === The @Export annotation
 
-The @Export annotation can be used for extreme corner or complex cases when for some reason a module requires to export a class
-that is not automatically exported by the SDK.
+The `@Export` annotation can be used for extreme corner cases or complex cases in which a module needs to export a class that is not automatically exported by the SDK.
 
 The `@Export` annotation receives an array of classes to be exported.
 
 [WARNING]
-Keep in mind that exporting a class will end up exporting all the classes in the same
-package as the exported class.
+You cannot export a class without exporting all the classes in the same package as the exported class.

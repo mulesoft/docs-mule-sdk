@@ -17,7 +17,7 @@ public void send(@Connection MyConnection connection, Object value) {
 }
 ----
 
-The operation is invoked like this:
+Which will be invoked like this:
 
 [source,xml,linenums]
 ----
@@ -37,7 +37,7 @@ This change explicitly disables the use of references, so the operation will rec
 
 == Defining How Complex Types Can Be Used
 
-Any module is able to expose POJOs that conform to the Module API:
+Any Module is able to expose POJOs that conform to the Module API:
 
 [source,java,linenums]
 ----
@@ -61,7 +61,7 @@ public class HouseConfig {
 }
 ----
 
-When using this kind of parameter, you are responsible for configuring how the `Door` can be used in the DSL. The `@TypeDsl` annotation allows you to configure two important things:
+When having this kind of parameters, the Module developer has the responsibility to configure how the `Door` can be used in the DSL. For this, we have the `@TypeDsl` annotation, that allows you to configure two important things:
 
 * `allowInlineDefinition`: Defines if the POJO (in the example, the `Door`) can be declared inline for the element that uses it as parameter.
 If this value is `true`, then the user can declare:
@@ -75,8 +75,8 @@ If this value is `true`, then the user can declare:
 ----
 
 +
-<1> The `config`` is declared as the container of the parameter
-<2> A `Door` is declared inline (in the `config`).
+<1> The config is declared as the container of the parameter
+<2> A `Door` is declared inline (in the `config`)
 
 * `allowTopLevelDefinition`: Defines if the POJO (in the example, the `Door`) can be declared as a top-level element in the application.
 If this value is `true`, then the user can declare:
@@ -86,9 +86,9 @@ If this value is `true`, then the user can declare:
 ----
 <demo:door name="MyGlobalDoor" isLocked="true" color="red"/> // <1>
 
-<demo:config name="myConfig" door="MyGlobalDoor"/> // <2>
+<demo:config name="myConfig" door-ref="MyGlobalDoor"/> // <2>
 ----
 
 +
 <1> A `Door` is declared as a global element of the application
-<2> The `config` is declared separately, referencing the global `Door` element by name with the `door` attribute
+<2> The `config` is declared separately, referencing the global `Door` element by name with the `door-ref` attribute

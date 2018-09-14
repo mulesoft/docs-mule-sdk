@@ -7,9 +7,7 @@ Imagine the case where your end user will use an operation that invokes an actio
 
 == Implementing a Multi-Level Metadata Key
 
-//TODO: RESUME COPYEDIT HERE
-There must be an order in which parameters of the metadata key are specified, starting with 1. Returning to the example above, the end user will first specify the service field first, then the action to invoke. So, the service parameter will
-have `order` 1 and the action parameter `order` 2.
+It is necessary to set the order in which parameters of the metadata key are specified, starting with `1`. Returning to the example above, the end user will first specify the service field, then the action to invoke. So, the service parameter needs to set `order = 1` and the action parameter `order = 2`.
 
 All the parameters of the POJO representing the `MetadataKeyId` must be annotated with a `@MetadataKeyPart` annotation that sets the `order` value for it. These annotated fields must be of type `String`.
 
@@ -110,14 +108,13 @@ public class InputOperationTypeResolver implements {
 
 *Available since version 1.1*
 
-The process of getting each `MetadataKey` can be very time consuming. In the example that gets all the possible services and the actions of each service, the information you are fetching might even be on another server.
+The process of getting each `MetadataKey` can be very time consuming. In the example that gets all the possible services and the actions of each service, the information you are fetching might be on another server.
 
-Partial fetching enables you to resolve one level of the MetadataKey tree at the time.
+Partial fetching enables you to resolve one level of the `MetadataKey` tree at a time.
 
-The `getKeys` method from the `TypeKeysResolver` will only return the first level of each tree, not the complete tree of each `MetadataKey`.
+The `getKeys` method from `TypeKeysResolver` will only return the first level of each tree, not the complete tree of each `MetadataKey`.
 
-In this case, the amount of information needed is greatly reduced. You only need to get the possible services. Once a service is selected, you need to provide the
-next level of the `MetadataKey` tree.
+So, the amount of information needed is greatly reduced because you only need to get the possible services. Once a service is selected, you need to provide the next level of the `MetadataKey` tree.
 
 To make this possible, your key resolver must implement `PartialTypeKeysResolver`, for example:
 
@@ -158,8 +155,87 @@ public class OperationTypeKeysResolver implements PartialTypeKeysResolver<Action
 <2> Build a single `MetadataKey` tree with a new, complete level of metadata, in this case, the actions level.
 <3> Add the actions of that service as children.
 
-////
 == Using User Input As Partial Level
 
 *Available since version 1.1*
-////
+
+In some cases, you might not be able to provide the end user with a hint about part of your MetadataKey. For example, the universe of options might be too big (a dropdown with all the classes in a classpath makes not sense) or when the starting point of the ID is a free input (for example, a query).
+
+Imagine a `MetadataKeyId` that has a part that is a `String` representing a Java class. It can be very time consuming to retrieve all the classes, and it is complicated for the user to have so many options on a dropdown.
+
+So, you can signal that a `MetadataKeyPart` will not be provided by the resolver and must be inserted by the user. You do this by setting the `providedByKeyResolver` to `false` value on the `MetadataKeyPart` annotation.
+
+Here is an example where the POJO representing the `MetadataKeyId` represents a Java
+method:
+
+[source,java,linenums]
+----
+public class MethodIdentifier{
+
+  @Parameter
+  @Alias("class")
+  @MetadataKeyPart(order = 1, providedByKeyResolver = false) // <1>
+  private String clazz;
+
+  @Parameter
+  @Alias("method")
+  @MetadataKeyPart(order = 2)
+  private String methodId;
+
+  @Override
+  public String getClazz() {
+    return clazz;
+  }
+
+  @Override
+  public String getMethodId() {
+    return methodId;
+  }
+
+  @Override
+  public void setClazz(String clazz) {
+    this.clazz = clazz;
+  }
+
+  @Override
+  public void setMethodId(String methodId) {
+    this.methodId = methodId;
+  }
+}
+----
+
+<1> The `clazz` field must be inserted by the end user without hints.
+
+In this case, it also means that the `getKeys` method cannot return all the possible classes:
+
+[source,java,linenums]
+----
+public class MethodTypeKeysResolver implements PartialTypeKeysResolver<MethodIdentifier> {
+
+  @Override
+  public Set<MetadataKey> getKeys(MetadataContext context) throws MetadataResolvingException, ConnectionException {
+    return emptySet(); // <1>
+  }
+
+  @Override
+  public MetadataKey resolveChilds(MetadataContext metadataContext, MethodIdentifier key)
+      throws MetadataResolvingException, ConnectionException {
+
+    if(key.getClazz() == null){
+      throw new MetadataResolvingException("Missing Class name. Cannot resolve Methods without a target Class",
+                                         FailureCode.INVALID_METADATA_KEY);
+    }
+
+    MetadataKeyBuilder key = MetadataKeyBuilder.newKey(key.getClazz()); // <2>
+    for(String methodId : getMethodIds(key.getClazz())){
+      key.withChild(MetadataKeyBuilder.newKey(methodId).build()); // <3>
+    }
+    return key;
+  }
+
+}
+----
+
+<1> Return an empty set of `MetadataKey` because the end user will provide this information.
+<2> Build a single `MetadataKey` tree with a new, complete level of metadata, in this case, the `methodIds` level.
+<3> Add the `methodIds` of that class as children.

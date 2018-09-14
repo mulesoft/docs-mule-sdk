@@ -143,8 +143,6 @@ Note that `@Optional` only accepts `String` values, but the SDK will auto-conver
 
 The name of each parameter will be the name given to the field in which it is defined. You can override this name by using the `@Alias` annotation.
 
-Example:
-
 [source,java,linenums]
 ----
 @Parameter
@@ -153,7 +151,7 @@ Example:
 private String clazz;
 ----
 
-Notice that the use of `@Alias` makes it possible to use Java reserved term (such as `class`) to name the parameter. You cannot use a reserved term to name the field.
+Notice that the use of `@Alias` makes it possible to use a Java reserved term (such as `class`) to name the parameter. You cannot use a reserved term to name the field.
 
 === Customizing the Parameter DSL
 
