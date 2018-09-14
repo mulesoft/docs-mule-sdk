@@ -1,0 +1,26 @@
+= Advanced Parameter Handling
+ifndef::env-site,env-github[]
+include::_attributes.adoc[]
+endif::[]
+
+Features in the SDK can improve the quality of your module by adding UI and UX tuning, enabling extension points so your module can interact with elements of other modules, and providing implementation enhancements to avoid boilerplate code.
+
+== UI and UX Tuning
+
+* xref:special-parameters.adoc[Special Parameters]
+* xref:parameter-layout.adoc[Customizing the Parameters UI]
+* xref:parameters-dsl.adoc[Customizing the Parameters DSL]
+* xref:exclusive-optionals.adoc[Exclusive Optional]
+* xref:value-providers.adoc[Value Providers]
+
+== Extension Points and Modules Reuse
+
+* xref:imported-types.adoc[Importing Types From Other Modules]
+* xref:subtypes-mapping.adoc[Using Generic Parameters For Extended Behavior]
+* xref:stereotypes.adoc[Stereotypes As A Way Of Referencing Elements By Kind]
+
+
+== Implementation Enhancers
+
+* xref:null-safe.adoc[NullSafe]
+* xref:mule-service-injection.adoc[Mule Services Injection]

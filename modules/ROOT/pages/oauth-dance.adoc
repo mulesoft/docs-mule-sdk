@@ -1,0 +1,52 @@
+= Performing the OAuth Dance with an OAuth-Enabled Module
+ifndef::env-site,env-github[]
+include::_attributes.adoc[]
+endif::[]
+:keywords: mule, sdk, security, oauth
+
+The final step for using the module is to trigger the OAuth dance. <<oauth-configuring#, Configuring an OAuth-Enabled Module>> includes a parameter called
+`authorizePath` through which the end user configures the path of an automatically created HTTP endpoint that is needed to hit a browser and start the OAuth dance.
+
+Tip: Remember that the Authorization Code grant type that the SDK supports requires human interaction through a web browser.
+
+== Multi-Tenancy
+
+Multi-Tenancy for OAuth means being able to perform the OAuth dance multiple times and to associate each obtained token with a different resource owner ID.
+
+The end user needs to specify the `resourceOwnerId` to assign to the token when the dance is initiated. For example, if `authorizePath` is set to `/authorize`, and you want to perform a dance for the user `sdk_demo`, you should hit the following HTTP path: `/authorize?resourceOwnerId=sdk_demo`.
+
+After the dance is complete, you execute an operation using the access token obtained for that user. You do that by using an expression on the `resourceOwnerId` parameter of your module's configuration. Here is a complete example:
+
+[source,xml,linenums]
+----
+<sfdc:config name="salesforce">
+    <sfdc:oauth-connection display="PAGE" immediate="FALSE" prompt="CONSENT">
+        <sfdc:oauth-authorization-code consumerKey="${sfdc.consumerkey}" consumerSecret="${sfdc.consumersecret}"
+                                       authorizationUrl="http://..." accessTokenUrl="http://..."/
+                                       localAuthorizationUrl="http://localhost:8080/.." scope="this that and those"
+                                       resourceOwnerId="#[vars.ownerId]" /> <!-- <1> -->
+        <sfdc:oauth-callback-config listenerConfig="myHtttpListener"
+                                    callbackPath="/callback"
+                                    authorizePath="/authorize" />  <!-- <2> -->
+</sfdc:config>
+----
+
+<1> The `resourceOwnerId` parameter is set to an expression. Each time an OAuth-protected operation is executed, that expression will be evaluated, and the token associated with that value will be used.
+<2> The example sets the authorization endpoint `authorizePath`.
+
+=== Invalidating Access Tokens
+
+Multi-tenancy implies the ability to invalidate the access token of a particular `resourceOwnerId`. Invalidating the token causes the associated token information to be deleted.
+
+To invalidate an access token, the SDK automatically adds an operation called `unauthorize` to every OAuth-enabled module. Returning to the example above, you might invalidate the obtained token with any of the following statements:
+
+[source,xml,linenums]
+----
+<sfdc:unauthorize resourceOwnerId="sdk_demo" config-ref="salesforce"/>
+<!-- or -->
+<sfdc:unauthorize resourceOwnerId="#[vars.resourceOwnerId]" config-ref="salesforce" />
+----
+
+== Next Step
+
+<<oauth-token-expiration#, Handling Expired Access Tokens>>

@@ -1,0 +1,315 @@
+= Value Providers
+ifndef::env-site,env-github[]
+include::_attributes.adoc[]
+endif::[]
+:keywords: mule, sdk, value provider, dynamic values
+
+When developing a connector, you can let the end user select a parameter
+from a set of values. This makes it easier for the user to know what to configure, and you can be sure that the configured values will be correct.
+
+You can provide this functionality for known values by using a <<java_enum, Java Enum>> as a parameter. The SDK automatically takes all the values from the Enum so they can be provided as a combo-selector in the UI.
+
+To include values that are not known, such as custom values, you should use <<value_providers, Value Providers>>, instead.
+
+[[java_enum]]
+== Java Enum
+
+Assume that you are developing a connector for a Content Publishing Service that can publish content with these roles:
+
+* `ADMIN`
+* `READER`
+* `WRITER`
+
+To provide these roles, you simply create a `UserRole` Enum and expose it as a parameter of the `publishAs` operation, for example:
+
+.Example: Java Enum the Defines Known Roles
+[source,java,linenums]
+----
+public enum UserRole {
+    ADMIN, READER, WRITER
+}
+----
+
+The operation in the next example lets the user publish content using a certain `UserRole`.
+
+[source,java,linenums]
+----
+public void publishAs(@Content Object content, UserRole roleEnum){
+    System.out.println("Publishing " + content + " with Role: " + roleEnum);
+}
+----
+
+This solution is easy and effective, but it carries several limitations and problems:
+
+* Does not support custom values: Because the parameter is based on a Enum, you cannot define a custom value. For example, if the service to which you are connecting can be configured with custom roles, you will not be able to continue using the `UserRole` Enum because it will limit the connector's capabilities.
+* The values are defined statically: You cannot change the values depending on a connection or configuration.
+* Java Enums have naming restrictions: You cannot have an Enum value starting with a Number or special characters.
+
+If need custom roles but do not want to lose the drop-down list of known User Roles, you can use <<value_providers, Value Providers>> for dynamic values and known values.
+
+[[value_providers]]
+== Value Providers
+
+Value Providers is a mechanism for providing values in a dynamic and smart way for any parameter in any component of a connector: xref:operations.adoc[Operations], xref:sources.adoc[Sources], xref:configs.adoc[Configurations], xref:connections.adoc[Connection Providers], scopes, and so on.
+
+[[StaticUserRoleValueProvider]]
+=== To Implement Value Providers
+
+This example produces the same behavior as the Enum solution above, but it provides the benefit of an open set of values. It will support a custom value.
+
+. Create a Java Class implementing `ValueProvider`.
++
+When implementing this interface, you must implement the `resolve()` method, which returns a set of <<value-structure, values>>.
++
+[source,java,linenums]
+----
+public class StaticUserRoleValueProvider implements ValueProvider {
+
+    @Override
+    public Set<Value> resolve() {
+        return ValueBuilder.getValuesFor("ADMIN", "READER", "WRITER");
+    }
+}
+----
++
+. Mark the parameter that requires dynamic values with the `@OfValues()` annotation.
++
+`@OfValues` requires a `ValueProvider` implementation that is bound to the parameter, for example:
++
+[source,java,linenums]
+----
+public void publishAs(@Content Object content,
+@OfValues(StaticUserRoleValueProvider.class) String userRole){ //<1>
+    System.out.println("Publishing " + content + " with Role: " + userRole);
+}
+----
++
+. Now, you can use it in Studio or Design Center to start retrieving values.
++
+image::value-provider-static.gif[align="center"]
+
+=== Value Providers with Connections or Configurations
+
+Value Providers can receive connections and configurations. This makes it possible to resolve values based on the current connection and configuration.
+
+IMPORTANT: You cannot inject connections and configurations into Value
+Providers that are located in connection and configuration parameters.
+
+==== Receiving a Connection or Configuration
+
+You use the `@Connection` and `@Config` annotations to declare the use of connections and configurations inside a Value Provider. To work, a Value Provider that uses these annotations depends on a _valid_ configuration or connection. The SDK ensures that the resolving logic will not be executed unless the connection and configuration are valid.
+
+[source,java,linenums]
+----
+public class ConnectedValueProvider implements ValueProvider {
+
+  @Connection
+  ServiceConnection connection;
+
+  @Config
+  ServiceConfig config;
+
+  @Override
+  public Set<Value> resolve() throws ValueResolvingException {
+    //Do whatever is required with the connection or config
+    List<String> result = connection.retrieveInfo();
+    return ValueBuilder.getValuesFor(result);
+  }
+}
+----
+
+WARNING: The injected connections and configurations must be of a type that is compatible with those defined in the operation or source where the Value Provider
+is referenced.
+
+=== Example 2: Connected Value Provider Use Case
+
+//TODO: USE OF "communicate"? Is there another word we can use? have this checked.
+
+In the Roles example above, the service could define custom roles, but it was not possible for the connector to communicate those roles.
+
+Once the Value Provider is implemented to resolve values through a working connection, it becomes possible to fetch the available roles and communicate them through the Value Provider:
+
+[source,java,linenums]
+----
+public class UserRoleValueProvider implements ValueProvider {
+
+  @Connection
+  ServiceConnection connection;
+
+  @Override
+  public Set<Value> resolve() throws ValueResolvingException {
+    return ValueBuilder.getValuesFor(connection.getAvailableRoles());
+  }
+}
+----
+
+=== Value Providers that Depend on Other Parameters
+
+In addition to injecting connections and configurations, Value Providers can  depend on other parameters of the _same context_. The SDK ensures that the Value Provider resolving logic will not be executed until the required parameters are configured.
+
+The words "_same context_" mean that if the Value Provider is used in a component, the required parameter must exist in that component. For example, if the configuration `FancyConfig` with a Value Provider in the parameter `dynamicParam` requires the value of the parameter `aConfigParam`, `aConfigParam` must exist in the `FancyConfig` configuration.
+
+CAUTION: The use of expressions in the required parameters might disable the
+execution of the Value Provider due to the impossibility of resolving the expression without an active event.
+
+==== Declaring Required Parameters
+
+As with connectors and configurations, you use the `@Parameter` annotation to declare a parameter that is required for executing the resolving logic. You use the annotation in a field of the Value Provider with the *same type and name* as the required parameter, such as `String requiredParam` in these examples:
+
+.Example External parameters: Operation declaring two params, one with a value provider
+[source,java,linenums]
+----
+public void operationWithValueProvider(String requiredParam, @OfValues(ValueProviderWithRequiredParams.class) String dynamicParam){
+
+}
+----
+
+.Example External parameters: Value provider requiring the `requiredParam` parameter.
+[source,java,linenums]
+----
+public class ValueProviderWithRequiredParams implements ValueProvider {
+
+    @Parameter
+    String requiredParam;
+
+    @Override
+    public Set<Value> resolve() {
+      return ValuesBuilder.getValuesFor(param);
+    }
+}
+----
+=====  What Happens If The Required Parameter Is Not Configured?
+
+If the parameter is defined as required in the component but is not configured
+by the end user, the Value Provider will not execute. However, if the parameter is defined as optional, the Value Provider will be executed with a `Null` value, so you will need to handle the nullability.
+
+===== Example 3: Value Provider with Context Parameters
+
+Consider the case where you want to have a Date Picker for the day and month.
+You can easily represent them with two Enums, but not all months have the same number of days. So the representation might allow the user to configure invalid
+dates.
+
+To fix this issue:
+
+. Define an operation that exposes a Date Picker.
++
+The operation receives two parameters, an `monthEnum` that statically communicates all the available months and a `day` that is used to communicate the day of the month.
++
+.Publish On Date Operation
+[source,java,linenums]
+----
+public void publishOnDate(Month monthEnum, @OfValues(DayValueProvider.class) String day) {
+}
+----
++
+. Define the `Month` Enum.
++
+The `Month` contains all the available months and identifies the number of days in each month.
++
+.MonthEnum Enum
+[source,java,linenums]
+----
+public enum Month {
+
+    JANUARY(31), FEBRUARY(28), MARCH(31), APRIL(30), MAY(31), JUNE(30),
+    JULY(31), AUGUST(31), SEPTEMBER(30), OCTOBER(31), NOVEMBER(30), DECEMBER(31);
+
+    private int dayCount;
+
+    MonthEnum(int i) {
+        dayCount = i;
+    }
+
+    public int getDayCount() {
+        return dayCount;
+    }
+}
+----
++
+. Create a Value Provider that consumes the selected Month.
++
+Depending on the selected month, the Value Provider will dynamically provide all the available days in that month. The `DayValueProvider` indicates that it requires the parameter `monthEnum` to work.
++
+[source,java,linenums]
+----
+public class DayValueProvider implements ValueProvider {
+
+    @Parameter
+    Month monthEnum; //<1>
+
+    @Override
+    public Set<Value> resolve() {
+      return ValueBuilder.getValuesFor(getNumbersFrom(1, monthEnum.getDayCount())
+              .stream()
+              .map(num -> String.format("%02d", num)));
+    }
+
+    List<Integer> getNumbersFrom(int init, int end){
+        List<Integer> numbers = new ArrayList<>(end - init);
+        for (int i = init; i <= end; i++) {
+            numbers.add(i);
+        }
+        return numbers;
+    }
+}
+----
++
+. Result!
++
+As shown in the animation below, the `Day` selector gets populated dynamically based on the `Month enum` parameter value.
++
+image::value-provider-months.gif[align="center"]
+
+[[value-structure]]
+==== Value Structure
+
+Value Providers return a set of Values. A `Value` is a simple structure composed of these properties:
+
+* `id` : A unique identifier for this value. This is required.
+* `displayName`: A name that will be displayed in the UI. This is optional. By  default, the ID will be used as the Display Name.
+
+==== How to create a Value
+
+There is a unique way to create values by using `ValueBuilder`.
+
+[source,java,linenums]
+----
+
+ValueBuilder adminValueBuilder = ValueBuilder.newValue("ADMIN_USR_ROLE"); //<1>
+adminValueBuilder.withDisplayName("Admin"); //<2>
+Value adminValue = newValue.build(); //<3>
+
+----
+
+<1> You must create the `ValueBuilder` with the ID of the `Value`.
+<2> Optionally, you can enrich the value with a Display Name.
+<3> Build the builder to return a `Value` instance.
+
+== ValueBuilder Utils
+
+`ValueBuilder` provides utilities to make it easier to create values for
+certain cases.
+
+If you have a `List<String>`, `String[]`, `Stream<String>`, or `Map<String, String>` with values that need to be transformed to Values, the easiest way to make this transformation is to use `getValuesFor()`.
+
+[source,java,linenums]
+----
+// Array Case
+Set<Value> arrayCase = ValueBuilder.getValuesFor("Admin", "Writer");
+
+// List Case
+List<String> valueList = new ArrayList<>();
+valueList.add("Admin");
+valueList.add("Writer");
+Set<Value> listCase = ValueBuilder.getValuesFor(valueList);
+
+// Stream Case
+Set<Value> streamCase = ValueBuilder.getValuesFor(valueList.stream());
+
+// Map Case
+// The Key will be considered as ID and the Value as Display Name
+Map<String, String> valueMap = new HashMap<>();
+valueMap.put("ADMIN_USR_ROLE", "Admin");
+valueMap.put("WRITER_USR_ROLE") "Writer");
+Set<Value> mapCase = ValueBuilder.getValuesFor(futureValues);
+----

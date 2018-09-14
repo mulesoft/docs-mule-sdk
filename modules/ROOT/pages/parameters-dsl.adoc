@@ -1,0 +1,94 @@
+= Customizing the Parameters DSL
+ifndef::env-site,env-github[]
+include::_attributes.adoc[]
+endif::[]
+:keywords: parameter, parameters, mule, sdk, dsl, xml, syntax
+
+To provide the best possible experience for the user, customize or limit some aspects of a component's parameters. For example, you can hide irrelevant parameters for clarity.
+
+== Receiving Strings As Reference Or As Value
+
+Let's say we have an operation like the following:
+
+[source,java,linenums]
+----
+public void send(@Connection MyConnection connection, Object value) {
+    connection.doSend(value);
+}
+----
+
+The operation is invoked like this:
+
+[source,xml,linenums]
+----
+<demo:send value="requestPayload"/>
+----
+
+By default, Mule assumes that `requestPayload` is a reference to an object in the registry, like a global list or POJO. If instead we want the extension to actually receive the `requestPayload` string, we must modify the operation declaration, using the `@ParameterDsl` annotation:
+
+[source,java,linenums]
+----
+public void send(@Connection MyConnection connection, @ParameterDsl(allowReferences = false) Object value) {
+    connection.doSend(value);
+}
+----
+
+This change explicitly disables the use of references, so the operation will receive the string value.
+
+== Defining How Complex Types Can Be Used
+
+Any module is able to expose POJOs that conform to the Module API:
+
+[source,java,linenums]
+----
+// This is the POJO declaration
+public class Door {
+
+  @Parameter
+  private boolean isLocked;
+
+  @Parameter
+  private String color;
+
+}
+
+// This is the configuration
+public class HouseConfig {
+
+  @Parameter
+  private Door mainDoor;
+
+}
+----
+
+When using this kind of parameter, you are responsible for configuring how the `Door` can be used in the DSL. The `@TypeDsl` annotation allows you to configure two important things:
+
+* `allowInlineDefinition`: Defines if the POJO (in the example, the `Door`) can be declared inline for the element that uses it as parameter.
+If this value is `true`, then the user can declare:
+
++
+[source,xml,linenums]
+----
+<demo:config name="myConfig"> // <1>
+    <demo:door isLocked="true" color="red"/> // <2>
+</demo:config>
+----
+
++
+<1> The `config`` is declared as the container of the parameter
+<2> A `Door` is declared inline (in the `config`).
+
+* `allowTopLevelDefinition`: Defines if the POJO (in the example, the `Door`) can be declared as a top-level element in the application.
+If this value is `true`, then the user can declare:
+
++
+[source,xml,linenums]
+----
+<demo:door name="MyGlobalDoor" isLocked="true" color="red"/> // <1>
+
+<demo:config name="myConfig" door="MyGlobalDoor"/> // <2>
+----
+
++
+<1> A `Door` is declared as a global element of the application
+<2> The `config` is declared separately, referencing the global `Door` element by name with the `door` attribute

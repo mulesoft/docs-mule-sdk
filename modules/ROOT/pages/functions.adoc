@@ -1,0 +1,53 @@
+= Contributing Functions with Mule SDK
+ifndef::env-site,env-github[]
+include::_attributes.adoc[]
+endif::[]
+:keywords: mule, sdk, functions, function
+
+DataWeave is the main expression language in Mule 4, and the Mule SDK is also aligned with that view. This allows you to contribute functions to DataWeave from your module's code in a similar fashion that you code a Mule <<operations#, Operation>>. Using custom functions allows you to reuse code in a new way, providing extra functionality in a single Module with very little overhead regarding how they are
+declared compared to a Mule operation.
+
+
+== Declaring a Function
+
+At Extension level, you can use the `@ExpressionFunctions` annotation to reference the classes that contain the public methods representing the DataWeave functions. This method's code is executed directly from DataWeave scripts using it name as identifier:
+
+[source,java,linenums]
+----
+@Extension(name = "Docs")
+@ExpressionFunctions(DocsFunction.class)
+public class DocsModule {
+
+}
+----
+
+In the `DocsFunction` class, this example defines the following method:
+
+[source,java,linenums]
+----
+public Object xpath(@Optional(defaultValue = PAYLOAD) InputStream item,
+                    String expression){
+    try {
+      return xPathFactory.newXPath().evaluate(expression, documentBuilder.parse(item));
+    } catch (Exception e) {
+      return null;
+    }
+  }
+----
+
+This `xpath` function can now be used from inside a DataWeave script, referencing it _inside our Module's namespace_.
+
+The next example reads XML and sets an XPath filter using the new `xpath` function:
+
+[source,xml,linenums]
+----
+<flow name="xpathFunctionUsingPayloadAsDefault">
+  <file:read path="files/bookstore.xml"/>
+  <set-payload value="#[Docs::xpath("/bookstore/book[price>35]/title")]"/>
+</flow>
+----
+
+== Restrictions: Config-less and Connection-less
+
+By definition, functions are not allowed to depend on or receive a particular
+<<configs#, Configuration>> or <<connections#, Connection>>.

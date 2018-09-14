@@ -1,0 +1,203 @@
+= Stereotypes
+ifndef::env-site,env-github[]
+include::_attributes.adoc[]
+endif::[]
+:keywords: stereotype, mule, sdk, types
+
+A stereotype is a loose way to classify a component. By assigning a stereotype to a component, you are not implying that it has any specific return type or structure. Instead, you are indicating that it holds something in common with the rest of the components in the same stereotype. You can assign a stereotype to make a parameter belong to the stereotype.
+
+== Stereotype Annotation
+
+To assign a stereotype to a component, you must use the `@Stereotype` annotation along with a `StereotypeDefinition` class.
+
+You can use the `@Stereotype` annotation at these levels:
+
+* At the method level to affect a particular operation.
+* At the class level to assign the stereotype to all the operations defined in that class.
+
+A component can only belong to one stereotype. This means that if the `@Stereotype` annotation is used on a component, no other annotations can assign a stereotype to it.
+
+For example, a `@Validator` annotation, which is used to signal that an operation does not change the message and only performs some kind of validation, assigns a stereotype to the operation automatically.
+
+This example uses `@Stereotype` on operations:
+
+[source,java,linenums]
+----
+@Stereotype(JenkinsStereotypeDefinition.class)
+public final class CommonJenkinsOperations {
+
+
+  public void triggerBuild(String name, Map<String,String> arguments)
+      throws Exception {
+      // ...
+  }
+
+  public void createJobs(String name, Map<String,String> arguments)
+      throws Exception {
+      // ...
+  }
+
+  public Result<JenkinsInformation , JenkinsAttributes> ActiveJobs()
+      throws Exception {
+      // ...
+  }
+}
+
+----
+
+//TODO: could "belong to" replace "be of"?
+In this case, all the operations in the class `CommonJenkinsOperations` will be of the stereotype defined in `JenkinsStereotypeDefinition`.
+
+== StereotypeDefinition
+
+This interface provides the stereotype name, namespace, and parent. By default, the namespace is assigned to the extension's namespace.
+
+Stereotypes have a hierarchy. By default, they do not extend from another stereotype unless specified.
+
+This example show how to define a `StereotypeDefinition`:
+
+[source,java,linenums]
+----
+public final class JenkinsStereotypeDefinition extends MuleStereotypeDefinition { // <1>
+
+  @Override
+  public String getName() {
+    return "JENKINS_OPERATION";
+  }
+
+  @Override
+  public Optional<StereotypeDefinition> getParent() {
+    return Optional.of(PROCESSOR_DEFINITION); <2>
+  }
+
+}
+----
+
+<1> The `JenkinsStereotypeDefinition` class extends from a `StereotypeDefinition` that knows about more than one
+`StereotypeDefinition` like `PROCESSOR_DEFINITION`.
+<2> Selects `PROCESSOR_DEFINITION` that is a `StereotypeDefinition` defined in `MuleStereotypeDefinition` as this `StereotypeDefinition`'s parent.
+
+== AllowedStereotypes Annotation on Parameters
+
+This annotation identifies every `StereotypeDefinition` that is accepted for a parameter. The value of this annotation is a single value or array of `StereotypeDefinition`. It can only be applied to parameters of type `Chain` or `Route`.
+
+This example enforces a certain stereotype as a parameter:
+
+[source,java,linenums]
+----
+public class JenkinsScope {
+
+  private static final Logger logger = getLogger(JenkinsScope.class);
+
+  public void jenkinsGroupExecution(@AllowedStereotypes(JenkinsStereotypeDefinition.class) Chain operations,
+                  CompletionCallback<Void, Void> callback)
+      throws Exception {
+
+    LOGGER.debug("Invoking Jenkins Operations.")
+    operations.process(
+      result -> {
+        // Log information about the execution of the operations
+        callback.success(result);
+      },
+      (error, previous) -> {
+        LOGGER.error(error.getMessage());
+        callback.error(error);
+    });
+
+  }
+
+}
+----
+
+The `Chain` that is received can only contain operations with the stereotype defined in `JenkinsStereotypeDefinition` class.
+
+== Configuration Reference
+
+Every configuration has a unique stereotype that is assigned automatically. This stereotype has the following characteristics:
+
+* Both the name and the namespace are made uppercase, and words are separated by underscores.
+
+* The namespace is the namespace of the extension, for example, "HTTP" for the HTTP Connector or "JMS" for the JMS Connector.
+
+* The name is the name of the configuration. For example, the stereotype name of the "requestConfig" configuration will be "REQUEST_CONFIG".
+
+This default stereotype can be overwritten using the `@Stereotype` annotation.
+
+You can use this stereotype to restrict a `String` parameter to a name of certain type of configuration by using the `@ConfigReference` annotation. This annotation requires the name and namespace of the configuration stereotype.
+
+A usage example of this feature:
+
+Developing an extension that uses the HttpService, which requires a HttpRequesterConfig for its use. Then, with the use of the Extension Client, the
+HttpService will use the actual Configuration.
+
+For example, if the HTTP Connector declares this `HttpRequesterConfig`:
+
+[source,java,linenums]
+----
+@Configuration(name = "requestConfig")
+@ConnectionProviders(HttpRequesterProvider.class)
+@Operations({HttpRequestOperations.class})
+public class HttpRequesterConfig {
+  // Parameters and getters for the Configuration
+}
+----
+
+And the Web Service Consumer connector is defined like this:
+
+[source,java,linenums]
+----
+@ErrorTypes(SoapErrors.class)
+@Operations(ConsumeOperation.class)
+@ConnectionProviders(SoapClientConnectionProvider.class) // <1>
+@SubTypeMapping(baseType = CustomTransportConfiguration.class, subTypes = CustomHttpTransportConfiguration.class)
+@Extension(name = "Web Service Consumer")
+@Xml(prefix = "wsc")
+public class WebServiceConsumer {
+}
+----
+<1> This ConnectionProvider holds a parameter that is using the `@ConfigReference` annotation. Note that the default `config` is used because  the connector does not declare any configuration.
+
+This is part of the declaration of the ConnectionProvider:
+
+[source,java,linenums]
+----
+public class SoapClientConnectionProvider implements CachedConnectionProvider<SoapClientWrapper> {
+  // ...
+  @Inject
+  private HttpService httpService;
+  // ...
+  @Placement(tab = "Transport")
+  @Parameter
+  @Optional
+  @Expression(NOT_SUPPORTED)
+  @DisplayName("Transport Configuration")
+  private CustomTransportConfiguration customTransportConfiguration;
+  // ...
+}
+----
+
+Here is where the `@ConfigReference` annotation is used:
+
+[source,java,linenums]
+----
+@Alias("http-transport-configuration")
+public class CustomHttpTransportConfiguration implements CustomTransportConfiguration {
+
+  @ConfigReference(namespace = "HTTP", name = "REQUEST_CONFIG") // <1>
+  @Parameter
+  private String requesterConfig;
+
+  @Override
+  public MessageDispatcher buildDispatcher(ExtensionsClient client) {
+    return new HttpConfigBasedMessageDispatcher(requesterConfig, client); // <2>
+  }
+
+  @Override
+  public TransportResourceLocator resourceLocator(ExtensionsClient client) {
+    return new HttpResourceLocator(requesterConfig, client); // <2>
+  }
+}
+----
+
+<1> The String parameter `requesterConfig` must take the value of the name of a `HttpRequesterConfig`.
+<2> The name of the configuration is used along with the `ExtensionsClient`

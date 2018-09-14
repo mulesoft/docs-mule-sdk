@@ -1,0 +1,111 @@
+= Dynamic Configurations
+ifndef::env-site,env-github[]
+include::_attributes.adoc[]
+endif::[]
+:keywords: mule, sdk, config, dynamic, multitenant, multitenancy
+
+The need to use expressions in a configuration parameter is a common one. Typical use cases are:
+
+* Multi-Tenancy: Credentials or any other setting might change depending on the active user.
+* Dynamic endpoints: Different destinations are used depending on the routed message.
+* Dynamic settings: For example, a timeout might change depending on the destination of the message.
+
+== Static Configurations
+
+A configuration is static when none of its parameters are assigned an expression (even if those parameters do support expressions), for example:
+
+.Example: Static Configuration
+[source,xml,linenums]
+----
+<ftp:config name="ftp" defaultWriteEncoding="UTF-8">
+  <ftp:connection username="foo" password="mySecret" />
+</ftp:connection>
+----
+
+All the parameters in the example have fixed values, so this configuration is  static.
+
+Note that that there is a difference between a parameter with a value that is not an expression and a parameter that does not accept expressions. The former might accept an expression as a value.
+
+== Dynamic Configurations
+
+In dynamic configurations, at least one parameter has an expression, for example:
+
+.Example: Dynamic Configuration
+[source,xml,linenums]
+----
+<ftp:config name="ftp" defaultWriteEncoding="#[attributes.queryParams.encoding]">
+  <ftp:connection username="foo" password="mySecret" />
+</ftp:connection>
+----
+
+This configuration is dynamic because the `defaultWriteEncoding` can resolve to a different value for each execution.
+
+Here is another dynamic configuration:
+
+[[multi_tenancy]]
+.Example: Multi-tenancy
+[source,xml,linenums]
+----
+<ftp:config name="ftp" defaultWriteEncoding="UTF-8">
+  <ftp:connection username="#[ftpUser]" password="#[ftpPassword]" />
+</ftp:connection>
+----
+
+This example shows how to configure multi-tenancy. Expressions in connection parameters also resolve into dynamic configurations.
+
+== Dynamic Configuration Lifecycle
+
+Static and dynamic configurations have very different lifecycles. For static configurations, a single instance is created and used each time it is needed.
+
+Dynamic configurations have a different behavior. Each time an operation that points to a dynamic configuration is executed, all the parameters in the configuration are evaluated. A configuration instance is created for each unique set of resolved parameters. In that way, each time the same values are resolved, the same instance is returned, but for each different set of values, a different instance is created.
+
+== Dynamic Configuration Expiration
+
+Although it is easy to create dynamic configurations, you still need a configurable mechanism for disposing the configuration instances that are no longer needed (or that have been idle for a certain period). This is critical to prevent out-of-memory (OOM) issues.
+
+Returning to the <<multi_tenancy, FTP multi-tenant>> example, the worst case scenario mandates that a new configuration instance is produced on a per-message basis. Depending on the app, these instances not be needed once the transfer is completed.
+
+By default, dynamic instances of any configuration element are automatically disposed of after 5 minutes of inactivity.
+
+[TIP]
+The instance is inactive if no operation has started _or finished_ in that lapse. If an FTP transfer started 6 minutes ago, but the file is too big, and the transfer is still in progress, that configuration will not be expire.
+
+SDK-based modules also support specifying custom timeouts for specific config definitions. This is something that the module user might do to fine-tune an app to handle cases where the default timeout is known to be too short or too long. The following example lowers the timeout to 30 seconds:
+
+.Example: Modifying a Timeout
+[source,xml,linenums]
+----
+<ftp:config name="ftp" defaultWriteEncoding="UTF-8">
+  <expiration-policy maxIdleTime="30" timeUnit="SECONDS" />
+  <ftp:connection username="#[ftpUser]" password="#[ftpPassword]" />
+</ftp:connection>
+----
+
+[TIP]
+No particular action is required from you for the `<expiration-policy />` element to be available. The SDK does this automatically.
+
+It is also possible to configure the global default at an app level so that any dynamic configuration has a different default. You set this up through the `<configuration>` element in the Mule DSL:
+
+[source,xml,linenums]
+----
+<mule>
+  <configuration>
+    <dynamic-config-expiration>
+      <expiration-policy maxIdleTime="30" timeUnit="SECONDS" />
+    </dynamic-config-expiration>
+  </configuration>
+</mule>
+----
+
+Finally, it is also possible to set the frequency at which the runtime checks for and disposes of configurations that have expired (default is 5 minutes). This cannot occur on a config-by-config basis, only at the app level. The following example not only sets the default expiration time to 30 SECONDS, it also makes the runtime check every 1 minute.
+
+[source,xml,linenums]
+----
+<mule>
+  <configuration>
+    <dynamic-config-expiration frequency="1" timeUnit="MINUTES">
+      <expiration-policy maxIdleTime="100" timeUnit="MILLISECONDS" />
+    </dynamic-config-expiration>
+  </configuration>
+</mule>
+----

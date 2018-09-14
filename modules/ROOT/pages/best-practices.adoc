@@ -1,0 +1,104 @@
+= Best Practices
+ifndef::env-site,env-github[]
+include::_attributes.adoc[]
+endif::[]
+:keywords: mule, sdk, best, practices
+
+Here's a summary of the SDK best practices. It includes tips and tricks that are recommended when you develop your modules.
+
+== Check the End-to-end Experience
+
+Before publishing your module, try it in Studio and Design Designer. Make sure that it provides a good usability and experience. A module that works but is hard to use is not complete.
+
+== Module Java API
+
+The SDK exports by package and not by class. To determine what packages to export, the SDK introspects each configuration, connection, and component return and input types to get their packages. So you need to make sure that any classes that you _do not_ want to export are kept out of exported packages. Exported classes should not share a package with classes that you do not want to export.
+
+The suggested package hierarchy (used internally for MuleSoft modules):
+
+----
+org.mule.module
+\--> .api.*
+\--> .internal.*
+----
+
+* `.api.*` contains all the classes that to be exported and seen by the Mule app: Return Types, Subtypes, Input Types, and Connection interfaces.
+* `.internal.*` contains all the classes used for specific behavior of the module: Annotated classes, `Connection` and `Operation` implementations, and internal classes.
+
+[TIP]
+You should *ONLY* export packaged defined in your module. *Never* export packaged from other dependency libs.
+
+== Types
+
+All types *must* be DataWeave compliant. This means that all exposed types must have an empty constructor and a getter method for each field that should be usable.
+
+== @ErrorTypes
+
+* Mule works in terms of errors instead of exceptions. Each operation should declare which errors can be thrown, and each module defines its own errors.
+* Use `ModuleException` to wrap an exception and enrich it with a custom error type.
+* Exceptions classes should not be exported in your module.
+
+== Config vs ConnectionProvider
+
+* Config has all the parameters that control how the module works.
+* `ConnectionProvider` has all the parameters needed to generate a connection.
+
+== Expressions
+
+By default, everything accepts expressions. Sometimes it does not make sense to allow a parameter to be configured with an expression, so you can disable that option with this:
+
+[source,java,linenums]
+----
+@Expression(NOT_SUPPORTED)
+----
+
+== Do Not Access the MuleContext
+
+The only reason that a module needs access to the `MuleContext` is to obtain certain Runtime services. Use `@Inject` to obtain those services instead.
+
+Do not use this:
+
+[source,java,linenums]
+----
+muleContext.getRegistry().lookupByType(MyClass.class)
+----
+
+Use this instead:
+
+[source,java,linenums]
+----
+public class MyComponent {
+    @Inject
+    MyClass myClass;
+}
+----
+
+== Transactions
+Non-transactional operations should not receive a transactional connection. The SDK will make those operations transactional, and in in Studio, your user will be wrongfully presented with transactional options.
+
+== Use Mule the HTTP Client
+
+* Do not use Jersey or similar HTTP libraries. Use the Mule HTTP service. That will provide access to all the features of the HTTP requester, including non-blocking execution.
+* Pay special attention to endpoints that require TLS. Make sure that you initialize the `TlsContextFactory` correctly.
+
+== Use Mule the SOAP client
+
+* Do not use CXF or similar libraries to consume Web Services. Use the Mule SOAP service. That will provide access to all the features of the web service consumer.
+
+== Choosing the SDK Version
+
+Normally, developers tend to use the latest available version of any given product. This should not be the case with the SDK. To extend Mule, you should:
+
+. Identify the features you need
+. Choose the lower version which includes the features you need.
+
+For more on selecting the correct SDK version, see xref:choosing-version.adoc[Choosing the SDK Version].
+
+== Miscellaneous
+
+* Do not use boxed Booleans. Only native Booleans are allowed. All `boolean` parameters are considered optional and default to `false`. You can use the `@Optional` annotation to change the default of a particular `boolean`, but you can never make it a required parameter.
+* Use plural names for `List` or `Array` parameters.
+* Remember to use the `@ConfigOverride` whenever you want an operation to override a configuration setting.
+* Use `@DefaultEncoding` to obtain the runtime's default encoding.
+* `@Nullsafe`: Use it whenever it makes sense to avoid `NullPointerException` problems.
+* Dates: Do not use `java.util.Date` or `java.util.Calendar`. Use Java 8 `java.time.LocalDate` instead.

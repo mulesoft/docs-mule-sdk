@@ -1,0 +1,44 @@
+= Context Information Injection
+ifndef::env-site,env-github[]
+include::_attributes.adoc[]
+endif::[]
+:keywords: mule, sdk, context, inject, event, location
+
+To get information about the context in which an operation or source is being processed, you can add parameters to the operation or source. The parameters do not appear in the UI, but they are injected by the SDK into the runtime.
+
+== Component Location
+
+When executing an operation or using a source, you might want to have some context about the location of the component, mostly for logging purposes. To achieve this, you can define a `ComponentLocation` as a parameter, and it will be injected.
+
+This examples shows how to log the component location when starting a source:
+
+[source,java,linenums]
+----
+
+@Alias("listener")
+public class HttpListener extends Source<InputStream, HttpRequestAttributes> {
+
+  private static final Logger LOGGER = getLogger(HttpListener.class);
+
+  @Connection
+  private ConnectionProvider<HttpServer> serverProvider;
+
+  @Parameter
+  private ComponentLocation location;
+
+  @Parameter
+  private String path;
+
+  private HttpServer server;
+
+  @Override
+  public void onStart(SourceCallback<InputStream, HttpRequestAttributes> sourceCallback) throws MuleException {
+    server = serverProvider.connect();
+    if (LOGGER.isDebugEnabled()) {
+      LOGGER.debug("Starting HTTP Listener %s on path %s", location.getLocation(), path);
+    }
+    server.listen(path);
+  }
+// ...
+}
+----

@@ -1,0 +1,72 @@
+= Choosing the SDK Version
+ifndef::env-site,env-github[]
+include::_attributes.adoc[]
+endif::[]
+:keywords: mule, sdk, create, new, project, getting, started, version
+
+//TODO: IS THIS 1.1 ONLY, NOT 1.0
+
+Developers tend to use the latest available version of a given product. This should not be the case with the Mule SDK. When choosing a version of the SDK to use for extending a Mule module, you should:
+
+* Identify the features you need.
+* Choose the lowest version that includes the features you need.
+
+The next sections explain why.
+
+== Extensions API
+
+When you are developing with the SDK, you are really using an API, the Extensions API. Whenever you annotate a field or method with any of the SDK annotations, or when you implement any interface, you are simply using parts of this Extensions API. The module that you ship only contains your code. It does not contain any of the code that bridges your module with the Mule Runtime internals. This gap is bridged in the Runtime because of the `Extensions API`.
+
+== Minimum Mule Version
+
+Each version of the Mule Runtime ships with support to one particular version of the `Extensions API`, plus all the version that proceeded it
+
+For example, assume that both are true:
+
+* Mule `4.1` ships with SDK version `1.1`.
+* Mule `4.2` ships with SDK version `1.2`.
+
+Mule `4.2` will fully support any module developed with SDK versions `1.2`, `1.1`, and `1.0`. If Mule `4.3` introduces SDK 1.3, it will also support `1.2` and `1.1`, and so on.
+
+This concept works both ways:
+
+* Any Mule Runtime version will support all the SDK versions that were released before, so a module that works in Mule `4.1` should work in any Mule 4.x (where `x >= 1`).
+* If a module is built using SDK `1.2`, it will only work in runtimes that support that SDK version. In the case of this example, this module will not work in Mule `4.1`.
+
+== Identify Your Required Features
+
+You should not aim to use the latest SDK version available because your module will only be compatible with the latest Mule Runtime. Instead, you should use the oldest version that includes all the features you need, for example:
+
+* If you are creating a simple connector that only needs connectivity and basic DataSense, you should use version `1.0`.
+* If you also need to use the `PollingSource` interface, then use SDK 1.1, which introduced support for `PollingSource`. Only the runtimes that support that feature will be able to run your module.
+
+For any new SDK feature, the documentation includes the version in which it was introduced. If no particular version is specified, the feature has been present since the very first version.
+
+[TIP]
+The recommended approach is to start all your projects using version `1.0.0` and only upgrade the versions as you face the need for particular features.
+
+Following these guidelines will make your module compatible with a wider number of Mule Runtime versions, so more people will be able to use your module. If you do require features from newer versions, then there is no good reason for you to use the newer versions.
+
+
+== What If There Is a Bug in the SDK?
+
+The `Extensions API` is an API, and its implementation resides in the Mule Runtime, so most SDK-related bug fixes will be released in patch releases and service packs for the Mule Runtime, not through new SDK versions.
+
+In some corner cases, where the issue is in the API definition, a patch release of the SDK will be made available (for example, `1.1.2`). You should always choose the higher bug fix version. For example, between `1.0.0` and `1.0.4`, you should pick `1.0.4`.
+
+Note that version numbers mentioned above meant as examples that do not necessarily represent any existing versions or patches.
+
+== Changing Version
+
+The SDK `version` is specified in your `pom.xml` file of your module project, inside the `parent` element.
+
+[source,xml,linenums]
+----
+<parent>
+  <groupId>org.mule.extensions</groupId>
+  <artifactId>mule-modules-parent</artifactId>
+  <version>1.0.0</version>
+</parent>
+----
+
+To change to another version, you simply change the parent version.

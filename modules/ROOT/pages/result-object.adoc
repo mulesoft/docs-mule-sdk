@@ -1,0 +1,76 @@
+= The Result Object
+ifndef::env-site,env-github[]
+include::_attributes.adoc[]
+endif::[]
+:keywords: mule, sdk, result, output, mimeType, attributes, operation, source
+
+The `Result` object represents the result of a component's execution. It is used for cases in which the component not only needs to return a value to be set on the message payload but also will specify message attributes and/or a mime type.
+
+The class has two generic types, one for the type of the value that goes into the payload and another for the type of the returned message attributes.
+
+For example, consider an oversimplified `read` operation from the File connector. This operation sets the payload to an `InputStream` with the file's content. It also sets the attributes to a `FileAttributes` object that contains information, such as file name, size, timestamp, permissions, and so on.
+
+[source,java,linenums]
+----
+public Result<InputStream, FileAttributes> read(String path) { // <1>
+  InputStream content = getContent(path);
+  FileAttributes attributes = getAttributes(path);
+
+  return Result.<InputStream, FileAttributes>builder() // <2>
+        .output(content) // <3>
+        .attributes(attributes) // <4>
+        .build(); // <5>
+}
+----
+
+<1> The operation returns a `Result<InputStream, FileAttributes>`. This tells the runtime that the operation returns an `InputStream` as payload and `FileAttributes` as attributes.
+<2> Once it obtains the result values, it uses `Result.builder()` to create a new instance. Note that this is strongly typed, so you need to specify the generics when creating the builder.
+<3> The `output(Object)` method in the builder is used to set the payload.
+<4> The `attributes(Object)` is used to set the attributes.
+<5> The example calls the `build()` method and returns the created `Result`.
+
+== Setting the Mime Type
+
+The `Result` object can be used to set the output `mimeType`. Building on the previous example, the operation here makes a best guess about the file's `mimeType` based on its file extension:
+
+[source,java,linenums]
+----
+public Result<InputStream, FileAttributes> read(String path) {
+  InputStream content = getContent(path);
+  FileAttributes attributes = getAttributes(path);
+
+  MediaType guessedMediaType = MediaType.ANY;
+  if (path.endsWith(".json")) {
+    guessedMediaType = MediaType.APPLICATION_JSON;
+  } else if (path.endsWith("*.xml")) {
+    guessedMediaType = MediaType.APPLICATION_XML;
+  } else if (path.endsWith("*.bin")) {
+    guessedMediaType = MediaType.BINARY;
+  }
+
+  return Result.<InputStream, FileAttributes>builder()
+        .output(content)
+        .attributes(attributes)
+        .mediaType(guessedMediaType)
+        .build();
+}
+----
+
+[TIP]
+In the example above, the `MediaType` class is not the `@MediaType` annotation but Mule API's `org.mule.runtime.api.metadata.MediaType`.
+
+== Void Attributes
+
+For a use case where you want to set the payload and the `mimeType` but do not want to set attributes, you use the `<Void>` type, for example:
+
+[source,java,linenums]
+----
+public Result<InputStream, Void> read(String path) {
+  InputStream content = getContent(path);
+
+  return Result.<InputStream, Void>builder()
+        .output(content)
+        .mediaType(bestGuessMediaType(path))
+        .build();
+}
+----

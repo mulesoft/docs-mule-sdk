@@ -1,0 +1,56 @@
+= Binary Streaming
+ifndef::env-site,env-github[]
+include::_attributes.adoc[]
+endif::[]
+:keywords: mule, sdk, streaming, binary
+
+In binary streaming use cases, the stream is a flux of bytes that are treated in a generic way regardless of what they represent. Examples include the response of an HTTP request or retrieving and writing a file in a FTP server.
+
+The SDK supports this abstraction by using the Java `InputStream` class.
+
+== Binary Streaming in Operations
+
+Operations can receive stream parameters, return streams, or do both.
+
+The Write operation in the File connector is an example of an operation that operates over a stream:
+
+[source,java,linenums]
+----
+public class FileOperations {
+
+    public void write(@Content InputStream content, String path) {
+        // do the writing
+    }
+}
+----
+
+If you have parameter of type `InputStream`, the SDK will provide all the necessary support for using Mule's streaming capabilities. The `content` parameter in the example above will always be assigned to a repeatable stream that points to the beginning of the stream, treating it as if this is the first time the stream is getting read, whether that is true or not.
+
+Another possibility is that your operation _returns_ a binary stream instead, like the Read operation does:
+
+[source,java,linenums]
+----
+public class FileOperations {
+
+    public InputStream read(String path) {
+        // do the reading
+    }
+}
+----
+
+If you return an `InputStream`, the SDK will automatically add all the necessary magic to make that stream repeatable.
+
+== Configuring Streaming
+
+By allowing elements such as `<repeatable-file-store-stream />`, `<repeatable-in-memory-stream />` and `<non-repeatable-stream />`, the SDK automatically adds support for configuring how streaming should behave. Here is an example that configures custom file store streaming for the Read example above:
+
+[source,xml,linenums]
+----
+<file:read path="myFile.json">
+    <repeatable-file-store-stream inMemorySize="10" bufferUnit="KB"/>
+</file:read>
+----
+
+== See Also
+
+xref:streaming.adoc[Streaming]

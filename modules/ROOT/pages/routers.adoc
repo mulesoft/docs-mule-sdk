@@ -1,0 +1,89 @@
+= Creating Routers with Mule SDK
+ifndef::env-site,env-github[]
+include::_attributes.adoc[]
+endif::[]
+:keywords: mule, sdk, routers, router
+
+Conceptually, routers are <<operations#, operations>> that can receive many executable routes and a set of parameters that handle the execution of one, all, or none of them.
+
+Routes should be used for receiving multiple possible paths of execution, where the parameters of the route can be used to decide whether or not the contained processors should be executed. Stereotypes can be used in the route declaration to define are stereotypes for the contained chain. Routes do not allow complex parameters to be defined inline because the DSL content of the element will be exclusive of the parameterized <<operations#, operations>>.
+
+== Defining a Route
+
+First you need to declare at least one route in your module by extending the `Route` base class:
+
+[source,java,linenums]
+----
+public class WhenRoute extends Route {
+
+  @Parameter
+  @Optional
+  private boolean shouldExecute;
+
+  public boolean shouldExecute() {
+    return shouldExecute;
+  }
+
+}
+----
+
+== Declaring the Router
+
+Next, you need to declare the router method as one of the module's <<operations#, operations>>. Any operation receiving at least one `Route` implementation along with a `RouterCompletionCallback` is registered as a router:
+
+[source,java,linenums]
+----
+@Extension(name = "Docs")
+@Operations(ChoiceRouter.class)
+public class DocsModule {
+
+}
+----
+
+The `ChoiceRouter` class defines the following method:
+
+[source,java,linenums]
+----
+public void choice(WhenRoute when,
+                   @Optional OtherwiseRoute otherwise,
+                   RouterCompletionCallback callback) {
+
+  if (when.shouldExecute()) {
+    when.getChain().process(callback::success, (error, previous) -> callback.error(error));
+
+  } else if (otherwise != null && otherwise.shouldExecute()) {
+    otherwise.getChain().process(callback::success, (e, r) -> callback.error(e));
+
+  } else {
+    callback.success(Result.builder().build());
+  }
+}
+----
+
+Above, you can see how a router is declared and how the routes are conditionally executed based on their configuration. Route execution is performed through their chain, exactly as though each route was an scope by itself.
+
+Using the router consists of configuring the router parameters and then adding each route declaration with its own parameters:
+
+[source,xml,linenums]
+----
+<flow name="logDecoratorSampleFlow">
+    <docs:choice>
+      <docs:when shouldExecute="#[payload != null]">
+        <http:request config-ref="config" path="/" method="GET"/>
+      </docs:when>
+      <docs:otherwise>
+        <logger message="Payload was null"/>
+      </docs:otherwise>
+    </docs:choice>
+</flow>
+----
+
+This will execute the `http:request` operation contained by the `when` route every time the `payload` is not null. If a null `payload` arrives, the fallback `otherwise` is executed.
+
+== Config-less and Connection-less
+
+Routers have some restrictions that differentiate them from <<operations#, operations>>. By definition, routers are not allowed to depend on or receive a particular configuration or connection.
+
+== Always Non-Blocking
+
+All routers have to be defined as a `void` method receiving a `RouterCompletionCallback` for communicating its result. This means that all routers are non-blocking by default.

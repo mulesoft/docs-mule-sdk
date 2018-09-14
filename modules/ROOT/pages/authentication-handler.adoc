@@ -1,0 +1,111 @@
+= Authentication Handler
+ifndef::env-site,env-github[]
+include::_attributes.adoc[]
+endif::[]
+
+This handler allows you to configure the current context's authentication, which is used for encryption and inbound authentication, based on a given request.
+
+== How to Use the Authentication Handler
+
+When you add a parameter of type `AuthenticationHandler` to your operation, the Authentication Handler instance from the current context will be injected in runtime. You can use this instance to check the current authentication (if there is any) and set a new one.
+
+The Authentication Handler interface provides the following methods:
+
+* `createCredentialsBuilder` returns a builder that is used to create a `Credentials` instance.
+
+* `createAuthentication`, when given an instance of `Credentials`, creates an `Authentication` instance.
+
+* `setAuthentication`, when given an `Authentication`, sets that value as the current context's authentication. Optionally, you can also provide a List of security providers (the names) that will be added to the `SecurityManager`.
+
+* `getAuthentication` returns the `Authentication` from the current context. There may be no `Authentication` for the current context.
+
+== Usage Example
+
+Imagine that after receiving an HTTP Request, you want to authenticate and store the credentials on the current context's Authentication Handler. You can use the `basic-security-filter` operation from the HTTP Connector for this use case.
+
+This simplified example shows how the `basic-security-filter` is implemented:
+
+[source,java,linenums]
+----
+public class HttpOperations {
+
+  /**
+   * Authenticates received HTTP requests. Must be used after a listener component.
+   */
+  @Throws(BasicSecurityErrorTypeProvider.class)
+  public void basicSecurityFilter(@ParameterGroup(name = "Security Filter") HttpBasicAuthenticationFilter filter,
+                                  AuthenticationHandler authenticationHandler) { // <1>
+    try {
+      filter.authenticate(authenticationHandler);
+    } catch (BasicUnauthorisedException e) {
+      throw new ModuleException(BASIC_AUTHENTICATION, e);
+    } catch (SecurityProviderNotFoundException | SecurityException | UnknownAuthenticationTypeException e) {
+      throw new ModuleException(SERVER_SECURITY, e);
+    }
+  }
+ // ...
+}
+----
+
+<1> The operation has an `AuthenticationHandler` parameter that will be injected in runtime.
+
+[source,java,linenums]
+----
+public class HttpBasicAuthenticationFilter {
+
+  @Parameter
+  private String realm;
+
+  @Parameter
+  @Optional
+  @NullSafe
+  private List<String> securityProviders;
+
+  @Parameter
+  @Optional(defaultValue = "#[attributes]")
+  HttpRequestAttributes attributes; // <1>
+
+  public void authenticate(AuthenticationHandler authenticationHandler)
+      throws SecurityException, SecurityProviderNotFoundException, UnknownAuthenticationTypeException {
+    String header = attributes.getHeaders().get("Authorization".toLowerCase());
+
+    if ((header != null) && header.startsWith("Basic ")) {
+
+      String username = retrieveUsername(header);
+      String password = retrievePassword(header);
+
+
+      Credentials credentials = authenticationHandler.createCredentialsBuilder() // <2>
+          .withUsername(username)
+          .withPassword(password.toCharArray())
+          .build();
+
+      try {
+        Authentication authentication = authenticationHandler.createAuthentication(credentials); // <3>
+        authenticationHandler.setAuthentication(securityProviders, authentication); // <4>
+      } catch (UnauthorisedException e) { // <5>
+        throw new BasicUnauthorisedException(authFailedForUser(username), e);
+      }
+
+    } else if (header == null) {
+      throw new BasicUnauthorisedException(null, "HTTP basic authentication", "HTTP listener");
+    } else {
+      throw new UnsupportedAuthenticationSchemeException("Http Basic filter doesn't know how to handle header " + header));
+    }
+  }
+
+}
+----
+
+<1> `HttpRequestAttributes` from where the username and password will be taken.
+
+<2> `Credentials` are created with the information taken from the request.
+
+<3> An `Authentication` is created based on `Credentials`.
+
+<4> The authentication information is checked against the `securityProviders` and set
+to the handler.
+
+<5> When the authentication information is invalid, and an exception is thrown.
+
+If there is another operation in the flow that has an Authentication Handler as a parameter, the instance that is injected will be the same as the one that is handled on the `basic-authentication-filter` operation. This way, by using the `getAuthentication` method, you will get the `Authentication` with the credentials from the HTTP Request.

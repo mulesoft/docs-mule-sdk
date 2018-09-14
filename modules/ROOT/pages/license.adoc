@@ -1,0 +1,137 @@
+= Modules Licensing
+ifndef::env-site,env-github[]
+include::_attributes.adoc[]
+endif::[]
+
+Modules written with the SDK have three possible kinds of licensing, each setting different requirements on how the application can be executed.
+
+== Community Module
+
+The default for all Modules, apps that use a Community Module can be executed in all Mule runtimes with no further requirements.
+
+== Enterprise Module
+
+Only Mule EE Runtimes can be used to execute the apps that use the Enterprise Modules, which means that the user of the Module needs a MuleSoft Enterprise License. Declaring a Module to be EE-only is very easy. You simply need to add the `@RequiresEnterpriseLicense` annotation:
+
+[source,java,linenums]
+----
+
+@Extension(name = "enterprise")
+@RequiresEnterpriseLicense
+public class EnterpriseConnector {
+
+}
+----
+
+By default, `RequiresEnterpriseLicense` forces the user to have a full MuleSoft Enterprise License, but you can also declare that the Module allows an evaluation license to be used for the Runtime. This can be configured using the `allowEvaluationLicense` flag in the `RequiresEnterpriseLicense` annotation:
+
+[source,java,linenums]
+----
+
+@Extension(name = "enterprise")
+@RequiresEnterpriseLicense(allowEvaluationLicense = true)
+public class EnterpriseConnector {
+
+}
+----
+
+== Custom Module License
+
+MuleSoft Certified Connectors can request a _certified license generation key_ from MuleSoft that allows them to create their own Custom License. This ensures that those who use the Certified Connector contact the Partner that developed the Module to obtain their Custom License.
+
+Partners who have built a MuleSoft Certified Connector can give potential customers the chance to build a Mule app with their connector and test it at design time. When attempting to deploy the Mule app with the connector, customers are prompted for the Partner’s Custom License.
+
+=== Obtaining a License Generation Key for your Connector
+
+Before submitting the developed connector to MuleSoft for certification, the prospective certified connector partner must complete these steps:
+
+. Include the following information for MuleSoft to use before generating a partner key and keystore:
++
+* Company Name (also known as "Provider Name")
+* Contact Email
+* Contact Message
+* Connector Name
++
+. Request the key and keystore from MuleSoft:
+.. The public `.key` is the file that you store in the connector.
+.. The `.jks` master keystore is for you as the partner to generate licenses with.
+
+== Adjusting the Connector Code and Storing the Public Key
+
+After obtaining the key and keystore:
+
+. The partner adjusts the connector project code by applying the `@RequiresEntitlement` annotation and entering values for all requested attributes.
++
+* `name` must be the name of the connector.
+* `provider` attribute must be the part before the `.key` suffix. For example, if MuleSoft generated a vendor key `prov-name.key`, the partner puts `prov-name` as the provider.
++
+[source,java,linenums]
+----
+@Extension(name="connector-name", provider="prov-name")
+@RequiresEntitlement(name="connector-name")
+public class LicensedConnector {
+  ...
+}
+----
++
+* Put the MuleSoft-provided `.key` file under `src/main/resources` or `src/main/resources/license` in the connector’s project directory.
+
+=== Sample Partner Connector
+
+You can download and import the sample connector to Studio to see how the license management annotations are configured in the connector code. The customer `.key` license file should reside in `src/main/resources`.
+
+== Producing a License File
+
+MuleSoft partners use the `.jks` file and the license generation plugin to generate a license to send to the connector customer.
+
+From the command line, where `vendor.keystore` should be replaced with the path to your `.jks` file, execute the command in the same directory where the `.jks` file is:
+
+//TODO redeploy license plugin as org.mule.extension:mule-extension-license
+----
+mvn org.mule.tools.devkit:mule-devkit-license:license  -Dvendor.keystore=betaprovider-license-demo.jks
+----
+
+[NOTE]
+Optionally, you can specify the expiration date of the license by appending `-Ddays.to.expire=<days-until-this-license-expires>` to the above command. To add the customer's name to the license, append `-Dclient=<client-name>`.
+
+If the license is successfully created, the output looks something like this:
+
+----
+[INFO] Scanning for projects...
+[NOTE]
+[INFO] ------------------------------------------------------------------------
+[INFO] Building Maven Stub Project (No POM) 1
+[INFO] ------------------------------------------------------------------------
+[NOTE]
+[INFO] --- mule-devkit-license:license (default-cli) @ standalone-pom ---
+* Enter the name of the client whom will receive this license: Bob
+* Enter the name of the provider of the Entitlement as it appears in the @RequiresEntitlement annotation: betaprovider
+* Enter the name of the Entitlement as it appears in the @RequiresEntitlement annotation: lic-demo
+* Enter the name of the Connector as it appears in the @Connector "name" attribute: license-demo
+* Enter keystore password:
+[INFO] ------------------------------------------------------------------------
+[INFO] BUILD SUCCESS
+[INFO] ------------------------------------------------------------------------
+[INFO] Total time: 18.151s
+[INFO] Finished at: Thu Dec 10 09:34:41 ART 2015
+[INFO] Final Memory: 6M/287M
+[NOTE]
+----
+
+== Developing a Mule Application with a Licensed Connector
+
+For customers to validate that their connector license is working, they need to make the license (`.lic` file) available through either the Mule app or the Mule server.
+
+=== License File in the Mule Application
+
+Once the customer has bought a license for the connector, the `.lic` file provided to the customer by the partner or vendor can be placed in one of these directories:
+
+* Under `src/main/resources` in the app (developed in Studio).
+* Under `app/classes` if the app has already been unpacked and deployed on the server.
+
+=== License File in the Mule Server
+
+Instead of storing the license in the app, you can be place in the `conf/` folder of the Mule server.
+
+[NOTE]
+Storing the license in the Mule server is the recommended approach if multiple apps require the same license.

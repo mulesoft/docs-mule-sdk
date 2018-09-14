@@ -1,0 +1,209 @@
+= Creating Configuration Objects
+ifndef::env-site,env-github[]
+include::_attributes.adoc[]
+endif::[]
+:keywords: mule, sdk, config, configuration
+
+Configurations are a set of configurable parameters that affect the overall behavior of your module.
+All modules are required to have at least one configuration, but you can define as many as needed.
+
+Different configurations might not only provide a different set of parameters
+but also specify their own set of operations, sources, and connection providers that
+are only available when using that configuration.
+
+== Defining Single Configuration Modules
+
+The simplest of cases is that of a Module that has only one configuration.
+For convenience, you can use the same class that you previously annotated
+with `@Extension` for that, for example:
+
+[source,java,linenums]
+----
+@Extension(name="singleConfig")
+@Operations(Operations.class)
+@Sources(MessageSources.class)
+@ConnectionProviders({BasicAuthConnection.class, OAuthConnection.class})
+public class SingleConfigModule {
+
+  @Parameter
+  private String someParameter;
+
+  @Parameter
+  private Integer numericParameter;
+
+  public String getSomeParameter() {
+    return someParameter;
+  }
+
+  public String getNumericParameter() {
+    return numericParameter;
+  }
+}
+
+----
+
+The example above shows the full skeleton of a module with one single configuration.
+You can see how the same class that declares the extension with all its operations,
+sources, connections, and so on, is also enriched with `@Parameter` annotated fields,
+which will translate into the configuration's parameters.
+
+When another component, such as an operation or source, requires access to the
+configuration, it will do so through instances of the `SingleConfigModule` class.
+
+== Externalizing Single Configuration Object
+
+Depending on how you want to organize your code, you might want to have a single
+configuration object without reusing the `@Extension` annotated class. Reasons
+for doing this might range from maintainability (you think that you might want to add
+more configurations in the future), separation of concerns, or simply personal preference.
+
+You can use the `@Configurations` annotation to do that. The same reworked example
+looks like this:
+
+[source,java,linenums]
+----
+@Extension(name="singleConfig")
+@Configurations(Config.class) // <1>
+public class SingleConfigModule {
+}
+
+@Configuration(name="config") // <2>
+@Operations(Operations.class)
+@Sources(MessageSources.class)
+@ConnectionProviders({BasicAuthConnection.class, OAuthConnection.class})
+public class Config {
+
+  @Parameter
+  private String someParameter;
+
+  @Parameter
+  private Integer numericParameter;
+
+  public String getSomeParameter() {
+    return someParameter;
+  }
+
+  public String getNumericParameter() {
+    return numericParameter;
+  }
+}
+----
+
+<1> Reference a `Config` class using the `@Configurations` annotation.
+<2> Define a class that acts as a configuration and defines the parameters, plus
+all the other components such as operations, connections, and so on.
+
+[TIP]
+Notice that the `@Configuration` annotation requires you to give the configuration a
+name. For modules with only one configuration, the name `config` is recommended.
+
+== Defining Multiple Configurations
+
+Let's explain this one using the HTTP connector as an example.
+
+There are two sides to implementing the HTTP protocol: to listen for requests and
+to send requests. Each of these aspects not only requires very different sets of
+parameters, it also turns out that:
+
+* To listen for request, you need to define an `<http:listener />` element that acts as a message source.
+* To send a request, you need an `<http:request />` element that acts as an operation.
+
+Because an application can contain many listener elements, the elements will only work when
+paired with an `<http:listener-config />` taht contains general settings about how the
+connection is to be established and other behavioral parameters. The same happens with the requester
+operation, which is paired with an `<http:requester-config />` element.
+
+The code looks like this:
+
+[source,java,linenums]
+----
+@Extension(name="http")
+@Configurations({HttpListenerConfig.class, HttpRequesterConfig.class}) // <1>
+public class HttpConnector {
+
+}
+
+@Configuration(name="listener") // <2>
+@ConnectionProviders(HttpListenerConnection.class)
+@Sources(HttpListener.class)
+public class HttpListenerConfig {
+
+  /**
+   * Base path to use for all requests that reference this config.
+   */
+  @Parameter
+  @Optional
+  @Expression(NOT_SUPPORTED)
+  private String basePath;
+
+  public String getBasePath() {
+    return basePath;
+  }
+}
+
+@Configuration(name="requester") // <3>
+@Operations(HttpRequester.class)
+@ConnectionProviders(HttpRequesterConnection.class)
+public class HttpRequesterConfig {
+
+  // the requester parameters
+}
+----
+
+<1> The `@Extension` annotated class defines the two configurations.
+<2> The `HttpListener` class defines the inbound connection and the message source that is exclusive to the listener feature.
+<3> The `HttpConfig` class defines the request operation and the outbound connection type.
+
+[TIP]
+Notice that this time, the name used in the `Configuration` annotation doesn't follow
+a specific default, but instead a descriptive name is used.
+
+== Getting the Configuration Name
+
+For logging or debugging reasons, you may want to know the name that this config instance
+has on the application. For this, you can use the `@RefName` annotation. This annotation must
+be used on fields of type `String`, and no two fields in the same class should bear this
+annotation. Here is an example of how to use it.
+
+In this example, you can see how to log the name of our component when it is getting initialized.
+This way, you can have traceability of the different config instances.
+
+[source,java,linenums]
+----
+@Configuration(name="config")
+@Operations(Operations.class)
+public class Config implements Initialisable {
+
+  private static final Logger LOGGER = LoggerFactory.getLogger(Config.class);
+
+  @RefName // <1>
+  private String configName;
+
+  @Parameter
+  private String someParameter;
+
+  public String getSomeParameter() {
+    return someParameter;
+  }
+
+  @Override
+  public void initialise(){
+    LOGGER.debug("Initializing config with name: " + configName);
+  }
+
+}
+----
+
+<1> The `@RefName` annotation signals that the name of the configuration used in the app
+should be injected to the field `configName`.
+
+You can see a concrete example of a DSL to see what would happen:
+
+[source,xml,linenums]
+----
+<my-extension:config name="exampleConfig" someParameter="aParameter">
+----
+
+In this case, the variable `configName` would take the value "exampleConfig". When
+this config is initialized, you will see this reflected on the logs with the message:
+`Initializing config with name: exampleConfig`

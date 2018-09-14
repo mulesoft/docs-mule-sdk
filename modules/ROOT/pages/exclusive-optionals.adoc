@@ -1,0 +1,62 @@
+= Exclusive Optionals
+ifndef::env-site,env-github[]
+include::_attributes.adoc[]
+endif::[]
+:keywords: mule, sdk, annotation, exclusive, optional
+
+When you are developing a module that provides several ways of configuring the same thing, but only one of them should be used, you might need to set the following rule:
+
+* From a given set of parameters, only one shall be used at any time.
+
+You use `@ExclusiveOptionals` to enforce this restriction.
+
+== @ExclusiveOptionals
+
+The `@ExclusiveOptionals` annotation can only be used on types that are used as a `@ParameterGroup` (see <<parameters#, Parameters>> for details).
+
+.Example
+[source,java,linenums]
+----
+@ExclusiveOptionals
+public class ExclusiveOptionalsExample {
+
+    @Parameter
+    private String requiredParameter;
+
+    @Parameter
+    @Optional
+    private String optionalParameter;
+
+    @Parameter
+    @Optional
+    private String anotherOptionalParameter;
+}
+----
+
+As the name of the annotation implies, the exclusivity restriction only applies to the optional parameters. So, setting `requiredParameter` at the same time as `optionalParameter` or `anotherOptionalParameter` is allowed, but setting `optionalParameter` and `anotherOptionalParameter` at the same time causes an error to be thrown.
+
+Tip: You can have as many parameters as you want inside an object that is annotated with `@ExclusiveOptionals`, but only one optional parameter is allowed to be set at any time.
+
+== Enforcing At Least One Parameter
+
+There can be cases where exactly one (but no more than one) of the optional parameters must be set. You can configure this requirement by using `@ExclusiveOptionals(isOneRequired = true)`, for example:
+
+[source,java,linenums]
+----
+@ExclusiveOptionals(isOneRequired = true)
+public class OneRequiredExample {
+
+    @Parameter
+    private String requiredParameter;
+
+    @Parameter
+    @Optional
+    private String optionalParameter;
+
+    @Parameter
+    @Optional
+    private String anotherOptionalParameter;
+}
+----
+
+So, an error is thrown if you set `requiredParameter` but do not set one of the optional parameters: `optionalParameter` or `anotherOptionalParameter`.

@@ -1,0 +1,60 @@
+= Creating Message Sources with the Mule SDK
+ifndef::env-site,env-github[]
+include::_attributes.adoc[]
+endif::[]
+:keywords: mule, sdk, sources, listener, triggers
+
+Operations are components that process a message and generate a result. Message sources are components that receive or generate new messages to be processed by the Mule Runtime.
+
+Examples of message sources:
+
+* An HTTP listener
+* A File watcher
+* A JMS/AMQP listener that retrieves messages from a queue to which the user previously subscribed
+* Salesforce Streaming API
+
+== Similarities Between an Operation and a Message Source
+
+Operations and message sources have:
+
+* Parameters
+* A return type
+* Name and Description
+* Reconnection capabilities
+
+== Differences Between an Operation and a Message Source
+
+[options="header"]
+|===
+|Operations|Message Sources
+|Operations process messages.
+|Sources create messages and push them to a flow.
+|The lifecycle of operations is tied to the containing flow.
+|Message sources can be started and stopped independently of the containing flow.
+|Parameters of operations have the option of accepting expressions (the default).
+|Sources have a clear definition of which parameters can accept expressions and which cannot. Only parameters that are part of generating a response can accept expressions.
+|An operation can have a lifecycle, but its parameter values are not available or not needed.
+|A Message source must have `start()` and `stop()` phases, and they might require access to the parameter values.
+|A connection is obtained each time the operation is executed.
+|A connection is obtained each time the message source is started or when reconnection happens.
+|===
+
+== Implementing a Message Source through the Mule SDK
+
+The differences listed above make it difficult to define a way to implement a message source in a way 100% consistent with the model defined for operations.
+
+Sources are required to extend the `Source` class, which takes two generics: one for the type of the generated event payload, the other for the type of the Attributes:
+
+[source,java,linenums]
+----
+@Alias("listener")
+@EmitsResponse
+public class HttpListener extends Source<InputStream, HttpRequestAttributes> {}
+----
+
+[TIP]
+You can use the `@Alias` annotation to force a name. Otherwise, the SDK will infer one.
+
+== Next Step
+
+* <<sources-parameters#, Defining Parameters in a Message Source>>

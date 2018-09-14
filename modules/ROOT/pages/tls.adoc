@@ -1,0 +1,86 @@
+= TLS Configuration
+ifndef::env-site,env-github[]
+include::_attributes.adoc[]
+endif::[]
+:keywords: mule, sdk, security, tls
+
+Adding support for TLS configuration in your module is as simple as declaring a <<parameters#, parameter>> of type `TlsContextFactory`, for example:
+
+[source,java,linenums]
+----
+@Parameter
+@Optional
+private TlsContextFactory tlsContextFactory;
+----
+
+The example above will automatically generate support for this XML setting:
+
+[source,xml,linenums]
+----
+<tls:context enabledProtocols="TLSv1.2,SSLv3">
+    <tls:trust-store path="my-trust-store.jks" password="myPassword"/>
+    <tls:key-store path="my-key-store.jks" keyPassword="myPassword" password="myPassword"/>
+</tls:context>
+----
+
+Note that a TLS context can also be defined as a global element of your app, so you can reference it by its name anywhere you need to use it.
+
+If TLS needs are hidden from the user (for example, if you need to connect safely to a service internally), you can create your own `TlsContextFactory` using its builder:
+
+[source,java,linenums]
+----
+private final TlsContextFactory tlsContextFactory = TlsContextFactory.builder()
+                                                        .trustStorePath("tls/trustStore")
+                                                        .trustStorePassword("mulepassword")
+                                                        .build()
+----
+
+This builder also allows creating default instances of `TlsContextFactory`:
+
+[source,java,linenums]
+----
+private final TlsContextFactory defaultTlsContextFactory = TlsContextFactory.builder().buildDefault();
+----
+
+Once a `TlsContextFactory` is available (whether as a parameter or obtained through its builder), it should be initialized, for example:
+
+[source,java,linenums]
+----
+if (tlsContextFactory instanceof Initialisable) {
+  ((Initialisable) tlsContextFactory).initialise();
+}
+----
+
+It can then be used to obtain an `SSLContext`, a `SSLSocketFactory` or a `SSLServerSocketFactory`. It can also obtain enabled TLS protocols and cipher suites, allowing you to set up most Java components that use TLS/SSL as shown in the examples below.
+
+You could set up a https://commons.apache.org/proper/commons-net/apidocs/org/apache/commons/net/ftp/FTPSClient.html[FTPSClient] by obtaining an https://docs.oracle.com/javase/8/docs/api/javax/net/ssl/SSLContext.html[SSLContext] and then configure the protocols and cipher suites for it:
+
+[source,java,linenums]
+----
+SSLContext sslContext = tlsContextFactory.createSslContext();
+String[] enabledProtocols = tlsContextFactory.getEnabledProtocols();
+String[] enabledCiphers = tlsContextFactory.getEnabledCipherSuites();
+
+FTPSClient client = new FTPSClient(sslContext);
+client.setEnabledProtocols(enabledProtocols);
+client.setEnabledCipherSuites(enabledCiphers);
+----
+
+You could obtain an https://docs.oracle.com/javase/8/docs/api/javax/net/ssl/SSLSocketFactory.html[SSLSocketFactory] to create your own https://docs.oracle.com/javase/8/docs/api/java/net/Socket.html[Socket]:
+
+[source,java,linenums]
+----
+SSLSocketFactory sslSocketFactory = tlsContextFactory.createSocketFactory();
+Socket socket = sslSocketFactory.create();
+----
+
+To create a https://docs.oracle.com/javase/8/docs/api/java/net/ServerSocket.html[ServerSocket]instead, you can obtain an https://docs.oracle.com/javase/8/docs/api/index.html?javax/net/ssl/SSLServerSocketFactory.html[SSLServerSocketFactory]:
+
+[source,java,linenums]
+----
+SSLServerSocketFactory sslServerSocketFactory = tlsContextFactory.createServerSocketFactory();
+ServerSocket socket = sslServerSocketFactory.createServerSocket();
+----
+
+To correctly configure TLS context and all the available parameters that
+you can set, see xref:4.1@mule4-runtime::tls-configuration.adoc[Configure TLS with Keystores and Truststores].

@@ -1,0 +1,130 @@
+= Metadata Keys Parameter
+ifndef::env-site,env-github[]
+include::_attributes.adoc[]
+endif::[]
+:keywords: mule, sdk, metadata, datasense, keys, type
+
+In order to describe a Dynamic Metadata structure, we need to
+know what type has to be represented.
+This type reference is done by defining a `@MetadataKeyId` Parameter in
+the operation, that contains the id of the type (eg, Account) which will
+be passed to the Metadata Resolver defined for that Parameter.
+
+This means, for example, that if your Operation can save a generic
+record to a remote system, but you wish to provide a better design time
+experience by describing the supported types `Account` and
+`Organization`, then one of your Operation parameters will be a type
+reference containing either the id `Account` or the id `Organization`,
+and this parameter will be used to describe either the Account
+structure or the Organization structure for the record to be saved
+into the bucket, depending on what the app developer decides to use.
+
+== Providing a List of Metadata Keys
+
+The most common case when resolving dynamic Metadata is to have a dynamic
+set of keys that identify each of the possible types to be resolved.
+At design time, the app developer will configure the Connector,
+select an operation and choose one of those keys from the Set that get's
+populated dynamically and the selected key will become the `MetadataKeyId`
+for the Metadata resolution.
+
+
+Implementing the dynamic key's resolution starts with having a `TypeKeysResolver`:
+
+[source,java,linenums]
+----
+public class RecordKeysResolver implements TypeKeysResolver {
+
+  @Override
+  public String getCategoryName() {
+    return "Records";
+  }
+
+  @Override
+  public Set<MetadataKey> getKeys(MetadataContext context) throws MetadataResolvingException, ConnectionException {
+     // First we need to obtain the key IDs that will be used.
+     // This is where you'd normally use `context.getConfig()`
+     // or `context.getConnection()` to obtain the entity id's
+     // from a remote service, for this demo the keys will be fixed
+     List<String> keyIds = Arrays.asList("Author_id", "BookList_id", "Book_id");
+
+     HashSet<MetadataKey> keys = new HashSet<>();
+     for (String id: keyIds){
+       // For each possible if, we create a new MetadataKey with that ID
+       MetadataKeyBuilder builder = MetadataKeyBuilder.newKey(id);
+
+       // Then, we add a DisplayName to that MetadataKey,
+       // this will be the name shown in the UI
+       builder.withDisplayName(StringUtils.removeEnd(id, "_id"));
+
+       //finally, add the key to the Set of known MetadataKeys
+       keys.add(builder.build());
+     }
+
+     return keys;
+  }
+
+}
+----
+
+Here you can see all the elements required to create a dynamic Set of
+MetadataKeys. The method to implement is `getKeys`, and its output
+all the keys that will be available to the user.
+
+The `id` element, like `Author_id` will be used internally and has to
+be unique for each structure you may want to represent across all the
+resolvers. On the other hand, the `displayName` is the name that
+will be shown to the user for that key, so it is expected to be more
+human-friendly.
+
+// _TODO Fix broken Image
+// image::<missing>metadata/keys_single_drop.png[MetadataKeys Single Level Dropdown]
+
+Once the resolver is defined, you can use it an Operation or Source,
+associating the resolver to a given `MetadataKeyId` Parameter.
+This will be explained in detail in the next section.
+
+[source,java,linenums]
+----
+  public class OperationWithMetadataKey {
+
+    public void create(@MetadataKeyId(RecordKeysResolver.class) String type,
+                       @Config MyConfig config){
+        //...
+    }
+  }
+----
+
+
+[source,java,linenums]
+----
+@MetadataScope(keysResolver = RecordKeysResolver.class)
+public class DocsMetadataSource extends Source<Map<String, Object>, Void> {
+
+    @MetadataKeyId
+    @Parameter
+    public String type;
+
+    //...
+  }
+----
+
+//TODO multilevel metadata keys
+
+== User defined MetadataKey
+
+When the `MetadataKey` is not defined by the Connector developer as one of the possible elements of a List,
+but instead the value of the key is provided freely by the app developer,
+we are talking about a user-defined `MetadataKey`.
+
+For example, this is a very common case in queries, where we use the whole query
+that the app developer wants to execute as `MetadataKey`.
+
+In order to declare it, just annotate a Parameter with `@MetadataKeyId` but don't provide a `TypesKeyResolver`.
+
+[source,java,linenums]
+----
+  public void query(@MetadataKeyId String query){
+      //...
+  }
+----

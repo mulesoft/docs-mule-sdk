@@ -1,0 +1,16 @@
+= Streaming
+ifndef::env-site,env-github[]
+include::_attributes.adoc[]
+endif::[]
+:keywords: mule, sdk, streaming, data, pagination
+
+In Mule 4, streaming allows automatic and transparent repeatable streams (see About Streaming below for details).
+
+There are two types of streaming:
+
+* <<binary-streaming#, Binary Streaming>>
+* <<object-streaming#, Object Streaming>>
+
+== See Also
+
+xref:4.1@mule4-runtime::streaming-about.adoc#repeatable_streams[About Streaming]

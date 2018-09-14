@@ -1,0 +1,168 @@
+= Customizing the Parameters UI
+ifndef::env-site,env-github[]
+include::_attributes.adoc[]
+endif::[]
+
+The SDK provides a set of annotations used for customizing many aspects of the UI and UX.
+
+== @DisplayName
+
+Specifies a custom label for an element or field to be used in the UI.
+
+== @Example
+
+Sometimes it is helpful to provide a simple example with the values a parameter can take.
+
+[source,java,linenums]
+----
+@Parameter
+@Example("0.0.0.0")
+private String port;
+----
+
+That parameter will be rendered as:
+
+image::example.png[Example]
+
+== @Summary
+
+`@Summary` is for a short description of the purpose of a parameter.
+
+For example, this description can be used in Design Center as the text to be displayed while hovering over the parameter:
+
+[source,java,linenums]
+----
+@Parameter
+@Optional(defaultValue = "SECONDS")
+@Summary("Time unit to be used in the Connection Timeout")
+private TimeUnit connectionTimeoutUnit;
+----
+
+That parameter will be rendered like this:
+
+image::summary.png[Summary tooltip]
+
+== @Placement
+
+This annotation enables you to configure these settings:
+
+* A relative order within the group in which the parameter is defined. The value is relative in the sense that the element with order `10` is above one with value `25`.
+
+* A tab, which is a graphical way to group parameters together. This attribute specifies the name of the tab in which the parameter should be displayed. It uses a default of "General" is no name is specified. To display more than one parameter or field in the same the tab, the value for the tab should be the same for all of them.
+
+In the following example, `foo` and `bar` will be grouped into the same tab named `Advanced`, while `foobar` will be the only parameter in the default tab.
+
+[source,java,linenums]
+----
+@Parameter
+@Placement(order = 1, tab="Advanced")
+private String foo;
+
+@Parameter
+@Placement(order = 2, tab="Advanced")
+private String bar;
+
+@Parameter
+private String foobar;
+----
+
+`foo` and `bar` parameters will be rendered in a new tab `"Advanced"` like this:
+
+image::placement-tab.png[Tab]
+
+== @Text
+
+Indicates that a parameter supports a multi-line string input in the UI. This annotation also affects the DSL, making the annotated parameter a child element with the text as the content of the element.
+
+Note that this annotation should only be used in parameters of `String` type.
+
+.Example
+[source,java,linenums]
+----
+@Parameter
+@Optional
+@Text
+@DisplayName("SQL Query Text")
+private String sql;
+----
+
+In Design Center, the `@Text` will be rendered like this:
+
+image::text.png[Text large input]
+
+`@Text` also affects the DSL of the element that contains the parameter. using it creates a child element that accepts `CDATA` content. For example, assume that you have this operation:
+
+[source,java,linenums]
+----
+public void execute(String message) { ... }
+----
+
+The DSL for the operation above looks like this:
+
+[source,xml,linenums]
+----
+<example:execute message="This is a pretty inline message!"/>
+----
+
+This example annotates the `message` operation parameter with `@Text`:
+
+[source,java,linenums]
+----
+public void execute(@Text String message) { ... }
+----
+
+So the corresponding DSL looks like this:
+
+[source,xml,linenums]
+----
+<example:execute>
+    <example:message>
+       <![CDATA[ This is a pretty CDATA message! ]]>
+    </example:message>
+</example:execute>
+----
+
+== @Path
+
+Marks a parameter as a path to either a file or a directory. This parameter will be displayed in the UI as a file-picker field.
+
+Note that this annotation should only be used in parameters of `String` type.
+
+This annotation carries information about:
+
+* `type`: Whether the path points to a directory, a file, or any of those.
+* `acceptsUrls`: Whether the path parameter supports URLs.
+* `acceptedFileExtensions`: A list of file extensions this parameter can handle.
+
+This example accepts a `.txt` resource that can be remote:
+
+[source,java,linenums]
+----
+@Parameter
+@Path(type = FILE, acceptedFileExtensions = "txt", acceptsUrls = true)
+private String resourcePath;
+----
+
+== @Password
+
+Indicates that the parameter needs to be masked when it is populated from the UI.
+
+Note that this annotation should only be used in parameters of `String` type.
+
+.Example in the UI
+image::password.png[Password input]
+
+== Putting It All Together
+
+This example uses features explained above:
+
+[source,java,linenums]
+----
+@Parameter
+@Placement(order = 3, tab="Additional information")
+@Example("My name is Max the Mule and I love MuleSoft!")
+@DisplayName("User biography")
+@Summary("Information related to the user\'s life")
+@Text
+private String biography;
+----

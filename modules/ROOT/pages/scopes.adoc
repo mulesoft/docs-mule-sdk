@@ -1,0 +1,152 @@
+= Creating Scopes with Mule SDK
+ifndef::env-site,env-github[]
+include::_attributes.adoc[]
+endif::[]
+:keywords: mule, sdk, scopes, scope, components
+
+Scopes are similar to <<operations#, Operations>>, but their execution includes the execution of other child <<operations#, Operations>>. This means that a Scope is basically an operation that receives one or more arguments that are simple <<parameters#, Parameters>> along with a single `Chain` component and the `CompletionCallback`.
+
+A `Chain` represents the child <<operations#, Operations>> that you declare inside the Scope and provide an abstraction to execute them.
+
+== Declaring a Scope
+
+You can see the basic structure of a Scope with this decorator example. It has the `Chain` to be executed and the `CompletionCallback` to invoke once the
+scope execution is done _(yes, all Scopes are declared as <<non-blocking-operations#, Non-Blocking Operations>>)_:
+
+[source,java,linenums]
+----
+@Extension(name = "Docs")
+@Operations(LogDecorator.class)
+public class DocsModule {
+
+}
+----
+
+[source,java,linenums]
+----
+public void logDecorator(Chain operations,
+                         CompletionCallback<Object, Object> callback) {
+
+  LOGGER.debug("Invoking child operations")
+  operations.process(
+    result -> {
+      LOGGER.debug(result.getOutput());
+      callback.success(result);
+    },
+    (error, previous) -> {
+      LOGGER.error(error.getMessage());
+      callback.error(error);
+    });
+}
+----
+
+Of course, if you receive a `Chain` of <<operations#, Operation>>, you need to execute
+them in some way, and that is what the `process(successCallback, errorCallback)` does.
+With it, the example executes the `Chain` in a non-blocking fashion and listens for the results in case of success or error. Here, the `successCallback` is called with the execution result when a successful execution is completed by _all_ the <<operations#, Operations>> in the `Chain`. The `errorCallback` will be called if an error occurs during the execution of _any_ child <<operations#, Operation>>, with both the error and the last successful result as arguments.
+
+Here is how you use the scope in a Mule app:
+
+[source,xml,linenums]
+----
+<flow name="logDecoratorSampleFlow">
+    <docs:log-decorator>
+        <http:request config-ref="config" path="/" method="GET"/>
+    </docs:log-decorator>
+</flow>
+----
+
+This executes the `http:request` child operation wrapped by the `LOGGER` invocations.
+Any number of <<operations#, Operations>> can be executed inside the scope, including other scopes or routers.
+
+
+== Adding Parameters
+
+Scopes can receive other simple `@Parameters` and `@ParameterGroups`. They are _simple_ because Scopes are not allowed to receive _complex_ parameters that
+are declared as child elements. For example, if you want to customize the log level of the decorator, you will be able to receive that as a Parameter:
+
+[source,java,linenums]
+----
+public void logDecorator(@Optional(defaultValue="true") boolean debug,
+                         Chain operations,
+                         CompletionCallback<Object, Object> callback) {
+
+  if (debug){
+    LOGGER.debug("Invoking child operations")
+  }
+  operations.process(
+    result -> {
+      Object message = result.getOutput();
+      if (debug){
+        LOGGER.debug(message);
+      } else {
+        LOGGER.info(message);
+      }
+      callback.success(result);
+    },
+    (error, previous) -> {
+      LOGGER.error(error.getMessage());
+      callback.error(error);
+    });
+}
+----
+
+With a minimal change in the Scope's API:
+
+[source,xml,linenums]
+----
+<flow name="logDecoratorSampleFlow">
+    <docs:log-decorator debug="false">
+        <http:request config-ref="config" path="/" method="GET"/>
+    </docs:log-decorator>
+</flow>
+----
+
+By default, a `Chain` is executed using the Message that was received by the container
+Scope, but other definitions of the `process` method allow the user of the scope to customize the `payload` and `attributes` that will be used to execute the `Chain`.
+
+== Using Stereotypes
+
+`Stereotypes` can be used to limit the <<operations#, Operation>> that are allowed to exist inside a `Chain`, which enforces consistency in its usage. Only the <<operations#, Operations>> that have the given `Stereotypes` can be declared inside the Scope.
+
+[source,java,linenums]
+----
+public void assertAll(@AllowedStereotypes(AssertionStereotype.class) Chain assertions,
+                @Optional boolean failOnError,
+                CompletionCallback<Boolean, Void> callback) {
+  assertions.process(
+    result -> {
+      callback.success(Result.<Boolean, Void>builder().output(true).build());
+    },
+    (error, previous) -> {
+      if (failOnError){
+        callback.error(error);
+      } else {
+        callback.success(Result.<Boolean, Void>builder().output(false).build());
+      }
+    });
+}
+----
+
+[source,xml,linenums]
+----
+<flow name="logDecoratorSampleFlow">
+    <docs:assert-all>
+      <docs:not-null value="#[payload]">
+      <docs:not-empty-collection value="#[payload]">
+    </docs:assert-all>
+</flow>
+----
+
+== Config-less and Connection-less
+
+Scopes have some restrictions that differentiate them from <<operations#, Operations>>. By definition, Scopes are not allowed to depend on or receive a particular <<configs#, Configuration>> or <<connections#, Connection>>.
+
+== Only One Chain
+
+The `Chain` component is key in the definition of a Scope, so it is _required_ to have one and _only_ one `Chain` argument.
+
+== Always Non-Blocking
+
+All Scopes must be defined as a `void` method receiving a `CompletionCallback` for communicating their Result, which means that all the Scopes are non-blocking by default.
+
+See xref:non-blocking-operations.adoc[Non-Blocking Operations].

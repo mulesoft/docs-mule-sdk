@@ -1,0 +1,13 @@
+= Security
+ifndef::env-site,env-github[]
+include::_attributes.adoc[]
+endif::[]
+:keywords: mule, sdk, security, tls, oauth
+
+The service to which the connector you are creating will connect probably enforces
+some kind of security for apps to talk to on behalf of a user.
+
+The SDK provides different two ways for end users of your connector to secure their connections.
+
+* <<tls#, Adding TLS>>
+* <<oauth#, Adding OAuth Authentication>>

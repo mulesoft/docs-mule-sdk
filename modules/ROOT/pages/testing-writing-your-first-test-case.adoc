@@ -1,0 +1,134 @@
+= Writing Your First Test Case
+ifndef::env-site,env-github[]
+include::_attributes.adoc[]
+endif::[]
+
+This section provides a step-by-step introduction to testing a module's
+operation. It explains the basics of test cases that you must perform.
+
+== First Concepts
+
+Every test case for a module contains these basic items:
+
+* Test Case Class: A Java class containing the test logic. Call flows and assert
+the results.
+* Mule App XML: A Mule app that makes use of the Module to test.
+
+Note that this documentation is based on the module project generated with the Mule Extension Archetype (<<getting-started#generating-a-project-using-the-maven-archetype-directly,Creating Your First SDK Project>>).
+
+You should learn how to test a module using this example.
+
+== 1. Creating the Test Case Class
+
+Your Test Case Class must inherit from `MuleArtifactFunctionalTestCase`, which enables the testing of modules inside a Mule app.
+
+[source,java,linenums]
+----
+public class BasicOperationsTestCase extends MuleArtifactFunctionalTestCase {
+
+}
+----
+
+== 2. Writing Your Mule App
+
+You test a module by running Mule app that uses the module, executing its flows and making assertions about the result of these executions.
+
+The Mule app XML must be placed inside the `src/test/resources` folder of the module project.
+
+[source,xml,linenums]
+----
+<mule xmlns="http://www.mulesoft.org/schema/mule/core"
+      xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xmlns:basic="http://www.mulesoft.org/schema/mule/basic"
+      xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+          http://www.mulesoft.org/schema/mule/basic http://www.mulesoft.org/schema/mule/basic/current/mule-basic.xsd">
+
+    <basic:config name="basic-config" configId="configId">
+        <basic:connection requiredParameter="aValue" />
+    </basic:config>
+
+    <flow name="sayHiFlow">
+        <basic:say-hi person="Mariano Gonzales"/>
+    </flow>
+
+    <flow name="retrieveInfoFlow">
+        <basic:retrieve-info config-ref="basic-config"/>
+    </flow>
+
+</mule>
+----
+
+image::first-test-app.png[align="center"]
+
+Tip: An easy way to write Mule apps is to create them in Anypoint Studio,
+copy the generated XML, and paste it inside the Module project.
+
+== 3. Importing Your Mule App into the Test Case
+
+After creating the test case class and Mule app XML, you bind the two components,  identifying the Mule app that will execute the test case. You do this by overriding the `getConfigFile()` method and returning a `String` containing a relative path of the Mule app XML.
+
+WARNING: The config file path is relative to the `module-project/src/test/resources` folder. For example, if the XML file is located in `module-project/src/test/resources/test-connector-mule-app.xml`,
+the `getConfigFile()` method must return `test-connector-mule-app.xml`.
+
+[source,java,linenums]
+----
+public class ModuleTestCase extends MuleArtifactFunctionalTestCase {
+
+    @Override
+    protected String getConfigFile() {
+        return "test-connector-mule-app.xml";
+    }
+
+}
+----
+
+== 4. Writing Your First Test Case
+
+At this stage, everything is set up to start writing the module test cases. The first test to write tests a simple operation that executes the flow, retrieves the output, and makes an assertion over it.
+
+=== 4.1 Executing a flow
+
+You use the `flowRunner("flowName")` utility method to create an instance of `FlowRunner`, a utility that can execute flows. The `FlowRunner` instance is configured to run the flow identified in the parameter.
+
+Then you use `run()` on the `FlowRunner` instance, for example:
+
+[source,java,linenums]
+----
+Event event = flowRunner("sayHiFlow").run();
+----
+
+Execution of the flow returns an `Event` that contains the `payload`, `attributes`, `vars`, and all the available information about the execution of the
+flow.
+
+=== 4.2 Retrieving the Payload Value
+
+After executing the flow, you have an `event` variable that contains the result
+of the flow execution. This variable is required for obtaining the value of the payload and make the required assertions:
+
+[source,java,linenums]
+----
+    Object payloadValue = event.getMessage()
+                               .getPayload()
+                               .getValue();
+    assertThat(payloadValue, is("Hello Mariano Gonzales!!!"))
+----
+
+=== 4.3 Summary
+
+This example puts the preceding steps of the test case together:
+
+[source,java,linenums]
+----
+@Test
+public void executeSayHiOperation() throws Exception {
+  Event sayHiFlow = flowRunner("sayHiFlow").run();           //<1>
+  String payloadValue = ((String) sayHiFlow
+                                    .getMessage()
+                                    .getPayload()
+                                    .getValue());            //<2>
+  assertThat(payloadValue, is("Hello Mariano Gonzales!!!")); //<3>
+}
+----
+<1> Executes the `sayHiFlow` flow.
+<2> Retrieves the payload value.
+<3> Makes an assertion over the value.

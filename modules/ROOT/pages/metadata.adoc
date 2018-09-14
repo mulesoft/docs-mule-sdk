@@ -1,0 +1,77 @@
+= Adding DataSense Support
+ifndef::env-site,env-github[]
+include::_attributes.adoc[]
+endif::[]
+:keywords: mule, sdk, metadata, datasense, input, output, keys, type
+
+DataSense is a Mule service that displays type metadata for the entities in a module.
+
+Although this feature is optional, MuleSoft strongly recommends that you use DataSense in your module so that it is easier for users of your module to use.
+
+Note that this documentation assumes that you are familiar with the architecture of connectors and with the concept of DataSense from the perspective of an end user.
+
+
+== What is the Metadata of a Component?
+
+Integration developers often spend a lot of time trying to determine the input and output types for a given component (operation, sources, and so on) so they can transform the data at hand to connect the output of one component to the input of another. This often requires use of API documentation for each component to discover the parameters. This process is inefficient, fallible, and often frustrating.
+
+DataSense uses the metadata provided by these components to resolve all this information automatically and present it to your end user in design time, which drastically increases the speed of development.
+
+The term "types" refers to the `MetadataType` of an element. A `MetadataType` represents the kind and structure of a given element, like `StringType` or `NumberType` for elements that are basic string or numbers, `ArrayType` for collections, `ObjectType` for complex structures with nested elements (like a POJO or a JSON object), and `AnyType` for elements whose type is actually unknown and can be any of the other available types.
+
+See xref:4.1@mule4-runtime::dataweave-types.adoc[DataWeave Types].
+
+=== Static Metadata
+
+Static metadata is metadata that is known at compile time and available from the types in the connector’s JAR file. Simple Java types are part of this static metadata as are custom POJOs defined by the developer in its model. What is relevant is that the structure is well known or can be introspected without depending on other
+parameters.
+
+=== Dynamic Metadata
+
+Dynamic metadata is metadata of a type with an unknown structure at compile time. It has to be resolved based on the configuration of the connector at design time. This metadata has different uses that span a range of cases. Uses span from cases where the type itself is known but its structure depends on the service configuration (for example, where the system has an account with fields that can be customized by the user, so its structure has to be discovered each time based on the user’s credentials) to cases where everything is dynamic and the structure described heavily depends on the configured parameters (for example, the described structure  is the payload of a service operation that also depends on the definition of the service based on the user sandbox).
+
+To resolve dynamic metadata, the element has to be associated with a metadata resolver that knows how to obtain the desired type structure based on the current component configuration. This is explained in more detail in <<metadata_resolvers, MetaData Resolvers>>.
+
+=== Input Metadata
+
+Input metadata is the type resolution for the parameters of a component. Each parameter can provide either static or dynamic metadata that is isolated from the kind of metadata that other parameters of the same component expose.
+
+Only operations and sources can have parameters with dynamic metadata, while configurations and connections always have static metadata.
+
+=== Output Metadata
+
+The output of a component is bound to a static or dynamic resolution of its metadata. For example, a `void` operation has static metadata indicating that the output of that operation is of `VoidType`, while an operation that fetches a `User` profile from a remote service can dynamically describe the structure of the `User` type.
+
+As explained in <<module-structure#, Structure>>, an operation can output a result that contains data for the payload and the attributes of the resulting message. The structure of these attributes is just as important as the structure of the payload. So, to improve the experience of your end user, metadata for each of them can be described independently, but dynamic metadata for attributes is always optional because some components might not produce attributes.
+
+Note that certain return types are forced to describe their metadata dynamically. This requirement is for consistency because it is necessary to consider the experience of the end user, and types that are too generic interfere with the quality of the user experience.
+
+== Implementation Overview
+
+Implementing dynamic DataSense support starts with defining the type of
+metadata you want to provide for a given element. Once that is defined, you can make use of a combination of annotations and custom implementations
+of different metadata resolvers, such as `@MetadataKeyId(BucketKeysResolver.class)`. What to use depends on your use case.
+
+The next sections provide detailed information on implementing the cases described above.
+
+=== Metadata Keys Parameter
+
+To describe a dynamic metadata structure, you need to know what type has to be represented. This type reference is done by defining a `@MetadataKeyId` parameter in
+the operation that will hold the ID of the type to be described.
+
+This means, for example, that if your operation can save a generic record to Amazon S3, but you want to provide a better design-time experience by describing each supported type structure (for example, `Account` or `Organization`), then one of your operation parameters will be a type reference containing either the id `Account` or the id `Organization`. This parameter will be used to describe either the Account
+structure or the Organization structure for the record to be saved into the bucket, depending on what the end user decides to use.
+
+Having a `@MetadataKeyId` parameter is not always required because you might have only one structure (and not multiple) to define that vary dynamically based on the configuration. For example, you might have a `User` entity whose structure changes based on whether the connection credentials are for an administrator or not.
+
+[[metadata_resolvers]]
+=== Metadata Resolvers
+
+Whenever you want to obtain a dynamic element for DataSense, you implement a metadata resolver. There are many different kinds of resolvers, each with its own responsibility and use cases (explained later), but they all share these main concepts:
+
+* Category Name: Name of the group that relates different metadata resolvers so they can work together.
+
+* Resolver Name: Name that uniquely identifies a given metadata resolver. Different resolvers can belong to the same `category` but _must_ have different resolver names.
+
+* Metadata Context: Provides access to the all the configuration and connection
+elements used during the metadata fetch invocation, along with a set of utility components, such as a `TypeLoader` and a `TypeBuilder`. Is important to always use the implementations provided by the context when creating a dynamic type.

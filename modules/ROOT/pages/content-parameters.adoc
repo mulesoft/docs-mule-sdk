@@ -1,0 +1,174 @@
+= Content Parameters
+ifndef::env-site,env-github[]
+include::_attributes.adoc[]
+endif::[]
+
+[[_content-parameters]]
+
+Consider the following operation (pseudocode):
+
+[source,xml,linenums]
+----
+<file:write path="hello.txt" overwrite="true" content="#[payload]" />
+----
+
+Notice that the parameters that compose operations often play different roles.
+
+== Behavior Parameters
+
+These parameters manage settings that determine how the operation is going to behave. In the example above, the `overwrite` parameter configures the action to take if the file already exists. The `path` parameter indicates where to write the content. Both parameters configure the operation, but because this is a Write operation,
+they do not represent the main concept, which is the data to be written.
+
+Some operations are exclusively formed by behavior parameters, for example:
+
+[source,xml,linenums]
+----
+<file:copy from="somePath" to="anotherPath" />
+----
+
+Both parameters are behavioral because the operation does not take any content. The content is in the file that is copied.
+
+== Content Parameters
+
+If you consider the explanation of behavior parameters above, the definition of a content parameter is obvious. In the `file:write` example above, the content is a `@Content` parameter.
+
+Content parameters have the following characteristics:
+
+* They must accept expressions. Both SUPPORTS_EXPRESSIONS and EXPRESSION_REQUIRED are supported, but compilation will fail if `@Expression(NOT_SUPPORTED)` is used.
+* Each content parameter can embed its own DataWeave script to generate the content. Therefore, inline definition of content parameters is not allowed.
+* Content parameters always translate to the DSL as a text element, precisely to enable the embedded DataWeave script.
+
+Consider the `file:write` operation again, this time with content parameters. Suppose that you are using this operation in a flow, and the message payload is JSON that you want to store as XML.
+
+[source,xml,linenums]
+----
+<file:write path="myFile.xml">
+	<file:content>
+		<![CDATA[#[
+        %dw 2.0
+        output application/xml
+        ---
+        rootElement: payload
+        ]
+        ]]>
+	</file:content>
+</file:write>
+----
+
+In the module's code, the `content` parameter is marked with the `@Content` annotation:
+
+[source,java,linenums]
+----
+public void write(String path, @Content InputStream content) {
+    // write code
+}
+----
+
+[[primary_content_parameter]]
+== Primary Content Parameter
+
+In some cases, an operation has many content parameters, for example:
+
+[source,xml,linenums]
+----
+<http:request path="/my/api">
+	<http:request-builder>
+		<http:body>
+			#[body..]
+		</http:body>
+		<http:uri-params>
+			#[uri-params …]
+		</http:uri-params>
+		<http:headers>
+			#[you get the picture..]
+		</http:headers>
+	</http:request-builder>
+</http:request>
+----
+
+As you can see, you can have as many content parameters as you want, which means that the `@Content` annotation can be used on more than one method argument.
+However, the `body` parameter is still more important than the rest. Although headers are also part of the content sent in the HTTP request, those headers are complimentary to the body that is sent. So, when an operation has more than one content parameter, one of them has to be marked as the primary content by using `@Content(primary = true)`.
+
+The primary content parameter has all of the same characteristics as the regular content parameters, plus these:
+
+* They are automatically made optional.
+* They automatically default to `#[payload]`.
+
+These two features are automatically added to the parameter by the runtime.
+
+[TIP]
+Going back to the `file:write` example in which there was only one content parameter: Is it primary? _YES_. When an operation has only one content parameter, the SDK will automatically consider it as primary. That means that the content parameter in the `file:write` operation is automatically made optional and defaults to `#[payload]`. This helps to enforce consistency across modules.
+
+== Changing the Default of a Primary Content
+
+There are edge cases in which a primary content should default to something other than the payload. This tends to happen more when the operation has only one content parameter, and that parameter is not always needed. For example, consider the Database connector. The input parameters of a Select query are primary content, but not all queries require input parameters. So the real default should be an empty map.
+
+You can do that by combining the `@Content` and `@Optional` annotations. For example, the following sets the default to an empty map:
+
+[source,java,linenums]
+----
+public List<Map> select(@Text String sql,
+                        @Optional(defaultValue="#[{}]") @Content Map<String, Object> inputParameters) {
+	// select
+}
+----
+
+You can also set the content parameter as optional, with no default:
+
+[source,java,linenums]
+----
+public List<Map> select(@Text String sql,
+                        @Optional @Content Map<String, Object> inputParameters) {
+	// select
+}
+----
+
+Finally, you can combine the `@Content` annotation with `@NullSafe`, for example:
+
+[source,java,linenums]
+----
+public List<Map> select(@Text String sql,
+                        @Optional @NullSafe @Content Map<String, Object> inputParameters) {
+	// select
+}
+----
+
+[TIP]
+The first and third examples are equivalent. However, the `@NullSafe` option is preferred because it gives the module's user a better experience. Having `#[{}]` as an explicit default might be confusing for inexperienced Mule users.
+
+== Embedding Content Parameters in Parameter Groups
+
+The content parameters in the <<primary_content_parameter,`http:request`>> operation above are contained in an element called `request-builder`. For usability reasons, the author of the connector chose to group all the request-related attributes into an enclosing object. This is supported
+by the SDK in the following manner:
+
+[source,java,linenums]
+----
+public void request(String path, @ParameterGroup(showInDsl=true) HttpRequestBuilder requestBuilder) {
+    // request
+}
+----
+
+As you can see, there are no content parameters here. However, if you look inside the `HttpRequestBuilder` class, you see `@Content` annotations:
+
+[source,java,linenums]
+----
+public class HttpRequestBuilder {
+
+    @Parameter
+    @Content(primary = true)
+    private InputStream body;
+
+    @Parameter
+    @Content
+    @NullSafe
+    private Map<String, String> uriParams;
+
+    @Parameter
+    @Content
+    @NullSafe
+    private Map<String, String> uriParams;
+}
+----
+
+[TIP]
+Removing the `@ParameterGroup` annotation from the `HttpRequestBuilder` argument in the sample request operation will result in a compilation error. `@Content` is not allowed in complex types.

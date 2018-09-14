@@ -1,0 +1,42 @@
+= Defining Parameters in a Message Source
+ifndef::env-site,env-github[]
+include::_attributes.adoc[]
+endif::[]
+:keywords: mule, sdk, sources, listener, triggers, parameters
+
+Parameters are defined as fields of your `Source` class. All the features and annotations
+(such as <<null-safe#, `@NullSafe`>>, <<parameters#groups, `@ParameterGroup`>>, <<input#,`@TypeResolver`>>) are available when defining an operation, for example:
+
+[source,java,linenums]
+----
+@EmitsResponse
+public class HttpListener extends Source<InputStream, HttpRequestAttributes> {
+
+    @Config
+    private HttpListenerConfig config;
+
+    @Parameter
+    @Optional(defaultValue = "/")
+    private String path;
+
+    @Parameter
+    private Integer port;
+
+    /**
+    * Comma separated list of allowed HTTP methods by this listener.
+    */
+    @Parameter
+    @Optional
+    @Placement(tab = Placement.ADVANCED_TAB)
+    @Summary("Comma separated list of methods. Leave empty to allow all.")
+    @Example("GET, POST")
+    private String allowedMethods;
+}
+----
+
+This is similar to how configs are defined, except that none of these parameters
+accept expressions. Using the `@Expression` annotation to support or require expression support will result in an error.
+
+== Next step
+
+* <<sources-lifecycle#, Lifecycle of a Message Source>>

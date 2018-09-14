@@ -1,0 +1,60 @@
+= Lifecycle of a Message Source
+ifndef::env-site,env-github[]
+include::_attributes.adoc[]
+endif::[]
+:keywords: mule, sdk, sources, listener, triggers, lifecycle
+
+Unlike operations which lifecycle is tied to that of the owning Flow, sources can be started or stopped
+separately through the Runtime manager.
+
+To support that, The `Source` class forces you to implement two methods, `onStart()` and `onStop()`
+
+== On Start
+
+Let's look at an example from the VM connector to see how the `onStart()` method actually looks like:
+
+[source,java,linenums]
+----
+@Override
+public void onStart(SourceCallback<Serializable, VMMessageAttributes> sourceCallback) throws MuleException {
+
+}
+----
+
+In this method, you have to initialize all the resources (such as threads, schedulers, connections, etc) you need in order to produce messages. If an exception or error
+condition is found trying to do that, then you have to:
+
+* Release any resources you did got to allocate
+* Throw an exception with a meaningful message
+
+If the source fails to start, so does the application that contains it.
+
+[TIP]
+All of the source parameters values that were defined through the `@Parameter` annotation are already resolved and available at this point.
+
+=== SourceCallback
+
+The method receives a SourceCallback object. The `SourceCallback` is arguably the most important piece of the Source, since it is
+involved in pretty much every aspect of the source's functionality. We will elaborate on the uses and responsibilities of the `SourceCallback`
+as this documentation progresses, but in a nutshell, the `SourceCallback` is what the source uses to communicate with the runtime. It is used for:
+
+* Pushing messages into the Flow
+* Communicating connection issues and triggering reconnection
+* Passing state between the push phase of the Source into the response handling part
+
+Because the `SourceCallback` plays such an important role, it is very important that the provided instance is always available. Depending on how your source's
+complexity and code organization, you may accomplish this by simply holding it as a method argument. More complex sources might need to keep a reference to it
+through an instance field. If you decide to do this, then you need to make sure that the reference is cleared when the `onStop()` method is executed
+
+== On Stop
+
+This method will be invoked by the runtime to make the source stop producing messages. *This method should not fail*. Any exceptions found during the stop process should be
+logged and correctly handled by the source, but after invoking this method the source must:
+
+* Stop producing messages
+* Free any allocated resources
+* Be capable of being restarted
+
+== Next step
+
+* <<sources-config-connection#, Obtain configuration and connections from a Message source>>

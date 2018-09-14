@@ -1,0 +1,48 @@
+= Mule Services Injection
+ifndef::env-site,env-github[]
+include::_attributes.adoc[]
+endif::[]
+:keywords: mule, sdk, dependency, inject, registry, service
+
+== Using Mule Services
+
+When implementing your module, you might need to use some of the services that Mule provides. Examples of these services include `ObjectStoreManager`, `LockFactory`, and `HttpService`.
+
+To achieve this, there is no need to get them from the registry of the `MuleContext`. You can simply inject them into your component (such as an operation, source, or configuration) through the `@Inject` annotation.
+
+Here is a simplified example that injects a service from the registry into a component:
+
+.Example: Using the @Inject Annotation
+[source,java,linenums]
+----
+public class ObjectStoreOperations {
+// ...
+  @Inject
+  private ObjectStoreManager runtimeObjectStoreManager;
+// ...
+  @Throws(StoreErrorTypeProvider.class)
+  public void store(String key,
+                  @Content TypedValue<Serializable> value,
+                  @Optional @ParameterDsl(allowInlineDefinition = false) ObjectStore objectStore) {
+    ObjectStore os = objectStore == null ? runtimeObjectStoreManager.getDefaultPartition() : objectStore;
+    os.store(key, value);
+  }
+// ...
+}
+----
+
+Here are some common Mule services:
+
+* `LockFactory`: All Mule components that require synchronization to access shared data must be synchronized using locks from the default implementation of this interface.
+
+* `ExpressionManager`: Provides universal access for evaluating expressions embedded in Mule configurations, such as XML, Java, scripting, and annotations.
+
+* `TransformationService`: Service that tries to transform a value into another given type.
+
+* `HttpService`: Provides both HTTP server and client implementations. Whenever using an HTTP connection on your connector, you should try to use this service.
+
+* `SchedulerService`: Provides access to the different schedulers and thread pools that exist in the Mule runtime, allowing you to schedule tasks on those.
+
+* `SoapService`: Service that creates SOAP clients to consume SOAP services.
+
+* `ObjectStoreManager`: Manager in charge of creation and management of `ObjectStore` instances.

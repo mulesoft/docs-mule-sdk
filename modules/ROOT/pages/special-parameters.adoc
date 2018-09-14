@@ -1,0 +1,162 @@
+= Special Parameters
+ifndef::env-site,env-github[]
+include::_attributes.adoc[]
+endif::[]
+:keywords: mule, sdk, operation, source, MIME, MIME Type, Encoding, Typed Value, Parameter Resolver, literal
+
+== TypedValue<Type>
+
+A common use case for <<operations#, Operations>> and <<sources#, Sources>> is to receive Media Type information along with the value of the parameter, for example:
+
+.Example: Operation
+[source,java,linenums]
+----
+public void receiveContent(InputStream content) {
+  // operation logic
+}
+----
+
+In the Mule app example below, you can see that you are receiving a `JSON` value, but the operation's code above does not indicate the MIME Type or encoding of the `content` parameter.
+
+.Example: Mule app
+[source,xml,linenums]
+----
+<flow name="mediaTypeFlow">
+    <set-payload value="#[output application/json --- { key : 'value'}]">
+    <cool-extension:receive-content content="#[payload]" />
+</flow>
+----
+
+To retrieve Media Type information (MIME Type and encoding), you simply need to wrap the parameter type into a `TypedValue<OriginalType>`.
+
+This example use the same Mule app above with the `TypedValue` parameter:
+
+.Media-Type-Friendly Parameter
+[source,java,linenums]
+----
+public void receiveContent(TypedValue<InputStream> content) {
+    DataType dataType = content.getDataType();
+    MediaType mediaType = dataType.getMediaType();
+    boolean streamType = dataType.isStreamType();
+    Long lenght = content.getLength().orElse(-1L);
+
+    InputStream theContent = content.value(); // The proper value
+
+    System.out.println(mediaType);  // application/json; UTF-8
+    System.out.println(streamType); // true
+    System.out.println(lenght);     // 18
+}
+----
+
+Use of `TypedValue` parameters is highly recommended for use cases
+where the `MIME Type` information is required to communicate with other systems that rely on this or to be able how to handle the parameter value.
+
+[[literal]]
+== Literal<Type>
+
+`Literal<Type>` parameters allow you to get values as they were written
+in the Mule app. This means that if the end user writes an expression such as `\#[attributes.queryParams]`, the operation will able to retrieve a `String` with the expression `#[attributes.queryParams]`. This prevents Mule runtime from resolving expressions or applying any transformations. This is useful when the evaluation needs to be performed by a third party.
+
+In the case of configurations and connection providers, using literal
+parameters <<static-dynamic-configs#, allows the configuration to be treated as a static one, instead of a dynamic one>>. This is because the literal value is constant even if that literal is an expression. The runtime will not evaluate it automatically, so it is treated a static value by the extension.
+
+If the value was provided as an expression, the class will provide the expression but offer no way to evaluate it. You need to use <<parameter-resolver, parameter resolvers>> for that.
+
+[source,xml,linenums]
+----
+<flow name="literalFlow">
+    <cool-extension:literal-value content="#[payload]" />
+</flow>
+----
+
+.Literal Parameter
+[source,java,linenums]
+----
+public void literalValue(Literal<InputStream> literal) {
+    System.out.println(literal.getLiteralValue().get());  // #[payload]
+    System.out.println(literal.getType()); // java.io.InputStream
+}
+----
+
+IMPORTANT: You need to consider the generic type. A parameter derived from uses of this interface will have its type set according to the generic type. The generic is not optional.
+
+[[parameter-resolver]]
+== ParameterResolver<Type>
+
+`ParameterResolver<Type>` allows you to defer the resolution of an expression. This is useful when a parameter that takes an expression as a value is not required. You can improve performance by resolving such an expression on demand from within the connectors's code instead of resolving it automatically.
+
+Compared to <<literal, `Literal<Type>`>> parameters, a `ParameterResolver<Type>` parameter with an expression continues to be treated as a dynamic parameter whether the value is resolved or not.
+
+=== Resolving Expressions
+
+When a `ParameterResolver<Type>` is received to resolve the expression value, the `resolve()` method must be called to return the result of the expression.
+
+WARNING: Expression resolution is deferred until it is required, so `resolve()` can fail due to an invalid expression.
+
+=== Getting the Expression Value
+
+`ParameterResolver<Type>` parameters can communicate the expression used for the parameter. It returns an `Optional<String>` because the parameter can be configured with an expression or not. If it is not configured with an expression, `Optional.empty()` will be returned.
+
+==== Example: With Expression
+
+.Configured With an Expression
+[source,xml,linenums]
+----
+<flow name="expressionParameterResolver">
+  <cool-extension:add-products products="#[{Potatoes : 2 , Oranges : 4}]"/>
+</flow>
+----
+
+.Example: Source
+[source,java,linenums]
+----
+public void addProducts(ParameterResolver<Map<String,Integer>> products) {
+    System.out.println(products.getExpression().get());  // #[{Potatoes : 2 , Oranges : 4}]
+    System.out.println(products.resolve()); // {Potatoes=2, Oranges=4}
+}
+----
+
+==== Example: Without Expression
+
+.Configured Without an Expression
+[source,xml,linenums]
+----
+<flow name="noExpressionParameterResolver">
+    <cool-extension:add-products>
+        <cool-extension:products>
+          <cool-extension:product key="Potatoes" value="2"/>
+          <cool-extension:product key="Oranges" value="4"/>
+        </cool-extension:product>
+    </cool-extensions:add-products>
+</flow>
+----
+
+[source,java,linenums]
+----
+public void addProducts(ParameterResolver<Map<String,Integer>> products) {
+    System.out.println(products.getExpression().isPresent());  // false
+    System.out.println(products.resolve()); // {Potatoes=2, Oranges=4}
+}
+----
+
+== Stacking Types
+
+You might need to use more than one of the parameters described above at the same time. For example, you might want to receive the Media Type of a given value and defer its resolution.
+
+To do this, you simply stack the generics for the capabilities you want.
+
+[source,xml,linenums]
+----
+<flow name="stackedTypes">
+  <cool-extension:add-products products="#[output application/json --- {Potatoes : 2 , Oranges : 4}]"/>
+</flow>
+----
+
+[source,java,linenums]
+----
+public void addProducts(ParameterResolver<TypedValue<InputStream>> products) {
+    System.out.println(products.getExpression().get());  // #[output application/json --- {Potatoes : 2 , Oranges : 4}]
+    TypedValue<InputStream> content = products.resolve();
+    System.out.println(content.getValue()); // {"Potatoes" : "2", "Oranges" : "4"}
+}
+----

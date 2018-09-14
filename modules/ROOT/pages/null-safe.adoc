@@ -1,0 +1,46 @@
+= Null Safe
+ifndef::env-site,env-github[]
+include::_attributes.adoc[]
+endif::[]
+:keywords: mule, sdk, annotations, null, safe
+
+In some cases, you might want to instantiate a `@Parameter` even though the end user has not provided a value, for example:
+
+[source,java,linenums]
+----
+@Parameter
+@Optional
+private List<Integer> numbers;
+----
+
+While interacting with `numbers` in your code, you will need to check if `numbers == null` at some point to avoid a `NullPointerException`.
+
+The SDK supports the use of annotations like `@NullSafe`, which can provide an empty list instead of `null`. When you use it, the SDK can automatically create a value for you if the value was not configured.
+
+There are many "flavors" of `@NullSafe` annotations. When used with `List` and `Map` interfaces, `@NullSafe` will provide a default implementation for those collections.
+
+This example shows a POJO as a null safe type:
+
+[source,java,linenums]
+----
+@Parameter
+@Optional
+@NullSafe
+private Foo foo;
+----
+
+As you might expect, the SDK will instantiate `Foo` and assign it to your `foo` parameter so that you do not have to manually check for null.
+
+Note that if you use `@NullSafe` with a POJO, all the parameters declared inside the POJO must all be _optional_. If a parameter is required, there is no default value for the SDK to use. So, using `@NullSafe` to automatically instantiate required parameters makes no sense.
+
+`@NullSafe` can be configured to instantiate a certain class instead of using the parameter's type. This can be helpful in the cases where the parameter's type cannot be instantiated (like an abstract class or an interface).
+
+You specify the class to be instantiated by setting the `defaultImplementingType` attribute in the annotation, for example:
+
+[source,java,linenums]
+----
+@Parameter
+@Optional
+@NullSafe(defaultImplementingType = Foo.class)
+private AbstractFoo foo;
+----

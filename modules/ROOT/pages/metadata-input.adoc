@@ -1,0 +1,221 @@
+= Input Metadata
+ifndef::env-site,env-github[]
+include::_attributes.adoc[]
+endif::[]
+:keywords: mule, sdk, metadata, datasense, input, type
+
+We refer as input Metadata to the type resolution for the Parameters of a Component.
+Each Parameter can provide either Static or Dynamic Metadata isolated from what kind of Metadata
+do other Parameters of the same Component expose.
+Only Operations can have Parameters with dynamic metadata,
+while Sources, Configurations and Connections will always have static metadata for their Parameters.
+
+== Declaring an InputTypeResolver
+
+An `InputTypeResolver` implementation handles the request for resolving a `MetadataType` based
+on the information provided by the `MetadataContext` and most importantly, using the `MetadataKey`
+to identify which is the `MetadataType` required by the app developer.
+
+[source,java,linenums]
+----
+public class InputEntityResolver implements InputTypeResolver<String> {
+
+  @Override
+  public String getCategoryName() {
+    return "DocEntities";
+  }
+
+  @Override
+  public MetadataType getInputMetadata(MetadataContext context, String key)
+      throws MetadataResolvingException, ConnectionException {
+
+      final ObjectTypeBuilder objectBuilder = context.getTypeBuilder().objectType();
+
+      switch (key) {
+        case "Author_id":
+          objectBuilder.addField().key("name").value().numberType();
+          objectBuilder.addField().key("lastName").value().stringType();
+          break;
+        case "BookList_id":
+          objectBuilder.addField().key("genre").value().stringType();
+          objectBuilder.addField().key("bookIds").value().arrayType().of().stringType();
+          break;
+        case "Book_id":
+          objectBuilder.addField().key("title").value().stringType();
+          objectBuilder.addField().key("ISBN").value().numberType();
+          break;
+        default:
+          throw new MetadataResolvingException("Unknown key:" + key, INVALID_METADATA_KEY);
+      }
+
+      return objectBuilder.build();
+  }
+
+}
+----
+
+In the example above, we are using the `MetadataContext` only to obtain the `typeBuilder`,
+but we could also use the provided Configuration and Connection elements.
+For example, we could fetch the Metadata from an external service using the Connection,
+or access an static resource present in the Configuration like an schema.
+
+== Using the InputTypeResolver
+
+Now that we have a `TypesKeysResolver` and an `InputTypeResolver` we can add input
+DataSense support on our Operations and Sources.
+The main restriction to use an `InputTypeResolver` along with a given `TypesKeysResolver` is that both
+have to belong to the same `category`, so we can can guarantee that the `MetadataKey` provided by the
+`TypesKeysResolver` can be resolved to a `MetadataType` by the `InputTypeResolver`:
+
+[source,java,linenums]
+----
+public class DemoOperation {
+
+  public void create(@Connection MyConnection connection,
+                     @MetadataKeyId(EntityKeysResolver.class) String type,
+                     @TypeResolver(InputEntityResolver.class) Map<String, Object> entity){
+
+    // Code that handles the creation based on the "type" of the "entity"
+    if ("Account_id".equals(type)){
+      //...
+    } else {
+      //...
+    }
+  }
+
+}
+----
+
+Each Parameter can have its own `TypeResolver` each using any `InputEntityResolver`. This means that
+both can have the same resolver thus describing the same MetadataType for the two parameters, or using
+the same `MetadataKeyId` to describe two different `MetadataType`, one for each Parameter.
+
+For example, we can do an entity merge using the same resolver for two parameters:
+
+
+[source,java,linenums]
+----
+  public void merge(@MetadataKeyId(EntityKeysResolver.class) String type,
+                    @TypeResolver(InputEntityResolver.class) Map<String, Object> first,
+                    @TypeResolver(InputEntityResolver.class) Map<String, Object> second){
+
+    // Code that handles the merge based on the "type" of the "entity"
+    if ("BookList_id".equals(type)){
+      ((List)first.get("bookIds")).addAll((List) second.get("bookIds"));
+    } else {
+      //...
+    }
+  }
+----
+
+Or we instead need to define two different `MetadataType` for each entity,
+but always bound to the same `MetadataKeyId` (which is resolved only once) and,
+again, all belonging to the same `category`:
+
+[source,java,linenums]
+----
+  public void crete(@MetadataKeyId(EntityKeysResolver.class) String type,
+                    @TypeResolver(ItemTypeResolver.class) Map<String, Object> item,
+                    @TypeResolver(ContainerTypeResolver.class) Map<String, Object> container){
+
+    // Code that handles the item based on the "type" of the "entity"
+    if ("developer".equals(type)){
+      createDeveloperInTeam(item, container);
+    } else {
+      //...
+    }
+  }
+----
+
+== Input Metadata with User defined MetadataKey
+
+In the previous section we saw that when the `MetadataKeyId` parameter doesn't declare a
+`TypeKeysResolver`, then any key can be defined by the app developer when configuring the
+Operation.
+
+Here is a simplified example of how the `MetadataKeyId` is used without a `TypeKeysResolver`,
+and the value configured for that Parameter is used to resolve the input MetadataType
+of the `queryParameters` in the Database Connector:
+
+[source,java,linenums]
+----
+  public List<Map<String, Object>> select(@MetadataKeyId String sql,
+                                          @TypeResolver(DbInputMetadataResolver.class) Map<String, Object> queryParameters,
+                                          @Config DbConnector connector){
+    //...
+  }
+----
+
+[source,java,linenums]
+----
+public class DbInputMetadataResolver implements InputTypeResolver<String> {
+
+  @Override
+  public String getCategoryName() {
+    return "DbCategory";
+  }
+
+  @Override
+  public MetadataType getInputMetadata(MetadataContext context, String query)
+      throws MetadataResolvingException, ConnectionException {
+
+    // The MetadataKey is the `query` parameter, we have to parse it to resolve
+    // all the Metadata of its parameters
+    QueryTemplate queryTemplate = parseQuery(query);
+    List<InputQueryParam> inputParams = queryTemplate.getInputParams();
+
+    if (inputParams.size() == 0) {
+      // No input metadata when no input parameters
+      return context.getTypeBuilder().nullType().build();
+    }
+
+    PreparedStatement statement = getStatement(context, queryTemplate);
+    return getInputMetadataUsingStatementMetadata(statement, inputParams);
+  }
+}
+----
+
+== Resolving dynamic Input Metadata without MetadataKey
+
+Many times we don't have multiple entities whose structure is unknown but just one,
+that has a dynamic MetadataType depending, for example, on the credentials that the app
+developer is using to connect to it's sandbox. In that case, different accounts may see different
+properties for the same `Organization` entity.
+
+In order to declare a `KeyLess` InputMetadata resolution, just skip the `MetadataKeyId` Parameter
+and use the `TypeResolver` without depending on the `MetadataKey`:
+
+[source,java,linenums]
+----
+  public void createOrg(@TypeResolver(OrganizationTypeResolver.class) Map<String, Object> organization){
+    //...
+  }
+----
+
+[source,java,linenums]
+----
+public class OrganizationTypeResolver implements InputTypeResolver {
+
+  @Override
+  public String getCategoryName() {
+    return "Organization";
+  }
+
+  @Override
+  public MetadataType getInputMetadata(MetadataContext context, Object key)
+      throws MetadataResolvingException, ConnectionException {
+
+    // The `key` parameter will be `null` if the fetch is performed
+    // as a `KeyLess` Metadata resolution. We'll just ignore it.
+
+    DemoConnection connection = context.<DemoConnection>getConnection()
+        .orElseThrow(() -> new MetadataResolvingException("A connection is required to resolve Metadata but none was provided",
+                                                          FailureCode.INVALID_CONFIGURATION));
+
+    String schema = connection.getClient().describeOrganization();
+    return new JsonTypeLoader(schema).load("http://demo.org")
+            .orElseThrow(() -> new MetadataResolvingException("No Metadata is available for the Organization",
+                                                              FailureCode.NO_DYNAMIC_TYPE_AVAILABLE));
+  }
+}
+----

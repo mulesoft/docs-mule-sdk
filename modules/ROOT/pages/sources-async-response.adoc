@@ -1,0 +1,40 @@
+= Sending Asynchronous Responses from a Message Source
+ifndef::env-site,env-github[]
+include::_attributes.adoc[]
+endif::[]
+:keywords: mule, sdk, sources, listener, triggers, response, output, asynchronous
+
+Sources can send responses in an asynchronous way. Some of the main uses cases for asynchronous sources are:
+
+* The response operation is non-blocking.
+* The response operation is blocking, but it is asynchronously executed in a thread other than the one that initiates it (most typically, the thread executing a method annotated with `OnSuccess` or `OnError`).
+* The source will perform asynchronous auditing for which it needs to consume a response stream in a separate thread.
+
+In these cases:
+
+* The runtime needs to know that the response will be asynchronous. Otherwise, there will be a race condition between the thread emitting the response and the runtime that is trying to free
+up resources associated with the message that is getting a response.
+* Methods annotated with `OnSuccess` or `OnError` must have an argument of type `SourceCompletionCallback`. That is enough to signal the runtime that the source is asynchronous.
+
+The runtime will not finish the associated event until either the `success()` or `error(Throwable)` methods are invoked. Note that this is a very strong contract. A source that requests a `SourceCompletionCallback` without properly notifying the runtime is one likely to freeze the entire runtime eventually.
+
+Here is an example:
+[source,java,linenums]
+----
+@OnSuccess
+public void onSuccess(@Content String response, SourceCompletionCallback callback) {
+  asyncResponder.sendResponse(response, new ResponderCallback() {
+    void onSuccess() {
+      callback.success();
+    }
+
+    void onFailure(Throwable t) {
+      callback.error(t);
+    }
+  };)
+}
+----
+
+== Next Step
+
+<<sources-transactions#, Transactional Message Sources>>

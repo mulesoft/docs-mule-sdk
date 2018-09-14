@@ -1,0 +1,65 @@
+= Importing Types From Other Modules
+ifndef::env-site,env-github[]
+include::_attributes.adoc[]
+endif::[]
+:keywords: parameter, parameters, mule, sdk, dsl, xml, import, type
+
+Every module can declare a set of types that are part of the module's API. This set of types can then be imported by other modules, while keeping the original module's namespace definition.
+
+Importing another module's types is useful in many cases, including:
+
+* Reusing the logic bundled inside the type, such as a specific authentication method.
+* Exposing the user to the same API for configuring the same properties. For example, if you want to configure the same parameters in the same order, with the same descriptions, you can enforce that by using the same types in different modules.
+
+You can reuse a module's type in three steps:
+
+. Add the dependency in your `pom.xml` to the `mule-plugin` whose API you want to use:
++
+[source,xml,linenums]
+----
+    <dependency>
+        <groupId>org.mule.connectors</groupId>
+        <artifactId>mule-sockets-connector</artifactId> // <1>
+        <version>${muleSocketsConnectorVersion}</version>
+        <classifier>mule-plugin</classifier> // <2>
+    </dependency>
+----
++
+<1> The module where the Type is declared
+<2> Remember to add the `mule-plugin` classifier in the dependency
+
+. Declare an `@Import` in the Extension class referencing the type you want to import:
++
+[source,java,linenums]
+----
+@Extension(name = "HTTP")
+@Import(type = TcpClientSocketProperties.class)
+@Import(type = TcpServerSocketProperties.class)
+public class HttpConnector {
+
+}
+----
+
+. Use the types in your parameters declaration:
++
+[source,java,linenums]
+----
+@Alias("request")
+public class HttpRequesterProvider implements CachedConnectionProvider<HttpExtensionClient> {
+
+  @Parameter
+  private TcpClientSocketProperties clientSocketProperties;
+
+}
+----
+
+Notice how this changes the DSL declaration, since now your extension (in this case `http`) can receive parameters declared in another namespace (in this example, `sockets`):
+
+[source,xml,linenums]
+----
+<http:request-connection>
+  <http:client-socket-properties>
+      <sockets:tcp-client-socket-properties connectionTimeout="1000" keepAlive="true" receiveBufferSize="1024"/>
+  </http:client-socket-properties>
+</http:request-connection>
+----

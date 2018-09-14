@@ -1,0 +1,82 @@
+= Getting Started with the Mule SDK
+ifndef::env-site,env-github[]
+include::_attributes.adoc[]
+endif::[]
+:keywords: mule, sdk, create, new, project, getting, started
+
+This section can help you start developing Mule SDK projects.
+
+== Set Up Your Development Environment
+
+You must have the following components installed and working in your local environment:
+
+* Java Development Kit 8 (JDK 8) to compile and build your Java code.
+
+* Apache Maven, version 3.3.9 or higher, to manage your project’s build.
+
+=== Set Up Your IDE
+
+For the SDK to work, you must pass the command line parameter `-parameters` to the Java compiler.
+
+==== For Development in Studio or Eclipse
+
+If you use Anypoint Studio or Eclipse:
+
+. Right-click the project.
+. Go to `Java Compiler`, and enable `Store information about method parameters (usable via reflection)`.
+
+image::eclipse-config.gif[600,600]
+
+==== For Development in IntelliJ
+
+If you are using IntelliJ:
+
+. Go to `Preferences > Build, Execution, Deployment > Compiler > Java Compiler`.
+. Add `-parameters` in the `Additional command line parameters` section.
+
+image::intellij-config.gif[600,600]
+
+== Create Your First SDK project.
+
+The SDK provides a Maven Plugin and a Maven Archetype to create new projects. An archetype is defined as an original pattern or model from which all other things of the same kind are made.
+
+=== Generate a Project Using the Maven Plugin
+
+There is a Maven plugin with steps and descriptions of the fields that are required to create a new Extension Project. You can run this command to get prompted for these values:
+
+----
+mvn org.mule.extensions:mule-extensions-archetype-maven-plugin:generate
+----
+
+=== The Generated Project
+
+The generated project contains the basic Mule <<module-structure#, module structure>> with some basic classes, a dummy implementation, and two running tests that use the generated module.
+
+Because this project is a Maven project, it contains a `pom.xml` file that contains all the information and configuration details used by Maven to perform the build. This generated POM file inherits from the module's parent POM, which contains all the common configurations and defaults for all Mule module projects.
+
+[source,xml,linenums]
+----
+<parent>
+  <groupId>org.mule.extensions</groupId>
+  <artifactId>mule-modules-parent</artifactId>
+  <version>1.1.0</version>
+</parent>
+----
+
+== Build the Project
+
+Once your project is generated, you can build it by running the following command:
+
+----
+mvn clean install
+----
+
+You run this command to compile your project, run the tests, and install the project in your local Maven repository.
+
+== Start Developing
+
+Now you are ready to add your custom module code.
+
+You need to find the `@Extension` annotated class and then
+examine <<module-structure#, module structure>> and the different
+elements that you can add to a module.

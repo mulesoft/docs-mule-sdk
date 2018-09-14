@@ -1,0 +1,72 @@
+= Learning the Module Model
+ifndef::env-site,env-github[]
+include::_attributes.adoc[]
+endif::[]
+:keywords: mule, sdk, module, extension, components, structure
+
+The entry point for building a Mule module is the `@Extension` annotated class. This class is used to export all the module functionality and all the elements associated with it.
+
+[WARNING]
+This class *must* be a public, non-abstract class. The `@Extension` annotation cannot be used on interfaces, abstract classes, private/protected classes, or typed classes (with generics).
+
+[source,java,linenums]
+----
+@Extension(name = "basic")
+public class BasicModule {
+}
+----
+
+When using the `@Extension` annotation, you need to provide a descriptive and concise name for your module. You should not use `extension`, `module`, or `connector` in the module name. If you do, the SDK will trim them. Optionally, you can specify the module `vendor` and the module `category` (See <<license#, Licensing>>).
+
+Once you have created an empty module, you can start adding elements to it.
+
+.Basic Module Structure
+image::model.png[Module Basic Model Diagram]
+
+At a high level, the elements are:
+
+[[components]]
+* <<Components>>
+** <<operations#, Operations>>
+** <<sources#, Sources>>
+** <<functions#, Functions>>
+** <<routers#, Routers>>
+** <<scopes#, Scopes>>
+* <<connections#, Connection Providers>>
+* <<configs#, Configurations>>
+* <<parameters#, Parameters>>
+
+== Components
+
+Components are the key to the functionality of a module. Given a set of parameters, they can be executed to produce or alter messages in a flow.
+
+Sources and Operations are the most common components in a module:
+
+* <<operations#, Operations>> are components that process an incoming message and generate a result.
+* <<sources#, Sources>> are components that receive or generate new messages to be processed by the Mule Runtime.
+
+== Configuration
+
+Configurations are a set of configurable parameters that affect the behavior of the Module. <<sources#, Sources>> and <<operations#, Operations>> typically depend on a Configuration for parameters that determine their behavior. However, some can work on their own without a Configuration.
+
+There is no requirement to declare a Configuration for a Module, but you can declare as many as you need. Different configurations might provide a different set of parameters and specify a set of <<operations#, Operations>> and <<sources#, Sources>> that are only available when using that configuration.
+
+== Connection Providers
+
+A <<connections#, Connection Provider>> is the Module element in charge of handling connections, which are created from a <<configs#, Configuration>>. They centralize the logic and parameterization
+to provision and release connections of some specific type.
+
+Like the <<configs#, Configurations>>, <<sources#, Sources>>, and <<operations#, Operations>>, Connection Providers typically depend on a connection in order to be executed. A connection is not required but is common. Connections used by <<operations#, Operations>> and <<sources#, Sources>> are provided by the <<connections#, Connection Provider>>.
+
+<<connections#, Connection Providers>> are bound to <<configs#, Configurations>>. <<configs#, Configurations>> can have none, one,
+or many <<connections#, Connection Providers>> that create different types of connections, for example, one `ConnectionProvider` for HTTPS and another for (non-secured) HTTP connections.
+
+== Parameters
+
+`Parameters` are the most granular elements on the module model, and they are used in all these elements: <<operations#, Operations>>, <<sources#, Sources>>, <<configs#, Configurations>>, and <<connections#, Connection Providers>>.
+
+They represent configurable elements that accept the values for elements to execute, or they hold the configured values.
+
+== Other Elements
+
+A module can have other element types, for example, <<routers#, Routers>>, <<scopes#, Scopes>>, <<functions#, Functions>>, or <<errors#, Errors>>. The ones described here are the core elements that most modules are likely have.

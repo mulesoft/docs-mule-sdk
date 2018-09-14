@@ -1,0 +1,38 @@
+= Pushing Messages to a Flow form a Message Source
+ifndef::env-site,env-github[]
+include::_attributes.adoc[]
+endif::[]
+:keywords: mule, sdk, sources, listener, triggers, generate, push, message
+
+After generating a piece of information for the flow, the source uses the `SourceCallback` to send the information to the flow. Returning to the minimalistic HTTP listener example:
+
+[source,java,linenums]
+----
+public class HttpListener extends Source<InputStream, HttpRequestAttributes> {
+
+    @Override
+    public void onStart(SourceCallback<InputStream, HttpRequestAttributes> sourceCallback) throws MuleException {
+        httpServer = serverProvider.connect(); // <1>
+
+        server.listen(path).onRequest(request -> { // <2>
+            Result<InputStream, HttpRequestAttributes> result = requestToResult(request); // <3>
+            sourceCallback.handle(result); // <4>
+        });
+    }
+}
+----
+
+<1> The example uses the ConnectionProvider to obtain an `HttpServer`. The typical connection provider most already configured the server with the proper host and port.
+<2> HTTP requests are pushed into the server by the remote clients, and the `HttpServer` component will notify the source of every request. The source then uses the `SourceCallback` to push the message into the flow.
+<3> The message is represented by leveraging the same `Result` object that operations use to communicate complex outputs. See <<result-object#, `Result`>> for more information.
+<4> The example uses the `handle(Result)` method in the `SourceCallback` to pass the message.
+
+== Threading Model
+
+Once the `Result` object is passed to the `SourceCallback` through the `handle(Result)` method,   message processing occurs asynchronously in a different thread than the one invoking the method.
+
+The next step explains how to catch the result of the Flow processing and optionally send a response.
+
+== Next Step
+
+* xref:sources-response.adoc[Obtaining Flow output and Sending responses from a Message Source]
