@@ -9,7 +9,7 @@ between the Module and Mule is required to ensure compatibility with the Mule ec
 Here are a series of articles that explain in detail how to test your module. It provides a step-by-step introduction on how to test a module. It explains the basis of a Module Test Case and how to execute a simple operation from a Module.
 
 * <<testing-writing-your-first-test-case#, Writing your first test case>>
-* <<testing-flowrunner#,FlowRunner>>
+* xref:testing-writing-your-first-test-case.adoc#_4_1_executing_a_flow[FlowRunner]
 * Operations, Scopes and Routers
 * Sources
 * DataSense Resolution
