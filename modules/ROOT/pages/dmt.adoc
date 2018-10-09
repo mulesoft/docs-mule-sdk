@@ -40,6 +40,8 @@ The DMT performs these tasks for you:
 
 == Running DMT
 
+To run DMT you have to adjust your connector `pom.xml` and build the connector from the command line.
+
 . Open the connector's `pom.xml` file and find the `parent` artifact:
 
 +
