@@ -517,9 +517,9 @@ hello-smart-connector
 +
 (2) `hello-smart-connector/smart-connector-it/src/test/munit/assertion-munit-test.xml`: An assertion operation that calls the XML SDK operation.
 +
-. Run `mvn clean install` in the `/hello-smart-connector` to create the plugin for the `Hello XML SDK` module. This will install a parent project as well as child projects.
+. Run `mvn clean install` in the `/hello-smart-connector` to create the plugin for the `Hello XML SDK` module.
 +
-This command also runs the suite through MUnit for the operation defined in the module.
+This command installs a parent project as well as its child projects. It also runs the suite through MUnit for the operation defined in the module.
 +
 [source,text,linenums]
 ----
@@ -543,7 +543,7 @@ This command also runs the suite through MUnit for the operation defined in the 
 ➜  hello-smart-connector
 ----
 +
-(3) When you want to add this connector to your project from your local Maven repository for testing, you need only add the following dependency to use this connector from your Studio palette.
+(3) When you want to add this connector to a project from your local Maven repository for testing, add the following dependency:
 ----
 <dependency>
        <groupId>org.mule.smart.connector</groupId>
@@ -552,6 +552,9 @@ This command also runs the suite through MUnit for the operation defined in the 
        <classifier>mule-plugin</classifier>
 </dependency>
 ----
++
+You can now use this connector from your Studio palette.
++
 == Consuming a Mule Plugin from an XML SDK Module
 
 To consume a Mule plugin from within an XML SDK module:
@@ -1430,7 +1433,7 @@ GitHub Location: https://github.com/mulesoft-labs/smart-connectors-integration-t
  </module>
 ----
 
-=== Using Validation Module
+=== Using the Validation Module
 
 This example uses the Validation module, specifically `validation:is-email`.
 
@@ -1461,7 +1464,7 @@ GitHub Location: https://github.com/mulesoft-labs/smart-connectors-integration-t
  </module>
 ----
 
-== XML SDK limitations
+== XML SDK Limitations
 
 The SDK currently has the following limitations:
 
