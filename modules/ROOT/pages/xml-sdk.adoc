@@ -471,11 +471,11 @@ To create an XML SDK module:
 [source,text,linenums]
 ----
 mvn archetype:generate                                       \
-  -DarchetypeGroupId=org.mule.smart.connector                \
-  -DarchetypeArtifactId=smart-connector-project-archetype    \
-  -DarchetypeVersion=1.0.0                                   \
-  -DgroupId=org.mule.smart.connector                         \
-  -DartifactId=hello-smart-connector                         \
+  -DarchetypeGroupId=org.mule.extensions                     \
+  -DarchetypeArtifactId=xml-mule-extensions-archetype        \
+  -DarchetypeVersion=1.0.1                                   \
+  -DgroupId=org.mule.extension                               \
+  -DartifactId=hello-mule-extension                          \
   -DmuleConnectorName=Hello
 ----
 +
@@ -489,50 +489,54 @@ The Maven archetype creates a stub project with a minimal amount of code for the
 +
 [source,text,linenums]
 ----
-➜  ~ tree hello-smart-connector
-hello-smart-connector
+➜  hello-mule-extension tree .
+.
 ├── pom.xml
-├── smart-connector
-│   ├── pom.xml
-│   └── src
-│       └── main
-│           └── resources
-│               └── module-Hello.xml // <1>
-└── smart-connector-it
-    ├── mule-application.json
-    ├── pom.xml
-    └── src
-        ├── main
-        │   └── mule
-        │       └── mule-config.xml
-        └── test
-            └── munit
-                └── assertion-munit-test.xml // <2>
+└── src
+    ├── main
+    │   └── resources
+    │       └── org
+    │           └── mule
+    │               └── yourdomain
+    │                   └── module-Hello.xml // <1>
+    └── test
+        └── munit
+            └── assertion-munit-test.xml // <2>
 
-10 directories, 7 files
-➜  ~
+8 directories, 3 files
 ----
 +
-(1) `hello-smart-connector/smart-connector/src/main/resources/module-Hello.xml`: Defines the XML SDK root element.
+(1) `hello-mule-extension/src/main/resources/org/mule/yourdomain/module-Hello.xml`: Defines the XML SDK root element.
 +
-(2) `hello-smart-connector/smart-connector-it/src/test/munit/assertion-munit-test.xml`: An assertion operation that calls the XML SDK operation.
+(2) `hello-mule-extension/src/test/munit/assertion-munit-test.xml`: An assertion operation that calls the XML SDK operation.
 +
-. Run `mvn clean install` in the `/hello-smart-connector` to create the plugin for the `Hello XML SDK` module.
+. Run `mvn clean install` in the `/hello-mule-extension` to create the plugin for the `Hello XML SDK` module.
 +
 This command installs a parent project as well as its child projects. It also runs the suite through MUnit for the operation defined in the module.
 +
 [source,text,linenums]
 ----
-➜  hello-smart-connector mvn clean install
+➜  hello-mule-extension mvn clean install
  ...
  ..
  .
-[INFO] ------------------------------------------------------------------------
-[INFO] Reactor Summary:
-[NOTE]
-[INFO] Parent POM Hello XML SDK and Mule App integration test SUCCESS [  0.142 s]
-[INFO] Hello XML SDK .............................. SUCCESS [  4.540 s]
-[INFO] Hello XML SDK Mule Application Integration Test SUCCESS [ 33.389 s]
+==================================================================================
+Number of tests run: 2 - Failed: 0 - Errors: 0 - Skipped: 0 - Time elapsed: 2246ms
+==================================================================================
+[INFO] ====================================================================================
+[INFO] MUnit Run Summary - Product: MULE, Version: 4.1.1
+[INFO] ====================================================================================
+[INFO]  >> assertion-munit-test.xml test result: Tests: 2, Errors: 0, Failures: 0, Skipped: 0
+[INFO]
+[INFO] ====================================================================================
+[INFO]  > Tests:   	2
+[INFO]  > Errors:  	0
+[INFO]  > Failures:	0
+[INFO]  > Skipped: 	0
+[INFO] ====================================================================================
+....
+...
+..
 [INFO] ------------------------------------------------------------------------
 [INFO] BUILD SUCCESS
 [INFO] ------------------------------------------------------------------------
@@ -546,8 +550,8 @@ This command installs a parent project as well as its child projects. It also ru
 (3) When you want to add this connector to a project from your local Maven repository for testing, add the following dependency:
 ----
 <dependency>
-       <groupId>org.mule.smart.connector</groupId>
-       <artifactId>hello-smart-connector-smart-connector</artifactId>
+       <groupId>org.mule.extension</groupId>
+       <artifactId>hello-mule-extension2</artifactId>
        <version>1.0.0-SNAPSHOT</version>
        <classifier>mule-plugin</classifier>
 </dependency>
