@@ -12,11 +12,11 @@ However, there are some cases in which it is mandatory to specify the output `mi
 
 This restriction is not arbitrary. Mule 4 uses DataWeave as its expression language, so users do not need to worry about the format of the data. They only need to concern themselves with the its structure. However, this means that DataWeave must be able to determine the media type of all the values carried on the Mule Message.
 
-The SDK automatically handles most of the work needed for DataWeave to have that information automatically, but when the operation returns a generic type such as `String`, it is impossible to know if the data is supposed to be in JSON, XML or even plain text format. The same thing happens with `InputStream`: it could be a stream of JSON, XML or CSV, or it could be binary information. In either case, the SDK needs help from the developer to know this in design time.
+The SDK automatically handles most of the work needed for DataWeave to have that information automatically, but when the operation returns a generic type such as `String`, it is impossible to know if the data is supposed to be in JSON, XML, or even plain text format. The same thing happens with `InputStream`: it could be a stream of JSON, XML, or CSV, or it could be binary information. In either case, the SDK needs help from a developer to know this in design time.
 
 The `@MediaType` annotation exists for this purpose. Every source or operation that returns a `String` or an `InputStream` is forced to have this annotation, even if the specified mediaType is `*/*`.
 
-For example, suppose you are developing an operation that returns information about a customer. Also suppose that this operation returns the information in XML format. You would do this:
+For example, suppose you are developing an operation that returns information about a customer. Also suppose that this operation returns the information in XML format. You can do this:
 
 [source,java,linenums]
 ----
@@ -38,36 +38,36 @@ public InputStream getVideo(String videoId) {
 
 TIP: The `@MediaType` annotation defines a set of constants with the most common media types. However, as shown in the video media type example, you can use whatever custom `mediaType `you need.
 
-== Un-strict Media Types
+== Strict False Media Types
 
-In the examples above, it is impossible for operations to return a media type other than the one specified. In other cases, you might know what the media type is _most likely_ to be, or you simply do not know the `mediaType` will be. For these cases, the `@MediaType` annotation has a `strict = false` option.
+In the examples above, it is impossible for operations to return a media type other than the one specified. In other cases, you might know what the media type is _most likely_ to be, or you simply do not know what the `mediaType` is. For these cases, the `@MediaType` annotation has a `strict = false` option.
 
 === Variable Media Type
 
-Returning to the example that gets a customer information operation, suppose that the service to which you are connecting returns XML _by default_, but you could also configure your particular account to use a different format instead. Also suppose there is no way for you to know this beforehand. You can do this:
+Returning to the example that gets a customer information operation, suppose that the service to which you are connecting returns XML by default, but you could also configure your particular account to use a different format instead. Also suppose there is no way for you to know this beforehand. You can do this:
 
 [source,java,linenums]
 ----
-@MediaType(MediaType.APPLICATION_XML, strict = false)
+@MediaType(value = MediaType.APPLICATION_XML, strict = false)
 public String getCustomerInfo(String customerId) {
   return fetchCustomerXml(customerId);
 }
 ----
 
-Setting the `strict` parameter to `false` will automatically add an `outputMimeType` parameter to the operation. This parameter allows the module's user to manually override the `mimeType`. So, users who know that their account is configured to use JSON can do this:
+Setting the `strict` parameter to `false`  automatically adds an `outputMimeType` parameter to the operation. This parameter allows the module's user to manually override the `mimeType`. So, users who know that their account and are configured to use JSON can do this:
 
-[source,xml,linenums]
+[source,xml]
 ----
 <customers:get-customer-info customerId="999" outputMimeType="application/JSON" />
 ----
 
 === Unknown Media Type
 
-Consider the case of an HTTP request. Depending on which endpoint you hit, the obtained media type will change. Because you do not know which media type you will get, you use the `ANY` (`*/*`) one.
+Consider the case of an HTTP request. Depending on which endpoint you hit, the obtained media type  changes. Because you do not know which media type you will get, you use the `ANY` (`*/*`) one.
 
 [source,java,linenums]
 ----
-@MediaType("*/*", strict = false)
+@MediaType(value =  "*/*", strict = false)
 public InputStream rquest(String path) {
   return httpClient.request(path);
 }
@@ -75,10 +75,10 @@ public InputStream rquest(String path) {
 
 Again, the `strict = false` attribute allows the end user to manually set the `mimeType` depending on the endpoint:
 
-[source,xml,linenums]
+[source,xml]
 ----
 <http:request path="/customer/999" outputMimeType="application/JSON" />
 ----
 
 [TIP]
-The `outputMimeType` parameter that is automatically added is optional and has no default. The user can just leave it blank. In that case, the SDK will use the media type you set in the annotation.
+The `outputMimeType` parameter that is automatically added is optional and has no default. The user can just leave it blank. In that case, the SDK uses the media type you set in the annotation.
