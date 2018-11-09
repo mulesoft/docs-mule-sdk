@@ -265,7 +265,7 @@ image::ex-connector-in-palette.png[Example: Cookbook connector in Studio palette
 
 https://www.mulesoft.com/webinars/api/intro-to-anypoint-design-center-flow-designer[Intro to Anypoint Design Center - Flow Designer]
 
-xref:4.1@mule-runtime::index.adoc[About Mule Runtime]
+xref:4.1@mule4-runtime::index.adoc[About Mule Runtime]
 
 xref:index.adoc[Mule SDKs]
 

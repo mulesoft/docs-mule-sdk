@@ -83,4 +83,4 @@ ServerSocket socket = sslServerSocketFactory.createServerSocket();
 ----
 
 To correctly configure TLS context and all the available parameters that
-you can set, see xref:4.1@mule-runtime::tls-configuration.adoc[Configure TLS with Keystores and Truststores].
+you can set, see xref:connectors::common/common-about-tls.adoc[Mule TLS Context].

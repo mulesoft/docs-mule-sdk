@@ -125,7 +125,7 @@ The connections are pooled. A cache of connections is maintained so that they ca
 
 This is useful when connections are expensive to create or when concurrent access to a connection instance is not supported.
 
-For this pooling strategy, a pooling profile configuration is automatically added to the connection. See link:
+For this pooling strategy, a pooling profile configuration is automatically added to the connection.
 
 You can enable pooling connection management by implementing the `PoolingConnectionProvider` interface.
 

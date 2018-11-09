@@ -6,13 +6,18 @@ endif::[]
 Testing ensures that a piece of code works correctly. Testing a module is more than simply creating test cases for the business logic. A lot of testing of the interaction
 between the Module and Mule is required to ensure compatibility with the Mule ecosystem.
 
-Here are a series of articles that explain in detail how to test your module. It provides a step-by-step introduction on how to test a module. It explains the basis of a Module Test Case and how to execute a simple operation from a Module.
+The Module Testing Framework (Beta) leverages *MUnit* to provide this Mule ecosystem.
+If you are not familiarized with the MUnit Framework, documentation about it can be found in the following section:
 
-* <<testing-writing-your-first-test-case#, Writing your first test case>>
-* xref:testing-writing-your-first-test-case.adoc#testing-flowrunner[FlowRunner]
-* Operations, Scopes and Routers
-* Sources
-* DataSense Resolution
-* ValueProviders Resolution
-* Handling ClassLoading Issues
-* Best Practices
+* xref:2.2@munit::index.adoc[About MUnit]
+
+NOTE: Unit tests should also be present in a Module with the purpose of testing internal logic. This tests will run during the *test* phase of your module's lifecycle.
+MUnit tests goal is to test the interaction of your module with the Mule environment, this tests will run during the *integration-test* phase of your module's lifecycle.
+
+Here are a series of articles that explain in detail how to test your module. It provides a step-by-step introduction on how to test a module. It explains the basis of the Module Testing Framework (Beta)
+and how to execute a simple operation from a Module.
+
+* <<testing-writing-your-first-munit-test#, Writing your first MUnit test>>
+* <<munit-extensions-maven-plugin#, To Operate the MUnit Extensions Maven Plugin>>
+* <<munit-extensions-maven-plugin-configuration#, MUnit Extensions Maven Plugin Configuration>>
+* <<mtf-tools#, MTF Tools>>
