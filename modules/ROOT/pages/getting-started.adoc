@@ -31,7 +31,7 @@ Install and verify that the following tools are working in your local environmen
 Run the `generate` command to create an extension project based on the Maven archetype:
 
 ----
-mvn org.mule.extensions:mule-extensions-archetype-maven-plugin:generate
+mvn org.mule.extensions:mule-extensions-archetype-maven-plugin:1.2.0:generate
 ----
 
 You are prompted to provide required field values, then a new project is generated.
@@ -47,7 +47,7 @@ Because this project is a Maven project, it contains a `pom.xml` file that conta
 <parent>
   <groupId>org.mule.extensions</groupId>
   <artifactId>mule-modules-parent</artifactId>
-  <version>1.1.0</version>
+  <version>1.1.3</version>
 </parent>
 ----
 
