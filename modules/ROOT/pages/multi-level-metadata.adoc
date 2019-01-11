@@ -15,7 +15,7 @@ Here is an example of a metadata key id class:
 
 [source,java,linenums]
 ----
-public class ActionIdentifier{
+public class ActionIdentifier {
 
   @Parameter
   @MetadataKeyPart(order = 1) // <1>
@@ -25,22 +25,18 @@ public class ActionIdentifier{
   @MetadataKeyPart(order = 2) // <1>
   private String action;
 
-  @Override
   public String getService() {
     return service;
   }
 
-  @Override
   public String getAction() {
     return action;
   }
 
-  @Override
   public void setService(String service) {
     this.service = service;
   }
 
-  @Override
   public void setAction(String action) {
     this.action = action;
   }
