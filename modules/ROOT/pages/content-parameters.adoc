@@ -35,7 +35,7 @@ If you consider the explanation of behavior parameters above, the definition of 
 Content parameters have the following characteristics:
 
 * They must accept expressions. Both SUPPORTS_EXPRESSIONS and EXPRESSION_REQUIRED are supported, but compilation will fail if `@Expression(NOT_SUPPORTED)` is used.
-* Each content parameter can embed its own DataWeave script to generate the content. Therefore, inline definition of content parameters is not allowed.
+* Each content parameter can embed its own DataWeave script to generate the content.
 * Content parameters always translate to the DSL as a text element, precisely to enable the embedded DataWeave script.
 
 Consider the `file:write` operation again, this time with content parameters. Suppose that you are using this operation in a flow, and the message payload is JSON that you want to store as XML.
