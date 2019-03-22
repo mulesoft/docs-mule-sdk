@@ -3,22 +3,21 @@ ifndef::env-site,env-github[]
 include::_attributes.adoc[]
 endif::[]
 
-This section provides a step-by-step introduction to testing a module's
-operation using MUnit. It explains how to configure your module and create a simple
-MUnit test.
+This section provides a step-by-step introduction to testing a module's operation using MUnit. It explains how to configure your module and how to create a simple MUnit test.
 
-== First Concepts
+== Prerequisites
 
-MUnit test cases should be located in the src/test/munit folder of your module. If you are not familiarized with MUnit,
-documentation about it can be found xref:2.2@munit::index.adoc[here].
+* This article assumes you are familiar with MUnit concepts. +
+To learn more about MUnit, see the xref:2.2@munit::index.adoc[MUnit] documentation.
+* MUnit test cases should be located in the `src/test/munit` folder of your module.
+* This example is based on the module project generated with the Mule Extension Archetype following the xref:getting-started.adoc#generating-a-project-using-the-maven-archetype-directly[Creating Your First SDK Project] instructions.
 
-Note that this documentation is based on the module project generated with the Mule Extension Archetype (<<getting-started#generating-a-project-using-the-maven-archetype-directly,Creating Your First SDK Project>>).
+== Configuring your Module
 
-== 1. Configuring your Module
+To configure your module to run your MUnit test cases, you need to configure your `pom.xml` file.
 
-To configure your module so it runs your MUnit test cases, you need to configure your `pom.xml` file.
-
-=== 1.1 Add the following properties
+. Add the following properties:
++
 [source,xml,linenums]
 ----
 <project xmlns="http://maven.apache.org/POM/4.0.0"
@@ -37,9 +36,8 @@ To configure your module so it runs your MUnit test cases, you need to configure
   ...
 </project>
 ----
-
-=== 1.2 Add the Maven Resources Plugin
-
+. Add the Maven Resources Plugin:
++
 [source,xml,linenums]
 ----
 <project xmlns="http://maven.apache.org/POM/4.0.0"
@@ -77,9 +75,8 @@ To configure your module so it runs your MUnit test cases, you need to configure
   ...
 </project>
 ----
-
-=== 1.3 Add the MUnit Extensions Maven Plugin
-
+. Add the MUnit Extensions Maven Plugin:
++
 [source,xml,linenums]
 ----
 <project xmlns="http://maven.apache.org/POM/4.0.0"
@@ -123,8 +120,7 @@ To configure your module so it runs your MUnit test cases, you need to configure
 </project>
 ----
 
-
-== 2. Writing Your MUnit Test
+== Writing Your MUnit Test
 
 You test a module by executing its operations and making assertions about the result of these executions.
 
@@ -169,16 +165,16 @@ The MUnit Test XML must be placed inside the `src/test/munit` folder of the modu
 </mule>
 ----
 
-== 3. Running your test
+== Running your test
 
-To run your test from the command line using Maven, run the following:
+To run your test from the command line using Maven:
 
-[source,text,linenums]
+[source,bash,linenums]
 ----
 mvn clean verify
 ----
 
-This should output the result of your test run:
+This outputs the result of your test run:
 ----
 ================================================================================
 === Running suite: basic-operations-test.xml                                 ===
@@ -193,3 +189,8 @@ This should output the result of your test run:
 = Tests run: 2 - Failed: 0 - Errors: 0 - Skipped: 0 - Time elapsed: 2.55 sec   =
 ================================================================================
 ----
+
+== See Also
+
+* xref:munit-extensions-maven-plugin.adoc[Operating the MUnit Extensions Maven Plugin]
+* xref:munit-extensions-maven-plugin-configuration.adoc[MUnit Extensions Maven Plugin Configuration]
