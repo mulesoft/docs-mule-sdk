@@ -1,31 +1,26 @@
-= To Operate the MUnit Extensions Maven Plugin
+= Operating the MUnit Extensions Maven Plugin
 ifndef::env-site,env-github[]
 include::_attributes.adoc[]
 endif::[]
 
-This section is dedicated to showing you how to run your tests using the plugin.
+This section shows you how to run your tests using the plugin.
 
-== To Run MUnit Tests for a Module Project
+== Running MUnit Tests for a Module Project
 
-.Running MUnit tests in a Module Project
 [source,console]
 ----
 mvn clean verify
 ----
 
-== To Run a Specific MUnit Test Suite
+== Running a Specific MUnit Test Suite
 
-You can instruct MUnit Maven Plugin to run only tests that belong to a specific test suite.
-
-To do this, we use the property `munit.test`.
+You can instruct MUnit Maven Plugin to only run tests that belong to a specific test suite by using the property `munit.test`.
 
 [source,console]
 ----
 mvn clean verify -Dmunit.test=<regex-test-suite>
 ----
-
-The property `munit.test` accepts regular expressions. The expression is applied to the name of the MUnit Test Suite file. The regular expression language is the Java implementation. +
-This path is relative to src/test/munit.
+.The property `munit.test` accepts regular expressions. The expression is applied to the name of the MUnit Test Suite file. The regular expression language is the Java implementation. This path is relative to `src/test/munit`.
 
 The following is a valid example:
 [source,console]
