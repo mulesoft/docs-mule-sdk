@@ -1,0 +1,91 @@
+= Metadata Testing
+ifndef::env-site,env-github[]
+include::_attributes.adoc[]
+endif::[]
+
+== Prerequisites
+
+To create metadata tests you need to add the mtf-tools dependency to your project. This means adding the following
+`mule-plugin`:
+
+.MTF Tools Dependency
+[source,xml,linenums]
+----
+<dependency>
+    <groupId>com.mulesoft.munit</groupId>
+    <artifactId>mtf-tools</artifactId>
+    <version>1.0.0-BETA2</version>
+    <classifier>mule-plugin</classifier>
+    <scope>test</scope>
+</dependency>
+----
+
+== Tooling Test
+
+The tooling test is meant to validate the component's metadata at design time, unlike the `munit:test` that validates
+the component's execution.
+It has the following representation:
+
+.Tooling test
+[source,xml,linenums]
+----
+<mtf:tooling-test name="metadataTest">
+    ...
+</mtf:tooling-test>
+----
+
+NOTE: When a suite with tooling tests is run, xml validations are disabled. When testing metadata, it may be
+necessary to avoid filling required parameters.
+
+The tooling test can have the following parameters:
+
+.Tooling test parameters
+[cols="30,70"]
+|===
+|Name |Description
+
+|name
+|*Mandatory.* Defines the name of the test. The name must be unique inside the test suite.
+
+|description
+|Describes the scenario being tested.
+
+|ignore
+|Defines if the test should be ignored. If not present, the test is not ignored.
+
+|tags
+|Comma separated list of tags to assign to the test.
+
+|expectFailureCode
+|Defines the failure code that should be received after the metadata calculation of this test.
+
+|expectFailureMessage
+|Defines the failure message that should be received after the metadata calculation of this test.
+
+|===
+
+The tooling test has two main sections:
+
+* Metadata Scope: Wraps the component over which to calculate metadata and defines the which metadata aspect to obtain.
+Possible values are:
+** Metadata Keys
+** Input Metadata
+** Output Metadata
+** Attributes Metadata
+* Validation: Has all the validations regarding the result of the metadata scope
+
+== Metadata Scopes
+
+=== Metadata Keys
+
+=== Input Metadata
+
+=== Output Metadata
+
+=== Attributes Metadata
+
+
+
+== See Also
+
+* xref:2.2@munit::storage-processors.adoc[Storage Event Processors]
