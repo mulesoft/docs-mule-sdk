@@ -5,7 +5,10 @@ endif::[]
 
 == Prerequisites
 
-To create metadata tests you need to add the mtf-tools dependency to your project. This means adding the following
+The following section assumes you are already familiarized on how to define `Metadata` for your module. If not, information
+can be found xref:metadata.adoc[here].
+
+To create metadata tests you need to add the `mtf-tools` dependency to your project. This means adding the following
 `mule-plugin`:
 
 .MTF Tools Dependency
@@ -66,7 +69,7 @@ The tooling test can have the following parameters:
 
 The tooling test has two main sections:
 
-* Metadata Scope: Wraps the component over which to calculate metadata and defines the which metadata aspect to obtain.
+* Metadata Scope: Wraps the component over which to calculate metadata and defines the metadata information to obtain.
 Possible values are:
 ** Metadata Keys
 ** Input Metadata
@@ -76,16 +79,144 @@ Possible values are:
 
 == Metadata Scopes
 
+The following are scopes to be used inside the tooling test. Only one of them can be used in each test. Inside
+the scope either an `operation` or a `source` can be present.
+
 === Metadata Keys
+
+Obtains the Metadata Keys for the component. The `payload` contains a map, where each key is the Metadata Key Id, and the value
+is the Metadata Key.
+
+[source,xml,linenums]
+----
+<mtf:tooling-test name="keysTest">
+    <mtf:get-metadata-keys>
+        <example:my-operation config-ref="config" />
+    </mtf:get-metadata-keys>
+    <mtf:validation>
+        <munit-tools:assert-equals actual="#[payload.aKeyId.displayName]" expected="#['Display Name']"/>
+    </mtf:validation>
+</mtf:tooling-test>
+----
 
 === Input Metadata
 
+Obtains the `Metadata Type` for the specified `parameter` of the component. The `payload` contains a Json representation of the Metadata type.
+
+[source,xml,linenums]
+----
+<mtf:tooling-test name="inputMetadataTest">
+    <mtf:get-input-metadata parameter="aParam">
+        <example:my-operation config-ref="config"/>
+    </mtf:get-input-metadata>
+    <mtf:validation>
+        <munit-tools:assert-equals actual="#[payload.'type']" expected="#['Number']"/>
+    </mtf:validation>
+</mtf:tooling-test>
+----
+
 === Output Metadata
+
+Obtains the `Metadata Type` for the output `payload` of the component. The `payload` contains a Json representation of the Metadata type.
+
+[source,xml,linenums]
+----
+<mtf:tooling-test name="outputMetadataTest">
+    <mtf:get-output-metadata>
+        <example:my-operation config-ref="config" />
+    </mtf:get-output-metadata>
+    <mtf:validation>
+        <munit-tools:assert-equals actual="#[payload.format]" expected="#['json']"/>
+        <munit-tools:assert-equals actual="#[payload.fields[0].key.name]" expected="#['lastName']"/>
+        <munit-tools:assert-equals actual="#[payload.fields[0].model.'type']" expected="#['String']"/>
+        <munit-tools:assert-equals actual="#[payload.fields[1].key.name]" expected="#['name']"/>
+        <munit-tools:assert-equals actual="#[payload.fields[1].model.'type']" expected="#['String']"/>
+    </mtf:validation>
+</mtf:tooling-test>
+----
 
 === Attributes Metadata
 
+Obtains the `Metadata Type` for the `attributes` Metadata of the component. The `payload` contains a Json representation of the Metadata Type.
+
+[source,xml,linenums]
+----
+<mtf:tooling-test name="attributesMetadataTest">
+    <mtf:get-attributes-metadata>
+        <example:my-operation config-ref="config" />
+    </mtf:get-attributes-metadata>
+    <mtf:validation>
+        <munit-tools:assert-equals actual="#[payload.format]" expected="#['java']"/>
+        <munit-tools:assert-equals actual="#[payload.fields[0].key.name]" expected="#['age']"/>
+        <munit-tools:assert-equals actual="#[payload.fields[0].model.'type']" expected="#['Number']"/>
+    </mtf:validation>
+</mtf:tooling-test>
+----
+
+== Expecting failures
+
+A common use case when testing Metadata, is validating failures that may occur during metadata calculation.
+In these cases, you can use the `expectFailureCode` and `expectFailureMessage` parameters.
+
+.Expect Failures Example
+[source,xml,linenums]
+----
+<mtf:tooling-test name="expectFailureTest"
+        expectFailureCode="INVALID_METADATA_KEY"
+        expectFailureMessage="No metadata available for an empty name">
+    <mtf:get-output-metadata>
+        <example:my-operation config-ref="config" id=""/>
+    </mtf:get-output-metadata>
+</mtf:tooling-test>
+----
+
+== Assert Type Processor
+
+The assert type processor allows you to assert in an easier way the Metadata Type structure returned by Metadata Scopes like the
+`get-input-metadata`, `get-output-metadata` and `get-attributes-metadata`.
+
+NOTE: The assert-type processor will compare the structure of both Metadata Types, this means it will ignore fields like `format` or `annotations`.
+To perform assertions over these fields, you can use the `payload` result of the metadata scopes operations as shown in the previous examples.
+
+If the assertion fails, the processor throws a `java.lang.AssertionError`.
+
+=== From Class
+
+To compare the Metadata Type structure against one obtained from a Java Class you use the `fromClass` parameter:
+
+.fromClass Example
+[source,xml,linenums]
+----
+<mtf:tooling-test name="assertTypeFromClass">
+    <mtf:get-output-metadata>
+        <example:my-operation config-ref="config" />
+    </mtf:get-output-metadata>
+    <mtf:validation>
+        <mtf:assert-type actual="#[payload]" fromClass="com.example.Person"/>
+    </mtf:validation>
+</mtf:tooling-test>
+----
 
 
-== See Also
+=== From Schema
 
-* xref:2.2@munit::storage-processors.adoc[Storage Event Processors]
+To compare the Metadata Type structure against one obtained from a schema use the `fromSchema` parameter.
+The `fromSchema` supports Metadata Types from `JSON schema`, `XSD schema` and `RAML Data Types`.
+The file extensions need to be `.json`, `.xsd` and `.raml` respectively.
+
+.fromSchema Example
+[source,xml,linenums]
+----
+<mtf:tooling-test name="assertTypeFromClass">
+    <mtf:get-output-metadata>
+        <example:my-operation config-ref="config" />
+    </mtf:get-output-metadata>
+    <mtf:validation>
+        <mtf:assert-type actual="#[payload]" fromSchema="expected-person.xsd"/>
+    </mtf:validation>
+</mtf:tooling-test>
+----
+
+TIP: The `actual` field defaults to payload. In the examples shown above, it could have not been specified. For example:
+ `<mtf:assert-type fromSchema="expected-person.xsd"/>`
+
