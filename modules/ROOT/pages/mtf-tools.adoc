@@ -8,7 +8,7 @@ MTF Tools is an extension with useful operations to test your module.
 == Queue operations
 
 Allows you to manage temporary queues during your test runs.
-All queues will be `emptied as soon as the test ends`.
+All queues will be emptied as soon as the test ends.
 
 === Queue
 
