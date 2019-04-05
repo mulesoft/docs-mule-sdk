@@ -1,17 +1,14 @@
-= Metadata Testing
+metadat type= Metadata Testing
 ifndef::env-site,env-github[]
 include::_attributes.adoc[]
 endif::[]
 
 == Prerequisites
 
-The following section assumes you are already familiarized on how to define `Metadata` for your module. If not, information
-can be found xref:metadata.adoc[here].
-
-To create metadata tests you need to add the `mtf-tools` dependency to your project. This means adding the following
-`mule-plugin`:
-
-.MTF Tools Dependency
+. The following section assumes that you are already familiarized on how to define `MetadataType` for your module. +
+See xref:metadata.adoc[Adding DataSense Support] for more information.
+. To create metadata tests you need to add the `mtf-tools` dependency to your project:
++
 [source,xml,linenums]
 ----
 <dependency>
@@ -25,11 +22,9 @@ To create metadata tests you need to add the `mtf-tools` dependency to your proj
 
 == Tooling Test
 
-The tooling test is meant to validate the component's metadata at design time, unlike the `munit:test` that validates
-the component's execution.
+The `tooling-test` component is meant to validate the component's metadata at design time, unlike the `munit:test` that validates the component's execution. +
 It has the following representation:
 
-.Tooling test
 [source,xml,linenums]
 ----
 <mtf:tooling-test name="metadataTest">
@@ -37,55 +32,53 @@ It has the following representation:
 </mtf:tooling-test>
 ----
 
-NOTE: When a suite with tooling tests is run, xml validations are disabled. When testing metadata, it may be
+NOTE: When a suite with tooling tests runs, XML validations are disabled. While testing metadata, it may be
 necessary to avoid filling required parameters.
 
 The tooling test can have the following parameters:
 
-.Tooling test parameters
-[cols="30,70"]
+[%header%autowidth.spread,cols="a,a"]
 |===
 |Name |Description
 
-|name
-|*Mandatory.* Defines the name of the test. The name must be unique inside the test suite.
+|`name`
+| Mandatory. Defines the name of the test. The name must be unique inside the test suite.
 
-|description
+|`description`
 |Describes the scenario being tested.
 
-|ignore
+|`ignore`
 |Defines if the test should be ignored. If not present, the test is not ignored.
 
-|tags
+|`tags`
 |Comma separated list of tags to assign to the test.
 
-|expectFailureCode
+|`expectFailureCode`
 |Defines the failure code that should be received after the metadata calculation of this test.
 
-|expectFailureMessage
+|`expectFailureMessage`
 |Defines the failure message that should be received after the metadata calculation of this test.
 
 |===
 
 The tooling test has two main sections:
 
-* Metadata Scope: Wraps the component over which to calculate metadata and defines the metadata information to obtain.
+* Metadata Scope: Wraps the component over which you need to calculate metadata, and defines the metadata information to obtain. +
 Possible values are:
-** Metadata Keys
-** Input Metadata
-** Output Metadata
-** Attributes Metadata
-* Validation: Has all the validations regarding the result of the metadata scope
+** Metadata Keys.
+** Input Metadata.
+** Output Metadata.
+** Attributes Metadata.
+* Validation: Has all the validations regarding the result of the metadata scope.
 
 == Metadata Scopes
 
-The following are scopes to be used inside the tooling test. Only one of them can be used in each test. Inside
-the scope either an `operation` or a `source` can be present.
+The following are scopes used inside the tooling test. Only one of them can be used in each test. +
+You can use either an `operation` or a `source` in each of these scopes.
 
 === Metadata Keys
 
-Obtains the Metadata Keys for the component. The `payload` contains a map, where each key is the Metadata Key Id, and the value
-is the Metadata Key.
+Obtains the Metadata Keys for the component. The `payload` contains a map, where each key is the metadata key ID, and the value is the metadata key.
 
 [source,xml,linenums]
 ----
@@ -101,7 +94,7 @@ is the Metadata Key.
 
 === Input Metadata
 
-Obtains the `Metadata Type` for the specified `parameter` of the component. The `payload` contains a Json representation of the Metadata type.
+Obtains the metadata type for the specified `parameter` of the component. The `payload` contains a JSON representation of the metadata type.
 
 [source,xml,linenums]
 ----
@@ -117,7 +110,7 @@ Obtains the `Metadata Type` for the specified `parameter` of the component. The 
 
 === Output Metadata
 
-Obtains the `Metadata Type` for the output `payload` of the component. The `payload` contains a Json representation of the Metadata type.
+Obtains the metadat type for the output `payload` of the component. The `payload` contains a JSON representation of the metadata type.
 
 [source,xml,linenums]
 ----
@@ -137,7 +130,7 @@ Obtains the `Metadata Type` for the output `payload` of the component. The `payl
 
 === Attributes Metadata
 
-Obtains the `Metadata Type` for the `attributes` Metadata of the component. The `payload` contains a Json representation of the Metadata Type.
+Obtains the metadat type for the `attributes` Metadata of the component. The `payload` contains a JSON representation of the metadata type.
 
 [source,xml,linenums]
 ----
@@ -155,10 +148,9 @@ Obtains the `Metadata Type` for the `attributes` Metadata of the component. The 
 
 == Expecting failures
 
-A common use case when testing Metadata, is validating failures that may occur during metadata calculation.
-In these cases, you can use the `expectFailureCode` and `expectFailureMessage` parameters.
+A common use case when testing Metadata, is validating failures that may occur during metadata calculation. +
+To validate these failures, you can use the `expectFailureCode` and `expectFailureMessage` parameters.
 
-.Expect Failures Example
 [source,xml,linenums]
 ----
 <mtf:tooling-test name="expectFailureTest"
@@ -172,19 +164,17 @@ In these cases, you can use the `expectFailureCode` and `expectFailureMessage` p
 
 == Assert Type Processor
 
-The assert type processor allows you to assert in an easier way the Metadata Type structure returned by Metadata Scopes like the
-`get-input-metadata`, `get-output-metadata` and `get-attributes-metadata`.
+The assert type processor allows you to assert the metadata type structure returned by metadata scopes such as `get-input-metadata`, `get-output-metadata` and `get-attributes-metadata`.
 
-NOTE: The assert-type processor will compare the structure of both Metadata Types, this means it will ignore fields like `format` or `annotations`.
+NOTE: The assert-type processor compares the structure of both metadata types, ignoring fields like `format` or `annotations`. +
 To perform assertions over these fields, you can use the `payload` result of the metadata scopes operations as shown in the previous examples.
 
 If the assertion fails, the processor throws a `java.lang.AssertionError`.
 
 === From Class
 
-To compare the Metadata Type structure against one obtained from a Java Class you use the `fromClass` parameter:
+To compare the metadata type structure against one obtained from a Java Class you use the `fromClass` parameter:
 
-.fromClass Example
 [source,xml,linenums]
 ----
 <mtf:tooling-test name="assertTypeFromClass">
@@ -197,14 +187,18 @@ To compare the Metadata Type structure against one obtained from a Java Class yo
 </mtf:tooling-test>
 ----
 
+The `actual` field defaults to `payload`. In the example above, you could choose not to specify it. For example:
+
+[source,xml,linenums]
+--
+<mtf:assert-type fromSchema="expected-person.xsd"/>
+--
 
 === From Schema
 
-To compare the Metadata Type structure against one obtained from a schema use the `fromSchema` parameter.
-The `fromSchema` supports Metadata Types from `JSON schema`, `XSD schema` and `RAML Data Types`.
-The file extensions need to be `.json`, `.xsd` and `.raml` respectively.
+To compare the metadata type structure against one obtained from a schema use the `fromSchema` parameter. +
+The `fromSchema` supports metadata types from `JSON schema`, `XSD schema` and `RAML Data Types`. The file extensions need to be `.json`, `.xsd` and `.raml` respectively.
 
-.fromSchema Example
 [source,xml,linenums]
 ----
 <mtf:tooling-test name="assertTypeFromClass">
@@ -217,6 +211,14 @@ The file extensions need to be `.json`, `.xsd` and `.raml` respectively.
 </mtf:tooling-test>
 ----
 
-TIP: The `actual` field defaults to payload. In the examples shown above, it could have not been specified. For example:
- `<mtf:assert-type fromSchema="expected-person.xsd"/>`
+
+The `actual` field defaults to `payload`. In the example above, you could choose not to specify it. For example:
+
+[source,xml,linenums]
+--
+<mtf:assert-type fromSchema="expected-person.xsd"/>
+--
+
+
+== See Also
 
