@@ -87,7 +87,7 @@ In some cases, an operation has many content parameters, for example:
 ----
 
 As you can see, you can have as many content parameters as you want, which means that the `@Content` annotation can be used on more than one method argument.
-However, the `body` parameter is still more important than the rest. Although headers are also part of the content sent in the HTTP request, those headers are complimentary to the body that is sent. So, when an operation has more than one content parameter, one of them has to be marked as the primary content by using `@Content(primary = true)`.
+However, the `body` parameter is still more important than the rest. Although headers are also part of the content sent in the HTTP request, those headers are complementary to the body that is sent. So, when an operation has more than one content parameter, one of them has to be marked as the primary content by using `@Content(primary = true)`.
 
 The primary content parameter has all of the same characteristics as the regular content parameters, plus these:
 
