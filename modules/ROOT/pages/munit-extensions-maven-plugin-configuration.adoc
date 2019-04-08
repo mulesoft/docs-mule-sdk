@@ -133,6 +133,11 @@ From the command line, the property is `discoverRuntimes.skip`.
 
 == Dynamic Ports
 
+[IMPORTANT]
+MUnit 2.2 and later introduce the `dynamic-port` global element, that allows you to define dynamic ports at the MUnit suite level. +
+Using this element instead of the plugin configuration described below allows you to set the dynamic port both from Maven and Studio. +
+See xref:2.2@munit::dynamic-ports.adoc[Dynamic Ports] in MUnit to learn how to configure this element.
+
 When testing a Mule application in a continuous integration (CI) environment, you might encounter the following scenario:
 
 `Your application tries to open a specific port. The port is already in use. The application fails with a port binding exception.`
