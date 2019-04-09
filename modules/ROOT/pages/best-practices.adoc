@@ -76,12 +76,12 @@ public class MyComponent {
 == Transactions
 Non-transactional operations should not receive a transactional connection. The SDK will make those operations transactional, and in in Studio, your user will be wrongfully presented with transactional options.
 
-== Use Mule the HTTP Client
+== Use the Mule HTTP Client
 
-* Do not use Jersey or similar HTTP libraries. Use the Mule HTTP service. That will provide access to all the features of the HTTP requester, including non-blocking execution.
+* Do not use Jersey or similar HTTP libraries. Use the xref:connectors::http/http-connector.adoc[HTTP Connector] to provide access to all the features of the HTTP requester, including non-blocking execution.
 * Pay special attention to endpoints that require TLS. Make sure that you initialize the `TlsContextFactory` correctly.
 
-== Use Mule the SOAP client
+== Use the Mule SOAP client
 
 * Do not use CXF or similar libraries to consume Web Services. Use the Mule SOAP service. That will provide access to all the features of the web service consumer.
 
