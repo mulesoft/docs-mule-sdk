@@ -140,13 +140,16 @@ See xref:2.2@munit::dynamic-ports.adoc[Dynamic Ports] in MUnit to learn how to c
 
 When testing a Mule application in a continuous integration (CI) environment, you might encounter the following scenario:
 
-`Your application tries to open a specific port. The port is already in use. The application fails with a port binding exception.`
 
-The easy solution to this problem is to have your application use a free port.
+When testing a module in a continuous integration (CI) environment, you might encounter the following scenario:
+
+`Your test tries to open a specific port. The port is already in use. The test fails with a port binding exception.`
+
+The easy solution to this problem is to have your test use a free port.
 The MUnit Maven Plugin comes with a built-in feature to do just that.
 
-`MUnit Dynamic Ports` instructs the MUnit Maven Plugin to look for unbound ports and reserve them before running the tests over the Mule application. Each port selected is placed in a system property under the name indicated in the configuration.
-The application can acquire the port number through the use of placeholders afterward.
+`MUnit Dynamic Ports` instructs the MUnit Maven Plugin to look for unbound ports and reserve them before running the tests over the module. Each port selected is placed in a system property under the name indicated in the configuration.
+The test can acquire the port number through the use of placeholders afterward.
 
 TIP: The Ports to be selected by the plugin are taken from the following range: `[40000,50000)`
 
@@ -178,7 +181,7 @@ To enable the feature, you need to add the following code to the `configuration`
 </plugins>
 ----
 
-If you have the `${http.port}` placeholder in your application, the configuration looks something like:
+If you have the `${http.port}` placeholder in your test, the configuration looks something like:
 
 .Example
 [source,xml,linenums]
@@ -187,40 +190,6 @@ If you have the `${http.port}` placeholder in your application, the configuratio
   <dynamicPort>http.port</dynamicPort>
 </dynamicPorts>
 ----
-
-==== Preparing Your Application
-
-A placeholder must parametrize the part of the application trying to make use of a port. +
-For instance, you may want to have your Mule application listening for HTTP traffic. To do that you should provide the following configuration:
-
-.HTTP Simple Application
-[source,xml,linenums]
-----
-<http:listener-config name="HTTP_Listener_config">
-  <http:listener-connection host="0.0.0.0" port="8081" />
-</http:listener-config>
-
-<flow name="httpFlow">
-  <http:listener path="/" config-ref="HTTP_Listener_config"/>
-</flow>
-----
-
-Now this application always listens in port `8081`. To make it dynamic, change it to:
-
-.HTTP Simple Application with dynamic port
-[source,xml,linenums]
-----
-<http:listener-config name="HTTP_Listener_config">
-  <http:listener-connection host="0.0.0.0" port="${http.port}"/> //<1>
-</http:listener-config>
-
-<flow name="httpFlow">
-  <http:listener path="/" config-ref="HTTP_Listener_config"/>
-</flow>
-----
-<1> Notice the placeholder `${http.port}`.
-
-With the application coded in this way and the configuration of Dynamic Ports in place, your application starts each run listening on a different port.
 
 == Enable surefire reports
 
@@ -316,7 +285,7 @@ If not specified, this value is false by default.
 
 == To Specify the Runtime Version
 
-MUnit allows you to specify the runtime version in which your applications being tested will run.
+MUnit allows you to specify the runtime version in which your module being tested will run.
 
 [source,xml,linenums]
 ----
@@ -337,7 +306,7 @@ WARNING: If this option is set, runtime discovery and additionalRuntimes won't t
 
 == To Specify The Runtime Product
 
-MUnit allows you to specify the type of runtime in which your applications being tested will run. +
+MUnit allows you to specify the type of runtime in which your module being tested will run. +
 The two possible values are MULE for community edition, and MULE_EE for Enterprise Edition.
 
 [source,xml,linenums]
@@ -356,6 +325,28 @@ The two possible values are MULE for community edition, and MULE_EE for Enterpri
 ----
 
 WARNING: If this option is set, runtime discovery and additionalRuntimes won't take effect.
+
+== To Specify The JVM
+
+MUnit allows you to specify the jvm (or the java executable) in which your module being tested will run.
+The property should be populated with the path to the executable.
+
+[source,xml,linenums]
+----
+<plugins>
+  <plugin>
+    <groupId>com.mulesoft.munit.tools</groupId>
+    <artifactId>munit-extensions-maven-plugin</artifactId>
+    <configuration>
+      ...
+      <jvm>/path/to/jdk/bin/java</jvm>
+      ...
+    </configuration>
+  </plugin>
+</plugins>
+----
+
+From the command line, the property is `-Dmunit.jvm`
 
 == Environment Variables
 
@@ -477,6 +468,47 @@ The path specified can be absolute or written as a maven placeholder.
 ----
 
 By default, the files will be created in `${project.build.directory}/munit-reports/output/`.
+
+== Shared Libraries
+
+When requiring external libraries as explained xref:external-libs[here], you need to specify
+these libraries as `sharedLibraries` (apart from having the corresponding dependencies in the project).
+
+For example if you defined the following annotation in your module:
+
+.External Library
+[source,java,linenums]
+----
+@ExternalLib(name = "My External Library",
+requiredClassName = "com.example.MyClass",
+coordinates = "com.example:my-external-library:1.2.3")
+----
+
+You should configure the plugin in the following way:
+
+.Shared Libraries
+[source,xml,linenums]
+----
+<plugins>
+  <plugin>
+    <groupId>com.mulesoft.munit.tools</groupId>
+    <artifactId>munit-extensions-maven-plugin</artifactId>
+    <configuration>
+      ...
+      <sharedLibraries>
+          <sharedLibrary>
+              <groupId>com.example</groupId>
+              <artifactId>my-external-library</artifactId>
+          </sharedLibrary>
+      </sharedLibraries>
+      ...
+    </configuration>
+  </plugin>
+</plugins>
+----
+
+
+
 
 == See Also
 
