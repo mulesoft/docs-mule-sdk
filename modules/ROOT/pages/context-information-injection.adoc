@@ -43,6 +43,20 @@ public class HttpListener extends Source<InputStream, HttpRequestAttributes> {
 }
 ----
 
+This example shows how to log the component location in an operations (non-source) context:
+
+[source,java,linenums]
+----
+//ComponentLocation is added as a parameter when used in an operation
+  public String sayHi(String person, String q, ComponentLocation location) {
+    // ...
+
+    System.out.println("Location: " + location.getLocation());
+
+   // ...
+  }
+----
+
 == Tracking an Event
 
 *Available since version 1.1*
