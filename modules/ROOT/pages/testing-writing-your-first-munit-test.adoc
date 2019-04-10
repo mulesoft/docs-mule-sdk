@@ -28,8 +28,8 @@ To configure your module to run your MUnit test cases, you need to configure you
     <!-- Remove when a new parent version with MTF is available -->
     <munit.input.directory>src/test/munit</munit.input.directory>
     <munit.output.directory>${basedir}/target/test-mule/munit</munit.output.directory>
-    <munit.extensions.maven.plugin.version>1.0.0-BETA</munit.extensions.maven.plugin.version>
-    <munit.version>2.2.0-BETA</munit.version>
+    <munit.extensions.maven.plugin.version>1.0.0-BETA2</munit.extensions.maven.plugin.version>
+    <munit.version>2.2.0-BETA2</munit.version>
     <mavenResourcesVersion>3.0.2</mavenResourcesVersion>
     ...
   </properties>
