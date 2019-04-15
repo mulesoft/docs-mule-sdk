@@ -5,6 +5,9 @@ endif::[]
 :keywords:
 :toc:
 
+[NOTE]
+The XML SDK is a Beta release. Do not use in production environments.
+
 The XML SDK is an alternative to the more advanced Java-based Mule SDK. XML SDK is for creating custom modules, similar to the way you create a Mule app.  In fact, you can use existing Mule components in the module. The framework simply adds a few syntactic idioms as XML elements that enclose the main parts of module, such as `<module>`, `<operation>`, and `<parameter>` elements. For example, this snippet defines a single operation in the `Hello XML SDK`:
 
 [source,xml,linenums]
