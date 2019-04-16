@@ -10,9 +10,3 @@ Here are a series of articles that explain in detail how to test your module. It
 
 * <<testing-writing-your-first-test-case#, Writing your first test case>>
 * xref:testing-writing-your-first-test-case.adoc#testing-flowrunner[FlowRunner]
-* Operations, Scopes and Routers
-* Sources
-* DataSense Resolution
-* ValueProviders Resolution
-* Handling ClassLoading Issues
-* Best Practices
