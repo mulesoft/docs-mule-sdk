@@ -4,11 +4,12 @@ include::_attributes.adoc[]
 endif::[]
 :keywords: connector, certification, sdk, program guidelines
 
-If you are creating a connector that you wish to have certified (not Select or Premium):
+If you are creating a connector that you wish to have certified (not Select or Premium), create your connector and prepare it for certification.
 
 . Set up your development environment and your IDE:
 ** xref:getting-started.adoc#setup[Setting Up Your Development Environment]
 ** xref:getting-started.adoc#setup_ide[Setting Up Your IDE]
+
 . Create or migrate your connector:
 
 * If you are creating a Mule 4 connector:
@@ -87,10 +88,7 @@ The generated Mule 4 extension appears in the target folder.
 @RequiresEntitlement(name = “sap-hybris-connector")
 ----
 +
-. Add folders named `icon` and `demo`.
-+
-* Connector Icon (SVG format): `connector_root_project/icon/icon.svg`
-* Add the following docs (https://drive.google.com/file/d/1jB4uDCjOFhPtEttmnTxYERktdzd0AwSF/view[user-manual.adoc] and https://drive.google.com/file/d/1ZzJGJAN8pIOx_mI9d2xKTAXt-tubcwSS/view?usp=sharing[release-notes.adoc]) where you plan to host them, and link to them from the Exchange asset.
+. Add a folder named `icon` insert the Connector Icon (SVG format): `connector_root_project/icon/icon.svg`.
 +
 . Add `License.md` if it is not in the root folder already:
 +
@@ -113,6 +111,8 @@ After you complete the preceding steps, the structure of your connector is ready
 +
 Note that your connector needs test coverage of at least 65%.
 +
+. Identify a location where you will host documentation, and a user guide and reference manual based on the templates https://drive.google.com/file/d/1jB4uDCjOFhPtEttmnTxYERktdzd0AwSF/view[user-manual.adoc] and https://drive.google.com/file/d/1ZzJGJAN8pIOx_mI9d2xKTAXt-tubcwSS/view?usp=sharing[release-notes.adoc]. Link to them from the Exchange asset you create in the next step.
+
 . Add your connector to Connectivity Assets Manager.
 +
 You can use your existing account for Connectivity Assets Manager. If you do not have an account, contact MuleSoft.
