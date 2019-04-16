@@ -4,24 +4,15 @@ include::_attributes.adoc[]
 endif::[]
 :keywords: connector, certification, sdk, program guidelines
 
-. Set up your development environment using these sections from _Getting Started with the Mule SDK_:
+If you are creating a connector that you wish to have certified (not Select or Premium), 
+. Set up your development environment and your IDE:
 +
 * xref:getting-started.adoc#setup[Setting Up Your Development Environment]
 * xref:getting-started.adoc#setup_ide[Setting Up Your IDE]
 +
-////
-*  Install this software:
-+
-* Java Development Kit 8 (JDK 8) to compile and build your Java code.
-* Apache Maven (version 3.3.9 or higher) to manage your project’s build
-+
-. Set up your IDE.
-+
-////
-+
 . Create or migrate your connector:
 +
-* If you are a partner or developer, create a Mule 4 connector.
+* If you are creating a Mule 4 connector:
 .. Run this command:
 +
 `mvn org.mule.extensions:mule-extensions-archetype-maven-plugin:generate`
@@ -30,13 +21,13 @@ endif::[]
 +
 ** Provide the name of your extension, for example: `cookbook`
 ** When you receive a request for the `groupId`, accept the default.
-** Specify the `artifactId` of _your_ extension, for example: `cookbook-connector`
+** Specify the `artifactId` of your extension, for example: `cookbook-connector`
 ** Specify the version of your extension.
 +
 If this is your first connector, use `1.0.0`. If not, create the major version from your last connector. For example, the latest version of AS/400 Connector is `v1.0.2` for Mule 3. For Mule 4, the connector version is `v2.0.0`.
 ** When you receive a request for the main package of your extension, accept the default.
 +
-* If you want to migrate existing Mule 3 connectors to Mule 4, use a migration tool:
+* If you are migrating an existing Mule 3 connector to Mule 4, use a migration tool:
 +
 .. Change your Devkit `version` as follows:
 +
@@ -97,10 +88,10 @@ The generated Mule 4 extension appears in the target folder.
 @RequiresEntitlement(name = “sap-hybris-connector")
 ----
 +
-. Add folders for `doc`, `icon`, and `demo`.
+. Add folders named `icon` and `demo`.
 +
 * Connector Icon (SVG format): `connector_root_project/icon/icon.svg`
-* Add the following docs (https://drive.google.com/file/d/1jB4uDCjOFhPtEttmnTxYERktdzd0AwSF/view[user-manual.adoc] and https://drive.google.com/file/d/1ZzJGJAN8pIOx_mI9d2xKTAXt-tubcwSS/view?usp=sharing[release-notes.adoc]) to the `doc` folder.
+* Add the following docs (https://drive.google.com/file/d/1jB4uDCjOFhPtEttmnTxYERktdzd0AwSF/view[user-manual.adoc] and https://drive.google.com/file/d/1ZzJGJAN8pIOx_mI9d2xKTAXt-tubcwSS/view?usp=sharing[release-notes.adoc]) where you plan to host them, and link to them from the Exchange asset.
 +
 . Add `License.md` if it is not in the root folder already:
 +
