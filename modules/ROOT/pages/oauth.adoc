@@ -7,12 +7,12 @@ endif::[]
 OAuth is an authentication protocol used by many APIs to allow an app to act on behalf of a user without sharing the user's credentials. If you are unfamiliar with the protocol, see https://oauth.net/2/[https://oauth.net/2/].
 
 The SDK provides supports for building modules that are _OAuth enabled_, which means that they establish connections that are authenticated through the OAuth protocol. This allows you to hide most of the complexities of the OAuth protocol (which is
-a _very_ complex) from the end user and provide a simpler, easier experience that does not force users to go through the learning curve of OAuth.
+a _very_ complex protocol) from the end user and provide a simpler, easier experience that does not force users to go through the learning curve of OAuth.
 
 OAuth support provided by the SDK is limited to:
 
 * OAuth version 2.
-* Only the Authorization grant type is supported.
+* Only the Authorization Code grant type is supported.
 
 == Developing an OAuth-Enabled Module
 
