@@ -38,7 +38,7 @@ public class FtpDirectoryListener extends PollingSource<InputStream, FtpFileAttr
 }
 ----
 
-== Implementing the Pool Method
+== Implementing the Poll Method
 
 This method gathers all the items to be dispatched and processes them one by one.
 
