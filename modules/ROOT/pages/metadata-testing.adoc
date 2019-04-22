@@ -1,4 +1,4 @@
-metadat type= Metadata Testing
+== Metadata Testing
 ifndef::env-site,env-github[]
 include::_attributes.adoc[]
 endif::[]
@@ -19,6 +19,10 @@ See xref:metadata.adoc[Adding DataSense Support] for more information.
     <scope>test</scope>
 </dependency>
 ----
+
+NOTE: Metadata Testing is available since Mule Runtime version 4.2.0. When running your tests against a prior version,
+metadata tests will be omitted
+
 
 == Tooling Test
 
