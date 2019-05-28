@@ -8,7 +8,7 @@ Here's a summary of the SDK best practices. It includes tips and tricks that are
 
 == Check the End-to-end Experience
 
-Before publishing your module, try it in Studio and Design Designer. Make sure that it provides a good usability and experience. A module that works but is hard to use is not complete.
+Before publishing your module, try it in Studio and Flow Designer. Make sure that it provides a good usability and experience. A module that works but is hard to use is not complete.
 
 == Module Java API
 
@@ -22,11 +22,11 @@ org.mule.module
 \--> .internal.*
 ----
 
-* `.api.*` contains all the classes that to be exported and seen by the Mule app: Return Types, Subtypes, Input Types, and Connection interfaces.
+* `.api.*` contains all the classes that are to be exported and seen by the Mule app: Return Types, Subtypes, Input Types, and Connection interfaces.
 * `.internal.*` contains all the classes used for specific behavior of the module: Annotated classes, `Connection` and `Operation` implementations, and internal classes.
 
 [TIP]
-You should *ONLY* export packaged defined in your module. *Never* export packaged from other dependency libs.
+You should *ONLY* export packages defined in your module. *Never* export packages from other dependency libs.
 
 == Types
 
@@ -74,7 +74,7 @@ public class MyComponent {
 ----
 
 == Transactions
-Non-transactional operations should not receive a transactional connection. The SDK will make those operations transactional, and in in Studio, your user will be wrongfully presented with transactional options.
+Non-transactional operations should not receive a transactional connection. The SDK will make those operations transactional, and in Studio, your user will be wrongfully presented with transactional options.
 
 == Use the Mule HTTP Client
 
