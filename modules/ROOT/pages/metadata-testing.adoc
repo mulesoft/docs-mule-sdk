@@ -195,13 +195,13 @@ The `actual` field defaults to `payload`. In the example above, you could choose
 
 [source,xml,linenums]
 --
-<mtf:assert-type fromSchema="expected-person.xsd"/>
+<mtf:assert-type fromClass="com.example.Person"/>
 --
 
 === From Schema
 
 To compare the metadata type structure against one obtained from a schema use the `fromSchema` parameter. +
-The `fromSchema` supports metadata types from `JSON schema`, `XSD schema` and `RAML Data Types`. The file extensions need to be `.json`, `.xsd` and `.raml` respectively.
+The `fromSchema` supports metadata types from `JSON schema`, `XSD schema` and `RAML Data Types`. The file extensions need to be `.json`, `.xsd` and `.raml` respectively and stored in the `src/test/resources` folder. 
 
 [source,xml,linenums]
 ----
