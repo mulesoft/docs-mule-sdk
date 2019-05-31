@@ -75,7 +75,7 @@ public class StaticUserRoleValueProvider implements ValueProvider {
 . Mark the parameter that requires dynamic values with the `@OfValues()` annotation.
 +
 `@OfValues` requires a `ValueProvider` implementation that is bound to the parameter.
-For example, the following operation method `publishAs` includes binding:
+For example, the following operation method `publishAs` includes such binding:
 +
 [source,java,linenums]
 ----
