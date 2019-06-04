@@ -21,7 +21,7 @@ See xref:metadata.adoc[Adding DataSense Support] for more information.
 ----
 
 CAUTION: Metadata Testing is available since Mule Runtime version 4.2.0. When running your tests against a prior version,
-metadata tests will be omitted
+suites containing metadata tests will be ignored
 
 
 == Tooling Test
