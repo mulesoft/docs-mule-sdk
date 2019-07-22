@@ -70,7 +70,7 @@
  ** xref:testing-writing-your-first-munit-test.adoc[Writing Your First MUnit Test]
  ** xref:sdk-testing-examples.adoc[SDK Testing Examples]
   *** xref:sdk-testing-a-listener.adoc[Testing a Listener]
-  *** xref:sdk-expecting-errors.adoc[Error Expectation]
+  *** xref:sdk-expecting-errors.adoc[Expecting Errors]
   *** xref:sdk-metadata-testing.adoc[Metadata Testing]
   *** xref:sdk-parametized-tests.adoc[Parameterized test]
   *** xref:sdk-using-test-classes.adoc[Using Test Classes]
