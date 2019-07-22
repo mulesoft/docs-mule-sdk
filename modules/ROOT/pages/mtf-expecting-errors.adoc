@@ -1,0 +1,70 @@
+= Expecting Errors
+ifndef::env-site,env-github[]
+include::_attributes.adoc[]
+endif::[]
+
+As explained xref:errors.adoc[here], your Module can define errors to throw. Apart from validating the successful execution of
+the Module's operations, it is important to validate the errors thrown and the description they generate.
+
+For example, if your Module defines the following:
+
+.Error Type Definition
+[source,java,linenums]
+----
+public enum SimpleError implements ErrorTypeDefinition<SimpleError> {
+  INVALID_PARAMETER, TIME_OUT, NOT_ALLOWED
+}
+----
+
+.Error Type Provider
+[source,java,linenums]
+----
+public class ExecuteErrorsProvider implements ErrorTypeProvider {
+    @Override
+    public Set<ErrorTypeDefinition> getErrorTypes() {
+        HashSet<ErrorTypeDefinition> errors = new HashSet<>();
+        errors.add(SimpleError.INVALID_PARAMETER);
+        errors.add(SimpleError.TIME_OUT);
+        return errors;
+    }
+}
+----
+
+.Operation that throws error
+[source,java,linenums]
+----
+@Throws(ExecuteErrorsProvider.class)
+public void execute(Integer number) {
+    if (number <= 0) {
+        throw new ModuleException("Parameter 'number' should be greater than 0", SimpleError.INVALID_PARAMETER);
+    }
+}
+----
+
+== Expecting an Error Type
+
+To expect that the error thrown by an operation has the proper error type, the test should look something like this:
+
+.Expect error type
+[source, xml, linenums]
+----
+<munit:test name="testErrorType" expectedErrorType="TEST-CONNECTOR:INVALID_PARAMETER">
+    <munit:execution>
+        <test-connector:execute number="0"/>
+    </munit:execution>
+</munit:test>
+----
+
+== Expecting an Error Description
+
+To expect that the error thrown by an operation has the proper description, the test should look something like this:
+
+.Expect error description
+[source, xml, linenums]
+----
+<munit:test name="testErrorDescription" expectedErrorDescription="Parameter 'number' should be greater than 0">
+    <munit:execution>
+        <test-connector:execute number="0"/>
+    </munit:execution>
+</munit:test>
+----
