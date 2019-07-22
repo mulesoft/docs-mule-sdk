@@ -1,0 +1,4 @@
+= Metadata Testing
+ifndef::env-site,env-github[]
+include::_attributes.adoc[]
+endif::[]
