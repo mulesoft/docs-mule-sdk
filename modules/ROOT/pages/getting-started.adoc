@@ -18,15 +18,6 @@ You must have the following components installed and working in your local envir
 
 For the SDK to work, you must pass the command line parameter `-parameters` to the Java compiler.
 
-==== For Development in Studio or Eclipse
-
-If you use Anypoint Studio or Eclipse:
-
-. Right-click the project.
-. Go to `Java Compiler`, and enable `Store information about method parameters (usable via reflection)`.
-
-image::eclipse-config.gif[600,600]
-
 ==== For Development in IntelliJ
 
 If you are using IntelliJ:
