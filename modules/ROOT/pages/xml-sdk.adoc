@@ -832,10 +832,10 @@ To create a more specific error, you can use error mapping to make the `div` ope
       </mule:set-payload>
     </body>
     <output type="number"/>
+      <errors>
+        <error type="DIVISION_BY_ZERO"/>
+      </errors>
   </operation>
-  <errors>
-    <error type="DIVISION_BY_ZERO"/>
-  </errors>
 </module>
 ----
 
@@ -859,10 +859,10 @@ You can produce the same error by executing a validation before the evaluation o
       <mule:set-payload value="#[vars.numberA / vars.numberB]" />
     </body>
     <output type="number"/>
+    <errors>
+      <error type="DIVISION_BY_ZERO"/>
+    </errors>
   </operation>
-  <errors>
-    <error type="DIVISION_BY_ZERO"/>
-  </errors>
 </module>
 ----
 
