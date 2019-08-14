@@ -1,0 +1,111 @@
+= Parameterized test
+ifndef::env-site,env-github[]
+include::_attributes.adoc[]
+endif::[]
+
+A parameterized suite allows you to run the same tests with different inputs. If you are not familiarized with the
+parameterization in MUnit, you can read it xref:2.2@munit::munit-parameterized-suite.adoc[here].
+
+In the test, any placeholder can be used to resolve to different values in each of the suite executions.
+
+== Configuration Parameterization
+
+In the following example, the test suite has 2 parameterizations, each of them will point to a different configuration.
+
+If your module defines the following operation:
+
+.Operation with a config
+[source, java, linenums]
+----
+public Integer withConfig(@Config ExampleConfig config) {
+    return config.getValue();
+}
+----
+
+We can test different configs the following way:
+
+.Test that runs against different configurations
+[source, xml, linenums]
+----
+<munit:config name="parameterized-configs-test">
+    <munit:parameterizations>
+        <munit:parameterization name="config1">
+            <munit:parameters>
+                <munit:parameter propertyName="config" value="config1"/>
+                <munit:parameter propertyName="expected" value="1"/>
+            </munit:parameters>
+        </munit:parameterization>
+        <munit:parameterization name="config2">
+            <munit:parameters>
+                <munit:parameter propertyName="config" value="config2"/>
+                <munit:parameter propertyName="expected" value="2"/>
+            </munit:parameters>
+        </munit:parameterization>
+    </munit:parameterizations>
+</munit:config>
+
+<test-connector:config name="config1" value="1"/>
+<test-connector:config name="config2" value="2"/>
+
+<munit:test name="parameterizedConfigsTest">
+    <munit:execution>
+        <test-connector:with-config config-ref="${config}" />
+    </munit:execution>
+    <munit:validation>
+        <munit-tools:assert-equals actual="#[payload]" expected="#[${expected}]"/>
+    </munit:validation>
+</munit:test>
+----
+
+== Input data parameterization
+
+In some cases, you want to execute the same operation but with different inputs, which expect different outputs.
+For example, having the following operation that replaces a string input with another:
+
+.Operation for different inputs
+[source, java, linenums]
+----
+public String replace(String input, String toReplace, String replacement) {
+    return input.replace(toReplace, replacement);
+}
+----
+
+Testing several inputs by calling the same operation can look something like this
+
+.Test case with different inputs
+[source, xml, linenums]
+----
+<munit:config name="parameterized-inputs-test">
+    <munit:parameterizations>
+        <munit:parameterization name="singleCharacter">
+            <munit:parameters>
+                <munit:parameter propertyName="input" value="foo"/>
+                <munit:parameter propertyName="toReplace" value="o"/>
+                <munit:parameter propertyName="replacement" value="e"/>
+                <munit:parameter propertyName="expected" value="fee"/>
+            </munit:parameters>
+        </munit:parameterization>
+        <munit:parameterization name="multipleCharacter">
+            <munit:parameters>
+                <munit:parameter propertyName="input" value="example"/>
+                <munit:parameter propertyName="toReplace" value="ple"/>
+                <munit:parameter propertyName="replacement" value="ination"/>
+                <munit:parameter propertyName="expected" value="examination"/>
+            </munit:parameters>
+        </munit:parameterization>
+    </munit:parameterizations>
+</munit:config>
+
+<munit:test name="parameterizedInputsTest">
+    <munit:execution>
+        <test-connector:replace input="${input}" toReplace="${toReplace}" replacement="${replacement}" />
+    </munit:execution>
+    <munit:validation>
+        <munit-tools:assert-equals actual="#[payload]" expected="${expected}"/>
+    </munit:validation>
+</munit:test>
+----
+
+
+
+
