@@ -134,7 +134,7 @@ Obtains the metadat type for the output `payload` of the component. The `payload
 
 === Attributes Metadata
 
-Obtains the metadat type for the `attributes` Metadata of the component. The `payload` contains a JSON representation of the metadata type.
+Obtains the metadata type for the `attributes` Metadata of the component. The `payload` contains a JSON representation of the metadata type.
 
 [source,xml,linenums]
 ----
