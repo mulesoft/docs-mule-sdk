@@ -3,10 +3,16 @@ ifndef::env-site,env-github[]
 include::_attributes.adoc[]
 endif::[]
 
-As explained xref:errors.adoc[here], your Module can define errors to throw. Apart from validating the successful execution of
-the Module's operations, it is important to validate the errors thrown and the description they generate.
+Apart from validating the successful execution of your module's operations, you also must validate the errors that your module throws and the description they generate.
 
-For example, if your Module defines the following:
+== Prerequesites
+
+* You are familiarized with how to define the errors your module throws. +
+See xref:errors.adoc[Errors Definition] for more information.
+
+== Example
+
+Consider a module that defines errors as follows:
 
 .Error Type Definition
 [source,java,linenums]
@@ -41,9 +47,11 @@ public void execute(Integer number) {
 }
 ----
 
+You can write tests to validate the expected error type, and error description.
+
 == Expecting an Error Type
 
-To expect that the error thrown by an operation has the proper error type, the test should look something like this:
+To expect that the error thrown by the previous module has the proper error type, the test should look as follows:
 
 .Expect error type
 [source, xml, linenums]
@@ -57,7 +65,7 @@ To expect that the error thrown by an operation has the proper error type, the t
 
 == Expecting an Error Description
 
-To expect that the error thrown by an operation has the proper description, the test should look something like this:
+To expect that the error thrown by the previous module's operation has the proper description, the test should look as follows:
 
 .Expect error description
 [source, xml, linenums]

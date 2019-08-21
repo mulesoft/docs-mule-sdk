@@ -3,12 +3,18 @@ ifndef::env-site,env-github[]
 include::_attributes.adoc[]
 endif::[]
 
-The following examples provide the basic test structure for testing the metadata defined for your Module. If you are not
-familiarized with how to define metadata, you can read the following xref:metadata.adoc[page] and how Metadata tests work
-in this other xref:metadata-testing.adoc[page].
+The following examples provide the basic test structure for testing the metadata defined for your Module.
 
+== Prerequesites
 
-Your Module can define the following metadata:
+* You are familiarized with how to define metadata in your module. +
+See xref:metadata.adoc[Adding DataSense Support] and xref:metadata-testing.adoc[Metadata Testing] for more information.
+
+== Example
+
+Implementations provided in the following example use fixed values to simplify the code. You must obtain metadata through external services.
+
+Your module can define the following metadata:
 
 .Operation with Metadata
 [source, java, linenums]
@@ -68,12 +74,9 @@ public class ExampleOutputResolver implements OutputTypeResolver<String> {
 }
 ----
 
-CAUTION: Implementations provided in the examples have fixed values to cover simplify the code.
-The proper way to obtain metadata, should be through external services.
-
 == Validating Metadata Keys
 
-In the following example, we validate that the keys have the proper Display names:
+The following example validates that the keys have the proper `Display` names:
 
 .Tooling test to validate metadata keys
 [source, xml, linenums]
@@ -91,8 +94,7 @@ In the following example, we validate that the keys have the proper Display name
 
 == Validating a Metadata Type
 
-Apart from defining the keys for the operation parameter, the output metadata attached to those keys is defined.
-In the following example, the test validates that Metadata Type returned by the operation:
+The following test validates the `Metadata Type` returned by the operation:
 
 .Tooling test to validate output metadata type of an operation
 [source, xml, linenums]
@@ -113,8 +115,9 @@ In the following example, the test validates that Metadata Type returned by the 
 
 == Expecting a failure
 
-In the case shown above a `MetadataResolvingException` is thrown when the parameter is null or empty.
-In the following example, the test validates that the proper failure code and message are thrown when the parameter is invalid:
+In the previous example, the module throws a `MetadataResolvingException` when the parameter is null or empty.
+
+The following test validates that the proper failure code and message are thrown when the parameter is invalid:
 
 .Tooling test to validate metadata failures
 [source, xml, linenums]

@@ -1,12 +1,11 @@
-= Using Test classes
+= Using Test Classes
 ifndef::env-site,env-github[]
 include::_attributes.adoc[]
 endif::[]
 
-When developing test cases, you may want to use Java classes located in `src/test/java`.
-Java classes can be used through the java module or through DW.
+When developing test cases, you may want to use Java classes located in `src/test/java`. Java classes can be used through the Java Module or through Dataweave.
 
-For the following example, we will assume that our class is located in `src/test/java/com/example/MyUtilClass.java`
+For the following example, assume that your class is located in `src/test/java/com/example/MyUtilClass.java`:
 
 .MyUtilClass
 [source, java, linenums]
@@ -24,7 +23,7 @@ public class Helper {
 
 == Using DataWeave
 
-To invoke static methods using DataWeave you must append the `java!` prefix to the package name of the class.
+To invoke static methods using DataWeave you must append the `java!` prefix to the package name of the class:
 
 .Using a class in DataWeave
 [source, xml, linenums]
@@ -41,8 +40,8 @@ To invoke static methods using DataWeave you must append the `java!` prefix to t
 
 == Using the Java Module
 
-Make sure the java module is your project:
-
+. Make sure the java module is your project:
++
 .Java Module dependency
 [source, xml, linenums]
 ----
@@ -54,9 +53,9 @@ Make sure the java module is your project:
     <scope>test</scope>
 </dependency>
 ----
-
-Then you can use any of the Java Module's operations. In this case, we want to invoke a static method of a class:
-
+. Use any of the Java Module's operations. +
+In this case, invoke a static method of a class:
++
 .Using a class with the Java Module
 [source, xml, linenums]
 ----
@@ -70,10 +69,9 @@ Then you can use any of the Java Module's operations. In this case, we want to i
 </munit:test>
 ----
 
-CAUTION: The MUnit Extensions Maven Plugin will automatically export any test packages and test resources located in your
-project. In case your Module is already exporting a class located in `src/main/java`, then any test classes with the same package
-located in `src/test/java` won't be able to be exported since there would be a conflict. In this case, you just change the test
-classes package to a different one.
+The MUnit Extensions Maven Plugin automatically exports any test packages and test resources in your
+project. If your module is already exporting a class located in `src/main/java`, then any test classes with the same package
+located in `src/test/java` won't be exported since there would be a conflict. To be able to export both classes, you must change the test classes to a different package.
 
 
 

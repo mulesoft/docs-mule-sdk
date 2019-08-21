@@ -1,18 +1,16 @@
-= Parameterized test
+= Parameterized Test
 ifndef::env-site,env-github[]
 include::_attributes.adoc[]
 endif::[]
 
-A parameterized suite allows you to run the same tests with different inputs. If you are not familiarized with the
-parameterization in MUnit, you can read it xref:2.2@munit::munit-parameterized-suite.adoc[here].
+== Prerequesites
 
-In the test, any placeholder can be used to resolve to different values in each of the suite executions.
+* The following section assumes that you are familiarized with the parameterization feature in MUnit. +
+A parameterized suite allows you to run the same tests with different inputs. See xref:munit::munit-parameterized-suite.adoc[MUnit Parameterized Test Suite] for more information.
 
-== Configuration Parameterization
+== Configuration Parameterization Example
 
-In the following example, the test suite has 2 parameterizations, each of them will point to a different configuration.
-
-If your module defines the following operation:
+The following example shows a test suite with two parameterizations, each of them pointing to a different configuration:
 
 .Operation with a config
 [source, java, linenums]
@@ -22,7 +20,7 @@ public Integer withConfig(@Config ExampleConfig config) {
 }
 ----
 
-We can test different configs the following way:
+You can test different configs as follows:
 
 .Test that runs against different configurations
 [source, xml, linenums]
@@ -57,10 +55,9 @@ We can test different configs the following way:
 </munit:test>
 ----
 
-== Input data parameterization
+== Input Data Parameterization Example
 
-In some cases, you want to execute the same operation but with different inputs, which expect different outputs.
-For example, having the following operation that replaces a string input with another:
+If you want to execute the same operation but with different inputs, and each of them expecting different outputs, for example, testing an operation that replaces a string input with another:
 
 .Operation for different inputs
 [source, java, linenums]
@@ -70,7 +67,7 @@ public String replace(String input, String toReplace, String replacement) {
 }
 ----
 
-Testing several inputs by calling the same operation can look something like this
+Your test for several inputs by calling the same operation should look as follows:
 
 .Test case with different inputs
 [source, xml, linenums]
