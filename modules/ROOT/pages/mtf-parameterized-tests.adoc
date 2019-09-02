@@ -3,9 +3,6 @@ ifndef::env-site,env-github[]
 include::_attributes.adoc[]
 endif::[]
 
-== Prerequesites
-
-* The following section assumes that you are familiarized with the parameterization feature in MUnit. +
 A parameterized suite allows you to run the same tests with different inputs. See xref:munit::munit-parameterized-suite.adoc[MUnit Parameterized Test Suite] for more information.
 
 == Configuration Parameterization Example
@@ -20,7 +17,7 @@ public Integer withConfig(@Config ExampleConfig config) {
 }
 ----
 
-You can test different configs as follows:
+You can test different configurations as follows:
 
 .Test that runs against different configurations
 [source, xml, linenums]
@@ -57,9 +54,9 @@ You can test different configs as follows:
 
 == Input Data Parameterization Example
 
-If you want to execute the same operation but with different inputs, and each of them expecting different outputs, for example, testing an operation that replaces a string input with another:
+Suppose that you want to execute one operation but with different inputs, each with different expected outputs: for example, testing an operation that replaces one string input with another. Your operation uses the following syntax:
 
-.Operation for different inputs
+.Operation for Different Inputs
 [source, java, linenums]
 ----
 public String replace(String input, String toReplace, String replacement) {
@@ -67,9 +64,9 @@ public String replace(String input, String toReplace, String replacement) {
 }
 ----
 
-Your test for several inputs by calling the same operation should look as follows:
+Your test for several different inputs to one operation looks like this:
 
-.Test case with different inputs
+.Test Case with Different Inputs
 [source, xml, linenums]
 ----
 <munit:config name="parameterized-inputs-test">

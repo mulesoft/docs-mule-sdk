@@ -3,11 +3,11 @@ ifndef::env-site,env-github[]
 include::_attributes.adoc[]
 endif::[]
 
-The following examples provide the basic test structure for testing the metadata defined for your Module.
+The following examples provide a basic structure for testing the metadata defined for your module.
 
 == Prerequesites
 
-* You are familiarized with how to define metadata in your module. +
+* You are familiar with how to define metadata in your module. +
 See xref:metadata.adoc[Adding DataSense Support] and xref:metadata-testing.adoc[Metadata Testing] for more information.
 
 == Example
@@ -94,9 +94,9 @@ The following example validates that the keys have the proper `Display` names:
 
 == Validating a Metadata Type
 
-The following test validates the `Metadata Type` returned by the operation:
+The following test validates the `Metadata Type` value returned by the operation:
 
-.Tooling test to validate output metadata type of an operation
+.Tooling Test to Validate the Output Metadata Type of an Operation
 [source, xml, linenums]
 ----
 <mtf:tooling-test name="outputMetadataTest">
@@ -113,9 +113,9 @@ The following test validates the `Metadata Type` returned by the operation:
 </mtf:tooling-test>
 ----
 
-== Expecting a failure
+== Validating an Expected Failure
 
-In the previous example, the module throws a `MetadataResolvingException` when the parameter is null or empty.
+In the previous example, the module throws a `MetadataResolvingException` error when the parameter is null or empty.
 
 The following test validates that the proper failure code and message are thrown when the parameter is invalid:
 

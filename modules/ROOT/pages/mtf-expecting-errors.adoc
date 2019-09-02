@@ -3,11 +3,11 @@ ifndef::env-site,env-github[]
 include::_attributes.adoc[]
 endif::[]
 
-Apart from validating the successful execution of your module's operations, you also must validate the errors that your module throws and the description they generate.
+Apart from validating the successful execution of your module's operations, you also must validate the errors that your module throws and the descriptions they generate.
 
 == Prerequesites
 
-* You are familiarized with how to define the errors your module throws. +
+* You are familiar with how to define the errors that your module throws. +
 See xref:errors.adoc[Errors Definition] for more information.
 
 == Example
@@ -36,7 +36,7 @@ public class ExecuteErrorsProvider implements ErrorTypeProvider {
 }
 ----
 
-.Operation that throws error
+.Operation That Throws Error
 [source,java,linenums]
 ----
 @Throws(ExecuteErrorsProvider.class)
@@ -47,13 +47,13 @@ public void execute(Integer number) {
 }
 ----
 
-You can write tests to validate the expected error type, and error description.
+You can create tests to validate the expected error type and error description.
 
-== Expecting an Error Type
+== Validating an Expected Error Type
 
-To expect that the error thrown by the previous module has the proper error type, the test should look as follows:
+You can validate that the error thrown by the module in the example has the proper error type as follows:
 
-.Expect error type
+.Expect Error Type
 [source, xml, linenums]
 ----
 <munit:test name="testErrorType" expectedErrorType="TEST-CONNECTOR:INVALID_PARAMETER">
@@ -63,9 +63,9 @@ To expect that the error thrown by the previous module has the proper error type
 </munit:test>
 ----
 
-== Expecting an Error Description
+== Validating an Expected Error Description
 
-To expect that the error thrown by the previous module's operation has the proper description, the test should look as follows:
+You can validate that the error thrown by the module in the example has the proper error description as follows:
 
 .Expect error description
 [source, xml, linenums]
