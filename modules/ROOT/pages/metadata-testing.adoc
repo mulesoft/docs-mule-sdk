@@ -1,11 +1,11 @@
-== Metadata Testing
+= Metadata Testing
 ifndef::env-site,env-github[]
 include::_attributes.adoc[]
 endif::[]
 
 == Prerequisites
 
-. The following section assumes that you are already familiarized on how to define `MetadataType` for your module. +
+. The following section assumes that you are already familiar on how to define `MetadataType` for your module. +
 See xref:metadata.adoc[Adding DataSense Support] for more information.
 . To create metadata tests you need to add the `mtf-tools` dependency to your project:
 +
@@ -82,7 +82,7 @@ You can use either an `operation` or a `source` in each of these scopes.
 
 === Metadata Keys
 
-Obtains the Metadata Keys for the component. The `payload` contains a map, where each key is the metadata key ID, and the value is the metadata key.
+The `metadata keys` scope obtains the metadata keys for the component. The `payload` contains a map, where each key is the metadata key ID, and the value is the metadata key:
 
 [source,xml,linenums]
 ----
@@ -98,7 +98,7 @@ Obtains the Metadata Keys for the component. The `payload` contains a map, where
 
 === Input Metadata
 
-Obtains the metadata type for the specified `parameter` of the component. The `payload` contains a JSON representation of the metadata type.
+The `input metadata` scope obtains the metadata type for the specified `parameter` of the component. The `payload` contains a JSON representation of the metadata type:
 
 [source,xml,linenums]
 ----
@@ -114,7 +114,7 @@ Obtains the metadata type for the specified `parameter` of the component. The `p
 
 === Output Metadata
 
-Obtains the metadat type for the output `payload` of the component. The `payload` contains a JSON representation of the metadata type.
+The `output metadat` obtains the metadata type for the output `payload` of the component. The `payload` contains a JSON representation of the metadata type:
 
 [source,xml,linenums]
 ----
@@ -134,7 +134,7 @@ Obtains the metadat type for the output `payload` of the component. The `payload
 
 === Attributes Metadata
 
-Obtains the metadat type for the `attributes` Metadata of the component. The `payload` contains a JSON representation of the metadata type.
+The `attributes metadata` scope obtains the metadata type for the `attributes` metadata of the component. The `payload` contains a JSON representation of the metadata type:
 
 [source,xml,linenums]
 ----
@@ -201,7 +201,7 @@ The `actual` field defaults to `payload`. In the example above, you could choose
 === From Schema
 
 To compare the metadata type structure against one obtained from a schema use the `fromSchema` parameter. +
-The `fromSchema` supports metadata types from `JSON schema`, `XSD schema` and `RAML Data Types`. The file extensions need to be `.json`, `.xsd` and `.raml` respectively and stored in the `src/test/resources` folder. 
+The `fromSchema` supports metadata types from `JSON schema`, `XSD schema` and `RAML Data Types`. The file extensions need to be `.json`, `.xsd` and `.raml` respectively and stored in the `src/test/resources` folder.
 
 [source,xml,linenums]
 ----

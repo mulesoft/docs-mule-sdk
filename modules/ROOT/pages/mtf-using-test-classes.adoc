@@ -1,0 +1,78 @@
+= Using Test Classes
+ifndef::env-site,env-github[]
+include::_attributes.adoc[]
+endif::[]
+
+When developing test cases, you might want to use Java classes located in `src/test/java`. You can use Java classes through Java Module or through DataWeave.
+
+For the following example, assume that your class is located in `src/test/java/com/example/MyUtilClass.java`:
+
+.MyUtilClass
+[source, java, linenums]
+----
+package com.example.test;
+
+public class Helper {
+
+  public static long getCurrentMillis() {
+    return System.currentTimeMillis();
+  }
+
+}
+----
+
+== Using DataWeave
+
+To invoke static methods using DataWeave you must add the `java!` prefix to the package name of the class:
+
+.Using a Class in DataWeave
+[source, xml, linenums]
+----
+<munit:test name="usingJavaInDW">
+    <munit:behavior>
+        <set-variable variableName="number" value="#[java!com::example::test::Helper::currentMillis()]" />
+    </munit:behavior>
+    <munit:execution>
+        <test-connector:execute number="#[vars.number]"/>
+    </munit:execution>
+</munit:test>
+----
+
+== Using Java Module
+
+. Ensure that the Java module is in your project:
++
+.Java Module dependency
+[source, xml, linenums]
+----
+<dependency>
+    <groupId>org.mule.module</groupId>
+    <artifactId>mule-java-module</artifactId>
+    <version>${javaModule.version}</version>
+    <classifier>mule-plugin</classifier>
+    <scope>test</scope>
+</dependency>
+----
+. Use any of the Java Module's operations. +
+In this case, invoke a static method of a class:
++
+.Using a class with the Java Module
+[source, xml, linenums]
+----
+<munit:test name="usingJavaInDW">
+    <munit:behavior>
+        <set-variable variableName="number" value="#[java!com::example::test::Helper::currentMillis()]" />
+    </munit:behavior>
+    <munit:execution>
+        <test-connector:execute number="#[vars.number]"/>
+    </munit:execution>
+</munit:test>
+----
+
+MUnit Extensions Maven Plugin automatically exports any test packages and test resources in your
+project. If your module is already exporting a class located in `src/main/java`, then any test classes with the same package
+located in `src/test/java` won't be exported because this would cause a conflict. To be able to export both classes, you must change the test classes to a different package.
+
+
+
+
