@@ -16,6 +16,7 @@ and how to execute a simple operation from a Module:
 . xref:munit-extensions-maven-plugin.adoc[Operating the MUnit Extensions Maven Plugin].
 . xref:munit-extensions-maven-plugin-configuration.adoc[MUnit Extensions Maven Plugin Configuration].
 . xref:metadata-testing.adoc[Metadata Testing].
+. xref:connectivity-testing.adoc[Connectivity Testing].
 
 == See Also
 

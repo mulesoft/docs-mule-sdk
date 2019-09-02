@@ -1,0 +1,83 @@
+== Connectivity Testing
+ifndef::env-site,env-github[]
+include::_attributes.adoc[]
+endif::[]
+
+== Prerequisites
+
+. The following section assumes that you are already familiarized on how to define a connection for your module. +
+See xref:connections.adoc[Connections] for more information.
+. To create connectivity tests you need to add the `mtf-tools` dependency to your project:
++
+[source,xml,linenums]
+----
+<dependency>
+    <groupId>com.mulesoft.munit</groupId>
+    <artifactId>mtf-tools</artifactId>
+    <version>1.0.0-BETA3</version>
+    <classifier>mule-plugin</classifier>
+    <scope>test</scope>
+</dependency>
+----
+
+CAUTION: Connectivity Testing is available since Mule Runtime version 4.2.0. If your connector has a minMuleVersion prior
+to 4.2.0, add the `minMuleVersion` to your connectivity testing suite: `<munit:config name="connectivity-testing-suite" minMuleVersion="4.2.0"/>`
+
+
+== Test Connectivity
+
+The `test-connectivity` processor is meant to establish a connection using the given configuration. +
+If testing connectivity with the given configuration fails, the processor will fail with the proper exception, description
+and error type (if present),
+
+=== Successful connection
+
+Testing that a connection is valid, is simply validating that the processor does not fail.
+A successful connection test, will look something like this:
+
+.Valid connection
+[source,xml,linenums]
+----
+<munit:test name="validConnectionTest">
+    <munit:execution>
+        <mtf:test-connectivity config-ref="validConnection"/>
+    </munit:execution>
+</munit:test>
+----
+
+=== Invalid connection
+
+When a connection fails, the processor will fail. Therefore, testing an invalid connection will be accomplished by expecting the error in the test.
+An invalid connection test, will look something like this:
+
+.Invalid connection
+[source,xml,linenums]
+----
+<munit:test name="invalidConnectionTest"
+            expectedException="com.example.MyConnectionException"
+            expectedErrorDescription="An error occurred while connecting">
+    <munit:execution>
+        <mtf:test-connectivity config-ref="invalidConnection"/>
+    </munit:execution>
+</munit:test>
+----
+
+If the connection fails with an error type, you can expect it as well:
+
+.Invalid connection with error type
+[source,xml,linenums]
+----
+<munit:test name="invalidConnectionWithErrorTypeTest"
+            expectedException="com.example.MyConnectionException"
+            expectedErrorType="EXAMPLE:INVALID_CREDENTIALS"
+            expectedErrorDescription="An error occurred while connecting">
+    <munit:execution>
+        <mtf:test-connectivity config-ref="invalidConnectionWithErrorType"/>
+    </munit:execution>
+</munit:test>
+----
+
+
+
+== See Also
+

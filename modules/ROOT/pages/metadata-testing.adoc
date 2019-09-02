@@ -150,6 +150,24 @@ Obtains the metadat type for the `attributes` Metadata of the component. The `pa
 </mtf:tooling-test>
 ----
 
+=== Get Values
+
+Obtains the possible values for the specified `parameter` of the component. The `payload` contains a JSON representation of the values.
+
+[source,xml,linenums]
+----
+<mtf:tooling-test name="attributesMetadataTest">
+    <mtf:get-values parameter="aParam">
+        <example:my-operation config-ref="config"/>
+    </mtf:get-values>
+    <mtf:validation>
+        <munit-tools:assert-equals actual="#[payload.WRITER.displayName]" expected="WRITER"/>
+        <munit-tools:assert-equals actual="#[payload.READER.displayName]" expected="READER"/>
+        <munit-tools:assert-equals actual="#[payload.ADMIN.displayName]" expected="ADMIN"/>
+    </mtf:validation>
+</mtf:tooling-test>
+----
+
 == Expecting failures
 
 A common use case when testing Metadata, is validating failures that may occur during metadata calculation. +

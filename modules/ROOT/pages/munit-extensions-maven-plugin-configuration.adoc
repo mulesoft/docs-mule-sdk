@@ -45,7 +45,7 @@ To enable MUnit Runtime Discovery, add the following configuration to the MUnit 
       ...
       <runtimeConfiguration>
           <discoverRuntimes>
-              <product>CE</product>
+              <product>CE</product> <1>
           </discoverRuntimes>
       </runtimeConfiguration>
       ...
@@ -77,6 +77,28 @@ line to the runtime configuration:
 
 From the command line, the property is `discoverRuntimes.includeSnapshots`.
 
+Default value is `false`.
+
+=== To Discover only latest patches
+
+If you want to discover only the latest patch versions of the runtime you can add the following
+line to the runtime configuration:
+
+.MUnit Runtime Discovery - Include Latest Patches
+[source,xml,linenums]
+----
+<runtimeConfiguration>
+    <discoverRuntimes>
+        <product>CE</product>
+        <latestPatches>true</latestPatches>
+    </discoverRuntimes>
+</runtimeConfiguration>
+----
+
+From the command line, the property is `discoverRuntimes.latestPatches`.
+
+Default value is `true`.
+
 === To Discover since a Minimum Version
 
 By default, the runtime discovery searches for all runtime versions since the minMuleVersion of
@@ -94,6 +116,8 @@ the module. You can change this minimum version adding the following to the runt
 ----
 
 From the command line, the property is `discoverRuntimes.minMuleVersion`.
+
+Default value is the `minMuleVersion` of the module.
 
 === To Run Against Additional Runtimes
 
@@ -130,6 +154,8 @@ If you wish to skip runtime discovery, you can add the following line to the run
 ----
 
 From the command line, the property is `discoverRuntimes.skip`.
+
+Default value is `false`.
 
 == Dynamic Ports
 
@@ -507,7 +533,45 @@ You should configure the plugin in the following way:
 </plugins>
 ----
 
+== Import external suites and resources
 
+If you want to reuse suite files across different modules and they are present in an external artifact, the plugin
+allows you to include them in the run (as if they were present in the `src/test/munit` and `src/test/resources` folders).
+
+Make sure that the dependencies are in the plugin's classpath adding them as dependencies of the plugin.
+
+You should configure the plugin in the following way:
+
+.External suites and resources
+[source,xml,linenums]
+----
+<plugins>
+  <plugin>
+    <groupId>com.mulesoft.munit.tools</groupId>
+    <artifactId>munit-extensions-maven-plugin</artifactId>
+    <configuration>
+      ...
+        <externalSuites>
+            <externalSuite>suite1.xml</externalSuite>
+            <externalSuite>suite2.xml</externalSuite>
+        </externalSuites>
+        <externalResources>
+            <externalResource>example.json</externalResource>
+        </externalResources>
+      ...
+    </configuration>
+    <dependencies>
+        <dependency>
+            <groupId>com.example</groupId>
+            <artifactId>my-dependency</artifactId>
+            <version>1.0.0</version>
+        </dependency>
+    </dependencies>
+  </plugin>
+</plugins>
+----
+
+NOTE: If any of the suite files or resources is not present in the classpath, the plugin will fail.
 
 
 == See Also
