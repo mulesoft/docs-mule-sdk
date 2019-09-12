@@ -5,9 +5,9 @@ endif::[]
 
 == Prerequisites
 
-. The following section assumes that you are already familiarized on how to define a connection for your module. +
+* Be familiar with how to define a connection for your module. +
 See xref:connections.adoc[Connections] for more information.
-. To create connectivity tests you need to add the `mtf-tools` dependency to your project:
+* To create connectivity tests, add the `mtf-tools` dependency to your project:
 +
 [source,xml,linenums]
 ----
@@ -19,21 +19,18 @@ See xref:connections.adoc[Connections] for more information.
     <scope>test</scope>
 </dependency>
 ----
-
-CAUTION: Connectivity Testing is available since Mule Runtime version 4.2.0. If your connector has a minMuleVersion prior
-to 4.2.0, add the `minMuleVersion` to your connectivity testing suite: `<munit:config name="connectivity-testing-suite" minMuleVersion="4.2.0"/>`
+* Connectivity Testing is available since Mule Runtime version 4.2.0. +
+If your connector has a minMuleVersion prior to 4.2.0, add the `minMuleVersion` to your connectivity testing suite: `<munit:config name="connectivity-testing-suite" minMuleVersion="4.2.0"/>`
 
 
 == Test Connectivity
 
-The `test-connectivity` processor is meant to establish a connection using the given configuration. +
-If testing connectivity with the given configuration fails, the processor will fail with the proper exception, description
+The `test-connectivity` processor establishes a connection using the given configuration. If testing connectivity with the given configuration fails, the processor will fail with the proper exception, description
 and error type (if present),
 
-=== Successful connection
+=== Successful Connection
 
-Testing that a connection is valid, is simply validating that the processor does not fail.
-A successful connection test, will look something like this:
+When you test that a connection is valid, you are validating that the processor does not fail. A successful connection test looks as follows:
 
 .Valid connection
 [source,xml,linenums]
@@ -47,8 +44,7 @@ A successful connection test, will look something like this:
 
 === Invalid connection
 
-When a connection fails, the processor will fail. Therefore, testing an invalid connection will be accomplished by expecting the error in the test.
-An invalid connection test, will look something like this:
+When a connection fails, the processor fails. Therefore, to test an invalid connection, expect the error in the test:
 
 .Invalid connection
 [source,xml,linenums]
