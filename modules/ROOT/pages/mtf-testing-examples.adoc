@@ -11,6 +11,6 @@ This section links to examples that demonstrate common MUnit for SDK development
 | xref:mtf-testing-sources.adoc[Testing Sources] | Different kind of sources require different kind of testing approaches
 | xref:mtf-expecting-errors.adoc[Error Expectation] | Validate that your module throws the proper errors
 | xref:mtf-metadata-testing.adoc[Metadata Testing] | Examples on how to test your Module's metadata
-| xref:mtf-parameterized-tests.adoc[Parameterized test] | Using parameterization to reuse your tests
+| xref:mtf-parameterized-tests.adoc[Parameterized tests] | Using parameterization to reuse your tests
 | xref:mtf-using-test-classes.adoc[Using Test classes] | How to use auxiliary classes for your tests
 |===
