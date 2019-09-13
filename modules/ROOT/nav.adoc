@@ -71,7 +71,7 @@
  ** xref:mtf-testing-examples.adoc[SDK Testing Examples]
   *** xref:mtf-expecting-errors.adoc[Expecting Errors]
   *** xref:mtf-metadata-testing.adoc[Metadata Testing Examples]
-  *** xref:mtf-parameterized-tests.adoc[Parameterized Test]
+  *** xref:mtf-parameterized-tests.adoc[Parameterized Tests]
   *** xref:mtf-testing-sources.adoc[Testing Sources]
   *** xref:mtf-using-test-classes.adoc[Using Test Classes]
  ** xref:munit-extensions-maven-plugin.adoc[Operating the MUnit Extensions Maven Plugin]

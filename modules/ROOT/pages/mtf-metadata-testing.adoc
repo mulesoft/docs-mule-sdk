@@ -5,7 +5,7 @@ endif::[]
 
 The following examples provide a basic structure for testing the metadata defined for your module.
 
-== Prerequesites
+== Prerequisites
 
 * You are familiar with how to define metadata in your module. +
 See xref:metadata.adoc[Adding DataSense Support] and xref:metadata-testing.adoc[Metadata Testing] for more information.
