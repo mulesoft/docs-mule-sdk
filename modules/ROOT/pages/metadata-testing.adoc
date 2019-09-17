@@ -14,7 +14,7 @@ See xref:metadata.adoc[Adding DataSense Support] for more information.
 <dependency>
     <groupId>com.mulesoft.munit</groupId>
     <artifactId>mtf-tools</artifactId>
-    <version>1.0.0-BETA2</version>
+    <version>1.0.0-BETA3</version>
     <classifier>mule-plugin</classifier>
     <scope>test</scope>
 </dependency>
@@ -36,8 +36,7 @@ It has the following representation:
 </mtf:tooling-test>
 ----
 
-NOTE: When a suite with tooling tests runs, XML validations are disabled. While testing metadata, it may be
-necessary to avoid filling required parameters.
+When a suite with tooling tests runs, XML validations are disabled. While testing metadata, it may be necessary to avoid filling required parameters.
 
 The tooling test can have the following parameters:
 
@@ -150,10 +149,27 @@ The `attributes metadata` scope obtains the metadata type for the `attributes` m
 </mtf:tooling-test>
 ----
 
-== Expecting failures
+=== Get Values
 
-A common use case when testing Metadata, is validating failures that may occur during metadata calculation. +
-To validate these failures, you can use the `expectFailureCode` and `expectFailureMessage` parameters.
+The `mtf:get-values` element retrieves the possible values for the specified `parameter` of the component. The `payload` contains a JSON representation of the values.
+
+[source,xml,linenums]
+----
+<mtf:tooling-test name="attributesMetadataTest">
+    <mtf:get-values parameter="aParam">
+        <example:my-operation config-ref="config"/>
+    </mtf:get-values>
+    <mtf:validation>
+        <munit-tools:assert-equals actual="#[payload.WRITER.displayName]" expected="WRITER"/>
+        <munit-tools:assert-equals actual="#[payload.READER.displayName]" expected="READER"/>
+        <munit-tools:assert-equals actual="#[payload.ADMIN.displayName]" expected="ADMIN"/>
+    </mtf:validation>
+</mtf:tooling-test>
+----
+
+== Expecting Failures
+
+A common use case when testing Metadata, is validating failures that may occur during metadata calculation. To validate these failures, you can use the `expectFailureCode` and `expectFailureMessage` parameters.
 
 [source,xml,linenums]
 ----
@@ -170,8 +186,7 @@ To validate these failures, you can use the `expectFailureCode` and `expectFailu
 
 The assert type processor allows you to assert the metadata type structure returned by metadata scopes such as `get-input-metadata`, `get-output-metadata` and `get-attributes-metadata`.
 
-NOTE: The assert-type processor compares the structure of both metadata types, ignoring fields like `format` or `annotations`. +
-To perform assertions over these fields, you can use the `payload` result of the metadata scopes operations as shown in the previous examples.
+The assert-type processor compares the structure of both metadata types, ignoring fields like `format` or `annotations`. To perform assertions over these fields, you can use the `payload` result of the metadata scopes operations as shown in the previous examples.
 
 If the assertion fails, the processor throws a `java.lang.AssertionError`.
 
@@ -200,7 +215,8 @@ The `actual` field defaults to `payload`. In the example above, you could choose
 
 === From Schema
 
-To compare the metadata type structure against one obtained from a schema use the `fromSchema` parameter. +
+To compare the metadata type structure against one obtained from a schema use the `fromSchema` parameter.
+
 The `fromSchema` supports metadata types from `JSON schema`, `XSD schema` and `RAML Data Types`. The file extensions need to be `.json`, `.xsd` and `.raml` respectively and stored in the `src/test/resources` folder.
 
 [source,xml,linenums]
