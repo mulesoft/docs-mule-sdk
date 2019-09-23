@@ -1,0 +1,71 @@
+= Testing OAuth Enabled Connectors
+ifndef::env-site,env-github[]
+include::_attributes.adoc[]
+endif::[]
+
+Mule runtime engine supports authorization through various OAuth grant types including `Authorization Code`. This grant type allows an external system, for example your Mule application, to operate on behalf of a user without the need to share the user's credentials. However, because the `Authorization Code` grant type is designed to force human intervention in the authentication process that identifies users using OAuth (OAuth dance), building an automated test for an application using this grant type is challenging.
+
+You can use the Storage Event processor to bypass the whole OAuth dance phase by manually providing a valid access token. It is your responsibility to manually obtain (and eventually update) such token.
+
+Consider the following configuration of the Salesforce connector using OAuth authentication and a user defined object store to hold the tokens:
+
+[source,xml,linenums]
+----
+<os:config name="TokenObjectStore_Config" />
+
+<os:object-store name="tokenStore" persistent="true" config-ref="TokenObjectStore_Config" />
+
+<sfdc:config name="sfdcConfig" ...>
+	<sfdc:oauth-connection ....>
+		<sfdc:oauth-authorization-code ... />
+<sfdc:oauth-callback-config ... />
+<sfdc:oauth-store-config objectStore="tokenStore" />
+	</sfdc:oauth-connection>
+</sfdc:config>
+----
+
+To use that token in an MUnit test, create a flow and insert your tokens in an MUnit Storage Event processor:
+
+[source,xml,linenums]
+----
+<flow name="storeOAuthToken">
+   <munit-tools:store-oauth-token resourceOwnerId="testUser"
+                                  ownerConfigName="sfdcConfig"
+                                  accessToken="${accessToken}"
+                                  refreshToken="${refreshToken}"
+                                  expiresIn="${expiresIn}"
+                                  state="${state}"
+                                  overwrite="true"
+                                  objectStore="tokenStore">
+       <munit-tools:additional-parameters>#[{param1: 'foo', param2: 3}]</munit-tools:additional-parameters>
+   </munit-tools:store-oauth-token>
+</flow>
+----
+
+Note that the the `ownerConfigName` element matches the name of the Salesforce configuration. Also, the access token and other properties are placeholders. The idea is that you manually obtain a token, by manually performing the OAuth dance. Then you supply the tokens to the test via system properties, properties file, or whatever mechanism you see fit.
+
+Finally, your Munit test should have the following structure:
+
+[source,xml,linenums]
+----
+<munit:test name="oauthTest">
+    <munit:behavior>
+	<flow-ref name="storeOAuthToken" />
+    </munit:behavior>
+    <munit:execution>
+            <sfdc:upsert config-ref="sfdcConfig" resourceOwnerId="testUser" ... />
+    </munit:execution>
+    <munit:validation>
+            .... Your assertions here ....
+    </munit:validation>
+</munit:test>
+----
+
+Notice how:
+
+* Inserting the token is the very first step in the test.
+* The `<sfdc:upsert>` operation references the same config name and `resourceOwnerId` that matches the token you inserted.
+
+== Caveats
+
+That token will eventually expire. How often the token expires depends on the service provider to which you are connecting. When that happens, you must obtain a new token and update the test with it.
