@@ -3,7 +3,9 @@ ifndef::env-site,env-github[]
 include::_attributes.adoc[]
 endif::[]
 
-Mule runtime engine supports authorization through various OAuth grant types including `Authorization Code`. This grant type allows an external system, for example your Mule application, to operate on behalf of a user without the need to share the user's credentials. However, because the `Authorization Code` grant type is designed to force human intervention in the authentication process that identifies users using OAuth (OAuth dance), building an automated test for an application using this grant type is challenging.
+Mule runtime engine supports authorization through various OAuth grant types, including `Authorization Code`. This grant type allows an external system (for example, your Mule application) to operate on behalf of a user without requiring user authentication. 
+
+However, because the `Authorization Code` grant type is designed to force human intervention in the authentication process that identifies users using OAuth (OAuth dance), building an automated test for an application using this grant type is challenging.
 
 You can use the Storage Event processor to bypass the whole OAuth dance phase by manually providing a valid access token. It is your responsibility to manually obtain (and eventually update) such token.
 
