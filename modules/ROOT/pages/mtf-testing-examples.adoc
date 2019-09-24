@@ -13,4 +13,5 @@ This section links to examples that demonstrate common MUnit for SDK development
 | xref:mtf-metadata-testing.adoc[Metadata Testing] | Examples on how to test your Module's metadata
 | xref:mtf-parameterized-tests.adoc[Parameterized test] | Using parameterization to reuse your tests
 | xref:mtf-using-test-classes.adoc[Using Test classes] | How to use auxiliary classes for your tests
+| xref:testing-oauth-modules.adoc[Testing OAuth Enabled Connectors] | How to test connectors that use OAuth authentication
 |===
