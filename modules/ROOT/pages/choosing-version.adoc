@@ -65,7 +65,7 @@ The SDK `version` is specified in your `pom.xml` file of your module project, in
 <parent>
   <groupId>org.mule.extensions</groupId>
   <artifactId>mule-modules-parent</artifactId>
-  <version>1.0.0</version>
+  <version>1.1.6</version>
 </parent>
 ----
 
