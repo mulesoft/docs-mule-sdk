@@ -151,6 +151,13 @@ See xref:content-parameters.adoc[more info on roles].
 | NA
 | Defines the group (or tab) to which the `<parameter>` must belong in the UI.
 
+| `visibility`
+| optional
+| `PUBLIC`
+| *Available since version 1.2* 
+
+Marks an operation's visibility to either `PUBLIC` (anyone can see and use it) to `PRIVATE` (accessible only for the current module and cannot be seen externally).
+
 | `doc:description`
 | optional
 | NA
