@@ -795,6 +795,9 @@ If a module contains two or more global elements that provide a test connection,
 </module>
 ----
 
+[NOTE]
+Marking multiple global elements with `xmlns:connection="true"` makes the compilation fail, as there can be only one.
+
 == Handling Errors
 
 In some cases, operations within the `<body>` throw error codes that should not be propagated as-is. In this case, you need to remap the codes to something more meaningful to the end user. In other cases, the issues might pertain to conditions within the `<operation>`.
