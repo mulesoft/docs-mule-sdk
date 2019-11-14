@@ -795,7 +795,8 @@ If a module contains two or more global elements that provide a test connection,
 </module>
 ----
 
-Bear in mind that marking multiple global elements with `xmlns:connection="true"` will make the compilation fail, as there must be only one.
+[NOTE]
+Marking multiple global elements with `xmlns:connection="true"` makes the compilation fail, as there can be only one.
 
 == Handling Errors
 
