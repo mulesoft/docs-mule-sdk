@@ -492,7 +492,6 @@ To create an XML SDK module:
          </repositories>
      </profile>
  </profiles>
- ----
 
 . Use Maven (`mvn`) from to execute the following command:
 +
