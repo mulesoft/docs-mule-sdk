@@ -472,7 +472,7 @@ This `hello with spaces` module above can be used in a Mule app, for example:
 
 To create an XML SDK module:
 
-. Add the MuleSoft Repository to your Maven (`mvn`) settings file:
+. Add the MuleSoft repository to your Maven (`mvn`) settings file:
 +
 [source,text,linenums]
 ----
