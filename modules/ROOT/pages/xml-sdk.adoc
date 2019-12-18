@@ -154,7 +154,7 @@ See xref:content-parameters.adoc[more info on roles].
 | `visibility`
 | optional
 | `PUBLIC`
-| *Available since version 1.2* 
+| *Available since version 1.2*
 
 Marks an operation's visibility to either `PUBLIC` (anyone can see and use it) to `PRIVATE` (accessible only for the current module and cannot be seen externally).
 
@@ -472,6 +472,27 @@ This `hello with spaces` module above can be used in a Mule app, for example:
 
 To create an XML SDK module:
 
+. Add the MuleSoft repository to your Maven (`mvn`) settings file:
++
+[source,text,linenums]
+----
+<profiles>
+     <profile>
+         <id>Mule</id>
+         <activation>
+             <activeByDefault>true</activeByDefault>
+         </activation>
+         <repositories>
+             <repository>
+                 <id>mulesoft-releases</id>
+                 <name>MuleSoft Repository</name>
+                 <url>http://repository.mulesoft.org/releases/</url>
+                 <layout>default</layout>
+             </repository>
+         </repositories>
+     </profile>
+ </profiles>
+----
 
 . Use Maven (`mvn`) from to execute the following command:
 +
