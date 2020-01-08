@@ -14,7 +14,7 @@ See xref:connections.adoc[Connections] for more information.
 <dependency>
     <groupId>com.mulesoft.munit</groupId>
     <artifactId>mtf-tools</artifactId>
-    <version>1.0.0-BETA3</version>
+    <version>1.0.0</version>
     <classifier>mule-plugin</classifier>
     <scope>test</scope>
 </dependency>
