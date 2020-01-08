@@ -1,0 +1,177 @@
+= HTTP-Based Connectors
+ifndef::env-site,env-github[]
+include::_attributes.adoc[]
+endif::[]
+
+There is a special set of considerations for connectors that access a remote system by either issuing HTTP requests or exposing HTTP endpoints.
+
+== Use the Mule HTTP Client
+
+The Mule HTTP Client *must* be used for making HTTP requests. Other HTTP clients (such as  the Jersey client, Apache HTTP Client, Jetty, Netty, and so on) *should not* be used in favor of the Mule HTTP client.
+
+The only exception to this rule is when the remote system vendor already provides a client library that has some level of added value that would be too difficult to replicate with the use of the Mule HTTP Client.
+
+For example, the Amazon AWS connectors work by consuming an HTTP API that requires custom message signing. Amazon provides a client library that encapsulates the logic necessary to make such signing.
+
+However, a client library that does nothing but wrap an HTTP client for convenience (like the Google clients) is not a valid exception to this rule.
+
+* Handle the HTTP Client Lifecycle
++
+The ConnectionProvider that creates the HttpClient is responsible for managing its lifecycle.
++
+* Use Cached Connection Providers
++
+Every ConnectionProvider that creates an HttpClient *must* implement the CachedConnectionProvider interface.
++
+Notice that this rule has implications on the connection object that the Connection Provider can yield. Because of the previously discussed Connection Object *must not* expose (nor be) the inner client rule, this means that the provided connection object needs to contain the HTTP client as part of its state and *must* be thread safe.
++
+* Use Startable and Stoppable Connection Providers
++
+The Connection Provider *must* also implement the Startable and Stoppable interfaces. The HttpClient *must* be created and started during the start() phase and *must* be stopped during the stop() phase.
++
+Lifecycle example:
++
+[source,java,linenums]
+----
+public class HttpConnectionProvider implements CachedConnectionProvider<HttpConnection>, Startable, Stoppable {
+
+        @Inject
+        private HttpService httpService;
+
+        @Parameter
+        private TlsContextFactory tlsContext;
+
+        @Override
+   public void start() throws MuleException {
+       initialiseIfNeeded(tlsContext);
+       httpClient = httpService.getClientFactory().create(getHttpClientConfiguration());
+       httpClient.start();
+   }
+
+   @Override
+   public void stop() throws MuleException {
+           if (httpClient != null) {
+              httpClient.stop();
+           }
+   }
+
+   // rest of the implementation removed for example simplicity
+
+}
+----
++
+* Set the HTTP Client Name
++
+The HttpClient created by each ConnectionProvider *must* have a name which is based on (or simply matches) the name of the configuration that owns that ConnectionProvider.
++
+This is very important for performance troubleshooting. Each HttpClient creates a set of selector threads that it uses for I/O. Those threads are named after the client’s name. Giving those threads a meaningful name is key for diagnosing performance problems.
++
+The name of the owning config can be obtained using the @RefName annotation.
++
+Here’s an example of how to do this:
++
+[source,java,linenums]
+----
+public class HttpConnectionProvider implements
+	CachedConnectionProvider<HttpConnection>, Startable, Stoppable {
+
+        @Inject
+        private HttpService httpService;
+
+        @RefName
+        private String configName
+
+        @Override
+   public void start() throws MuleException {
+       httpClient = httpService.getClientFactory().
+       	create(new HttpClientConfiguration.Builder()
+                       .setName(configName)
+                       .build());
+       httpClient.start();
+   }
+
+   // rest of implementation removed for example simplicity
+
+}
+----
++
+* Leverage Non-Blocking I/O in Operations
++
+The HttpClient is capable of using non-blocking I/O to make the requests. Operations *must* leverage this capability and also be defined as non-blocking.
++
+* Do not reference <http:requester-config> Elements
++
+The HttpService allows you to obtain the HttpClient associated with a separate <http:requester-config> element. Although this capability exists, it is not meant to be used by connectors. Connectors *must not* use this feature.
++
+All connectors in need of a HttpClient instance, *must* create and manage their own.
++
+* Provide HTTP Proxy settings
++
+Connectors using HttpClient instances *should* provide the ability to configure a proxy, in a manner that is consistent with the standard HttpConnector.
++
+Examples of how to do that can be found in the Http Connector code.
+
+== Exposing HTTP Inbound Endpoints
+
+Some connectors need to expose their own HTTP inbound endpoints.
+
+To achieve this, connectors *must* reference an external <http:listener-config> element to obtain an HttpServer instance. Connectors *must not* create their own servers.
+
+This *must* be achieved as follows:
+
+* Correctly reference the listener config
++
+The connection provider *must* expose a String parameter called listenerConfig. This parameter *must* be of type String, not accept expressions, and use the @ConfigReference annotation to indicate that it points to an <http:listener-config> element.
++
+For example:
++
+[source,java,linenums]
+----
+@Parameter
+@Expression(NOT_SUPPORTED)
+@ConfigReference(name = "LISTENER_CONFIG", namespace = "HTTP")
+private String listenerConfig;
+----
++
+* Add a RequestHandler
++
+Using the listenerConfig parameter added above, a matching HttpServer instance can be obtained like this:
++
+[source,java,linenums]
+----
+HttpServer httpServer;
+try {
+        httpServer = httpService.getServerFactory().lookup(listenerConfig);
+        } catch (ServerNotFoundException e) {
+        throw new IllegalArgumentException(
+           format("Connector configuration '%s' refers to an <http:listener-config> with name '%s', "
+               + "but such element doesn't exist", configName, listenerConfigName),
+           e);
+}
+----
++
+With the obtained HttpServer, a new RequestHandler can be added using the org.mule.runtime.http.api.server.HttpServer#addRequestHandler(java.lang.String, org.mule.runtime.http.api.server.RequestHandler) method.
++
+The connector *must* carefully follow the contract defined in the Javadocs for that method. Most importantly, invoking that method will return a RequestHandlerManager instance. Those instances *must* be kept by the connector as they expose two important methods: start() and stop().
++
+The inbound endpoint will not be actually functioning until the start() method is invoked on the RequestHandlerManager. At the same time, the endpoint does not go away until the stop() method is invoked on the RequestHandlerManager.
++
+That means that when the component owning the custom endpoint is stopped, so *must* the RequestHandlerManager be stopped. Otherwise, your connector will generate a memory leak.
+
+=== Make Timeouts Configurable
+
+The connector *must* expose a parameter that controls the timeout of the HTTP requests.
+
+This *must* be done in a way that is consistent with the previously discussed rules about how to handle duration parameters and making timeouts Config Override parameters.
+
+== HTTPS Security
+
+The connector *must* support the HTTPS scheme whenever possible and *must* consider it as the recommended option:
+
+* If the remote system supports only HTTPS, then the connector *must* have a required TlsContextFactory parameter.
+* If the remote system supports both HTTP and HTTPS schemes, then the connector *must* support both options but log a warning when HTTP is used.
+
+== See Also
+
+* https://help.mulesoft.com[MuleSoft Help Center]
+* xref:mule-sdk::best-practices.adoc[Mule SDK Development Best Practices]

@@ -1,0 +1,144 @@
+= Threading and Asynchronous Processing
+ifndef::env-site,env-github[]
+include::_attributes.adoc[]
+endif::[]
+
+Most modules *should not* have concurrency concerns other than designing for Thread safety.
+
+However, there are some very valid use cases in which a module needs to either perform tasks asynchronously or schedule recurring tasks. This section elaborates on the best practices for doing that.
+
+As you go through this section, keep in mind that when we refer to a Scheduler, we’re actually referring to an instance of the org.mule.runtime.api.scheduler.Scheduler class.
+
+NOTE: Do not confuse asynchronous processing with non-locking I/O. These are not the same thing.
+
+== Don’t Create Your Own Threads or Executors
+
+Modules *must not* create their own Threads, Executors or ExecutorServices. Any asynchronous tasks *must* be done by obtaining a Scheduler from Mule’s SchedulerService.
+
+The SchedulerService API is very well documented in its Javadocs. Be mindful of the contracts documented there and use them accordingly.
+
+=== Dependency-Created Threads
+
+Sometimes a module has no choice but to depend on an external source to create its own threads. For example:
+
+* A JMS connector that depends on broker libraries to create its own consumer Threads
+* A client library that spawns its own I/O selector Threads
+* A JDBC driver that spawns its own Threads
+
+As these cases are unavoidable, they are valid exceptions to this rule. However, the following conditions *must* be met:
+
+* When there’s no viable alternative and there’s no point in creating your own JMS broker just for the sake of being in control of the Threads
+* The Threads created by these libraries *must* have a meaningful name
+
+Keep in mind that some libraries may allow you to pass an Executor instance and fall back to create its own threads if not provided. In such cases, passing the executor *should* be the method you use. Refer to the custom Schedulers section that follows for additional details.
+
+== Do Not Use Schedulers for Polling in Sources
+
+Sources *must not* create Schedulers with the purpose of doing polling. Extend the PollingSource class instead.
+
+== Manage Schedulers Lifecycle
+
+As most things in Mule, Schedulers have a lifecycle that *must* be carefully handled.
+
+* Choose the correct Scheduler type
++
+The Scheduler Service provides three types of Schedulers:
++
+** CPU Light
++
+These schedulers *should* be used for asynchronous tasks that complete really quickly without significant CPU consumption. They can also be used for tasks that perform non-locking I/O. Examples include simple validations, light calculations, or any kind of logic that doesn’t perform I/O and takes around 10 ms to complete.
++
+** CPU Intensive
++
+For tasks that perform intensive CPU computation. No I/O operations or long blocking, such as waiting for a lock held by an I/O thread while doing I/O *should* be performed here. Examples include encryption, heavy transformations, expensive validations, and any other kind of logic that doesn’t perform I/O and makes heavy use of the CPU for more than 20 ms.
++
+** IO Scheduler
++
+For blocking I/O operations, such as writing to an FTP site, accessing a relational database, and so on.
++
+Tasks submitted to any of these Schedulers *must* be compliant with the type of work that each Scheduler is meant to handle. These schedulers are slices of the main thread pools used by the Mule 4 xref:mule-runtime::execution-engine.adoc[Execution Engine]. Failing to comply with each Scheduler work profile can lead Mule to operate with sub-optimal performance.
++
+* Custom Schedulers
++
+There are certain types of Schedulers that don’t completely fit into the profile of any of the three Scheduler types. Custom Schedulers *should* be used for:
++
+** Tasks that execute and repeat at a fixed rate (and *should not* be part of a PollingSource). Examples include (but are not limited to):
+*** Cache expiration tasks
+*** Resource releasing tasks
+*** I/O selectors
+*** Queue consumers
+*** Tasks that require their own thread pool
+*** Tasks that have a mixed profile that doesn’t completely fix any of the previous criteria
++
+* Give Schedulers a meaningful name
++
+All Schedulers obtained through the SchedulerService *must* be assigned with a meaningful name that refers to:
++
+** The name of the module that created the Scheduler
+** The name of the configuration object for the component that created the Scheduler or its position in a flow
+** The Scheduler purpose
++
+* Define the owning Component
++
+An important aspect of managing your own Schedulers is defining which component *should* own it:
++
+** If the Scheduler is to be used by a source, then the Scheduler  *must* be defined as part of that source
+** If the Scheduler is used for releasing connection related resources, then it *should* be owned by a ConnectionProvider
+** If the Scheduler performs tasks not specific to any component, or many components will receive tasks from different components, then it *should* be owned by a configuration object
++
+The owning component *must* be one that is lifecycle aware. This means that at a minimum it *must* either:
++
+** Implement the Initialisable and Disposable interfaces
+** Implement the Startable and Stoppable interfaces
++
+* Never create Schedulers at the operation level
++
+Schedulers *must* never be created in operation classes. If an operation requires the use of a Scheduler, then it *must* be created at a config element level and the Scheduler shared across all operations.
++
+* Make a best effort to share Schedulers
++
+Modules *should* create as many Schedulers as needed, but as few as possible. There are use cases in which it makes sense for different components to have their own Schedulers, but a best effort *must* be made to share and reuse Schedulers across components.
++
+* Guarantee that all Schedulers are stopped
++
+All created Schedulers *must* be guaranteed to eventually invoke the stop() method. Invocation of this method *should* be tied to the lifecycle of the component that owns it. For example, if the Scheduler is owned by a configuration element, then that component *should* implement the Stoppable interface and invoke it as part of its own stop() call. Sources *should* do it during the onStop() method and so forth.
+
+== Scheduler Lifecycle Example
+
+This example of a Source-owned Scheduler applies all the lifecycle concepts:
+
+[source,java,linenums]
+----
+public class ExampleSourceScheduler extends Source<Serializable, VMMessageAttributes> {
+
+ @Inject
+ private SchedulerService schedulerService;
+
+ @Inject
+ private SchedulerConfig schedulerConfig;
+
+ private ComponentLocation location;
+ private Scheduler scheduler;
+
+ @Override
+ public void onStart(SourceCallback<Serializable, VMMessageAttributes> sourceCallback) throws MuleException {
+   scheduler = schedulerService.customScheduler(schedulerConfig
+       .withMaxConcurrentTasks(numberOfConsumers)
+       .withName("vm-listener-flow " + location.getRootContainerName())
+       .withWaitAllowed(true)
+       .withShutdownTimeout(5, SECONDS));
+ }
+
+ @Override
+ public void onStop() {
+   if (scheduler != null) {
+     scheduler.stop();
+   }
+ }
+}
+----
+
+== See Also
+
+* https://help.mulesoft.com[MuleSoft Help Center]
+* xref:mule-sdk::best-practices.adoc[Mule SDK Development Best Practices]

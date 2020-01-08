@@ -1,0 +1,171 @@
+= Define Configurations and Connection Providers
+ifndef::env-site,env-github[]
+include::_attributes.adoc[]
+endif::[]
+
+== Distributing Parameters
+
+One key aspect is determining which parameters *should* be part of a configuration object and which *should* be part of a configuration provider.
+
+Connection providers *must* contain only parameters that are used to establish and configure connections to an external system. Any parameters used for any other purpose *must* go into the configuration object instead.
+
+== POJO Parameters in Configurations
+
+When a configuration or connection provider uses a POJO as a parameter type, without the use of the @ParameterGroup annotation, then the POJO *must* comply with the following:
+
+* Have a default constructor
+* Expose a getter for each field annotated with @Parameter
+* Override the equals() and hashCode() methods with an implementation that uses all the @Parameter fields
+
+== Don’t Establish Connections During the Lifecycle Phase
+
+ConnectionProviders can hook into the application lifecycle by implementing any of the corresponding interfaces (Initialisable, Startable, Stoppable, or Disposable).
+
+Connections *must not* be established in the initialisable() or start() methods, and they *must not* be disconnected during the stop() or dispose() methods. Therefore, the provider’s constructor and lifecycle methods *must* never throw a ConnectionException.
+
+Connections *must*  be established only in the connect() method and *must* be severed only in the disconnect(T) methods
+
+== Handling SSL Connections
+
+When a connector needs to establish a TLS/SSL secure connection, the SSLContext *must* be obtained through a TlsContextFactory parameter as explained in this article.
+
+When a ConnectionProvider has a TlsContextFactory parameter, it *must* also implement the Initialisable interface and invoke the initialise() method on such context during initialization:
+
+[source,java,linenums]
+----
+public class MyConnectionProvider implements ConnectionProvider<Connection>, Initialisable {
+
+        @Parameter
+        private TlsContextFactory tlsContext;
+
+        @Override
+        public void initialise() throws InitialisationException {
+                ((Initialisable) tlsContextFactory).initialise();
+        }
+}
+----
+
+
+== Defining a Connection Management Strategy
+
+When defining  or designing the xref:mule-sdk::connections.adoc[connection management strategy], the following decision process *must* be followed:
+
+* The most efficient option is to use a CachedConnectionProvider.
++
+This however requires that the connection object *must* be thread safe, and that thread safeness *must not* come at the expense of significant synchronization contention.
++
+* If a CachedConnectionProvider is not possible, then a PoolingConnectionProvider *should* be used instead, especially if establishing the connection is expensive.
+* Only if neither of the previous two options  are possible, *should* a plain ConnectionProvider be considered.
+
+== Handling OAuth Protected Connections
+
+The SDK supports building connectors to systems protected by OAuth. xref:mule-sdk::oauth.adoc[As explained in this article], it automatically handles the process of obtaining and refreshing OAuth tokens, which are made available through an AuthorizationCodeState object (if the Authorization Code grant type is being used) or the ClientCredentialsState object (if the Client Credentials Grant Type is being used).
+
+The sections that follow provide additional considerations for OAuth use.
+
+=== Handle Token Expiration
+
+Although the SDK provides the ability to refresh access tokens in a thread-safe manner, there’s no standard way to detect that the token has actually expired because different service providers communicate this in different ways, making it each connector’s responsibility to detect such a condition.
+
+When using OAuth authentication, all connectors *must* detect when a token has expired and communicate it to Mule by raising an AccessTokenExpired exception.
+
+This is difficult because connectors *must* differentiate between the following conditions:
+
+* The access token expired and needs to be refreshed
+* The access token is valid, but lacks privileges to perform a given action
+* The access token has been remotely revoked
+
+=== Always Query the State Object on Each Request
+
+The AuthorizationCodeState and ClientCredentialsState objects are the means through which connectors gain access to the access tokens that Mule manages. Most precisely, this happens through the getAccessToken() method that both classes share.
+
+Because of the highly concurrent nature of Mule, those tokens can be refreshed or unauthorized at any time.
+
+Therefore, the getAccessToken() method *must* be invoked on the state object for every request to be sent. The access token *must not* be cached or stored in an internal variable.
+
+This consideration is especially important when using third-party client libraries that might perform caching.
+
+== Connection Object Must Not Expose (Nor Be) the Inner Client
+
+A common anti-pattern often found in connectors is that the ConnectionProvider generates a connection object that exposes the client or implementation used to access the external system. For example:
+
+[source,java,linenums]
+----
+public class HttpConnection {
+
+        private HttpClient client;
+
+        public HttpClient getClient() {
+                return client;
+        }
+}
+----
+
+An operation would then use it like in this pseudo code:
+
+[source,java,linenums]
+----
+public void createCustomer(@Connection HttpConnection connection, @Content InputStream content) {
+
+        connection.getClient().send(HttpRequest.builder()
+                .path(connection.getPath() + "/customer")
+                .method("POST")
+                .entity(content)
+                .addHeader("Accept", "application/json")
+            .build()
+        );
+}
+----
+
+This code has several drawbacks. The most obvious is that the operations using the connection are strongly coupled to the implementation of the connection object. If the need ever comes to change the implementation of the client, all the components using that connection will be affected.
+
+Another problem is that the connection object is not testable. Because the client object is exposed, writing a test that interacts with a mock version of the connection object becomes too complicated.
+
+The biggest problem is that it introduces functional coupling between all components using the connection object and the functional nuances of all supported connection providers.
+
+For example, assume that the example above is part of a connector that supports both Basic Authentication and OAuth authorization mechanisms.
+
+If invalid credentials are used with the Basic Authentication connection, then the request will result in a HTTP 401 status code and the operation *should* fail.
+
+However, if the same response code is received using an OAuth protected connection, then the connector needs to execute logic to determine if the token has expired and an AccessTokenExpiredException *should* be thrown.
+
+As new connection types and components are added, the worse the problem becomes. This is only one example. It can happen with all other types of connections, not just HTTP clients.
+
+To prevent this, the connection objects *must* encapsulate their inner communication mechanisms and security schemes, leading to a pattern like this:
+
+[source,java,linenums]
+----
+public void createCustomer(@Connection HttpConnection connection, @Content InputStream content) {
+
+        connection.createCustomer(content);
+}
+----
+
+With this approach, each ConnectionProvider implementation can provide its own implementation of the HttpConnection object, removing the root cause of the problem and providing freedom to change the inner workings of the connection without affecting other components.
+
+=== Alternative: Leverage the Command Pattern
+
+Instead of giving the connection object one method per endpoint to be consumed, another option is to implement the command design pattern in a more generic way:
+
+[source,java,linenums]
+----
+public void createCustomer(@Connection HttpConnection connection, @Content InputStream content) {
+
+        connection.request(HttpRequest.builder()
+                .path(connection.getPath() + "/customer")
+                .method("POST")
+                .entity(content)
+        );
+}
+----
+
+With this approach, the connection object has only one generic request method which receives an HttpRequestBuilder object. Notice that the builder object never receives the build() command. Depending on the implementation of the connection object, additional headers can be added, the request can be performed in different ways and the response can be processed accordingly.
+
+== Do Not Export as Part of the Module’s API
+
+Configuration, ConnectionProvider and Connection classes *must not* be exported as part of the module’s API.
+
+== See Also
+
+* https://help.mulesoft.com[MuleSoft Help Center]
+* xref:mule-sdk::best-practices.adoc[Mule SDK Development Best Practices]

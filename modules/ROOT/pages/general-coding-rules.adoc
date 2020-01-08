@@ -1,0 +1,332 @@
+= General Coding Rules
+ifndef::env-site,env-github[]
+include::_attributes.adoc[]
+endif::[]
+
+This set of general rules applies to any component of a module or connector. These apply on all operations, sources, configs, connection providers, and functions).
+
+== Connectors Must Closely Reflect the Target System
+
+In the context of Anypoint Platform, a connector’s purpose is to bring the target system into the Mule language. The connector *must not* add higher-level abstractions or include operations that implement specific business use cases.
+
+For example, imagine a billing API that contains resources for creating an invoice, adding items to an invoice, and submitting an invoice. The connector for such an API *must* contain one operation per each of those resources, but *must not* include an operation that combines all three calls into a single unit.
+
+The one exception is auto-paging operations, which, to achieve the paging effect, perform several calls as part of processing the output of one single Mule operation.
+
+== Do Not Mix Protocols
+
+One connector *must* connect to only one type of protocol at a time. For example, suppose an external system exposes a REST API, a SOAP API, and an OData API.
+
+In Anypoint Platform, there are three different APIs, even if they access the same external system. Therefore, each
+of those APIs *must* have its own connector, instead of one that understands the three protocols.
+
+== Exported Module Java API
+
+Before reading this section, see xref:mule-sdk::isolation.adoc[Classloading isolation] in the Mule SDK.
+
+The module *must* export only packages defined in your module. Packages from dependency libraries *must not* be exported.
+
+=== Java Packages
+
+
+Packages from the JDK are treated differently since modules don’t export them but only consume them. Mule automatically exports all available Java packages for the modules to use.
+
+However, the module *must* use only Java packages available on all of the JDKs supported by the Mule versions that the module is compatible with. Vendor-specific packages such as com.sun *must not* be used.
+
+=== Java 11 Compatibility
+
+Starting with Mule 4.2.0, JDK 11 is also supported. That means that when depending on native Java APIs, the module *must* account for the fact that the needed API might not be available given Java’s new modular architecture (also known as https://openjdk.java.net/projects/jigsaw/[Project Jigsaw], first introduced in Java 9).
+
+For example, if your module requires the Java Transaction API (JTA), the module *must* declare the following dependency in its pom.xml file:
+
+[source,xml,linenums]
+----
+<dependency>
+  <groupId>javax.transaction</groupId>
+  <artifactId>javax.transaction-api</artifactId>
+  <version>1.2</version>
+</dependency>
+----
+
+Or if the Java Mail API is used:
+
+[source,xml,linenums]
+----
+<dependency>
+  <groupId>javax.mail</groupId>
+  <artifactId>javax.mail-api</artifactId>
+  <version>1.6.2</version>
+</dependency>
+----
+
+=== Design for Thread Safety
+
+Mule is a reactive execution engine, designed for highly concurrent workloads. Therefore, all components *must* always be designed to support concurrent executions at minimal contention.
+
+https://en.wikipedia.org/wiki/Thread_safety[Thread safety] is a basic concept for any Java developer familiar with concurrency. Users of the SDK are expected to be familiar with this.
+
+== Use Immutable Payload and Attributes Objects
+
+All output types, used as either payload or message attributes, *must* be immutable objects.
+
+== Correct Use of Content Parameters
+
+Make correct use of @Content parameters according to the MuleSoft xref:mule-sdk::content-parameters.adoc[Content Parameters] document.
+
+== Never Access Flow Variables
+
+In Mule 4, variables are for exclusive access of end users only. No module *should* ever access flow variables directly.
+
+Although the SDK doesn’t provide any API for accessing them, optional parameters can be leveraged to hack this restriction. For example:
+
+[source,java,linenums]
+----
+@Optional(defaultValue = "#[vars.foo]") String foo
+
+@Optional(defaultValue = "#[vars]") Map<String, TypedValue<Object>> vars
+----
+
+However, these statements (or any other way of getting to the vars from inside a module) are forbidden. Every piece of information required by the module *should* be made explicit through a parameter. End users decide to assign that value to a variable or not.
+
+Notice that violating this rule automatically violates position independence.
+
+== Never Use Message Attributes as Parameters
+
+No component *should* define a parameter of a type that’s also used as message attributes, even if the attributes object is defined as part of the same module.
+
+For example, if a connector has an operation that uses the LocalFileAttributes class as output attributes, the following is illegal:
+
+[source,java,linenums]
+----
+public void checkAccess(@Content LocalFileAttributes attributes) {
+        doCheckAccess(attributes);
+}
+----
+
+Instead, add parameters that reflect what information from the attributes class you actually need:
+
+[source,java,linenums]
+----
+public void checkAccess(String path) {
+ ...
+}
+----
+
+== Use Correct Encodings
+
+When connecting to systems that accept multiple encodings, the encoding to be used *must* be configurable through a xref:mule-sdk::config-override.adoc[Configuration Override]. This means that the encoding to use *should* be parameterizable at the config level, but also on each component that requires it (operations, sources, functions, and so on).
+
+At the config level, the encoding parameter *must* default to the Mule default encoding, which is obtained through the @DefaultEncoding annotation.
+
+For example:
+
+[source,java,linenums]
+----
+public class MyConfig implements Initialisable {
+
+        @DefaultEncoding
+        private String defaultEncoding;
+
+        @Parameter
+        @Optional
+        private String encoding;
+
+        public void initialise() throws InitialisationException {
+                if (encoding == null) {
+                        encoding = defaultEncoding;
+                }
+        }
+
+        public String getEncoding() {
+                return encoding;
+        }
+
+}
+----
+
+== Duration Parameters
+
+Modules often require that you configure durations with classical examples such as timeouts and cache evictions.
+
+Durations *must* be expressed as the combination of two parameters:
+
+* An int or Integer scalar parameter with the Timeout suffix
+* A java.util.concurrent.TimeUnit parameter that qualifies the scalar
++
+This parameter *must* be named exactly the same as its companion scalar except for adding the TimeUnit suffix. The TimeUnit parameter *should* default to SECONDS.
+
+For example:
+
+[source,java,linenums]
+----
+/**
+* The socket connection timeout value. This attribute works in tandem with {@link #connectionTimeoutUnit}.
+*/
+@Parameter
+@Optional(defaultValue = "5")
+@Placement(tab = ADVANCED_TAB, order = 1)
+@Summary("Socket connection timeout value")
+private int connectionTimeout;
+
+/**
+* A {@link TimeUnit} that qualifies the {@link #connectionTimeout}
+*/
+
+@Parameter
+@Optional(defaultValue = "SECONDS")
+@Placement(tab = ADVANCED_TAB, order = 2)
+@Summary("Time unit to be used in the Timeout configurations")
+private TimeUnit connectionTimeoutUnit;
+----
+
+== Timeouts Must Have Configurable Configuration Overrides
+
+All components that perform operations that could be affected by timeouts *must* make those configurable through xref:mule-sdk::config-override.adoc[Configuration Override] parameters.
+
+Such timeouts *must* be expressed as duration parameters.
+
+== Only Primary @Content Should Default to Payload
+
+No parameter other than a primary content *should* default to payload. This means that the following *should* never be used:
+
+[source,java]
+----
+@Optional(defaultValue = "#[payload]")
+----
+
+== Handle Dates and Time Parameters
+
+Date and time parameters *must* be implemented by using java.time.LocalDate or java.time.LocalDateTime types. Do not use java.util.Date or java.util.Calendar.
+
+== Check the End-to-End Experience
+
+Before publishing your module, test it in Anypoint Studio and Anypoint Design Center. Make sure it provides good usability and a good experience. A module that works but is hard to use is not complete.
+
+You *must* check for the following:
+
+* DataSense is correctly resolved for all input parameters and output values.
+* Each component's parameter <<layout>> is correct.
+* No typos exist in labels and descriptions.
+* Users can easily build an application that uses the module’s main use cases.
+
+== Discourage the Use of POJOs
+
+The SDK allows using POJOs as both input parameters and output types. However, their use  is discouraged. All modules *should* make a best effort to use JSON or XML instead. In the case of dynamic types, Java Maps may also be used.
+
+This rule doesn’t mean that there’s no use case for using POJOs, nor that you need to convert all structures to JSON or Java Maps. This rule is merely about favoring data formats that interoperate better with other components and avoid serialization issues.
+
+For example, suppose that your organization developed a Java taxes library that you want to leverage in your Mule applications. If this library returns POJOs, it is okay for you to build an SDK module that wraps this library, even if that means that this tax module will accept and produce POJOs.
+
+Instead, if what you are leveraging is a Tax API that returns JSON, then your Tax connector *should* return the same JSON as the API instead of transforming that JSON into a POJO.
+
+== Expose POJOs
+
+All POJOs that are exposed (because they’re being used as output types, input parameters, or message attributes) *must* be DataWeave compliant. This means that all  have a default constructor and a getter method for each @Parameter annotated field.
+
+== User Must Not Be Aware of Java Types
+
+The user *must not* need to know the Java type used to implement a module in order to use it.
+
+For example, consider the following transformation:
+
+[source,json,linenums]
+----
+{
+  name: "Pedro",
+  address: {
+           x: 11,
+         y: 12
+  }
+}  as com.foo.Person
+----
+
+The module *must* be defined in a way in which explicit transformations such as this are not needed. Some ways of achieving this are:
+
+* Don’t use POJOs to represent a person (recommended)
+* Make com.foo.Person a DataWeave compliant concrete class
+* When used as an input parameter, refer to com.foo.Person explicitly instead of using an abstract type or interface
+
+== Payload and Attributes Must Be Serializable
+
+Message attributes objects returned by either operations or message sources *must* be Java Serializable. Otherwise they cannot be used  with ObjectStore, VM queues, or Mule in cluster mode.
+
+== Don’t Access the MuleContext
+
+The MuleContext is deprecated and *must not* be accessed by any module or connector.
+
+Most of the time, the only reason for a module to access the MuleContext is to obtain certain Runtime service. For example:
+
+[source,java]
+----
+muleContext.getRegistry().lookupByType(ObjectStoreManager.class)
+----
+
+Instead, use @Inject to obtain those services.
+
+[source,java,linenums]
+----
+public class MyComponent {
+
+@Inject
+ObjectStoreManager osm;
+}
+----
+
+== Log Through SLF4J
+
+All logging *must* be made through the SLF4J API.
+
+The module *must not* add any dependency with this API as it’s already provided in the parent pom file provided by MuleSoft.
+
+== All Loggers Must Be Static
+
+Loggers are expensive to create. Therefore, all loggers *must* be private, static, and final.
+
+For example:
+
+[source,java,linenums]
+----
+public class Operation {
+
+        private static final Logger LOGGER = LoggerFactory.getLogger(Operation.class);
+
+        ...
+
+}
+----
+
+== Avoid Static State
+
+All module classes *must not* contain a static state. The only exceptions are Loggers and the serialVersionUID of Serializable classes.
+
+== Choose the SDK Version
+
+Normally, developers tend to use the latest available version of any given product. This *should not* be the case with the SDK. To extend Mule, you should:
+
+* Identify the features you need
+* Choose the lower version that includes the features you need.
+
+For more on selecting the correct SDK version, see xref:mule-sdk::choosing-version.adoc[Choosing the SDK Version].
+
+== Do Not Use Boxed Booleans
+
+Boolean parameters *must* be of the native boolean type. A boxed Boolean is not allowed as a parameter type.
+
+All boolean parameters are considered optional and *must* default to false. You can use the @Optional annotation to change the default of a boolean, but you can never make it a required parameter.
+
+== Use Plural Names for List Parameters
+
+All parameters implemented as a Java Collection, Map, or Array, or any other type that represents an array of some sort, such as a JSON array, *must* have a plural name.
+
+== Use Semver Versioning
+
+Modules *must* be versioned using the https://semver.org/[Semantic Versioning] standard.
+
+== Use Strict Camel Casing
+
+The entirety of the module’s source code *must* correctly apply camel casing. This is critical since otherwise the SDK will not be able to correctly generate the XML DSL or process layouts.
+
+== See Also
+
+* https://help.mulesoft.com[MuleSoft Help Center]
+* xref:mule-sdk::best-practices.adoc[Mule SDK Development Best Practices]

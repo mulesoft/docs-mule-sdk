@@ -1,0 +1,280 @@
+= Define Operations
+ifndef::env-site,env-github[]
+include::_attributes.adoc[]
+endif::[]
+
+The sections that follow provide general rules that apply to all operations.
+
+== Position Independence
+
+Operations *must not* depend on their position in the flow for them to work.
+
+This means that no component *should* depend on the side effects of a prior or next component to fulfil its contract.
+
+For example, consider the following flow:
+
+[source,xml,linenums]
+----
+<flow name="independence">
+  <my-connector:operation-a />
+  <my-connector:operation-b />
+</flow>
+----
+
+`<operation-b>` *must not* depend on `<operation-a>` to have been previously executed for it to work.
+
+== Non-Metadata Key Parameters Must Not Change the Output Type
+
+Behavior parameters *must not* change the operation’s return type.
+
+NOTE: There’s a special case regarding parameters that act as Metadata Keys. This rule applies to all non-metadata key parameters. For example, a module wants to offer the capability to perform a given action both synchronously (which means that the output results are available immediately) or asynchronously (the operation returns a promise ID that can be later be used to retrieve the result).
+
+This could be solved like this:
+
+[source,xml,linenums]
+----
+<fruits:get-apple async="false"/>
+<fruits:get-apple async="true"/>
+----
+
+The first operation returns an apple object, and the second returns a String representing a job ID.
+
+This example is illegal. The get-apple operation *must* always return an apple. It cannot change its return type based on the async parameter.
+
+This *should* be modeled as two different operations:
+
+[source,xml,linenums]
+----
+<fruits:get-apple />
+<fruits:get-apple-async />
+----
+
+== Dynamic Types and Metadata Key Parameters
+
+Metadata Key parameters are treated as special because they are allowed to change the output type of an operation. This change can be considered in two levels:
+
+* The operation still always returns an apple, but the definition of what an apple is changes dependending to the system instance or user that is being used (even if the structure of the apple is dynamic, it’s still an apple)
+* The operation is generic and the Metadata Key parameters actually determine which type will be returned.
+
+For example:
+
+[source,xml]
+----
+<my-connector:search searchType="ORDERS" query="......" />
+----
+
+This operation does not violate the rule that the non-metadata key parameters *must not* change the output type because:
+
+* This operation returns a List, even if the type of the items in that list depends on the searchType parameter
+* searchType is set to “ORDERS”, it always returns a list of ORDERS. There’s no other parameter in the operation that makes it return a list of ORDER_REFERENCES instead.
+
+== Operation Output
+
+The output of operations *must* comply with the following:
+
+=== Always Communicate the MIME Type
+
+For DataWeave to handle the output of an operation, it is critical to make sure that the MIME type of the output value is always communicated.
+
+The SDK does this automatically when the return type is a Map, POJO, or Java simple type (String, Integer, Short, and so on).
+
+However, when the output type is a String, InputStream, or byte[], the module *must* specify the mimeType for that value. Otherwise DataWeave will not know how to handle it.
+
+There are two ways of doing this:
+
+* @MediaType annotation
++
+When the output type of the operation is always certain, the @MediaType annotation *must* be used:
++
+[source,java,linenums]
+----
+@MediaType("application/json")
+public InputStream getPerson(String personId) {
+// ....
+}
+----
++
+* Use the Result object
++
+There are other cases in which the return MIME type is known only at runtime. Examples of this include:
++
+** Reading a file (the actual MIME type depends on the file being read)
+** Hitting an HTTP endpoint that accepts several MIME types (the server communicates the MIME type through the Content-Type header).
++
+For example:
++
+[source,java,linenums]
+----
+public Result<InputStream, FileAttributes> read(String path) {
+        return Result.<InputStream, FileAttributes>builder()
+         .output(readStream(path))
+         .mediaType(inferMediaTypeFromFileName(path))
+         .attributes(getAttributes(path))
+         .build();
+}
+----
++
+* Using Java POJOs as return types
++
+If the operation returns a POJO, then:
++
+** The class *must* be part of the module’s API.
+** The object *must* be a value object that cannot contain any logic.
+** The object *must not* contain any static state.
+** The object *must* be Serializable.
++
+* Handling JSON and XML output types
++
+Some operations return values in the form of JSON or XML documents.
++
+** Java Types
++
+The JSON and XML documents *must* be returned in the form of an InputStream. None of the usual Java types for representing these types (Reader, Sax objects, Document, Node, JSON Node, and so on) are allowed.
++
+** DataSense Resolution
++
+For tooling to assist the user with handling the documents returned by the operation, the schema of the returned documents needs to be known. Therefore, operations *must* clearly define the output schema.
++
+*** Static DataSense
++
+Sometimes, the schema is fixed and well known. If the schema is well known and static, the problem *must not* be resolved through the use of dynamic DataSense resolvers. The connector *must* specify that schema through either of the following instead:
++
+**** @OutputJsonType
++
+Define the output type by pointing to a JSON schema that's part of a module's resources:
++
+[source,java,linenums]
+----
+@OutputJsonType(schema = "person-schema.json")
+public InputStream getPerson(String personId) {
+   // ...
+}
+----
++
+**** @OutputXmlType
++
+Similar to @OutputJsonType, but for XML schemas:
++
+[source,java,linenums]
+----
+@OutputXmlType(schema = "order.xsd", qname = "shiporder")
+public void getOrder(String orderId) {
+...
+}
+----
++
+**** OutputStaticTypeResolver
++
+Define the type programmatically.
++
+[source,java,linenums]
+----
+@OutputResolver(OrderTypeResolver.class)
+public InputStream getOrder(String orderId) {
+...
+}
+----
+
+=== Dynamic DataSense
+
+If the schemas are dynamic, a dynamic output resolver is needed. This is done by implementing the OutputTypeResolver interface.
+
+The key rule is that the module *must* resolve to a specific schema that the user can abide by. The dynamic resolver cannot return a generic ANY type.
+
+[source,java,linenums]
+----
+@OutputResolver(DynamicOrderTypeResolver.class)
+public InputStream getOrder(String orderId) {
+...
+}
+----
+
+=== Dynamic Java Type Parameters
+
+It’s very common for connectors to handle dynamic types. For example, services like Salesforce, NetSuite, or SAP define a set of core entities (Person, Order, and so on) that have a base structure that the user can customize.
+
+Other services go further and allow for a completely custom type set, for example, any OData service.
+
+All operations returning these dynamic types *must* have an associated @OutputTypeResolver that provides the actual type definition to be used for the current configuration.
+
+Prior sections discussed this for output values communicated in the form of JSON or XML documents. The same applies for parameters represented as Java types, such as Map or custom POJOs. A well defined, non trivial OutputTypeResolver *must* exist for all other dynamic types, regardless of which Java class is being used to represent them.
+
+== Streaming
+
+=== Favor InputStream over byte[]
+
+InputStream *should* be used as a return type instead of a byte[] array. Returning an array of bytes is valid when such array is certain to be of a small size.
+
+If the array size is unknown, variable or potentially large, then the operation *must* return InputStream.
+
+This avoids large memory requirements that can lead to an OutOfMemoryError, especially when running in small workers. Returning InputStream implies that your code needs to avoid fully loading that large piece of information into memory. Loading the entire byte[] array into memory and only wrapping it into a ByteArrayInputStream completely defeats the purpose of this rule and *must* be avoided.
+
+=== Don’t Return Large Strings
+
+Returning a String is acceptable, but only if you can ensure that the string does not become a String larger than 4 KB. If that’s a possibility, then the operation *must* return InputStream instead, and use @OutputResolver to provide metadata on the expected media type.
+
+=== Use the StreamingHelper
+
+When a component returns a streamable resource (InputStream or PagingProvider), the SDK automatically makes those streams repeatable (provided that the application is configured to do so).
+
+When those resources are contained in a higher level structure such as a Map, you *must* use http://www.mulesoft.org/docs/site/4.1.1/apidocs/org/mule/runtime/extension/api/runtime/streaming/StreamingHelper.html[StreamingHelper] to explicitly tell the SDK to perform that adaptation.
+
+Common cases:
+
+* Stream contained inside a Map
++
+An example of this case is the <db:select> operation, in which the result set obtained from the database is returned in the form of a Map for which the keys are the column names and the values are the actual result. If the result set contains a BLOB column, then that value is of type InputStream. For that case, the connector *must* use this method, which returns a new Map in which all streamable resources have been made repeatable:
++
+`org.mule.runtime.extension.api.runtime.streaming.StreamingHelper#resolveCursors(Map, boolean)`
++
+* Stream contained in a POJO
++
+Although not applicable for the case of database, it is possible to have a use case in which InputStream is actually contained in a field of a POJOo.
++
+In the previous case, `<db:select>` returns a Map because the actual structure of the response is unknown, as it changes with each query. Ensure you plan ahead to avoid causing problems that require difficult troubleshooting.
++
+However, if you’re using a POJO, it’s because the structure is fixed, which means that the POJO most likely contains some well-known attributes and some streamable information. Although we cannot 100% ensure it , most likely the fixed attributes of that POJO *should* go into an Attributes object and the stream into the payload, reducing this to the standard case.
++
+On the corner case in which doing this actually makes sense, the field containing the streaming resource *must* be adapted using the org.mule.runtime.extension.api.runtime.streaming.StreamingHelper#resolveCursorProvider(Object) method.
++
+NOTE: Although the pattern of a POJO containing a streamable resource is not explicitly forbidden, it is a big code smell that *should* be reviewed carefully and *must* be matched with a custom Metadata resolver.
++
+Assuming that the scenario is valid, a custom Metadata resolver is necessary because you don’t know if the value will be adapted into a CursorProvider or not. It will have to be of type Object, which means it will become obscure to DataSense without the aid of a custom resolver.
+
+=== Favor Non-Blocking I/O
+
+Mule 4 is a reactive execution engine that is optimized to perform non-blocking I/O operations.
+
+When an input or output operation executes in non-blocking mode, the connector *must* adhere to the MuleSoft xref:mule-sdk::non-blocking-operations.adoc[Non-Blocking Operations] requirements.
+
+Best uses for non-blocking I/O:
+
+* Accessing files in the local file system
+* HTTP requests
+* TCP/UDP socket requests
+* Any I/O operation for which a non-blocking client exists
+
+Where not to use non-blocking I/O:
+
+* Accessing a database through JDBC (non-blocking JDBC drivers are still experimental)
+* Using clients where non-blocking equivalents do not exist or are unreliable, such as using Apache Commons Net for accessing FTP servers where no reliable non-blocking option exists.
+
+==== Non-Blocking and Asynchronous Are Not the Same
+
+It’s common to confuse asynchronous with non-blocking. They are not the same thing. This rule of favoring non-locking I/O does not mean that all I/O operations *should* be dispatched to a separate thread that is executed asynchronously just for the sake of it.
+
+Be sure you have a good understanding of the principles of non-blocking IO and how it's implemented in Mule.
+
+See:
+
+* http://www.programmr.com/blogs/difference-between-asynchronous-and-non-blocking[The Difference Between Asynchronous and Non-Blocking]
+* xref:mule-sdk::non-blocking-operations.adoc[Mule Non-Blocking Operations]
+
+=== Use Transactions
+
+When an operation interacts with a transactional system (including XA transactions), the operation *must* support that capability. See Transactions.
+
+== See Also
+
+* https://help.mulesoft.com[MuleSoft Help Center]
+* xref:mule-sdk::best-practices.adoc[Mule SDK Development Best Practices]
