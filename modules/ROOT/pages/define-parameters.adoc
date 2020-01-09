@@ -68,7 +68,7 @@ public void createOrder(@TypeResolver(DynamicOrderTypeResolver.class) @Content I
 }
 ----
 
-=== Dynamic Java Type Parameters
+== Dynamic Java Type Parameters
 
 It’s very common for connectors to work with dynamic types. For example, services like Salesforce, NetSuite, or SAP define a set of core entities (Person, Order, and so on) which have a base structure that the user can customize.
 
@@ -78,7 +78,7 @@ All parameters using these dynamic types *must* have an associated @TypeResolver
 
 Prior sections discussed the need for @TypeResolver for parameters communicated in the form of JSON or XML documents. The same applies for parameters represented as Java types, such as Map or custom POJOs. A well defined, non-trivial TypeResolver *must* exist for all other dynamic types, regardless of which Java class is used to represent them.
 
-=== Streaming
+== Streaming
 
 Streaming is a key aspect of Mule 4. It’s important to define operations in a way that allows to leverage that.
 
@@ -91,7 +91,7 @@ Parameters *must not* be of byte[] type. Use InputStream instead. Mule automatic
 String parameters are perfectly fine, but always consider what are the odds of the assigned values to become larger than 4 KB. If that’s a possibility, then the parameter *must* be an InputStream instead and use an InputTypeResolver to provide metadata on the media type that’s expected.
 
 [[layout]]
-=== Layout
+== Layout
 
 The MuleSoft layout mechanism comprises two organizational concepts: groups and tabs.
 
@@ -174,7 +174,7 @@ For example: if is being used the MongoDB Library to create a MongoDB Connector,
 ** The type is difficult or impossible to consume or create from DataWeave.
 ** The internal library gets shared on the application classloader and could cause class clashing.
 
-=== Parameter Hints:
+== Parameter Hints:
 
 * @Example
 +
@@ -221,7 +221,7 @@ Here’s an example of how the hinting features can interact together
  private String fromAddress;
 ----
 
-=== Enum Versus Value Provider
+== Enum Versus Value Provider
 
 There are use cases in which certain parameters are exposed to the user as a list of predefined values.
 
@@ -250,7 +250,7 @@ When to use a Value Provider?
 * When the value set is open such that the connector can suggest some values, but other ones can also be valid
 * When the value set is dynamic
 
-=== Exclusive Parameters
+== Exclusive Parameters
 
 If parameters values are invalid, modules *should not* fail at startup time or execution time. For example, the scripting module executes user scripts that can be provided either inline or referenced from a file. This module provides two parameters: one called script for the inlining option, and another called scriptFile. The user can use only one of these at a time, which means that they’re both optional.
 
@@ -261,7 +261,7 @@ To provide a good user experience, the UI *should* provide hints to a user at de
 
 Use cases like this *must* leverage the xref:mule-sdk::exclusive-optionals.adoc[Exclusive Optionals] feature to provide a good experience at design time.
 
-=== Using POJO Parameters
+== Using POJO Parameters
 
 Sometimes, you need to define parameters of POJO types. Depending on the scenario, that practice might be advised or simply discouraged.
 
@@ -452,6 +452,8 @@ private LocalDateTime createdUntil;
 * DSL Decision Making
 +
 As a summary, here’s a simple flow chart to aid with the decision process of how to use POJOs and parameter groups.
+
+image::mule-sdk-dsl-parameter-pojos.png[Decision tree for POJOs and parameter groups]
 
 == See Also
 
