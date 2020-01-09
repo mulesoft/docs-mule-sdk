@@ -1,0 +1,95 @@
+= Error Handling
+ifndef::env-site,env-github[]
+include::_attributes.adoc[]
+endif::[]
+
+== Defining Error Types
+
+The module *must* define an error type for all business related or technical conditions that can be expected and make sense for the user to want to handle specifically.
+
+Examples of conditions that *should* have a matching error type:
+
+* Entity referenced by ID does not exists
+* Account has no funds
+* User is unauthorized
+* User lacks privileges to perform a certain action
+* Remote system is at capacity
+
+Examples of conditions that *should not* have a matching error type:
+
+* Network error
+* Unexpected server error
+* Unknown error
+
+== Use Error Hierarchies
+
+Mule 4 Error types support the concept of hierarchies. That means that an error can stand on its own, or it can be a child of another ErrorType defined in the same module or defined as a generic Mule Error.
+
+Leveraging Mule 4 error handling allows the user to reuse generic error handlers that tackle generic problems in consistent ways. For example, imagine a flow that uses multiple connectors in the same flow and wants to trigger a specific alert when a connectivity issue appears. If all the connectors in that flow use MuleErrors.CONNECTIVITY as the parent error for all connectivity problems, then that becomes easy to accomplish.
+
+The same applies internally for any module that defines error types that hold some kind of internal relationship.
+
+Here's an example taken from the WebSockets connector:
+
+[source,java,linenums]
+----
+public enum WsError implements ErrorTypeDefinition<WsError> {
+
+CONNECTIVITY(MuleErrors.CONNECTIVITY),
+CLIENT_SECURITY(MuleErrors.CLIENT_SECURITY),
+SERVER_SECURITY(MuleErrors.SERVER_SECURITY),
+BASIC_AUTHENTICATION(SERVER_SECURITY),
+UNAUTHORIZED(CLIENT_SECURITY),
+FORBIDDEN(CLIENT_SECURITY),
+NOT_FOUND,
+SERVICE_UNAVAILABLE,
+NO_SUCH_SOCKET,
+INVALID_SOCKET_ID,
+NON_UNIQUE_SOCKET_ID,
+REMOTELY_CLOSED,
+INTERNAL_SERVER_ERROR;
+
+private ErrorTypeDefinition<? extends Enum<?>> parent;
+
+WsError(ErrorTypeDefinition<? extends Enum<?>> parent) {
+  this.parent = parent;
+}
+
+WsError() {}
+
+@Override
+	public Optional<ErrorTypeDefinition<? extends Enum<?>>> getParent() {
+	  return Optional.ofNullable(parent);
+	}
+}
+----
+
+In this example you can see how:
+
+* To define error types with parents
+* The CONNECTIVITY error extends the Mule one
+* The CLIENT_SECURITY and SERVER_SECURITY errors are defined
+* BASIC_AUTHENTICATION, FORBIDDEN, and UNAUTHORIZED errors extend CLIENT_SECURITY and SERVER_SECURITY
+* The set of other errors that are domain-specific and stand on their own
+
+== Correct Use of Module Exception
+
+The ModuleException class (or a custom subclass of it) *must* be thrown only when an error matches a defined ErrorType. Unexpected or non-handable errors that do not have a
+matching ErrorType *must* be thrown as regular exceptions.
+
+== Avoid Proliferation of Error Types
+
+A common anti-pattern is to excessively apply the concept of “one error type per business error” into “one error type for every error detail”. An example of that is creating errors like INVALID_EMAIL, INVALID_ID, INVALID_NAME, INVALID_CARD, and so on, that lead to an explosion of types that makes the feature unusable.
+
+The module *must* collapse error types of similar semantics and leverage the exception message instead. So per the previous example, only one ErrorType called INVALID_DATA *should* exist, and then the exception message can provide additional context on whether the problem was the credit card, client name, and so on.
+
+Notice that this rule is closely related to the previous concept of “the error has to be handleable” as it’s extremely unlikely that an end user will want to catch an invalid ID and invalid email differently (simply think of how many times have you actually done that in Java in your life).
+
+== Do Not Expose Exceptions or Error Types
+
+Exception, ErrorTypeDefinition, and ErrorTypeProvider classes defined in the module *must not* be exported as part of its API.
+
+== See Also
+
+* https://help.mulesoft.com[MuleSoft Help Center]
+* xref:mule-sdk::best-practices.adoc[Mule SDK Development Best Practices]

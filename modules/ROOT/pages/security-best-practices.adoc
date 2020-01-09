@@ -1,0 +1,19 @@
+= Security
+ifndef::env-site,env-github[]
+include::_attributes.adoc[]
+endif::[]
+
+The module *must* follow all standard security best practices.
+
+In particular, the following *should* be given special consideration:
+
+* Protect against XXE attacks
+* Always sanitize information from untrusted sources
+* When reading files from the local file system, make sure not to access secrets of the host environment nor enable path traversal
+* When possible, use CSRF tokens
+* When executing queries to a database, make correct use of PreparedStatement class to avoid SQL injection attacks.
+
+== See Also
+
+* https://help.mulesoft.com[MuleSoft Help Center]
+* xref:mule-sdk::best-practices.adoc[Mule SDK Development Best Practices]
