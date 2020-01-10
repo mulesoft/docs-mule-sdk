@@ -59,6 +59,7 @@ Static and dynamic configurations have very different lifecycles. For static con
 
 Dynamic configurations have a different behavior. Each time an operation that points to a dynamic configuration is executed, all the parameters in the configuration are evaluated. A configuration instance is created for each unique set of resolved parameters. In that way, each time the same values are resolved, the same instance is returned, but for each different set of values, a different instance is created.
 
+[[dynamic-config-expiration]]
 == Dynamic Configuration Expiration
 
 Although it is easy to create dynamic configurations, you still need a configurable mechanism for disposing the configuration instances that are no longer needed (or that have been idle for a certain period). This is critical to prevent out-of-memory (OOM) issues.
