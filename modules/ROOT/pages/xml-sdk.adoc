@@ -328,11 +328,6 @@ Note that incorrect credentials return this error response from GitHub:
 | Adds a short example of the data type for this property.
 
 | `displayName`
-| `optional`
-| NA
-| Provides a nicer label in the UI. By leaving this attribute empty, the default value is a hyphenated version of the `name` attribute.
-
-| `displayName`
 | optional
 | NA
 | Provides a UI label. When there is no `displayName`, the default value is a hyphenated version of the `name` attribute.
