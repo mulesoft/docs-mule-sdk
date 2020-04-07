@@ -54,7 +54,7 @@ To run DMT, adjust your connector `pom.xml` and build the connector from the com
 </parent>
 ----
 
-. Change the values of `artifactId` and `version`:
+. Change the values of `groupId`, `artifactId` and `version`:
 
 +
 [source,xml,linenums]
