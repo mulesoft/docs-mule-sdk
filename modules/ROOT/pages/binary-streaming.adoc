@@ -86,7 +86,7 @@ public InputStream read(String path) {
 
 An important aspect of dealing with files of this nature is understanding when to delete them. Depending on the use case, you might need to do that on your own code. In simpler cases, you can delete it when the stream is closed. If you want to delete the file when the stream is closed, you can use the following convenience constructor that allows you to instruct the Runtime to automatically delete the file when the stream is closed:
 
-`new ImmutableFileRepeatableInputStream(file, true);``
+`new ImmutableFileRepeatableInputStream(file, true);`
 
 [IMPORTANT]
 The file must be immutable in order for you to use this feature. That means that once the ImmutableFileRepeatableInputStream instance is created, the contents of that file cannot change, at least until the ImmutableFileRepeatableInputStream is closed. Changing the file’s content while the flow is reading it can lead to inconsistencies, dirty reads, and other types of race conditions.
