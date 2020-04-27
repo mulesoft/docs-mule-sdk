@@ -9,6 +9,7 @@ OAuth 2.0 is the industry standard protocol for authorization. OAuth 2.0 focuses
 The SDK provides support for building modules that are OAuth enabled, which means that they establish connections that are authorized through the OAuth protocol. This allows you to hide most of the complexities of the OAuth protocol from the end user and provide a simpler, easier experience that does not force users to go through the learning curve of OAuth.
 
 OAuth support provided by the SDK is limited to:
+
 * OAuth version 2.
 * xref:mule-sdk::authorization-code.adoc[Authorization Code] grant type
 * xref:mule-sdk::client-credentials.adoc[Client Credentials] grant type (Available since version 1.3)
