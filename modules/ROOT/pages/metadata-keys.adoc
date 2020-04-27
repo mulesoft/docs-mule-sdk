@@ -4,7 +4,6 @@ include::_attributes.adoc[]
 endif::[]
 :keywords: mule, sdk, metadata, datasense, keys, type
 
-//TODO: 1.1 ONLY? NO 1.0 VERSION?
 To describe a dynamic metadata structure, you need to know what type to represent. This type reference is done by defining a `@MetadataKeyId` parameter in the operation that contains the ID of the type (for example, Account) that will be passed to the metadata resolver defined for that parameter.
 
 This means, for example, that if your operation can save a generic record to a remote system, but you want to provide a better design-time experience by describing the supported types `Account` and `Organization`, then one of your operation parameters will be a type reference containing either the ID `Account` or the ID `Organization`.

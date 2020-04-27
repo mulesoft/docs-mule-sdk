@@ -1,0 +1,110 @@
+= Implicit Configurations
+ifndef::env-site,env-github[]
+include::_attributes.adoc[]
+endif::[]
+
+Some configurations can also be classified as implicit. A configuration can be used implicitly when none of its parameters are required. For example, suppose a foo configuration object which has a required parameter bar:
+
+[source, java, linenums]
+----
+<example:foo-config name="myFoo" bar="required value" />
+
+<flow>
+	<example:operation config-ref="myFoo" />
+</flow>
+----
+
+Now suppose that the bar parameter were to turn optional instead:
+
+[source, java, linenums]
+----
+<example:foo-config name="myFoo" />
+
+<flow>
+	<example:operation config-ref="myFoo" />
+</flow>
+----
+
+In this case, the entire foo-config (and subsequent config-ref) are redundant as they have no real effect. In these cases, implicit configurations can be used:
+
+[source, java, linenums]
+----
+<flow>
+	<example:operation />
+</flow>
+----
+
+Because foo-config does not have required parameters, the SDK can create an implicit instance in which all parameters are automatically assigned to their default values. The implicit configuration is either static or dynamic depending on its parameter’s default values. If any of those default is an expression, then the implicit config will be dynamic.
+
+[NOTE]
+Using an expression as a default value breaks the position independence best practice).
+
+== Mixing implicit and Explicit configurations
+
+You can use implicit and explicit configurations in tandem:
+
+[source, java, linenums]
+----
+<flow>
+	<example:operation />
+	<example:operation config-ref="myFoo" />
+</flow>
+----
+
+TIP: Only one implicit config is created per configuration type. If two operations try to use implicit configurations of the same type, each uses the exact same instance:
+
+[source, java, linenums]
+----
+<flow>
+	<example:operation />
+	<example:operation />
+	<!-- Both operations use the same config instance -->
+</flow>
+----
+
+== Forcing Explicit Configurations
+
+Available since version 1.3.
+
+There are cases in which you may want to force configurations to always be explicit, even if they contain no required parameters. Usually, such requirements revolve around clarity and usability concerns.
+
+The @NoImplicit annotation can be used to instruct the SDK to never build implicit instances of a given configuration type:
+
+[source, java, linenums]
+----
+@Extension(name="example")
+@NoImplicit
+@Operations(ExampleOperations.class)
+public class ExampleModule {
+
+	@Parameter
+	@Optional
+	public String bar;
+
+
+
+}
+----
+
+This annotation can also be used if your configuration has been externalized into a separate class:
+
+[sourcee, java, linenums]
+----
+@Extension(name="example")
+@Configurations(FooConfiguration.class)
+public class ExampleModule {
+
+}
+
+@Configuration(name="foo")
+@NoImplicit
+@Operations(ExampleOperations.class)
+public class FooConfiguration {
+
+	@Parameter
+	@Optional
+	public String bar;
+
+
+}
+----
