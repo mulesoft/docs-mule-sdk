@@ -190,7 +190,7 @@ public void onStart(SourceCallback<Connection, Void> sourceCallback) throws Mule
 <2> Communicating to the `SourceCallback` the `ConnectionException` containing
 the failure connection that should be replaced.
 
-==== Accessing the Retry Policy Template from within an Operation
+==== Accessing the Retry Policy Template from Within an Operation
 
 Available since version 1.3.
 

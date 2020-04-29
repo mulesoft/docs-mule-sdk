@@ -12,4 +12,4 @@ OAuth support provided by the SDK is limited to:
 
 * OAuth version 2.
 * xref:mule-sdk::authorization-code.adoc[Authorization Code] grant type
-* xref:mule-sdk::client-credentials.adoc[Client Credentials] grant type (Available since version 1.3)
+* xref:mule-sdk::client-credentials.adoc[Client Credentials] grant type (available since version 1.3)

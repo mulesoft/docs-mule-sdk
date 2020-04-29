@@ -43,7 +43,7 @@
   *** xref:authentication-handler.adoc[Authentication Handler]
   *** xref:oauth.adoc[OAuth]
   **** xref:authorization-code.adoc[Authorization Code Grant Type]
-  **** xref:oauth-configuring.adoc[Configuring OAuth]
+  **** xref:oauth-configuring.adoc[Configure OAuth]
   **** xref:oauth-dance.adoc[OAuth Dance]
   **** xref:oauth-token-expiration.adoc[OAuth Token Expiration]
   **** xref:tls.adoc[TLS]

@@ -34,12 +34,12 @@ In this case, the entire foo-config (and subsequent config-ref) are redundant as
 </flow>
 ----
 
-Because foo-config does not have required parameters, the SDK can create an implicit instance in which all parameters are automatically assigned to their default values. The implicit configuration is either static or dynamic depending on its parameter’s default values. If any of those default is an expression, then the implicit config will be dynamic.
+Because `foo-config` does not have required parameters, the SDK can create an implicit instance in which all parameters are automatically assigned to their default values. The implicit configuration is either static or dynamic depending on its parameter’s default values. If any of those default values is an expression, then the implicit configuration is dynamic.
 
 [NOTE]
-Using an expression as a default value breaks the position independence best practice).
+Using an expression as a default value violates the best practice of the position independence.
 
-== Mixing implicit and Explicit configurations
+== Mixing Implicit and Explicit Configurations
 
 You can use implicit and explicit configurations in tandem:
 
@@ -51,7 +51,7 @@ You can use implicit and explicit configurations in tandem:
 </flow>
 ----
 
-TIP: Only one implicit config is created per configuration type. If two operations try to use implicit configurations of the same type, each uses the exact same instance:
+TIP: Only one implicit `config` is created per configuration type. If two operations try to use implicit configurations of the same type, each uses the exact same instance:
 
 [source, java, linenums]
 ----
@@ -66,7 +66,7 @@ TIP: Only one implicit config is created per configuration type. If two operatio
 
 Available since version 1.3.
 
-There are cases in which you may want to force configurations to always be explicit, even if they contain no required parameters. Usually, such requirements revolve around clarity and usability concerns.
+There are cases in which you might want to force configurations to always be explicit, even if they contain no required parameters. Usually, such requirements revolve around clarity and usability concerns.
 
 The @NoImplicit annotation can be used to instruct the SDK to never build implicit instances of a given configuration type:
 
