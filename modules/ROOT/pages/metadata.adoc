@@ -64,7 +64,7 @@ structure or the Organization structure for the record to be saved into the buck
 
 Having a `@MetadataKeyId` parameter is not always required because you might have only one structure (and not multiple) to define that vary dynamically based on the configuration. For example, you might have a `User` entity whose structure changes based on whether the connection credentials are for an administrator or not.
 
-The purpose of using a MetadataKey parameter is to use the value given to it to resolve the metadata of output and inputs of the component where the key is defined. As such, you should not define a MetadataKey without any MetadataResolver for Inputs, Output, or Attributes. SDK versions 1.3 or above fail to compile connectors that contain a Component which has a MetadataKey parameter but does not have an Output Resolver or Input Resolvers.
+The purpose of including a MetadataKey parameter is to use the value given to it to resolve the metadata of output and inputs of the component for which the key is defined. This means that you should not define a MetadataKey without any MetadataResolver for inputs, output, or Attributes. SDK versions 1.3 and later fail to compile connectors that contain a Component that has a MetadataKey parameter but does not have an Output Resolver or Input Resolvers.
 
 [[metadata_resolvers]]
 === Metadata Resolvers
@@ -76,4 +76,4 @@ Whenever you want to obtain a dynamic element for DataSense, you implement a met
 * Resolver Name: Name that uniquely identifies a given metadata resolver. Different resolvers can belong to the same `category` but _must_ have different resolver names.
 
 * Metadata Context: Provides access to all the configuration and connection
-elements used during the metadata fetch invocation, along with a set of utility components, such as a `TypeLoader` and a `TypeBuilder`. It is important to always use the implementations provided by the context when creating a dynamic type.
+elements used during the metadata fetch invocation, along with a set of utility components, such as `TypeLoader` and `TypeBuilder`. It is important to always use the implementations provided by the context when creating a dynamic type.

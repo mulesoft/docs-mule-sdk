@@ -194,9 +194,9 @@ the failure connection that should be replaced.
 
 Available since version 1.3.
 
-There are advanced cases in which an operation may need to access the RetryPolicyTemplate object that has been configured for it. For example, an operation might be leveraging an existing library which handles retries on its own, or your use case might require applying retries without necessarily reconnecting.
+There are advanced cases in which an operation might need to access the `RetryPolicyTemplate` object that has been configured for it. For example, an operation might be leveraging an existing library that handles retries independently, or your use case might require applying retries without necessarily reconnecting.
 
-To support these cases, operation can request the effective RetryPolicyTemplate instance being used by adding it as an operation parameter. Consider this example from the WebSockets connector:
+To support these cases, operations can request that the effective `RetryPolicyTemplate` instance be used by adding it as an operation parameter. Consider this example from Anypoint Connector for WebSockets (WebSockets Connector):
 
 [source, java, linenums]
 ----
@@ -212,7 +212,7 @@ public void send(String socketId,
 The retryPolicyTemplate argument is not translated into an operation parameter, but it is injected with the effective value upon execution.
 
 [NOTE]
-This feature is intended for advanced scenarios only. Typically, you should  throw a ConnectionException and allow the Mule Runtime handle reconnection and retries automatically. Only use this feature when absolutely necessary.
+This feature is intended for advanced scenarios only. Typically, you should throw a ConnectionException and allow Mule to handle reconnection and retries automatically. Use this feature only when absolutely necessary.
 
 [[connection-exception]]
 == Connection Exception

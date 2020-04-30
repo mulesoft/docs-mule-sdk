@@ -109,7 +109,7 @@ In order to declare it, you simply annotate a parameter with `@MetadataKeyId`, b
 
 Available since version 1.3.
 
-MetadataKey parameters can be made optional like the other parameters by adding the ``@Optional` annotation. For example:
+You can make `MetadataKey` parameters optional like other parameters, by adding the `@Optional` annotation:
 
 [source,java,linenums]
 ----
@@ -118,4 +118,4 @@ public void query(@MetadataKeyId @Optional String query){
 }
 ----
 
-When an optional MetadataKey parameter does not have a value, metadata calls are made using null as MetadataKey. This means that any MetadataResolver associated with this MetadataKey must be prepared to receive a null value as MetadataKey.
+When an optional MetadataKey parameter is not assigned a value, metadata calls are made using `null` as the value of `MetadataKey`. This means that any `MetadataResolver` parameter associated with this `MetadataKey` parameter must be prepared to receive a null value.

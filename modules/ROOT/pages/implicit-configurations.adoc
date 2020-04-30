@@ -3,14 +3,14 @@ ifndef::env-site,env-github[]
 include::_attributes.adoc[]
 endif::[]
 
-Some configurations can also be classified as implicit. A configuration can be used implicitly when none of its parameters are required. For example, suppose a foo configuration object which has a required parameter bar:
+Some configurations can be classified as implicit. A configuration can be used implicitly when none of its parameters are required. For example, suppose a `myConfig` configuration object which has a required parameter `param1`:
 
 [source, java, linenums]
 ----
-<example:foo-config name="myFoo" bar="required value" />
+<example:my-config name="myConfig" param1="required value" />
 
 <flow>
-	<example:operation config-ref="myFoo" />
+	<example:operation config-ref="myConfig" />
 </flow>
 ----
 
@@ -18,14 +18,14 @@ Now suppose that the bar parameter were to turn optional instead:
 
 [source, java, linenums]
 ----
-<example:foo-config name="myFoo" />
+<example:my-config name="myConfig" />
 
 <flow>
 	<example:operation config-ref="myFoo" />
 </flow>
 ----
 
-In this case, the entire foo-config (and subsequent config-ref) are redundant as they have no real effect. In these cases, implicit configurations can be used:
+In this case, the entire my-config element (and subsequent config-ref) are redundant because they have no real effect. In these cases, implicit configurations can be used:
 
 [source, java, linenums]
 ----
@@ -34,10 +34,10 @@ In this case, the entire foo-config (and subsequent config-ref) are redundant as
 </flow>
 ----
 
-Because `foo-config` does not have required parameters, the SDK can create an implicit instance in which all parameters are automatically assigned to their default values. The implicit configuration is either static or dynamic depending on its parameter’s default values. If any of those default values is an expression, then the implicit configuration is dynamic.
+Because `my-config` does not have required parameters, the SDK can create an implicit instance in which all parameters are automatically assigned to their default values. The implicit configuration is either static or dynamic depending on its parameter’s default values. If any of those default values is an expression, then the implicit configuration is dynamic.
 
 [NOTE]
-Using an expression as a default value violates the best practice of the position independence.
+Using an expression as a default value violates the best practice of the xref:mule-sdk::define-operations.adoc#position-independence[position independence].
 
 == Mixing Implicit and Explicit Configurations
 
@@ -47,7 +47,7 @@ You can use implicit and explicit configurations in tandem:
 ----
 <flow>
 	<example:operation />
-	<example:operation config-ref="myFoo" />
+	<example:operation config-ref="myConfig" />
 </flow>
 ----
 
@@ -68,7 +68,7 @@ Available since version 1.3.
 
 There are cases in which you might want to force configurations to always be explicit, even if they contain no required parameters. Usually, such requirements revolve around clarity and usability concerns.
 
-The @NoImplicit annotation can be used to instruct the SDK to never build implicit instances of a given configuration type:
+Use the `@NoImplicit` annotation to instruct the SDK to never build implicit instances of a given configuration type:
 
 [source, java, linenums]
 ----
@@ -86,20 +86,20 @@ public class ExampleModule {
 }
 ----
 
-This annotation can also be used if your configuration has been externalized into a separate class:
+You can also use this annotation if your configuration has been externalized into a separate class:
 
 [sourcee, java, linenums]
 ----
 @Extension(name="example")
-@Configurations(FooConfiguration.class)
+@Configurations(MyConfiguration.class)
 public class ExampleModule {
 
 }
 
-@Configuration(name="foo")
+@Configuration(name="myConfig")
 @NoImplicit
 @Operations(ExampleOperations.class)
-public class FooConfiguration {
+public class MyConfiguration {
 
 	@Parameter
 	@Optional
