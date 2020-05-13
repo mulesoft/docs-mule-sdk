@@ -17,7 +17,7 @@ Integration developers often spend a lot of time trying to determine the input a
 
 DataSense uses the metadata provided by these components to resolve all this information automatically and present it to your end user in design time, which drastically increases the speed of development.
 
-Note that unlike xref:value-providers.adoc[Value Providers], which are meant to narrow down the possible values that a parameter of a KNOWN type can take, this feature is to discover dynamic types whose universe of possible values is not to be discovered by this feature.
+Note that unlike xref:value-providers.adoc[Value Providers], which are meant to narrow down the possible values that a parameter of a known type can take, this feature is to discover dynamic types whose universe of possible values is not to be discovered by this feature.
 
 The term "types" refers to the `MetadataType` of an element. A `MetadataType` represents the kind and structure of a given element, like `StringType` or `NumberType` for elements that are basic string or numbers, `ArrayType` for collections, `ObjectType` for complex structures with nested elements (like a POJO or a JSON object), and `AnyType` for elements whose type is actually unknown and can be any of the other available types.
 
