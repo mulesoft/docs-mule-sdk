@@ -11,6 +11,8 @@ You can provide this functionality for known values by using a <<java_enum, Java
 
 To include values that are not known, such as custom values, you should use <<value_providers, Value Providers>>, instead.
 
+Note that unlike xref:metadata.adoc[Metadata], which is meant to discover the dynamic types of a parameter, this feature is designed to provide the possible values of a parameter.
+
 [[java_enum]]
 == Java Enum
 
