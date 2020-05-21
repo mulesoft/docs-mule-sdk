@@ -111,8 +111,8 @@ WARNING: Expression resolution is deferred until it is required, so `resolve()` 
 [source,java,linenums]
 ----
 public void addProducts(ParameterResolver<Map<String,Integer>> products) {
-    System.out.println(map.getExpression().get());  // #[{Potatoes : 2 , Oranges : 4}]
-    System.out.println(map.resolve()); // {Potatoes=2, Oranges=4}
+    System.out.println(products.getExpression().get());  // #[{Potatoes : 2 , Oranges : 4}]
+    System.out.println(products.resolve()); // {Potatoes=2, Oranges=4}
 }
 ----
 
@@ -134,8 +134,8 @@ public void addProducts(ParameterResolver<Map<String,Integer>> products) {
 [source,java,linenums]
 ----
 public void addProducts(ParameterResolver<Map<String,Integer>> products) {
-    System.out.println(map.getExpression().isPresent());  // false
-    System.out.println(map.resolve()); // {Potatoes=2, Oranges=4}
+    System.out.println(products.getExpression().isPresent());  // false
+    System.out.println(products.resolve()); // {Potatoes=2, Oranges=4}
 }
 ----
 
@@ -155,8 +155,8 @@ To do this, you simply stack the generics for the capabilities you want.
 [source,java,linenums]
 ----
 public void addProducts(ParameterResolver<TypedValue<InputStream>> products) {
-    System.out.println(map.getExpression().get());  // #[output application/json --- {Potatoes : 2 , Oranges : 4}]
-    TypedValue<InputStream> content = map.resolve();
+    System.out.println(products.getExpression().get());  // #[output application/json --- {Potatoes : 2 , Oranges : 4}]
+    TypedValue<InputStream> content = products.resolve();
     System.out.println(content.getValue()); // {"Potatoes" : "2", "Oranges" : "4"}
 }
 ----
