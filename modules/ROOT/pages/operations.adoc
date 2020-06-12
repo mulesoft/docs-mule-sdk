@@ -222,7 +222,8 @@ A void operation is an operation that was created from a method that returns `vo
 ----
 <flow>
     <set-payload value="Hello" />
-    <foo:output-string-payload/>
+    <foo:output-string-payload />
+    <foo:void-operation />
     <foo:other-operation />
 </flow>
 ----
