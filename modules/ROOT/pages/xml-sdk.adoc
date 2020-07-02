@@ -235,7 +235,7 @@ TODO: VERIFY THAT httpn is correct and not http
 
   <operation name="get-user" doc:description="Lists public and private profile information when authenticated.">
     <body>
-      <httpn:request config-ref="github-httpreq-config" path="#['user/' ++ vars.username]" method="GET"/>
+      <http:request config-ref="github-httpreq-config" path="#['user/' ++ vars.username]" method="GET"/>
     </body>
     <output type="string" doc:description="User information if logged properly."/>
   </operation>
