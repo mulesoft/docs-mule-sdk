@@ -1500,3 +1500,4 @@ The SDK currently has the following limitations:
 
 * XML SDK only provides outbound operations, not sources (such as a `<scheduler>`) or routers.
 * Operations do not support recursive calls.
+* Operations cannot have parameters called `name` or `config-ref` as those are reserved keywords.
