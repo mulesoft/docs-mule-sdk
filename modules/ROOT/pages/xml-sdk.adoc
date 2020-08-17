@@ -574,7 +574,7 @@ Number of tests run: 2 - Failed: 0 - Errors: 0 - Skipped: 0 - Time elapsed: 2246
 ----
 <dependency>
        <groupId>org.mule.extension</groupId>
-       <artifactId>hello-mule-extension2</artifactId>
+       <artifactId>hello-mule-extension</artifactId>
        <version>1.0.0-SNAPSHOT</version>
        <classifier>mule-plugin</classifier>
 </dependency>
