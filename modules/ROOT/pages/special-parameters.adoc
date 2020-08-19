@@ -93,6 +93,8 @@ When a `ParameterResolver<Type>` is received to resolve the expression value, th
 
 WARNING: Expression resolution is deferred until it is required, so `resolve()` can fail due to an invalid expression.
 
+WARNING: Parameter Resolvers are only allowed in Operations. Dont try to use these in Configurations.
+
 === Getting the Expression Value
 
 `ParameterResolver<Type>` parameters can communicate the expression used for the parameter. It returns an `Optional<String>` because the parameter can be configured with an expression or not. If it is not configured with an expression, `Optional.empty()` will be returned.
