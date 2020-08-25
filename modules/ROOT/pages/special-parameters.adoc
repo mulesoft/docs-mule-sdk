@@ -87,7 +87,7 @@ IMPORTANT: You need to consider the generic type. A parameter derived from uses 
 
 Compared to <<literal, `Literal<Type>`>> parameters, a `ParameterResolver<Type>` parameter with an expression continues to be treated as a dynamic parameter whether the value is resolved or not.
 
-WARNING: `ParameterResolver` is not compatible to be used inside Configurations or Connection Providers.
+NOTE: You cannot use `ParameterResolver` inside of configurations or connection providers.
 
 === Resolving Expressions
 
