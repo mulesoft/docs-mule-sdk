@@ -83,7 +83,7 @@ IMPORTANT: You need to consider the generic type. A parameter derived from uses 
 [[parameter-resolver]]
 == ParameterResolver<Type>
 
-`ParameterResolver<Type>` allows you to defer the resolution of an expression on a Operation. This is useful when a parameter that takes an expression as a value is not required. You can improve performance by resolving such an expression on demand from within the connectors's code instead of resolving it automatically.
+`ParameterResolver<Type>` allows you to defer the resolution of an expression on an operation. This is useful when a parameter that takes an expression as a value is not required. You can improve performance by resolving such an expression on demand from within the connectors's code instead of resolving it automatically.
 
 Compared to <<literal, `Literal<Type>`>> parameters, a `ParameterResolver<Type>` parameter with an expression continues to be treated as a dynamic parameter whether the value is resolved or not.
 
