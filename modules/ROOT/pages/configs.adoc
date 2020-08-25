@@ -109,7 +109,7 @@ parameters, it also turns out that:
 * To send a request, you need an `<http:request />` element that acts as an operation.
 
 Because an application can contain many listener elements, the elements will only work when
-paired with an `<http:listener-config />` taht contains general settings about how the
+paired with an `<http:listener-config />` that contains general settings about how the
 connection is to be established and other behavioral parameters. The same happens with the requester
 operation, which is paired with an `<http:requester-config />` element.
 
