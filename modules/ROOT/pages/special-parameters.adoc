@@ -97,7 +97,6 @@ When a `ParameterResolver<Type>` is received to resolve the expression value, th
 * Parameter resolvers are allowed only in operations. As such, you cannot use parameter resolvers in configurations.
 ====
 
-WARNING: Parameter Resolvers are only allowed in Operations. Dont try to use these in Configurations.
 
 === Getting the Expression Value
 
