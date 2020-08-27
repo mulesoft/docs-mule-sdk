@@ -4,6 +4,7 @@ include::_attributes.adoc[]
 endif::[]
 :page-aliases: 1.1@mule-sdk::define-operations.adoc, 1.2@mule-sdk::define-operations.adoc
 :page-aliases: 1.1@mule-sdk::define-operations.adoc, 1.2@mule-sdk::define-operations.adoc
+:page-aliases: 1.1@mule-sdk::define-operations.adoc, 1.2@mule-sdk::define-operations.adoc
 
 The sections that follow provide general rules that apply to all operations.
 

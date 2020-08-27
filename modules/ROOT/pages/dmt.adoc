@@ -2,6 +2,7 @@
 ifndef::env-site,env-github[]
 include::_attributes.adoc[]
 endif::[]
+:page-aliases: 1.1@mule-sdk::dmt.adoc, 1.2@mule-sdk::dmt.adoc
 :keywords: mule, sdk, devkit, migration, migrate, connector
 
 The DevKit Migration Tool (DMT) helps you migrate from a Connector built with DevKit that runs on Mule 3.x to a project that is compatible with Mule 4 SDK.

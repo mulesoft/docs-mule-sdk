@@ -2,6 +2,7 @@
 ifndef::env-site,env-github[]
 include::_attributes.adoc[]
 endif::[]
+:page-aliases: 1.1@mule-sdk::about-connector-certification-program-guidelines.adoc, 1.2@mule-sdk::about-connector-certification-program-guidelines.adoc
 :keywords: connector, certification, sdk, program guidelines
 
 This document pertains to connector certification for Mule 4. For Mule 3 certification, see xref:3.9@connector-devkit::connector-certification-program-guidelines.adoc[DevKit documentation].

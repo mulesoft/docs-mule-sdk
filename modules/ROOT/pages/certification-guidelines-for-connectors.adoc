@@ -2,6 +2,7 @@
 ifndef::env-site,env-github[]
 include::_attributes.adoc[]
 endif::[]
+:page-aliases: 1.1@mule-sdk::certification-guidelines-for-connectors.adoc, 1.2@mule-sdk::certification-guidelines-for-connectors.adoc
 :keywords: connector, certification, sdk, program guidelines
 
 . Set up your development environment using these sections from _Getting Started with the Mule SDK_:

@@ -2,6 +2,7 @@
 ifndef::env-site,env-github[]
 include::_attributes.adoc[]
 endif::[]
+:page-aliases: 1.1@mule-sdk::xml-sdk.adoc, 1.2@mule-sdk::xml-sdk.adoc
 :keywords:
 :toc:
 
