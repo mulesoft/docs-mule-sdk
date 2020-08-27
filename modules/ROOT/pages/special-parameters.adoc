@@ -93,7 +93,12 @@ NOTE: You cannot use `ParameterResolver` inside of configurations or connection 
 
 When a `ParameterResolver<Type>` is received to resolve the expression value, the `resolve()` method must be called to return the result of the expression.
 
-WARNING: Expression resolution is deferred until it is required, so `resolve()` can fail due to an invalid expression.
+[WARNING]
+====
+* Expression resolution is deferred until it is required, so `resolve()` can fail due to an invalid expression.
+* Parameter resolvers are allowed only in operations. As such, you cannot use parameter resolvers in configurations.
+====
+
 
 === Getting the Expression Value
 
