@@ -2,6 +2,7 @@
 ifndef::env-site,env-github[]
 include::_attributes.adoc[]
 endif::[]
+:page-aliases: 1.1@mules-sdk::authorization-code.adoc
 :keywords: mule, sdk, grant, oauth
 
 Authorization Code is a grant type that allows an application to act on behalf of a user without the need for that user to share their actual credentials. This grant type allows an application to impersonate a user.
