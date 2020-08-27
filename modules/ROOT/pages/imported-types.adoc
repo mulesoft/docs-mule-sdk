@@ -2,6 +2,7 @@
 ifndef::env-site,env-github[]
 include::_attributes.adoc[]
 endif::[]
+:page-aliases: 1.1@mule-sdk::imported-types.adoc, 1.0@mule-sdk::imported-types.adoc, 1.2@mule-sdk::imported-types.adoc
 :keywords: parameter, parameters, mule, sdk, dsl, xml, import, type
 
 Every module can declare a set of types that are part of the module's API. This set of types can then be imported by other modules, while keeping the original module's namespace definition.

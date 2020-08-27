@@ -2,6 +2,7 @@
 ifndef::env-site,env-github[]
 include::_attributes.adoc[]
 endif::[]
+:page-aliases: 1.1@mule-sdk::testing-writing-your-first-test-case.adoc, 1.0@mule-sdk::testing-writing-your-first-test-case.adoc, 1.2@mule-sdk::testing-writing-your-first-test-case.adoc
 
 This section provides a step-by-step introduction to testing a module's
 operation. It explains the basics of test cases that you must perform.

@@ -2,6 +2,7 @@
 ifndef::env-site,env-github[]
 include::_attributes.adoc[]
 endif::[]
+:page-aliases: 1.1@mule-sdk::sources-config-connection.adoc, 1.0@mule-sdk::sources-config-connection.adoc, 1.2@mule-sdk::sources-config-connection.adoc
 :keywords: mule, sdk, sources, listener, triggers, config, connection
 
 == Obtaining the Config Object

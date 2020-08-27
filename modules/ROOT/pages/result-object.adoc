@@ -2,6 +2,7 @@
 ifndef::env-site,env-github[]
 include::_attributes.adoc[]
 endif::[]
+:page-aliases: 1.1@mule-sdk::result-object.adoc, 1.0@mule-sdk::result-object.adoc, 1.2@mule-sdk::result-object.adoc
 :keywords: mule, sdk, result, output, mimeType, attributes, operation, source
 
 The `Result` object represents the result of a component's execution. It is used for cases in which the component not only needs to return a value to be set on the message payload but also will specify message attributes and/or a mime type.

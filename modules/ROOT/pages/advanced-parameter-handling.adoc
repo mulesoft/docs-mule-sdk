@@ -2,6 +2,7 @@
 ifndef::env-site,env-github[]
 include::_attributes.adoc[]
 endif::[]
+:page-aliases: 1.1@mule-sdk::advanced-parameter-handling.adoc, 1.0@mule-sdk::advanced-parameter-handling.adoc, 1.2@mule-sdk::advanced-parameter-handling.adoc
 
 Features in the SDK can improve the quality of your module by adding UI and UX tuning, enabling extension points so your module can interact with elements of other modules, and providing implementation enhancements to avoid boilerplate code.
 

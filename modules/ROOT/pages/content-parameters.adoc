@@ -2,6 +2,7 @@
 ifndef::env-site,env-github[]
 include::_attributes.adoc[]
 endif::[]
+:page-aliases: 1.1@mule-sdk::content-parameters.adoc, 1.0@mule-sdk::content-parameters.adoc, 1.2@mule-sdk::content-parameters.adoc
 
 [[_content-parameters]]
 

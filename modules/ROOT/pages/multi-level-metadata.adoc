@@ -2,6 +2,7 @@
 ifndef::env-site,env-github[]
 include::_attributes.adoc[]
 endif::[]
+:page-aliases: 1.1@mule-sdk::multi-level-metadata.adoc, 1.0@mule-sdk::multi-level-metadata.adoc, 1.2@mule-sdk::multi-level-metadata.adoc
 
 Imagine the case where your end user will use an operation that invokes an action provided by a service. To know the metadata that the action requires as arguments or the metadata of what it returns, you need to differentiate the service from the action to be executed. You do this with a metadata key id. For these cases, the metadata key id does not need to be a single `String`. It can instead contain multiple parts bundled within a complex parameter that holds the information needed to resolve the metadata.
 

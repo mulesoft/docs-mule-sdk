@@ -2,6 +2,7 @@
 ifndef::env-site,env-github[]
 include::_attributes.adoc[]
 endif::[]
+:page-aliases: 1.1@mule-sdk::connections.adoc, 1.0@mule-sdk::connections.adoc, 1.2@mule-sdk::connections.adoc
 :keywords: mule, sdk, connection, connectivity, management, pooling, cached, provider, connection-provider
 
 Connected modules (connectors) are probably the most common type of module.

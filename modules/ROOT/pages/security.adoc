@@ -2,6 +2,7 @@
 ifndef::env-site,env-github[]
 include::_attributes.adoc[]
 endif::[]
+:page-aliases: 1.1@mule-sdk::security.adoc, 1.0@mule-sdk::security.adoc, 1.2@mule-sdk::security.adoc
 :keywords: mule, sdk, security, tls, oauth
 
 The service to which the connector you are creating will connect probably enforces

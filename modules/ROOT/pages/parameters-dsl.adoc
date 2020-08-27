@@ -2,6 +2,7 @@
 ifndef::env-site,env-github[]
 include::_attributes.adoc[]
 endif::[]
+:page-aliases: 1.1@mule-sdk::parameters-dsl.adoc, 1.0@mule-sdk::parameters-dsl.adoc, 1.2@mule-sdk::parameters-dsl.adoc
 :keywords: parameter, parameters, mule, sdk, dsl, xml, syntax
 
 To provide the best possible experience for the user, customize or limit some aspects of a component's parameters. For example, you can hide irrelevant parameters for clarity.

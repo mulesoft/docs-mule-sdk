@@ -2,6 +2,7 @@
 ifndef::env-site,env-github[]
 include::_attributes.adoc[]
 endif::[]
+:page-aliases: 1.1@mule-sdk::oauth-token-expiration.adoc, 1.0@mule-sdk::oauth-token-expiration.adoc, 1.2@mule-sdk::oauth-token-expiration.adoc
 :keywords: mule, sdk, security, oauth
 
 Most services providers return (or should return) access tokens with a limited lifespan. In general, access tokens usually expire about 30 to 60 minutes after being issued, although this is not a standard that strictly enforced by providers.

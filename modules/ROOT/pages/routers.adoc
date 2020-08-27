@@ -2,6 +2,7 @@
 ifndef::env-site,env-github[]
 include::_attributes.adoc[]
 endif::[]
+:page-aliases: 1.1@mule-sdk::routers.adoc, 1.0@mule-sdk::routers.adoc, 1.2@mule-sdk::routers.adoc
 :keywords: mule, sdk, routers, router
 
 Conceptually, routers are <<operations#, operations>> that can receive many executable routes and a set of parameters that handle the execution of one, all, or none of them.

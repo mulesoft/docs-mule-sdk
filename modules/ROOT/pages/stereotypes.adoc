@@ -2,6 +2,7 @@
 ifndef::env-site,env-github[]
 include::_attributes.adoc[]
 endif::[]
+:page-aliases: 1.1@mule-sdk::stereotypes.adoc, 1.0@mule-sdk::stereotypes.adoc, 1.2@mule-sdk::stereotypes.adoc
 :keywords: stereotype, mule, sdk, types
 
 A stereotype is a loose way to classify a component. By assigning a stereotype to a component, you are not implying that it has any specific return type or structure. Instead, you are indicating that it holds something in common with the rest of the components in the same stereotype. You can assign a stereotype to make a parameter belong to the stereotype.

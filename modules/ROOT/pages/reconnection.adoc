@@ -2,6 +2,7 @@
 ifndef::env-site,env-github[]
 include::_attributes.adoc[]
 endif::[]
+:page-aliases: 1.1@mule-sdk::reconnection.adoc, 1.0@mule-sdk::reconnection.adoc, 1.2@mule-sdk::reconnection.adoc
 :keywords: anypoint, studio, reconnection strategies, reconnection strategy, retry policies, retry
 
 The SDK and Mule provide out-of-the-box reconnection strategies to be applied

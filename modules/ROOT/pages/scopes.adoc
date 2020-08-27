@@ -2,6 +2,7 @@
 ifndef::env-site,env-github[]
 include::_attributes.adoc[]
 endif::[]
+:page-aliases: 1.1@mule-sdk::scopes.adoc, 1.0@mule-sdk::scopes.adoc, 1.2@mule-sdk::scopes.adoc
 :keywords: mule, sdk, scopes, scope, components
 
 Scopes are similar to <<operations#, Operations>>, but their execution includes the execution of other child <<operations#, Operations>>. This means that a Scope is basically an operation that receives one or more arguments that are simple <<parameters#, Parameters>> along with a single `Chain` component and the `CompletionCallback`.

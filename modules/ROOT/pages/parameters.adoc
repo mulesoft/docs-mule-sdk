@@ -2,6 +2,7 @@
 ifndef::env-site,env-github[]
 include::_attributes.adoc[]
 endif::[]
+:page-aliases: 1.1@mule-sdk::parameters.adoc, 1.0@mule-sdk::parameters.adoc, 1.2@mule-sdk::parameters.adoc
 :keywords: mule, sdk, parameter
 
 Parameters are configurable arguments that belong to a given component. <<configs#, Configurations>>, <<module-structure#components, Components>>, and <<connections#, Connection Providers>> are called _parameterizables_ because

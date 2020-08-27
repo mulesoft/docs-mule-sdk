@@ -2,6 +2,7 @@
 ifndef::env-site,env-github[]
 include::_attributes.adoc[]
 endif::[]
+:page-aliases: 1.1@mule-sdk::testing.adoc, 1.0@mule-sdk::testing.adoc, 1.2@mule-sdk::testing.adoc
 
 Testing ensures that a piece of code works correctly. Testing a module is more than simply creating test cases for the business logic. A lot of testing of the interaction
 between the Module and Mule is required to ensure compatibility with the Mule ecosystem.

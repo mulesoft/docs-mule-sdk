@@ -2,6 +2,7 @@
 ifndef::env-site,env-github[]
 include::_attributes.adoc[]
 endif::[]
+:page-aliases: 1.1@mule-sdk::exclusive-optionals.adoc, 1.0@mule-sdk::exclusive-optionals.adoc, 1.2@mule-sdk::exclusive-optionals.adoc
 :keywords: mule, sdk, annotation, exclusive, optional
 
 When you are developing a module that provides several ways of configuring the same thing, but only one of them should be used, you might need to set the following rule:

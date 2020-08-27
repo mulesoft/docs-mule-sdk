@@ -2,6 +2,7 @@
 ifndef::env-site,env-github[]
 include::_attributes.adoc[]
 endif::[]
+:page-aliases: 1.1@mule-sdk::external-libs.adoc, 1.0@mule-sdk::external-libs.adoc, 1.2@mule-sdk::external-libs.adoc
 :keywords: mule, SDK, library, dependency, external, jar, maven
 
 Connectors and Modules sometimes depend on external libraries that cannot

@@ -2,6 +2,7 @@
 ifndef::env-site,env-github[]
 include::_attributes.adoc[]
 endif::[]
+:page-aliases: 1.1@mule-sdk::isolation.adoc, 1.0@mule-sdk::isolation.adoc, 1.2@mule-sdk::isolation.adoc
 :keywords: mule, sdk, classloading, isolation
 
 The Mule 4 classloading schema isolates the runtime, apps and modules from each other. Each specifies the packages (rather than the classes) to export as part of its API, making those specific packages visible.

@@ -2,6 +2,7 @@
 ifndef::env-site,env-github[]
 include::_attributes.adoc[]
 endif::[]
+:page-aliases: 1.1@mule-sdk::functions.adoc, 1.0@mule-sdk::functions.adoc, 1.2@mule-sdk::functions.adoc
 :keywords: mule, sdk, functions, function
 
 DataWeave is the main expression language in Mule 4, and the Mule SDK is also aligned with that view. This allows you to contribute functions to DataWeave from your module's code in a similar fashion that you code a Mule <<operations#, Operation>>. Using custom functions allows you to reuse code in a new way, providing extra functionality in a single Module with very little overhead regarding how they are
