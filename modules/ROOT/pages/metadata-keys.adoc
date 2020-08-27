@@ -2,7 +2,7 @@
 ifndef::env-site,env-github[]
 include::_attributes.adoc[]
 endif::[]
-:page-aliases: 1.1@mule-sdk::metadata-keys.adoc, 1.0@mule-sdk::metadata-keys.adoc, 1.2@mule-sdk::metadata-keys.adoc
+:page-aliases: 1.1@mule-sdk::metadata-keys.adoc, 1.0@mule-sdk::metadata-keys.adoc, 1.2@mule-sdk::metadata-keys.adoc, 1.0@mule-sdk::keys.adoc
 :keywords: mule, sdk, metadata, datasense, keys, type
 
 To describe a dynamic metadata structure, you need to know what type to represent. This type reference is done by defining a `@MetadataKeyId` parameter in the operation that contains the ID of the type (for example, Account) that will be passed to the metadata resolver defined for that parameter.

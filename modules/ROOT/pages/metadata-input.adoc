@@ -2,7 +2,7 @@
 ifndef::env-site,env-github[]
 include::_attributes.adoc[]
 endif::[]
-:page-aliases: 1.1@mule-sdk::metadata-input.adoc, 1.0@mule-sdk::metadata-input.adoc, 1.2@mule-sdk::metadata-input.adoc
+:page-aliases: 1.1@mule-sdk::metadata-input.adoc, 1.0@mule-sdk::metadata-input.adoc, 1.2@mule-sdk::metadata-input.adoc, 1.0@mule-sdk::input.adoc
 :keywords: mule, sdk, metadata, datasense, input, type
 
 We refer as input Metadata to the type resolution for the Parameters of a Component.

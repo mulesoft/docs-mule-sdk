@@ -2,7 +2,7 @@
 ifndef::env-site,env-github[]
 include::_attributes.adoc[]
 endif::[]
-:page-aliases: 1.1@mule-sdk::metadata-output.adoc, 1.0@mule-sdk::metadata-output.adoc, 1.2@mule-sdk::metadata-output.adoc
+:page-aliases: 1.1@mule-sdk::metadata-output.adoc, 1.0@mule-sdk::metadata-output.adoc, 1.2@mule-sdk::metadata-output.adoc, 1.0@mule-sdk::output.adoc
 
 [[_output_metadata]]
 //TODO: 1.1. ONLY, NO 1.0 VERSION?
