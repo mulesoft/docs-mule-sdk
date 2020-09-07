@@ -458,8 +458,9 @@ image::mule-sdk-dsl-parameter-pojos.png[Decision tree for POJOs and parameter gr
 * Implementing *equals* and *hashCode* methods
 
 POJO parameters (regardless if they are used with the @ParameterGroup annotation) *must* override the *equals* and
-*hashCode* methods for internals of the mule runtime to function correctly. Below is an example from a class in the
-Database Connector that illustrates how to do this:
+*hashCode* methods for <<static-dynamic-configs.adoc#Dynamic-Configuration-Lifecycle,Dynamic Configurations>> to function correctly.
+Even if no configurations have POJO parameters, it is still required that they override *equals* and *hashCode* as future
+runtime functionality may depend on it. Below is an example from a class in the Database Connector that illustrates how to do this:
 [source,java,linenums]
 ----
 /**
