@@ -457,7 +457,7 @@ image::mule-sdk-dsl-parameter-pojos.png[Decision tree for POJOs and parameter gr
 
 * Implementing *equals* and *hashCode* methods
 
-The Java classes that define your POJO parameters (regardless if they are used with the @ParameterGroup annotation) *must* implement the *equals* and
+Java classes used for POJO parameters or Parameter Groups *must* implement the *equals* and
 *hashCode* methods for <<static-dynamic-configs.adoc#Dynamic-Configuration-Lifecycle,Dynamic Configurations>> to function correctly.
 Even if no configurations have POJO parameters, it is still required that they implement *equals* and *hashCode* as future
 runtime functionality may depend on it. Below is an example from a class in the Database Connector that illustrates how to do this:
