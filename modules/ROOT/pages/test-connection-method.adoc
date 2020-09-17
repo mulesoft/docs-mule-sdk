@@ -1,0 +1,137 @@
+= Define a Test Connection Method
+ifndef::env-site,env-github[]
+include::_attributes.adoc[]
+endif::[]
+
+The test connection method allows the connector user to check whether a
+connection against a server is valid in design time. +
+By default, the generated connectors (and their connection providers) do
+not include a generated test connection method.
+
+REST SDK allows defining test connection methods to the generated
+connection providers via a property in the Connector Descriptor.
+
+Test connection can be defined globally (for all of the generated
+connections) or for a specific connection provider.
+
+[cols="",]
+|===
+a|
+*testConnection:*
+
+*path:* my/path
+
+*validStatusCodes:*
+
+- 200
+
+*responseValidation:*
+
+*validationExpression:*
+
+*language:* dw
+
+*expression: "#[payload contains('string')]"*
+
+*security:*
+
+*basic:*
+
+*testConnection:*
+
+*path: test/passtwo/fail*
+
+*method: post*
+
+*mediaType: application/json*
+
+*validStatusCodes: 210*
+
+*responseValidation:*
+
+*- validationExpression:*
+
+*expression: "#[payload.userId != null]"*
+
+*- validationExpression:*
+
+*expression: "#[payload.userId == 'lucas.giordano']"*
+
+*errorTemplate:*
+
+*expression: "#['userId (' ++ payload.userId ++ ') is expected to be
+lucas.giordano']"*
+
+|===
+
+This example shows both a global definition and one that is specific for
+a connection provider.
+
+In cases where both test connections are defined, the one defined for
+the security scheme takes precedence.
+
+In the testConnection property, you can define multiple settings for
+this test connection method that you are generating.
+
+[cols=",,",options="header",]
+|===
+|Property Name |Description |Default Value
+a|
+path
+
+(Mandatory)
+
+|This property allows defining the path where the connection validation
+request is made. +
+This can, for example, be a /health endpoint of the server API. +
+If you are adding it to a security scheme, this path should point to a
+secured endpoint, as this allows the user to validate that the
+credentials that they are using in the connector configuration are
+valid. |-
+
+|validStatusCodes |This property accepts a list of status codes that are
+considered as a valid server response status code. The server response
+for the connection validation request is validated against this list,
+and if it is not included, the connection is considered invalid, and the
+connector shows an error message specifying this. |200
+
+|mediaType a|
+The media type of the server response body.
+
+REST SDK tries to get it from the content-type header, use this property
+if the response does not have a content-type header or if you want to
+override it.
+
+|-
+
+|method |Defines the method to use when making the request to the
+testConnectionPath. |GET
+
+|responseValidation |This property expects a list of
+TestConnectionResponseValidation**.** |-
+
+|TestConnectionResponseValidation |Is composed of a validationExpression
+and an errorTemplate. |-
+
+|validationExpression +
+(Mandatory if responseValidation is defined) a|
+An expression used to validate the HTTP test connection request's
+response.
+
+This expression must return true if the response is valid or false if it
+is not.
+
+REST SDK assigns the body and attributes of the server response to the
+payload and attributes variables respectively.
+
+|-
+
+|errorTemplate a|
+Allows defining a message to be shown to the user if the connection
+validation fails.
+
+A default error telling that the validation expression failed appears if
+this expression is not defined.
+
+|-
+|===

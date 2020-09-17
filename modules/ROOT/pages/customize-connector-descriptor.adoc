@@ -261,7 +261,7 @@ The base Java package is used as the root package:
 
 image:media/image5.png[image,width=282,height=144]
 
-== Select a base URI
+== Select a Base URI
 
 You can select the XML prefix for the connector using the `baseUri`
 property, which is located at the root of the Connector Descriptor.
@@ -348,7 +348,7 @@ _#% Rest Connect Connector Descriptor 1.0_
 In this case, the *baseUri* field does not appear in the connector
 configuration and the user cannot change it.
 
-==== Multiple URI
+=== Multiple URI
 
 Multiple base URIs work as a set of predefined fixed base URIs.
 

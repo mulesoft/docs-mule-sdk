@@ -1,0 +1,274 @@
+= Customize Multipart Requests
+ifndef::env-site,env-github[]
+include::_attributes.adoc[]
+endif::[]
+
+Multipart content definition in both RAML 1.0 and OAS2 lacks some
+features, such as the ability to define the content type of each part of
+a multipart body. The Connector Descriptor can amend these issues.
+
+In the following example, the API spec defines a multipart request:
+
+[cols="",]
+|===
+a|
+*/attachment*:
+
+*post*:
+
+*body*:
+
+*multipart/form-data*:
+
+*properties*:
+
+*requestid*:
+
+*type*: string
+
+*attributes*:
+
+*type*: attribute[]
+
+*attachment*:
+
+*type*: file
+
+*responses*:
+
+*200*:
+
+*description*: Successful call
+
+|===
+
+The following example shows several improvements to the multipart
+request by adding extra information to the body parts of the POST
+attachment endpoint:
+
+[cols="",]
+|===
+a|
+*endpoints*:
+
+*/attachment*:
+
+*operations*:
+
+*post*:
+
+*expects*:
+
+*part*:
+
+*requestid*:
+
+*friendlyName*: *"Request-ID"*
+
+*description*: The tracking ID for this request
+
+*attributes*:
+
+*contentType*: application/json
+
+*description*: A list of attributes for this attachment
+
+*attachment*:
+
+*contentType*: text/csv
+
+*file*: true
+
+|===
+
+== Define a Friendly Part Name
+
+Parameters in the request body can supply an alternative name using the
+`friendlyName` property. In the example above, the final connector UI
+shows `requestid` as `Request-ID`.
+
+[cols="",]
+|===
+a|
+*endpoints*:
+
+*/attachment*:
+
+*operations*:
+
+*post*:
+
+*expects*:
+
+*part*:
+
+*requestid*:
+
+*friendlyName*: *"Request-ID"*
+
+|===
+
+== Define a Description for a Part
+
+The previous example assigned descriptions to 2 of the parts defined in
+the body. This appears to the users as a contextual tooltip when working
+with this operation.
+
+[cols="",]
+|===
+a|
+*endpoints*:
+
+*/attachment*:
+
+*operations*:
+
+*post*:
+
+*expects*:
+
+*part*:
+
+*requestid*:
+
+*description*: The tracking ID for this request
+
+*attributes*:
+
+*description*: A list of attributes for this attachment
+
+|===
+
+== Define File Parts
+
+You must use the `file` property to state that a body part represents a
+file. This creates an implicit parameter with the filename that the user
+must fill to use the generated operation.
+
+[cols="",]
+|===
+a|
+*endpoints*:
+
+*/attachment*:
+
+*operations*:
+
+*post*:
+
+*expects*:
+
+*part*:
+
+*attachment*:
+
+*file*: true
+
+|===
+
+== Define the Content Type of a Part
+
+Each part of a multipart request can define its own content type that is
+sent in the content disposition header of that part when the HTTP
+request is done.
+
+You define the value that the header should have in the request by using
+the `contentType` property. This also helps the user of the connector know
+what content type is expected for that part.
+
+[cols="",]
+|===
+a|
+*endpoints*:
+
+*/attachment*:
+
+*operations*:
+
+*post*:
+
+*expects*:
+
+*part*:
+
+*attributes*:
+
+*contentType*: application/json
+
+*attachment*:
+
+*contentType*: text/csv +
+*file*: true
+
+|===
+
+In this example, the attributes object must be sent as an
+`application/json` object and that the expected file type is a .txt or
+.csv.
+
+== Redefine the Expected Content for a Part
+
+If the API spec does not specify the expected structure of a part (or
+defines it in an incorrect way), you can redefine it using a JSON
+schema.
+
+You must use the `inputType` property. The value for this property must be
+the path to the JsonSchema relative to the location of the Connector
+Descriptor file.
+
+[cols="",]
+|===
+a|
+*endpoints*:
+
+*/attachment*:
+
+*operations*:
+
+*post*:
+
+*expects*:
+
+*part*:
+
+*attributes*:
+
+*description*: A list of attributes for this attachment
+
+*inputType*: *'./ip-attributes.json'*
+
+|===
+
+The structure of the attributes part of the request is structured to be
+like the following JSON schema:
+
+[cols="",]
+|===
+a|
+\{
+
+*"$schema"*: *"http://json-schema.org/draft-04/schema#"*,
+
+*"$ref"*: *"#/definitions/IPAttributes"*,
+
+*"definitions"*: \{
+
+*"IPAttributes"*: \{
+
+*"type"*: *"object"*,
+
+*"properties"*: \{
+
+*"local"*: \{*"type"*: *"boolean"*},
+
+*"broadcast"*: \{*"type"*: *"boolean"*},
+
+*"type"*: \{*"type"*: *"string"*}
+
+}
+
+}}
+
+}
+
+|===
