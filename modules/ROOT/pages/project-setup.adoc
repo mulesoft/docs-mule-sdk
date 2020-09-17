@@ -128,4 +128,4 @@ experience issues generating the connector descriptor and the connector.
 
 == What's Next?
 
-xref:customize-connector-descriptor.adoc
+xref:customize-connector-descriptor.adoc[Customize the Connector Descriptor]
