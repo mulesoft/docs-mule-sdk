@@ -1,7 +1,8 @@
 .xref:index.adoc[Mule SDK]
 * xref:index.adoc[Mule SDK]
 * xref:connectivity.adoc[REST SDK]
- ** xref:project-setup.adoc
+ ** xref:project-setup.adoc[Getting Started]
+ ** xref:customize-connector-descriptor.adoc[Customize the Connector Descriptor]
 * xref:getting-started.adoc[Java SDK]
  ** xref:choosing-version.adoc[Choosing the SDK version]
  ** xref:module-structure.adoc[Module Structure]

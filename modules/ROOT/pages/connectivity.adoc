@@ -3,7 +3,7 @@ ifndef::env-site,env-github[]
 include::_attributes.adoc[]
 endif::[]
 
-You can create a connector from an API spec (OAS or RAML) by using REST
+You can create a connector from an API specification, or _API spec_ (OAS or RAML), by using REST
 SDK.
 
 Creating a connector involves creating a Connector Descriptor that
@@ -76,4 +76,6 @@ On the non-functional side, these connectors are fully
 https://docs.mulesoft.com/mule-sdk/1.1/non-blocking-operations[non-blocking]
 and also provide reduced and optimized _extension models_.
 
-==  +
+== What's Next?
+
+xref:project-setup.adoc[Getting Started]

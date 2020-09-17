@@ -3,17 +3,13 @@ ifndef::env-site,env-github[]
 include::_attributes.adoc[]
 endif::[]
 
-
-
 To create a connector using REST SDK:
 * Use a CLI command to scaffold a Connector Descriptor for an API Spec.
-* Use a CLI command to create a Connector from an API Spec and a Connector
-Descriptor.
+* Use a CLI command to create a Connector from an API Spec and a Connector Descriptor.
 * Perform some example modifications to the Connector Descriptor for
 tailoring the generated connector.
-* Build the connector using Maven
-* Publish the connector to Anypoint Exchange
-
+* Build the connector using Maven.
+* Publish the connector to Anypoint Exchange.
 
 == Prerequisites
 
@@ -129,3 +125,7 @@ an invalid API spec is not guaranteed. Users who skip validation might
 experience issues generating the connector descriptor and the connector.
 |FALSE
 |===
+
+== What's Next?
+
+xref:customize-connector-descriptor.adoc
