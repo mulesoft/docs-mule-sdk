@@ -1,0 +1,79 @@
+= Connectivity using the REST SDK
+ifndef::env-site,env-github[]
+include::_attributes.adoc[]
+endif::[]
+
+You can create a connector from an API spec (OAS or RAML) by using REST
+SDK.
+
+Creating a connector involves creating a Connector Descriptor that
+articulates how the connector should look. You can then combine the
+Connector Descriptor with an API spec and generate a connector.
+
+You can use the following steps to create a connector:
+
+[arabic]
+. Scaffold the Connector Descriptor from the API Spec.
+. Customize your Connector Descriptor to make the connector behave and
+look as specified.
+. Generate the connector using REST SDK.
+
+== Connector Descriptor
+
+A Connector Descriptor is a YAML file that allows you to describe a
+connector, customize aspects of the generated connector (such as name,
+Maven GAV, operation names, layout information, and so on), and provide
+additional metadata that is specific to Mulesoft’s connectors.
+
+When you create a Connector Descriptor, you should not edit the API
+spec. If you modify your API spec and a new version of an API spec is
+released, you must move all changes from the old version to the new
+version. API specs should be as complete as possible and provide rich
+schemas for every input/output type, examples, security information, and
+so on.
+
+== Differences with Rest Connect
+
+The main differences between the REST SDK and the Rest Connect v1 are:
+
+* Unlike Rest Connect v1 which generates and deploys an unmodifiable
+connector, REST SDK generates source code that you can version, modify,
+and extend manually.
+* REST SDK does not publish the generated connectors automatically. You
+can deploy the connector at your convenience.
+* The generated source code uses the Java SDK instead of the XML source
+code.
+
+== Features in REST SDK
+
+The following features are available in REST SDK:
+
+* Support for RAML 1.0 and OAS 2.0.
+* Support for paginated operations.
+* Security Scheme support for:
+** Basic Authentication
+** Digest Authentication
+** Pass Through
+** OAuth 2.0 Client Credentials
+** OAuth 2.0 Authorization Code
+* Support for TLS support
+* Support for custom headers and query parameters at the global and
+operation levels
+* Ability to configure global and operation-specific timeouts
+* Support for reconnection
+* HTTP proxy support
+* DataSense support
+* Automatic error handling
+* Support for multiple base URLs
+* Ability to modify or extend the generated connector. You can:
+** Add additional security schemes
+** Customize operations
+** Add message sources, expression functions, etc
+** Add dynamic DataSense resolver
+* Ability to ignore specific API resources
+
+On the non-functional side, these connectors are fully
+https://docs.mulesoft.com/mule-sdk/1.1/non-blocking-operations[non-blocking]
+and also provide reduced and optimized _extension models_.
+
+==  +
