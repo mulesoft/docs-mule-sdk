@@ -45,7 +45,9 @@ As indicated previously, there are 3 possible strategies: *offset*,
 Each pagination endpoint has parameters that take a role in the
 paginated operation. These vary depending on the pagination strategy.
 
-For *offset* pagination, the available parameters are:
+==== Offset Pagination
+
+For _offset_ pagination, the available parameters are:
 
 offsetParamName:: Indicates the name of the query parameter that must
 be passed to the API to indicate the initial position of the next page.
@@ -53,8 +55,9 @@ be passed to the API to indicate the initial position of the next page.
 initialOffset:: The initial value the connector passes to the
 previously indicated query parameter.
 
+==== Marker Pagination
 
-For *marker* pagination, the available parameters are:
+For _marker_ pagination, the available parameters are:
 
 nextTokenParamName:: Indicates the name of the query parameter that
 must be passed to the API to indicate where the next page starts.
@@ -63,7 +66,9 @@ nextTokenExpression:: This is a dataweave expression that the connector
 uses to extract the next page token from the API response. This token is
 then used to request the page that follows.
 
-For *pageNumber* pagination, the available parameters are:
+==== Page Number Pagination
+
+For _pageNumber_ pagination, the available parameters are:
 
 pageNumberParamName:: Indicates the name of the query parameter that
 must be passed to the API to indicate the page number we want to get
@@ -135,8 +140,8 @@ page data. Notice that the expression should return the page. The
 expression doesn’t need to be able to split the elements; REST SDK does
 that automatically.
 
-For the first example, the expression is #[payload] and the second one
-is #[payload.data].
+For the first example, the expression is `#[payload]` and the second one
+is `#[payload.data]`.
 
 == Shop Connector Example
 
