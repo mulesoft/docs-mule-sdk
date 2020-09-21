@@ -20,16 +20,19 @@ tailoring the generated connector.
 == Scaffold the Connector Descriptor
 
 To scaffold the Connector Descriptor, you must run the
-*create-descriptor* command:
+`create-descriptor` command:
 
-[cols="",]
-|===
-|java -jar
+----
+java -jar
 $PATH_TO_JAR/rest-connect-cli-1.0.0-RC2-jar-with-dependencies.jar
 create-descriptor -apiSpec $PATH_TO_SPEC/api.raml -outputDir $OUTPUT
-|===
+----
 
-The create-descriptor command uses the following parameters:
+* Where `$PATH_TO_JAR` is the location of the REST SDK jar file
+* Where `$PATH_TO_SPEC` is the location of your API spec
+* Where `$OUTPUT` is the location where you want your Connector Descriptor to be created
+
+The `create-descriptor` command uses the following parameters:
 
 [cols=",,,",options="header",]
 |===
@@ -74,15 +77,18 @@ and the connector. |FALSE
 == Create Connector
 
 After you have modified the Connector Descriptor, you can generate the
-connector using the *create-connector* command:
+connector using the `create-connector` command:
 
-[cols="",]
-|===
+----
 |java -jar
 $PATH_TO_JAR/rest-connect-cli-1.0.0-RC1-jar-with-dependencies.jar
 create-connector -apiSpec $PATH_TO_SPEC/api.raml -apiDesc
 $PATH_TO_DESCRIPTOR/descriptor.yaml -outputDir $OUTPUT
-|===
+----
+
+* Where `$PATH_TO_JAR` is the location of the REST SDK jar file
+* Where `$PATH_TO_SPEC` is the location of your API spec
+* Where `$OUTPUT` is the location where you want your Connector Descriptor to be created
 
 The create-connector command uses the following parameters:
 
@@ -114,7 +120,7 @@ You should not use RAMLParser.
 |outputDir |No a|
 The path where the connector resides.
 
-The generated file is named output.yaml and is located in the specified
+The generated file is named `output.yaml` and is located in the specified
 folder.
 
 |Current directory
