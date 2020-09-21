@@ -199,7 +199,6 @@ operations:
 get:
 
 pagination: content-search-pagination
-
 ----
 
 The example defines an offset based pagination. It declares that the

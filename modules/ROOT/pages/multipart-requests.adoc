@@ -9,77 +9,71 @@ a multipart body. The Connector Descriptor can amend these issues.
 
 In the following example, the API spec defines a multipart request:
 
-[cols="",]
-|===
-a|
-*/attachment*:
+----
+/attachment:
 
-*post*:
+  post:
 
-*body*:
+    body:
 
-*multipart/form-data*:
+      multipart/form-data:
 
-*properties*:
+        properties:
 
-*requestid*:
+          requestid:
 
-*type*: string
+            type: string
 
-*attributes*:
+          attributes:
 
-*type*: attribute[]
+            type: attribute[]
 
-*attachment*:
+          attachment:
 
-*type*: file
+            type: file
 
-*responses*:
+    responses:
 
-*200*:
+      200:
 
-*description*: Successful call
-
-|===
+        description: Successful call
+----
 
 The following example shows several improvements to the multipart
 request by adding extra information to the body parts of the POST
 attachment endpoint:
 
-[cols="",]
-|===
-a|
-*endpoints*:
+----
+endpoints:
 
-*/attachment*:
+attachment:
 
-*operations*:
+operations:
 
-*post*:
+post:
 
-*expects*:
+expects:
 
-*part*:
+part:
 
-*requestid*:
+requestid:
 
-*friendlyName*: *"Request-ID"*
+friendlyName: "Request-ID"
 
-*description*: The tracking ID for this request
+description: The tracking ID for this request
 
-*attributes*:
+attributes:
 
-*contentType*: application/json
+contentType: application/json
 
-*description*: A list of attributes for this attachment
+description: A list of attributes for this attachment
 
-*attachment*:
+attachment:
 
-*contentType*: text/csv
+contentType: text/csv
 
-*file*: true
-
-|===
+file: true
+----
 
 == Define a Friendly Part Name
 
@@ -87,26 +81,23 @@ Parameters in the request body can supply an alternative name using the
 `friendlyName` property. In the example above, the final connector UI
 shows `requestid` as `Request-ID`.
 
-[cols="",]
-|===
-a|
-*endpoints*:
+----
+endpoints:
 
-*/attachment*:
+/attachment:
 
-*operations*:
+operations:
 
-*post*:
+post:
 
-*expects*:
+expects:
 
-*part*:
+part:
 
-*requestid*:
+requestid:
 
-*friendlyName*: *"Request-ID"*
-
-|===
+friendlyName: "Request-ID"
+----
 
 == Define a Description for a Part
 
@@ -114,30 +105,27 @@ The previous example assigned descriptions to 2 of the parts defined in
 the body. This appears to the users as a contextual tooltip when working
 with this operation.
 
-[cols="",]
-|===
-a|
-*endpoints*:
+----
+endpoints:
 
-*/attachment*:
+/attachment:
 
-*operations*:
+operations:
 
-*post*:
+post:
 
-*expects*:
+expects:
 
-*part*:
+part:
 
-*requestid*:
+requestid:
 
-*description*: The tracking ID for this request
+description: The tracking ID for this request
 
-*attributes*:
+attributes:
 
-*description*: A list of attributes for this attachment
-
-|===
+description: A list of attributes for this attachment
+----
 
 == Define File Parts
 
@@ -145,26 +133,23 @@ You must use the `file` property to state that a body part represents a
 file. This creates an implicit parameter with the filename that the user
 must fill to use the generated operation.
 
-[cols="",]
-|===
-a|
-*endpoints*:
+----
+endpoints:
 
-*/attachment*:
+/attachment:
 
-*operations*:
+operations:
 
-*post*:
+post:
 
-*expects*:
+expects:
 
-*part*:
+part:
 
-*attachment*:
+attachment:
 
-*file*: true
-
-|===
+file: true
+----
 
 == Define the Content Type of a Part
 
@@ -176,31 +161,29 @@ You define the value that the header should have in the request by using
 the `contentType` property. This also helps the user of the connector know
 what content type is expected for that part.
 
-[cols="",]
-|===
-a|
-*endpoints*:
+----
+endpoints:
 
-*/attachment*:
+/attachment:
 
-*operations*:
+operations:
 
-*post*:
+post:
 
-*expects*:
+expects:
 
-*part*:
+part:
 
-*attributes*:
+attributes:
 
-*contentType*: application/json
+contentType: application/json
 
-*attachment*:
+attachment:
 
-*contentType*: text/csv +
-*file*: true
+contentType: text/csv
 
-|===
+file: true
+----
 
 In this example, the attributes object must be sent as an
 `application/json` object and that the expected file type is a .txt or
@@ -216,59 +199,53 @@ You must use the `inputType` property. The value for this property must be
 the path to the JsonSchema relative to the location of the Connector
 Descriptor file.
 
-[cols="",]
-|===
-a|
-*endpoints*:
+----
+endpoints:
 
-*/attachment*:
+/attachment:
 
-*operations*:
+operations:
 
-*post*:
+post:
 
-*expects*:
+expects:
 
-*part*:
+part:
 
-*attributes*:
+attributes:
 
-*description*: A list of attributes for this attachment
+description: A list of attributes for this attachment
 
-*inputType*: *'./ip-attributes.json'*
-
-|===
+inputType: './ip-attributes.json'
+----
 
 The structure of the attributes part of the request is structured to be
 like the following JSON schema:
 
-[cols="",]
-|===
-a|
-\{
+----
+{
 
-*"$schema"*: *"http://json-schema.org/draft-04/schema#"*,
+"$schema": "http://json-schema.org/draft-04/schema#",
 
-*"$ref"*: *"#/definitions/IPAttributes"*,
+"$ref": "#/definitions/IPAttributes",
 
-*"definitions"*: \{
+"definitions": {
 
-*"IPAttributes"*: \{
+"IPAttributes": {
 
-*"type"*: *"object"*,
+"type": "object",
 
-*"properties"*: \{
+"properties": {
 
-*"local"*: \{*"type"*: *"boolean"*},
+"local": {"type": "boolean"},
 
-*"broadcast"*: \{*"type"*: *"boolean"*},
+"broadcast": {"type": "boolean"},
 
-*"type"*: \{*"type"*: *"string"*}
+"type": {"type": "string"}
 
 }
 
 }}
 
 }
-
-|===
+----

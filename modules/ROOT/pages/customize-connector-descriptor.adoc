@@ -183,7 +183,7 @@ The value set for the `extensionXml` property defines how the XML for
 using this connector in the Mule runtime has to look.
 
 The following example shows use of a connector’s operation whose prefix
-is ‘shop’:
+is `shop`:
 
 ----
 <shop:get-content-search
