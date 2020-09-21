@@ -11,10 +11,8 @@ in the `security` node of your Connector Descriptor.
 
 ----
 security:
-
-passThrough:
-
-ignored: true
+  passThrough:
+    ignored: true
 ----
 
 In this case, the API spec declares a security scheme named `passThrough`.
@@ -30,14 +28,10 @@ your Connector Descriptor.
 
 ----
 security:
-
-passThrough:
-
-headers:
-
-passThroughHeader:
-
-friendlyName: 'Auth Header'
+  passThrough:
+    headers:
+      passThroughHeader:
+        friendlyName: 'Auth Header'
 ----
 
 In this case, the API spec defines the security scheme name `passThrough`

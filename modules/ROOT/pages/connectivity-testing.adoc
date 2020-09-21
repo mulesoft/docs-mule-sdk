@@ -1,0 +1,6 @@
+= Connectivity Testing
+ifndef::env-site,env-github[]
+include::_attributes.adoc[]
+endif::[]
+
+Coming soon.

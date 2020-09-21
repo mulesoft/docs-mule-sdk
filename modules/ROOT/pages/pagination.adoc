@@ -86,49 +86,51 @@ from the response.
 Some APIs return the pages directly in the response body, either through
 a JSON array or as an XML document. For example:
 
+[source,xml]
 ----
 [
-{
-"name": "Tony Stark",
-"age": 45,
-"alias": "Iron Man"
-},
-\{
-"name": "Steve Rodgers",
-"age": 95,
-"alias": "Captain America"
-},
-{
-"name": "Dr. Stephen Strange",
-"age": 40,
-"alias": "Sorcerer Supreme"
-}
+ {
+   "name": "Tony Stark",
+   "age": 45,
+   "alias": "Iron Man"
+ },
+ {
+   "name": "Steve Rodgers",
+   "age": 95,
+   "alias": "Captain America"
+ },
+ {
+   "name": "Dr. Stephen Strange",
+   "age": 40,
+   "alias": "Sorcerer Supreme"
+ }
 ]
 ----
 
 Others return a complex object with metadata in which the page is
 another field:
 
+[source,xml]
 ----
 {
-"data": [
-{
-"name": "Tony Stark",
-"age": 45,
-"alias": "Iron Man"
-},
-{
-"name": "Steve Rodgers",
-"age": 95,
-"alias": "Captain America"
-},
-{
-"name": "Dr. Stephen Strange",
-"age": 40,
-"alias": "Sorcerer Supreme"
-}
-],
-"totalResults": 9
+ "data": [
+   {
+     "name": "Tony Stark",
+     "age": 45,
+     "alias": "Iron Man"
+   },
+   {
+     "name": "Steve Rodgers",
+     "age": 95,
+     "alias": "Captain America"
+   },
+   {
+     "name": "Dr. Stephen Strange",
+     "age": 40,
+     "alias": "Sorcerer Supreme"
+   }
+ ],
+ "totalResults": 9
 }
 ----
 
@@ -152,53 +154,34 @@ the root of the document.
 #% Rest Connect Connector Descriptor 1.0
 
 apiSpec:
-
-url: http://myhost.com/resources/shop-api.yaml
+ url: http://myhost.com/resources/shop-api.yaml
 
 connectorName: Shop Connector
 
 connectorGav:
-
-groupId: com.mulesoft.connectors
-
-artifactId: shop-connector
-
-version: 1.0.0
+ groupId: com.mulesoft.connectors
+ artifactId: shop-connector
+ version: 1.0.0
 
 baseUri:
-
-value: https://myhost.com/shop/api
-
-type: parameter
+ value: https://myhost.com/shop/api
+ type: parameter
 
 paginations:
-
-content-search-pagination: #Declares a pagination strategy to be used
-within this API
-
-type: offset
-
-parameters:
-
-offsetParamName: "start"
-
-initialOffset: 0
-
-pagingResponseExpression:
-
-language: "dataweave"
-
-expression: "#[payload.hits]"
+ content-search-pagination: #Declares a pagination strategy to be used within this API
+   type: offset
+   parameters:
+     offsetParamName: "start"
+     initialOffset: 0
+     pagingResponseExpression:
+       language: "dataweave"
+       expression: "#[payload.hits]"
 
 endpoints:
-
-content_search:
-
-operations:
-
-get:
-
-pagination: content-search-pagination
+  /content_search:
+   operations:
+     get:
+       pagination: content-search-pagination
 ----
 
 The example defines an offset based pagination. It declares that the

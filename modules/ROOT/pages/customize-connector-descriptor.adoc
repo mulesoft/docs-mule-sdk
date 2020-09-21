@@ -13,32 +13,22 @@ property, which is located at the root of the Connector Descriptor.
 
 ----
 #% Rest Connect Connector Descriptor 1.0
-
 apiSpec:
-
-url: http://myhost.com/resources/shop-api.yaml
+ url: http://myhost.com/resources/shop-api.yaml
 
 connectorName: Shop Connector
 
 connectorGav:
-
-groupId: com.mulesoft.connectors
-
-artifactId: shop-connector
-
-version: 1.0.0
+ groupId: com.mulesoft.connectors
+ artifactId: shop-connector
+ version: 1.0.0
 
 baseUri:
-
-value: https://myhost.com/shop/api
-
-type: parameter
+ value: https://myhost.com/shop/api
+ type: parameter
 ----
 
-The name you set for the connector appears in the Mule Palette in
-Anypoint Studio and when you
-xref:exchange::to-publish-assets-maven.adoc[publish
-the connector to Anypoint Exchange].
+The name you set for the connector appears in the Mule Palette in Anypoint Studio and when you xref:exchange::to-publish-assets-maven.adoc[publish the connector to Anypoint Exchange].
 
 image:media/image1.png[image,width=624,height=361]
 
@@ -52,27 +42,19 @@ Connector Descriptor.
 #% Rest Connect Connector Descriptor 1.0
 
 apiSpec:
-
-url: http://myhost.com/resources/shop-api.yaml
+ url: http://myhost.com/resources/shop-api.yaml
 
 connectorName: Shop Connector
-
-connectorDescription: This is the connector for the Shop API located
-in https://myhost.com/shop/api
+connectorDescription: This is the connector for the Shop API located in https://myhost.com/shop/api
 
 connectorGav:
-
-groupId: com.mulesoft.connectors
-
-artifactId: shop-connector
-
-version: 1.0.0
+ groupId: com.mulesoft.connectors
+ artifactId: shop-connector
+ version: 1.0.0
 
 baseUri:
-
-value: https://myhost.com/shop/api
-
-type: parameter
+ value: https://myhost.com/shop/api
+ type: parameter
 ----
 
 This description appears in the Connector POM file’s `<description>`
@@ -89,24 +71,18 @@ generated connector POM and identify it as a Maven asset.
 #% Rest Connect Connector Descriptor 1.0
 
 apiSpec:
-
-url: http://myhost.com/resources/shop-api.yaml
+ url: http://myhost.com/resources/shop-api.yaml
 
 connectorName: Shop Connector
 
 connectorGav:
-
-groupId: com.mulesoft.connectors
-
-artifactId: shop-connector
-
-version: 1.0.0
+ groupId: com.mulesoft.connectors
+ artifactId: shop-connector
+ version: 1.0.0
 
 baseUri:
-
-value: https://myhost.com/shop/api
-
-type: parameter
+ value: https://myhost.com/shop/api
+ type: parameter
 ----
 
 == Select a Category for the Connector
@@ -121,26 +97,19 @@ The possible values for this property are `select` and `premium`.
 #% Rest Connect Connector Descriptor 1.0
 
 apiSpec:
-
-url: http://myhost.com/resources/shop-api.yaml
+ url: http://myhost.com/resources/shop-api.yaml
 
 connectorName: Shop Connector
-
 connectorCategory: select
 
 connectorGav:
-
-groupId: com.mulesoft.connectors
-
-artifactId: shop-connector
-
-version: 1.0.0
+ groupId: com.mulesoft.connectors
+ artifactId: shop-connector
+ version: 1.0.0
 
 baseUri:
-
-value: https://myhost.com/shop/api
-
-type: parameter
+ value: https://myhost.com/shop/api
+ type: parameter
 ----
 
 This property indicates who is able to use this connector.
@@ -157,26 +126,19 @@ XML namespace.
 #% Rest Connect Connector Descriptor 1.0
 
 apiSpec:
-
-url: http://myhost.com/resources/shop-api.yaml
+ url: http://myhost.com/resources/shop-api.yaml
 
 connectorName: Shop Connector
-
 extensionXml: shop
 
 connectorGav:
-
-groupId: com.mulesoft.connectors
-
-artifactId: shop-connector
-
-version: 1.0.0
+ groupId: com.mulesoft.connectors
+ artifactId: shop-connector
+ version: 1.0.0
 
 baseUri:
-
-value: https://myhost.com/shop/api
-
-type: parameter
+ value: https://myhost.com/shop/api
+ type: parameter
 ----
 
 The value set for the `extensionXml` property defines how the XML for
@@ -185,20 +147,15 @@ using this connector in the Mule runtime has to look.
 The following example shows use of a connector’s operation whose prefix
 is `shop`:
 
+[source,xml]
 ----
 <shop:get-content-search
-
-doc:name="Get Content Search"
-
-doc:id="fa0f9783-c704-4ac2-bbf1-fee0f9987024"
-
-config-ref="Shop_Connector_Config_Client_Id"
-
-q="#[attributes.uriParams['query']]"
-
-count="1"
-
-initialOffset="#[attributes.uriParams['start']]"/>
+			doc:name="Get Content Search"
+			doc:id="fa0f9783-c704-4ac2-bbf1-fee0f9987024"
+			config-ref="Shop_Connector_Config_Client_Id"
+			q="#[attributes.uriParams['query']]"
+			count="1"
+			initialOffset="#[attributes.uriParams['start']]"/>
 ----
 
 == Select a Base Java Package
@@ -214,26 +171,19 @@ is located at the root of the Connector Descriptor.
 #% Rest Connect Connector Descriptor 1.0
 
 apiSpec:
-
-url: http://myhost.com/resources/shop-api.yaml
+ url: http://myhost.com/resources/shop-api.yaml
 
 connectorName: Shop Connector
-
 baseJavaPackage: com.mulesoft.connectors
 
 connectorGav:
-
-groupId: com.mulesoft.connectors
-
-artifactId: shop-connector
-
-version: 1.0.0
+ groupId: com.mulesoft.connectors
+ artifactId: shop-connector
+ version: 1.0.0
 
 baseUri:
-
-value: https://myhost.com/shop/api
-
-type: parameter
+ value: https://myhost.com/shop/api
+ type: parameter
 ----
 
 The base Java package is used as the root package:
@@ -246,27 +196,21 @@ You can select the XML prefix for the connector using the `baseUri`
 property, which is located at the root of the Connector Descriptor.
 
 ----
-#% Rest Connect Connector Descriptor 1.0_
+#% Rest Connect Connector Descriptor 1.0
 
 apiSpec:
-
-url: http://myhost.com/resources/shop-api.yaml
+ url: http://myhost.com/resources/shop-api.yaml
 
 connectorName: Shop Connector
 
 connectorGav:
-
-groupId: com.mulesoft.connectors
-
-artifactId: shop-connector
-
-version: 1.0.0
+ groupId: com.mulesoft.connectors
+ artifactId: shop-connector
+ version: 1.0.0
 
 baseUri:
-
-value: https://myhost.com/shop/api
-
-type: parameter
+ value: https://myhost.com/shop/api
+ type: parameter
 ----
 
 There are 3 types of base URIs:
@@ -304,18 +248,13 @@ GitHub.
 connectorName: Twitter Connector
 
 connectorGav:
-
-groupId: com.mulesoft.connectors
-
-artifactId: twitter-connector
-
-version: 1.0.0
+ groupId: com.mulesoft.connectors
+ artifactId: twitter-connector
+ version: 1.0.0
 
 baseUri:
-
-value: https://api.twitter.com
-
-type: fixed
+ value: https://api.twitter.com
+ type: fixed
 ----
 
 In this case, the `baseUri` field does not appear in the connector
@@ -335,39 +274,24 @@ to upload files to a different server.
 connectorName: Complex API Connector
 
 connectorGav:
-
-groupId: com.mulesoft.connectors
-
-artifactId: twitter-connector
-
-version: 1.0.0
+ groupId: com.mulesoft.connectors
+ artifactId: twitter-connector
+ version: 1.0.0
 
 baseUri:
-
-type: multiple
-
-mapping:
-
-uriUser:
-
-value: "https://users.com"
-
-default: true
-
-uriUpload:
-
-value: "https://upload.users.com"
+   type: multiple
+   mapping:
+       uriUser:
+           value: "https://users.com"
+           default: true
+       uriUpload:
+           value: "https://upload.users.com"
 
 endpoints:
-
-/api/users:
-
-baseUri: uriUser #Select the base uri for the endpoint (This is
-optional as it is the default base URI)
-
-/api/upload:
-
-baseUri: uriUpload #Select the base uri for the endpoint
+   /api/users:
+       baseUri: uriUser #Select the base uri for the endpoint (This is optional as it is the default base URI)
+   /api/upload:
+       baseUri: uriUpload #Select the base uri for the endpoint
 ----
 
 In this case, all operations defined under `/api/users` access the

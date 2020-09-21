@@ -11,19 +11,19 @@ In the following example, the API spec defines a multipart request:
 
 ----
 /attachment:
-  post:
-    body:
-      multipart/form-data:
-        properties:
-          requestid:
-            type: string
-          attributes:
-            type: attribute[]
-          attachment:
-            type: file
-    responses:
-      200:
-        description: Successful call
+ post:
+   body:
+     multipart/form-data:
+       properties:
+         requestid:
+           type: string
+         attributes:
+           type: attribute[]
+         attachment:
+           type: file
+   responses:
+     200:
+       description: Successful call
 ----
 
 The following example shows several improvements to the multipart
@@ -32,34 +32,20 @@ attachment endpoint:
 
 ----
 endpoints:
-
-attachment:
-
-operations:
-
-post:
-
-expects:
-
-part:
-
-requestid:
-
-friendlyName: "Request-ID"
-
-description: The tracking ID for this request
-
-attributes:
-
-contentType: application/json
-
-description: A list of attributes for this attachment
-
-attachment:
-
-contentType: text/csv
-
-file: true
+ /attachment:
+   operations:
+     post:
+       expects:
+         part:
+           requestid:
+             friendlyName: "Request-ID"
+             description: The tracking ID for this request
+           attributes:
+             contentType: application/json
+             description: A list of attributes for this attachment
+           attachment:
+             contentType: text/csv
+             file: true
 ----
 
 == Define a Friendly Part Name
@@ -70,20 +56,13 @@ shows `requestid` as `Request-ID`.
 
 ----
 endpoints:
-
-/attachment:
-
-operations:
-
-post:
-
-expects:
-
-part:
-
-requestid:
-
-friendlyName: "Request-ID"
+ /attachment:
+   operations:
+     post:
+       expects:
+         part:
+           requestid:
+             friendlyName: "Request-ID"
 ----
 
 == Define a Description for a Part
@@ -94,24 +73,15 @@ with this operation.
 
 ----
 endpoints:
-
-/attachment:
-
-operations:
-
-post:
-
-expects:
-
-part:
-
-requestid:
-
-description: The tracking ID for this request
-
-attributes:
-
-description: A list of attributes for this attachment
+ /attachment:
+   operations:
+     post:
+       expects:
+         part:
+           requestid:
+             description: The tracking ID for this request
+           attributes:
+             description: A list of attributes for this attachment
 ----
 
 == Define File Parts
@@ -122,20 +92,13 @@ must fill to use the generated operation.
 
 ----
 endpoints:
-
-/attachment:
-
-operations:
-
-post:
-
-expects:
-
-part:
-
-attachment:
-
-file: true
+ /attachment:
+   operations:
+     post:
+       expects:
+         part:
+           attachment:
+             file: true
 ----
 
 == Define the Content Type of a Part
@@ -150,26 +113,16 @@ what content type is expected for that part.
 
 ----
 endpoints:
-
-/attachment:
-
-operations:
-
-post:
-
-expects:
-
-part:
-
-attributes:
-
-contentType: application/json
-
-attachment:
-
-contentType: text/csv
-
-file: true
+ /attachment:
+   operations:
+     post:
+       expects:
+         part:
+           attributes:
+             contentType: application/json
+           attachment:
+             contentType: text/csv
+             file: true
 ----
 
 In this example, the attributes object must be sent as an
@@ -188,51 +141,32 @@ Descriptor file.
 
 ----
 endpoints:
-
-/attachment:
-
-operations:
-
-post:
-
-expects:
-
-part:
-
-attributes:
-
-description: A list of attributes for this attachment
-
-inputType: './ip-attributes.json'
+ /attachment:
+   operations:
+     post:
+       expects:
+         part:
+           attributes:
+             description: A list of attributes for this attachment
+             inputType: './ip-attributes.json'
 ----
 
 The structure of the attributes part of the request is structured to be
 like the following JSON schema:
 
+[source,json]
 ----
 {
-
-"$schema": "http://json-schema.org/draft-04/schema#",
-
-"$ref": "#/definitions/IPAttributes",
-
-"definitions": {
-
-"IPAttributes": {
-
-"type": "object",
-
-"properties": {
-
-"local": {"type": "boolean"},
-
-"broadcast": {"type": "boolean"},
-
-"type": {"type": "string"}
-
-}
-
-}}
-
+ "$schema": "http://json-schema.org/draft-04/schema#",
+ "$ref": "#/definitions/IPAttributes",
+ "definitions": {
+   "IPAttributes": {
+   "type": "object",
+   "properties": {
+     "local": {"type": "boolean"},
+     "broadcast": {"type": "boolean"},
+     "type": {"type": "string"}
+   }
+ }}
 }
 ----

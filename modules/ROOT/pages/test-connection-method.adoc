@@ -14,55 +14,31 @@ connection providers via a property in the Connector Descriptor.
 Test connection can be defined globally (for all of the generated
 connections) or for a specific connection provider.
 
-[cols="",]
-|===
-a|
-*testConnection:*
+----
+testConnection:
+  path: my/path
+  validStatusCodes:
+     - 200
+  responseValidation:
+     validationExpression:
+        language: dw
+        expression: "#[payload contains('string')]"
 
-*path:* my/path
-
-*validStatusCodes:*
-
-- 200
-
-*responseValidation:*
-
-*validationExpression:*
-
-*language:* dw
-
-*expression: "#[payload contains('string')]"*
-
-*security:*
-
-*basic:*
-
-*testConnection:*
-
-*path: test/passtwo/fail*
-
-*method: post*
-
-*mediaType: application/json*
-
-*validStatusCodes: 210*
-
-*responseValidation:*
-
-*- validationExpression:*
-
-*expression: "#[payload.userId != null]"*
-
-*- validationExpression:*
-
-*expression: "#[payload.userId == 'lucas.giordano']"*
-
-*errorTemplate:*
-
-*expression: "#['userId (' ++ payload.userId ++ ') is expected to be
-lucas.giordano']"*
-
-|===
+security:
+  basic:
+   testConnection:
+     path: test/passtwo/fail
+     method: post
+     mediaType: application/json
+     validStatusCodes: 210
+     responseValidation:
+       - validationExpression:
+           expression: "#[payload.userId != null]"
+       - validationExpression:
+           expression: "#[payload.userId == 'lucas.giordano']"
+         errorTemplate:
+           expression: "#['userId (' ++ payload.userId ++ ') is expected to be lucas.giordano']"
+----
 
 This example shows both a global definition and one that is specific for
 a connection provider.

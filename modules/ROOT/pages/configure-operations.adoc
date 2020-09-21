@@ -1,0 +1,223 @@
+= Configure Operations
+ifndef::env-site,env-github[]
+include::_attributes.adoc[]
+endif::[]
+
+== Ignore Operations or Endpoints
+
+If you don’t want to generate an operation in the connector for a
+resource that is present in the API spec, you must use the `ignored`
+property. You can define the ignored property at endpoint or operation
+level.
+
+If you ignore an endpoint, none of the operations defined under the
+endpoint are generated.
+
+If you ignore an operation, only that operation is not generated; the
+rest of the operations for that endpoint are generated.
+
+== Ignore an Operation
+
+----
+endpoints:
+   /flights/{ID}:
+      operations:
+         delete:
+            ignored: true
+----
+
+In this case, only the DELETE verb is ignored. Operations are still
+generated for the other verbs in the resource.
+
+----
+endpoints:
+   /flights/{ID}:
+      ignored: true
+----
+
+In this case, all of the endpoint verbs will be ignored. No operations
+will be generated for this resource.
+
+== Set a Display Name for an Operation Name
+
+You can define the display name of an operation by using the `name`
+property in the operation node.
+
+----
+endpoints:
+   /content_search:
+      operations:
+         get:
+            pagination: content-search-pagination
+            name: Get Content Search
+            description: Provides keyword and refinement search functionality for content assets.
+            outputMediaType: application/json
+            expects:
+               queryParameter:
+                  count:
+                     friendlyName: count
+                     description: The maximum number of instances per request.
+----
+
+By setting this property, the operation is available to the final user
+with the display name in the UI.
+
+image:media/image7.png[image,width=470,height=210]
+
+== Set a Description for an Operation
+
+You can define the description of an operation by using the
+`description` property in the operation node.
+
+----
+endpoints:
+   /content_search:
+      operations:
+         get:
+            pagination: content-search-pagination
+            name: Get Content Search
+            description: Provides keyword and refinement search functionality for content assets.
+            outputMediaType: application/json
+            expects:
+               queryParameter:
+                  count:
+                     friendlyName: count
+                     description: The maximum number of instances per request.
+----
+
+The `description` property can be used to give the final user of the
+connector some context or explanation of what the operation does. It
+appears in Anypoint Studio as a tooltip.
+
+image:media/image2.png[image,width=624,height=228]
+
+[[select-default-media-type-for-an-operation]]
+== Select a Default Media Type for an Operation
+
+Both RAML and OAS API specs allow you to define multiple media types for
+the operations.
+
+REST SDK uses only one media type to generate the operation.
+
+If it is not defined using a custom property, the default one is
+selected following this priority:
+
+* _application/json_ if it is defined
+* _application/xml_ if it is defined
+* The first media type defined in the API spec for that body
+
+If you want to select the operation media type manually, you can use the
+`inputMediaType` and `outputMediaType` properties. These properties
+allow you to define the request body media type and the response media
+type respectively.
+
+----
+endpoints:
+   /content_search:
+      operations:
+         get:
+            pagination: content-search-pagination
+            name: Get Content Search
+            description: Provides keyword and refinement search functionality for content assets.
+            inputMediaType: application/json
+            outputMediaType: application/json
+            expects:
+               queryParameter:
+                  count:
+                     friendlyName: count
+                     description: The maximum number of instances per request.
+----
+
+== Select a Default Media Type for All Operations
+
+If you want to select a default media type for your operations like
+defined in xref:configure-operations.adoc#select-default-media-type-for-an-operation[Select a Default Media Type for an Operation] but you want
+to do it globally, you can use the `defaultInputMediaType` and
+`defaultOutputMediaType` properties at the root level of the Connector
+Descriptor.
+
+----
+defaultInputMediaType: application/json
+defaultOutputMediaType: application/json
+
+endpoints:
+   /content_search:
+      operations:
+         get:
+            pagination: content-search-pagination
+            name: Get Content Search
+            description: Provides keyword and refinement search functionality for content assets.
+            expects:
+               queryParameter:
+                  count:
+                     friendlyName: count
+                     description: The maximum number of instances per request.
+----
+
+== Redefine an Operation Input/Output Type
+
+The API spec may not define an input/output type; if you need one, you
+can use the `inputType` and `outputType` properties in the Connector
+Descriptor. You can set these properties at the operation level in the
+Connector Descriptor. +
+ +
+For example, let’s say we have the following OAS spec.
+
+----
+"paths": {
+ "/payment_instrument/{payment_instrument_id}": {
+   "post": {
+     "responses": {
+       "default": {
+         "description": ""
+       }
+     }
+[..]
+}
+----
+
+In this case, the operation does not define input or output metadata. +
+You can add it using the following descriptor:
+
+----
+defaultInputMediaType: application/json
+defaultOutputMediaType: application/json
+
+endpoints:
+ /payment_instrument/{payment_instrument_id}:
+   operations:
+     post:
+       inputType: './payment-instrument.json'
+       outputType: './payment-instrument.json'
+----
+
+The operation uses the type definition from that schema as input and
+output metadata. +
+The value of this property must be the path to a JSON schema relative to
+the location of the Connector Descriptor file. +
+ +
+In this case, the JSON schema appears as follows:
+
+[source,json]
+----
+{
+ "$schema": "http://json-schema.org/draft-04/schema#",
+ "$ref": "#/definitions/PaymentInstrument",
+ "definitions": {
+   "PaymentInstrument": {
+   "type": "object",
+   "properties": {
+     "name": {"type": "string"}
+   },
+   "required": [
+     "name"
+   ]
+ }}
+}
+----
+
+=== Override an Operation Input/Output Type
+
+You can also use the inputType and outputType properties to override the
+type that is defined in the API spec. If a type is defined in the
+Connector Descriptor, the one in the API spec is ignored.
