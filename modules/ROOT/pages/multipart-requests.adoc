@@ -11,31 +11,18 @@ In the following example, the API spec defines a multipart request:
 
 ----
 /attachment:
-
   post:
-
     body:
-
       multipart/form-data:
-
         properties:
-
           requestid:
-
             type: string
-
           attributes:
-
             type: attribute[]
-
           attachment:
-
             type: file
-
     responses:
-
       200:
-
         description: Successful call
 ----
 
