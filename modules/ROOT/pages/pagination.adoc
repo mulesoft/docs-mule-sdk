@@ -37,8 +37,8 @@ pagination name when an operation is paged using this strategy.
 
 The type defines the behavior of the pagination strategy.
 
-As indicated previously, there are 3 possible strategies: *offset*,
-*marker* and *pageNumber*.
+As indicated previously, there are 3 possible strategies: _offset_,
+_marker_, and _pageNumber_.
 
 === Parameters
 
@@ -86,53 +86,51 @@ from the response.
 Some APIs return the pages directly in the response body, either through
 a JSON array or as an XML document. For example:
 
-[cols="",]
-|===
-|[ +
-\{ +
-"name": "Tony Stark", +
-"age": 45, +
-"alias": "Iron Man" +
-}, +
-\{ +
-"name": "Steve Rodgers", +
-"age": 95, +
-"alias": "Captain America" +
-}, +
-\{ +
-"name": "Dr. Stephen Strange", +
-"age": 40, +
-"alias": "Sorcerer Supreme" +
-} +
+----
+[
+{
+"name": "Tony Stark",
+"age": 45,
+"alias": "Iron Man"
+},
+\{
+"name": "Steve Rodgers",
+"age": 95,
+"alias": "Captain America"
+},
+{
+"name": "Dr. Stephen Strange",
+"age": 40,
+"alias": "Sorcerer Supreme"
+}
 ]
-|===
+----
 
 Others return a complex object with metadata in which the page is
 another field:
 
-[cols="",]
-|===
-|\{ +
-"data": [ +
-\{ +
-"name": "Tony Stark", +
-"age": 45, +
-"alias": "Iron Man" +
-}, +
-\{ +
-"name": "Steve Rodgers", +
-"age": 95, +
-"alias": "Captain America" +
-}, +
-\{ +
-"name": "Dr. Stephen Strange", +
-"age": 40, +
-"alias": "Sorcerer Supreme" +
-} +
-], +
-"totalResults": 9 +
+----
+{
+"data": [
+{
+"name": "Tony Stark",
+"age": 45,
+"alias": "Iron Man"
+},
+{
+"name": "Steve Rodgers",
+"age": 95,
+"alias": "Captain America"
+},
+{
+"name": "Dr. Stephen Strange",
+"age": 40,
+"alias": "Sorcerer Supreme"
 }
-|===
+],
+"totalResults": 9
+}
+----
 
 As such, Connector Descriptors must provide a
 Dataweave expression to be evaluated over the response to obtain the
@@ -150,64 +148,62 @@ a pagination strategy in the Connector Descriptor by creating a
 pagination node inside the `paginations` property, which is located at
 the root of the document.
 
-[cols="",]
-|===
-a|
-_#% Rest Connect Connector Descriptor 1.0_
+----
+#% Rest Connect Connector Descriptor 1.0
 
-*apiSpec*:
+apiSpec:
 
-*url*: http://myhost.com/resources/shop-api.yaml
+url: http://myhost.com/resources/shop-api.yaml
 
-*connectorName*: Shop Connector
+connectorName: Shop Connector
 
-*connectorGav*:
+connectorGav:
 
-*groupId*: com.mulesoft.connectors
+groupId: com.mulesoft.connectors
 
-*artifactId*: shop-connector
+artifactId: shop-connector
 
-*version*: 1.0.0
+version: 1.0.0
 
-*baseUri*:
+baseUri:
 
-*value*: https://myhost.com/shop/api
+value: https://myhost.com/shop/api
 
-*type*: parameter
+type: parameter
 
-*paginations*:
+paginations:
 
-*content-search-pagination*: _#Declares a pagination strategy to be used
-within this API_
+content-search-pagination: #Declares a pagination strategy to be used
+within this API
 
-*type*: offset
+type: offset
 
-*parameters*:
+parameters:
 
-*offsetParamName*: *"start"*
+offsetParamName: "start"
 
-*initialOffset*: 0
+initialOffset: 0
 
-*pagingResponseExpression*:
+pagingResponseExpression:
 
-*language*: *"dataweave"*
+language: "dataweave"
 
-*expression*: *"#[payload.hits]"*
+expression: "#[payload.hits]"
 
-*endpoints:*
+endpoints:
 
-*/content_search*:
+content_search:
 
-*operations*:
+operations:
 
-*get*:
+get:
 
-*pagination*: content-search-pagination
+pagination: content-search-pagination
 
-|===
+----
 
 The example defines an offset based pagination. It declares that the
-offset parameter in the API spec is named start, and an expression that
+offset parameter in the API spec is named `start`, and an expression that
 allows the connector to extract the results from the response.
 
 You must also define that the content search operation uses that
