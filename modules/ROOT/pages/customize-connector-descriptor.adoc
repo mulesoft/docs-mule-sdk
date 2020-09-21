@@ -115,7 +115,7 @@ You can select a category for the connector using the
 `connectorCategory` property, which is located at the root of the
 Connector Descriptor.
 
-The possible values for this property are ‘select’ and ‘premium’.
+The possible values for this property are `select` and `premium`.
 
 ----
 #% Rest Connect Connector Descriptor 1.0
@@ -177,8 +177,7 @@ baseUri:
 value: https://myhost.com/shop/api
 
 type: parameter
-
-|===
+----
 
 The value set for the `extensionXml` property defines how the XML for
 using this connector in the Mule runtime has to look.
