@@ -87,11 +87,11 @@ This consideration is especially important when using third-party client librari
 
 === Do Not Use the Access Token in the Connection Creation
 
-The creation of the connection object in the ConnectionProvider#connect method must not depend on the presence of a valid access token. Even if the connection needs to use the token to perform a one-time only request, that should not be done in the creation of the connection. The request must be deferred to when the connection is first used.
+The creation of the connection object in the `ConnectionProvider#connect` method must not depend on the presence of a valid access token. Connections that need to use the token to perform a one-time-only request should not rely on the creation of the connection. The request must be deferred to when the connection is first used.
 
-To this end, the org.mule.runtime.api.util.LazyValue class can be leveraged. So that when a value is first used, the action of retrieving the value is done, and later uses will get the value that was cached from the first time.
+To adhere to this practice, you can use the `org.mule.runtime.api.util.LazyValue` class. When a value is initially used, the value is retrieved; subsequent uses get the value that was cached initially.
 
-Here is an example of how this can be done:
+The following example shows how to use the `org.mule.runtime.api.util.LazyValue` class:
 
 [source,java,linenums]
 ----
