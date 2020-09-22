@@ -121,7 +121,7 @@ public class MyConnectionProvider implements ConnectionProvider<Connection> {
 }
 ----
 
-Now, the first time the LazyValue is used, the information will be retrieved, and all later usages will get the already resolved value.
+As such, the first time `LazyValue` is used, the information is retrieved, and all later usages get the value that has already been resolved.
 
 == Connection Object Must Not Expose (Nor Be) the Inner Client
 
