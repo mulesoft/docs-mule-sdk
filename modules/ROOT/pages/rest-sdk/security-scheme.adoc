@@ -1,6 +1,6 @@
 = Security Scheme
 ifndef::env-site,env-github[]
-include::_attributes.adoc[]
+include::../_attributes.adoc[]
 endif::[]
 
 == Ignore a Security Scheme
@@ -9,6 +9,7 @@ If your API spec defines a security scheme that you don’t want to be
 present in the generated connector, you can use the `ignored` property
 in the `security` node of your Connector Descriptor.
 
+[source,yaml]
 ----
 security:
   passThrough:
@@ -26,6 +27,7 @@ You can set friendly names for security scheme parameters using the
 Descriptor. You can use the `ignored` property in the `security` node of
 your Connector Descriptor.
 
+[source,yaml]
 ----
 security:
   passThrough:

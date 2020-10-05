@@ -1,6 +1,6 @@
 = Getting Started
 ifndef::env-site,env-github[]
-include::_attributes.adoc[]
+include::../_attributes.adoc[]
 endif::[]
 
 To create a connector using REST SDK:
@@ -13,7 +13,7 @@ tailoring the generated connector.
 
 == Prerequisites
 
-* Download REST SDK: https://repository-master.mulesoft.org/nexus/service/local/repositories/releases/content/com/mulesoft/connectors/rest-connect-cli/1.0.0-RC2/rest-connect-cli-1.0.0-RC2-jar-with-dependencies.jar[rest-connect-cli-1.0.0-RC2.jar]
+* Download REST SDK: https://repository-master.mulesoft.org/nexus/service/local/repositories/releases/content/com/mulesoft/connectivity/rest-sdk-cli/0.1.0/rest-sdk-cli-0.1.0-jar-with-dependencies.jar[rest-sdk-cli-0.1.0.jar]
 * Install Java SDK
 * Apache Maven
 
@@ -24,7 +24,7 @@ To scaffold the Connector Descriptor, you must run the
 
 ----
 java -jar
-$PATH_TO_JAR/rest-connect-cli-1.0.0-RC2-jar-with-dependencies.jar
+$PATH_TO_JAR/rest-sdk-cli-0.1.0-jar-with-dependencies.jar
 create-descriptor -apiSpec $PATH_TO_SPEC/api.raml -outputDir $OUTPUT
 ----
 
@@ -46,15 +46,6 @@ The format of the API spec.
 Allowed values are RAML, JsonOAS, and YamlOAS
 
 |RAML
-
-|parser |No a|
-The parser you want to use to parse the API spec.
-
-Allowed values are AMF and RAMLParser.
-
-You should not use RAMLParser.
-
-|AMF
 
 |outputDir |No a|
 The path where the Connector Descriptor is placed.
@@ -81,7 +72,7 @@ connector using the `create-connector` command:
 
 ----
 |java -jar
-$PATH_TO_JAR/rest-connect-cli-1.0.0-RC1-jar-with-dependencies.jar
+$PATH_TO_JAR/rest-sdk-cli-0.1.0-jar-with-dependencies.jar
 create-connector -apiSpec $PATH_TO_SPEC/api.raml -apiDesc
 $PATH_TO_DESCRIPTOR/descriptor.yaml -outputDir $OUTPUT
 ----
@@ -101,37 +92,43 @@ create a Connector. |-
 |apiDesc |Yes |The relative path to the Connector Descriptor that you
 created to customize the API spec. |-
 
-|specFormat |No a|
-The format of the API spec.
+|specFormat
+|No
+a|The format of the API spec.
 
 Allowed values are RAML, JsonOAS, and YamlOAS
-
 |RAML
 
-|parser |No a|
-The parser you want to use to parse the API spec.
-
-Allowed values are AMF and RAMLParser.
-
-You should not use RAMLParser.
-
-|AMF
-
-|outputDir |No a|
-The path where the connector resides.
+|outputDir
+|No
+a|The path where the connector resides.
 
 The generated file is named `output.yaml` and is located in the specified
 folder.
-
 |Current directory
 
-|skipValidation |No |Allows you to skip the validation step for the API
+
+|skipValidation
+|No
+|Allows you to skip the validation step for the API
 spec. Users should not skip the validations as the successful parsing of
 an invalid API spec is not guaranteed. Users who skip validation might
 experience issues generating the connector descriptor and the connector.
+|FALSE
+
+
+|dynamicMetadata
+|No
+|Creates backwards compatible Dynamic Metadata for Operations.
+|FALSE
+
+
+|forceContentParameter
+|No
+|Forces the content parameters names to always be 'content'.
 |FALSE
 |===
 
 == What's Next?
 
-xref:customize-connector-descriptor.adoc[Customize the Connector Descriptor]
+xref:rest-sdk/customize-connector-descriptor.adoc[Customize the Connector Descriptor]
