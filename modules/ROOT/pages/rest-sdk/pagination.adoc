@@ -1,6 +1,6 @@
 = Paginated Operations
 ifndef::env-site,env-github[]
-include::_attributes.adoc[]
+include::../_attributes.adoc[]
 endif::[]
 
 Neither OAS nor RAML provides a way to declare that an operation is
@@ -62,7 +62,7 @@ For _marker_ pagination, the available parameters are:
 nextTokenParamName:: Indicates the name of the query parameter that
 must be passed to the API to indicate where the next page starts.
 
-nextTokenExpression:: This is a dataweave expression that the connector
+nextToken:: This is a dataweave expression that the connector
 uses to extract the next page token from the API response. This token is
 then used to request the page that follows.
 
@@ -77,7 +77,7 @@ from the server.
 initialPageNumber:: The initial value the connector passes to the
 previously indicated query parameter.
 
-The _pagingResponseExpression_ is common to all the pagination
+The _pagingResponse_ is common to all the pagination
 strategies; it provides the expression used to extract the item data
 from the response.
 
@@ -86,7 +86,7 @@ from the response.
 Some APIs return the pages directly in the response body, either through
 a JSON array or as an XML document. For example:
 
-[source,xml]
+[source,json]
 ----
 [
  {
@@ -110,7 +110,7 @@ a JSON array or as an XML document. For example:
 Others return a complex object with metadata in which the page is
 another field:
 
-[source,xml]
+[source,json]
 ----
 {
  "data": [
@@ -150,6 +150,7 @@ a pagination strategy in the Connector Descriptor by creating a
 pagination node inside the `paginations` property, which is located at
 the root of the document.
 
+[source,yaml]
 ----
 #% Rest Connect Connector Descriptor 1.0
 
@@ -173,7 +174,7 @@ paginations:
    parameters:
      offsetParamName: "start"
      initialOffset: 0
-     pagingResponseExpression:
+     pagingResponse:
        language: "dataweave"
        expression: "#[payload.hits]"
 

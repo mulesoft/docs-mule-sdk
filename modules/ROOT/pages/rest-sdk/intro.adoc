@@ -1,6 +1,6 @@
 = Connectivity using the REST SDK
 ifndef::env-site,env-github[]
-include::_attributes.adoc[]
+include::../_attributes.adoc[]
 endif::[]
 
 You can create a connector from an API specification, or _API spec_ (OAS or RAML), by using REST
@@ -78,4 +78,4 @@ and also provide reduced and optimized _extension models_.
 
 == What's Next?
 
-xref:project-setup.adoc[Getting Started]
+xref:rest-sdk/project-setup.adoc[Getting Started]

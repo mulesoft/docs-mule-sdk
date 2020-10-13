@@ -1,6 +1,6 @@
 = Configure Parameters
 ifndef::env-site,env-github[]
-include::_attributes.adoc[]
+include::../_attributes.adoc[]
 endif::[]
 
 == Set a Name for a Parameter
@@ -11,6 +11,7 @@ parameter type. You can define parameters using the `queryParameter`,
 `uriParameter`, or `header` nodes, and they refer to the corresponding
 parameter defined in the API spec.
 
+[source,yaml]
 ----
 endpoints:
    /content_search:
@@ -37,6 +38,7 @@ Parameters can be defined under the `queryParameter`, `uriParameter`, or
 `header` nodes, and they refer to the corresponding parameter defined in
 the API spec.
 
+[source,yaml]
 ----
 endpoints:
    /content_search:
@@ -65,6 +67,7 @@ present in the generated connector.
 To ignore a parameter, you must use the `ignored` property under the
 parameter node. It applies for any parameter type.
 
+[source,yaml]
 ----
 security:
  oauth2:
@@ -107,6 +110,7 @@ You can select the query parameter array format globally for the
 connector or at an operation level. In both cases, the query parameter
 is defined by using the `queryParameterArrayFormat` property.
 
+[source,yaml]
 ----
 queryParameterArrayFormat: multimap
 
