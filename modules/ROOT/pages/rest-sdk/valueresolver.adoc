@@ -15,7 +15,7 @@ https://api.slack.com/methods/chat.postMessage
 
 image:media/image1.png[image,width=624,height=148]
 
-This endpoint has a required ‘channel’ parameter whose possible values
+This endpoint has a required `channel` parameter whose possible values
 can be obtained by making a request to another endpoint:
 https://api.slack.com/methods/conversations.list
 
@@ -45,7 +45,7 @@ A response from this endpoint looks like this:
 ----
 
 Given this, you can create a simple value resolver that enables you to
-provide the possible values for the ‘channels’ parameter.
+provide the possible values for the `channels` parameter.
 
 [source,yaml]
 ----
@@ -67,7 +67,7 @@ to the `/conversations.list` endpoint using the path and method
 properties respectively.
 
 Next, the resolver extracts the array of values from the response
-with the `extraction` expression, and for each one of these items, ‘name’ property is returned as *displayName* and the ‘id’ property is returned as *value*.
+with the `extraction` expression, and for each one of these items, `name` property is returned as *displayName*, and the `id` property is returned as *value*.
 
 The user sees *displayName* in the dropdown for the
 possible channel values, and *value* is sent to the server.
@@ -156,7 +156,7 @@ following variables.
 
 payload:: The full response returned from the server.
 
-|attributes:: The response attributes returned from the server. This resembles the attributes from a request done using http connector.
+attributes:: The response attributes returned from the server. This resembles the attributes from a request done using http connector.
 
 //http connector?
 
@@ -169,8 +169,6 @@ this value resolver from the operation.
 The availability of these variables depending on the expressions is as
 follows:
 
-[source,yaml]
-----
 [cols=",,,,",options="header",]
 |===
 | |payload |attributes |item |parameters
@@ -184,7 +182,7 @@ Display Name
 |Item Extraction |Yes |Yes |- |-
 |Parameter Binding |- |- |- |Yes
 |===
-----
+
 
 == Skip Output Type Validations
 
@@ -247,6 +245,6 @@ endpoints:
 
 Using this property causes the operation to not have an
 `InputStream` as output. Instead, it always returns an empty string
-output. Using this property causes the actual server response to be
+output. Using this property also causes the actual server response to be
 discarded. The HTTP response properties are still returned as
 attributes.
