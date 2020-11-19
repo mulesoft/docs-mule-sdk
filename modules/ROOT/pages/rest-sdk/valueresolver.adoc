@@ -3,7 +3,9 @@ ifndef::env-site,env-github[]
 include::../_attributes.adoc[]
 endif::[]
 
-// what is a value resolver?
+Value resolvers provide the possible values of an operation’s parameter.
+
+Value resolvers also enable the connector to make a request to an endpoint and get the possible values from there, providing capabilities to extract the actual values from the server response.
 
 == Example: Simple Value Resolver
 
@@ -117,8 +119,7 @@ valueResolvers:
          expression: “[item.id]”
 ----
 
-This value resolver resembles the previous one with the exception of
-the addition of the `binding` node. +
+This value resolver resembles the previous one with the exception of the addition of the `binding` node. +
 You can use this node to bind parameter values from the operation’s where
 this value resolver is used to the request that is made to
 request the possible values.
@@ -141,12 +142,8 @@ value provided in the operation `uriChannelType` URI parameter.
                     Value: uriParameter.uriChannelType
 ----
 
-Setting the value resolver to the operation is as simple as in the
-previous example, only that in this case it is validated that the
-binded parameters exist in the operation before generating the connector
-code.
+Setting the value resolver to the operation is as simple as in the previous example, only that in this case it is validated that the bound parameters exist in the operation before generating the connector code.
 
-//"bound" parameters?
 
 == Value Resolver Expressions
 
