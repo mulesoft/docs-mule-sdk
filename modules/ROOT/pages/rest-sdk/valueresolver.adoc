@@ -122,7 +122,6 @@ the addition of the `binding` node. +
 You can use this node to bind parameter values from the operation’s where
 this value resolver is used to the request that is made to
 request the possible values.
-// I don't really understand what this sentence is trying to convey ^ Is operations supposed to be possessive?
 
 In this example, the `channelType` query parameter is bound to the
 value provided in the operation `uriChannelType` URI parameter.
