@@ -9,16 +9,14 @@ Value resolvers also enable the connector to make a request to an endpoint and g
 
 == Example: Simple Value Resolver
 
-The following example example shows the application of a Value Resolver
-declaration and usage using in the Slack API.
+The following example example shows the application of a Value Resolver declaration and usage using in the Slack API.
 
 In this example, the `postMessage` method has a value resolver implemented:
 https://api.slack.com/methods/chat.postMessage
 
 image:media/image1.png[image,width=624,height=148]
 
-This endpoint has a required `channel` parameter whose possible values
-can be obtained by making a request to another endpoint:
+This endpoint has a required `channel` parameter whose possible values can be obtained by making a request to another endpoint:
 https://api.slack.com/methods/conversations.list
 
 image:media/image2.png[image,width=624,height=328]
@@ -46,8 +44,7 @@ A response from this endpoint looks like this:
 }
 ----
 
-Given this, you can create a simple value resolver that enables you to
-provide the possible values for the `channels` parameter.
+Given this, you can create a simple value resolver that enables you to provide the possible values for the `channels` parameter.
 
 [source,yaml]
 ----
@@ -64,18 +61,13 @@ valueResolvers:
          expression: “#[item.id]”
 ----
 
-According to the example, the value resolver must make a `GET` request
-to the `/conversations.list` endpoint using the path and method
-properties respectively.
+According to the example, the value resolver must make a `GET` request to the `/conversations.list` endpoint using the path and method properties respectively.
 
-Next, the resolver extracts the array of values from the response
-with the `extraction` expression, and for each one of these items, `name` property is returned as *displayName*, and the `id` property is returned as *value*.
+Next, the resolver extracts the array of values from the response with the `extraction` expression, and for each one of these items, `name` property is returned as *displayName*, and the `id` property is returned as *value*.
 
-The user sees *displayName* in the dropdown for the
-possible channel values, and *value* is sent to the server.
+The user sees *displayName* in the dropdown for the possible channel values, and *value* is sent to the server.
 
-You can then add this value resolver to the channel
-parameter in the operation as shown:
+You can then add this value resolver to the channel parameter in the operation as shown:
 
 [source,yaml]
 ----
@@ -92,9 +84,7 @@ endpoints:
 
 == Example: Value Resolver with Parameters
 
-This example contains the previous parameter resolver and adds
-some intelligence. This value resolver uses the operation’s
-parameters in order to query for the appropriate type of channels.
+This example contains the previous parameter resolver and adds some intelligence. This value resolver uses the operation’s parameters in order to query for the appropriate type of channels.
 
 [source,yaml]
 ----
@@ -122,8 +112,7 @@ valueResolvers:
 This value resolver resembles the previous one with the exception of the addition of the `binding` node. +
 This is a way of forwarding parameters set in the operation to the value resolver. These bound parameters can be later used to build the value resolver request.
 
-In this example, the `channelType` query parameter is bound to the
-value provided in the operation `uriChannelType` URI parameter.
+In this example, the `channelType` query parameter is bound to the value provided in the operation `uriChannelType` URI parameter.
 
 [source,yaml]
 ----
@@ -145,8 +134,7 @@ Setting the value resolver to the operation is as simple as in the previous exam
 
 == Value Resolver Expressions
 
-Depending on the context, the expressions have access to the
-following variables.
+Depending on the context, the expressions have access to the following variables.
 
 payload:: The full response returned from the server.
 
@@ -154,14 +142,11 @@ attributes:: The response attributes returned from the server. This resembles th
 
 //http connector?
 
-item:: When the response from the server is extracted and split, the _item_
-variable contains each of those split values.
+item:: When the response from the server is extracted and split, the _item_ variable contains each of those split values.
 
-parameters:: Contains a map with the parameter names and values sent to
-this value resolver from the operation.
+parameters:: Contains a map with the parameter names and values sent to this value resolver from the operation.
 
-The availability of these variables depending on the expressions is as
-follows:
+The availability of these variables depending on the expressions is as follows:
 
 [cols=",,,,",options="header",]
 |===
@@ -180,14 +165,9 @@ Display Name
 
 == Skip Output Type Validations
 
-`GET`, `POST`, `PATCH`, and `OPTIONS` operations defined in the API spec must
-declare a response body and a type for that body. If they do not, the
-connector descriptor must skip this check, define a response body for
-the operation, or declare it as void. +
+`GET`, `POST`, `PATCH`, and `OPTIONS` operations defined in the API spec must declare a response body and a type for that body. If they do not, the connector descriptor must skip this check, define a response body for the operation, or declare it as void. +
  +
-Though is not the recommended approach, you can skip the this check
-using the `skipOutputTypeValidation` property in the Connector
-Descriptor.
+Though is not the recommended approach, you can skip the this check using the `skipOutputTypeValidation` property in the Connector Descriptor.
 
 It can be used at the operation level or globally.
 
@@ -205,24 +185,15 @@ endpoints:
         skipOutputTypeValidation: true   #<-- Operation Level
 ----
 
-If the validation is skipped, the generated connector still generates
-an `InputStream` output for the operation, and it contains the actual
-server response, but without informing the user that this operation has
-an output. This is not recommended and should be avoided as much as
-possible.
+If the validation is skipped, the generated connector still generates an `InputStream` output for the operation, and it contains the actual server response, but without informing the user that this operation has an output. This is not recommended and should be avoided as much as possible.
 
-If the operation does not have an output, the `voidOperation` property
-should be used instead of this.
+If the operation does not have an output, the `voidOperation` property should be used instead of this.
 
 == Void Operations
 
-`GET`, `POST`, `PATCH`, and `OPTIONS` operations defined in the API spec must
-declare a response body and a type for that body. If they don't the
-connector descriptor must skip this check, define a response body for
-the operation, or declare it as void.
+`GET`, `POST`, `PATCH`, and `OPTIONS` operations defined in the API spec must declare a response body and a type for that body. If they don't, the connector descriptor must skip this check, define a response body for the operation, or declare it as void.
 
-You can declare the operation as void using the `voidOperation` property
-of the operation node in the Connector Descriptor:
+You can declare the operation as void using the `voidOperation` property of the operation node in the Connector Descriptor:
 
 [source,yaml]
 ----
@@ -237,8 +208,4 @@ endpoints:
        voidOperation: true   #<-- Operation Level
 ----
 
-Using this property causes the operation to not have an
-`InputStream` as output. Instead, it always returns an empty string
-output. Using this property also causes the actual server response to be
-discarded. The HTTP response properties are still returned as
-attributes.
+Using this property causes the operation to not have an `InputStream` as output. Instead, it always returns an empty string output. Using this property also causes the actual server response to be discarded. The HTTP response properties are still returned as attributes.
