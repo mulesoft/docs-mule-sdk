@@ -307,3 +307,8 @@ In this case, all operations defined under `/api/users` access the
 https://users.com/api/users[https://users.com/api/users] endpoint, and
 the ones defined under `/api/upload` access
 https://users.com/api/upload[https://upload.users.com/api/upload].
+
+=== TLS Support
+
+TLS support is automatically generated and does not need to ve specified in the connector descriptor.
+The only requirement for TLS support to be generated in the connector Configuration is that the API spec must declare support for the HTTPS protocol.

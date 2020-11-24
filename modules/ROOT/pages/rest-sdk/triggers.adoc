@@ -1,0 +1,282 @@
+= Define a Trigger
+ifndef::env-site,env-github[]
+include::../_attributes.adoc[]
+endif::[]
+
+== Complete trigger descriptor
+
+Let’s say we want to create a trigger (aka polling source) for the following endpoint from the Salesforce’s Sales Cloud API.
+
+----
+GET /vXX.X/sobjects/{SObjectName}/updated/?start=startDateAndTime
+----
+
+This endpoint returns a list of the specified *{SObjectName}* updated since the provided start query parameter.
+
+This is a clear case of an endpoint that would be good for a trigger declaration. We would want that trigger to fire a new event (Acting as source for a flow) for every record that gets updated.
+
+
+A response from that endpoint would look like the following
+
+[source,json5]
+----
+{
+"items" : [
+{"id": "a00D0000008pQR5IAM"/*, [...]*/},
+{"id": "a00D0000008pQRGIA2"/*, [...]*/},
+{"id": "a00D0000008pQRFIA2"/*, [...]*/},
+],
+"latestDateCovered" : "2013-05-08T21:20:00.000+0000"
+}
+----
+
+The trigger declaration for this endpoint can look like this
+
+
+[source,yaml]
+----
+triggers:
+   onUpdatedObject:
+     path: /v48.0/sobjects/{SObjectName}/updated/
+     method: GET
+     displayName: SObjects Updated
+     description: Query for updated instances of a specified SObject
+
+     outputType: ./SObject.json
+     outputMediaType: application/json
+
+     parameters:
+       objectName:
+         displayName: SObject Name
+         description: The object to query for new records
+         type: string
+         required: true
+       startDate:
+         displayName: Start Date
+         description: The date since an element has to have been modified in order to trigger.
+         type: localDateTime
+         required: true
+
+     binding:
+       uriParams:
+         SObjectName:
+            value: "#[parameters.objectName]"
+       queryParams:
+         start:
+           value: "#[if(context.watermark == null) parameters.startDate else context.watermark]"
+
+     items:
+       extraction:
+         expression: "#[payload.items]"
+
+     watermark:
+       extraction:
+         expression: "#[payload.latestDateCovered]"
+      type: localDateTime
+
+
+     identity:
+       extraction:
+         expression: "#[item.id]"
+----
+
+== Detailed explanation
+
+[source,yaml]
+----
+triggers:
+    onUpdatedObject:
+        path: /v48.0/sobjects/{SObjectName}/updated/
+        method: GET
+        displayName: SObjects Updated
+        description: Query for updated instances of a specified SObject
+----
+
+The first thing we see in this trigger declaration are the basic details.
+
+*triggers*: Is the section of the connector descriptor where all triggers must be declared.
+
+*onUpdatedObject*: Is the name we are giving to this trigger. The generated class name will be generated based on this. It has to be unique.
+
+*path*: is the path that will be polled to check if a new event needs to be triggered - If an object has been updated, in this case -, and to get the mentioned updated entities.
+
+*method*: Defines the HTTP verb that will be used when making this request.
+
+*displayName* and *description* define a friendly name and description that will be seen by the final user respectively.
+
+[source,yaml]
+----
+    outputType: ./SObject.json
+    outputMediaType: application/json
+----
+
+*outputType*: This property is used to define the trigger output metadata. It must be a path to a Json Schema, relative to the Descriptor file location.
+
+*outputMediaType*: Use this property to override the trigger default output media type that comes from the API spec.
+
+
+[source,yaml]
+----
+    parameters:
+       objectName:
+         displayName: SObject Name
+         description: The object to query for new records
+         type: string
+         required: true
+       startDate:
+         displayName: Start Date
+         description: The date since an element has to have been modified in order to trigger.
+         type: localDateTime
+         required: true
+----
+
+The *parameters* section is used to define the parameters the user will see. These don’t need to be the same that the API endpoint declares.
+
+In this case, we want the user to choose the SObject he wants to query, so we created the *objectName* parameter for the user to provide that name.
+The *displayName* and *description* properties define how the user will see this parameter in the UI.
+*required* indicates if the user will be required to give a value to this parameter or not. If the parameter is not required and the user does not specify a value for it, it will be assigned a null value.
+Finally, the *type* parameter defines the type of data this parameter will store, this adds restrictions to what the user can input there. Allowed values for the type field are: integer, number, string, localDateTime, zonedDateTime and boolean.
+
+We also want the user to provide a start date from where starting querying for updates, so we created the *startDate* parameter.
+In this case the *type* is localDateTime, this matches the watermark type as we are assigning it to the watermark as its initial value.
+
+[source,yaml]
+----
+    binding:
+       uriParams:
+         SObjectName:
+            value: "#[parameters.objectName]"
+       queryParams:
+         start:
+           value: "#[if(context.watermark == null) parameters.startDate else context.watermark]"
+----
+
+The *binding* section allows us to define the parameters values to be sent in the request.
+
+
+There we will have context variables and the parameters values the user set available to use. Each expression in a trigger has access to a different set of the context variables, specified in the *Trigger Expressions* section.
+
+First, we want to send the SObjectName set by the user in the request, so we binded the *SObjectName URI parameter* to the objectName parameter we declared using the *"#[parameters.objectName]"* expression.
+
+Then, we want to send the start query parameter in a way that allows the trigger to query for new records each time. For this, we will first check if the watermark is set - This happens if the trigger polled values previously - and send it. If it is not set, we use the startDate provided by the user for the *‘start’ query parameter*, as it will be the first date we are interested in querying.
+
+[source,yaml]
+----
+     items:
+       extraction:
+         expression: "#[payload.items]"
+----
+
+In the *items* section we define how to extract the actual values from the server response.
+In this case the response looks like this:
+
+[source,json5]
+----
+{
+"items" : [
+{"id": "a00D0000008pQR5IAM"/*, [...]*/},
+{"id": "a00D0000008pQRGIA2"/*, [...]*/},
+{"id": "a00D0000008pQRFIA2"/*, [...]*/},
+],
+"latestDateCovered" : "2013-05-08T21:20:00.000+0000"
+}
+----
+
+The trigger will automatically split the array and each of the items will be sent to the flow as a different element -i.e. `{"id": "a00D0000008pQR5IAM", [...]}` will be one of the propagated items-
+We extract that array using the *"#[payload.items]"* expression.
+
+[source,yaml]
+----
+   watermark:
+       extraction:
+         expression: "#[payload.latestDateCovered]"
+       type: localDateTime
+----
+
+In the *watermark* section we will define how to extract the watermark from the response, and how to check if the extracted watermark is higher than the actual one. If it is higher, it will be set as the new watermark.
+
+In this case, we can see that the response provides the last covered date in a separate field, so we can simply get it from there.
+
+For the *extraction* we are using the *#[payload.latestDateCovered]* to extract it from the latestDateCovered response field.
+
+[source,yaml]
+----
+     identity:
+       extraction:
+         expression: "#[item.id]"
+----
+
+In the *identity* section we are setting the *item id* -Each instance of an element from the split payload- as identity. By setting this value, each id will only trigger an event once per poll, that means, if the id appears more than once, the application won’t be notified.
+
+== Trigger Expressions
+
+Wherever an expression is supported, you can provide the described expression object, or a simple string value.
+
+When a string value is provided, Rest SDK will check if it is an expression or a fixed value and behave accordingly.
+
+Depending on the context, the expressions will have access to the following variables.
+
+[cols="h,l"]
+|===
+|Variable Name | Description
+
+|parameters
+|Contains a map of the parameters declared for the trigger and their assigned values.
+
+|context.watermark
+|Contains the value of the current watermark. This value will be null in the first poll. Subsequent polls will contain the highest value extracted from the previous polls.
+
+|payload
+|The full response returned from the server.
+
+|attributes
+|The response attributes returned from the server. This will look just as the attributes from a request done using http connector looks.
+
+|item
+|When the response from the server is extracted and split, this variable will contain each of those split values.
+
+|===
+
+The availability of these variables depending on the expressions is as follows:
+
+
+[cols="h,l,l,l,l,l"]
+|===
+| | parameters | context.watermark | payload | attributes | item
+
+| Parameter Binding
+| Yes
+| Yes
+| -
+| -
+| -
+
+| Body Binding
+| Yes
+| Yes
+| -
+| -
+| -
+
+| Watermark Extraction
+| Yes
+| Yes
+| Yes
+| Yes
+| Yes
+
+| Items Extraction
+| Yes
+| Yes
+| Yes
+| Yes
+| -
+
+| Identity Extraction
+| Yes
+| Yes
+| Yes
+| Yes
+| Yes
+
+|===
