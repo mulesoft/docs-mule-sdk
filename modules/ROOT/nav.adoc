@@ -9,6 +9,7 @@
   *** xref:rest-sdk/security-scheme.adoc[Security Scheme]
   *** xref:rest-sdk/multipart-requests.adoc[Multipart Requests]
   *** xref:rest-sdk/test-connection-method.adoc[Test Connection Method]
+  *** xref:rest-sdk/value-resolver.adoc[Value Resolvers]
  ** xref:connectivity-testing.adoc[Connectivity Testing]
 * xref:getting-started.adoc[Java SDK]
  ** xref:choosing-version.adoc[Choosing the SDK version]
