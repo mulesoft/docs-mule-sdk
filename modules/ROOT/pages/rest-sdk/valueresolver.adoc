@@ -120,9 +120,7 @@ valueResolvers:
 ----
 
 This value resolver resembles the previous one with the exception of the addition of the `binding` node. +
-You can use this node to bind parameter values from the operation’s where
-this value resolver is used to the request that is made to
-request the possible values.
+This is a way of forwarding parameters set in the operation to the value resolver. These bound parameters can be later used to build the value resolver request.
 
 In this example, the `channelType` query parameter is bound to the
 value provided in the operation `uriChannelType` URI parameter.
