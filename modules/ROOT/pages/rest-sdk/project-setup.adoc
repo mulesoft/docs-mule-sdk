@@ -96,7 +96,7 @@ created to customize the API spec. |-
 |No
 a|The format of the API spec.
 
-Allowed values are RAML, JsonOAS, and YamlOAS
+Allowed values are RAML, JsonOAS, YamlOAS, JsonOAS3, and YamlOAS3
 |RAML
 
 |outputDir
