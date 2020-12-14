@@ -3,7 +3,7 @@ ifndef::env-site,env-github[]
 include::../_attributes.adoc[]
 endif::[]
 
-== Complete trigger descriptor
+== Complete Trigger Descriptor
 
 Let’s say we want to create a trigger (aka polling source) for the following endpoint from the Salesforce’s Sales Cloud API.
 
