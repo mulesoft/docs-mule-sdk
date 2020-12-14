@@ -1315,7 +1315,7 @@ This example explains how to add a resource to your project so that it is export
 
 GitHub Location: https://github.com/mulesoft-labs/smart-connectors-integration-tests/tree/master/smart-connectors/smart-connector-exporting-resources[smart-connectors/smart-connector-exporting-resources]
 
-As the objective is to simply export a resource and make it available in the main mule app, the module file `module-exporting-resources.xml` will not contain any functionality.
+As the objective is to export a resource and make it available in the main mule app, the module file `module-exporting-resources.xml` does not contain any functionality.
 
 [[module-exporting-resources]]
 .module-exporting-resources.xml
