@@ -1336,7 +1336,7 @@ As the objective is to export a resource and make it available in the main mule 
  </module>
 ----
 
-This is the resource file that will be exported:
+The following resource file is exported:
 
 .myMappings.dwl
 [source,text,linenums]
@@ -1371,8 +1371,8 @@ fun toUpper(persons: Array<Person>): Array<Person> =
 ----
 
 The resource file *must* be placed inside a new folder named after the module's name (which was defined in the  <<module-exporting-resources], main module file>>).
-In this example the module is named "module-exporting-resources" so the folder must be named "module_exporting_resources" (notice that hyphens were replaced with underscores).
-All files contained in this new folder (or its subfolders) will be automatically exported by the XML SDK.
+In this example, the module is named `module-exporting-resources`, so the folder must be named `module_exporting_resources`. Note that hyphens are replaced with underscores.
+All files contained in this new folder or its subfolders are automatically exported by the XML SDK.
 
 In the example, the folder structure looks like this:
 
