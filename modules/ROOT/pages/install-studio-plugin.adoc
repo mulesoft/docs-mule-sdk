@@ -1,0 +1,15 @@
+= Install the Testing Framework Studio Plugin
+
+Anypoint Studio 7.8.0 provides you a plugin to write and run your modules' MUnit tests from Studio.
+
+To install the plugin:
+
+. Select *Help* > *Install New Software*.
+. Click *Add...*.
++
+image::add-new-software.png[]
+. In *Name*, add a name to identify the update site.
+. In *Location*, type the URL of the update site.
++
+image::add-new-software-url.png[]
+. Click *OK*.
