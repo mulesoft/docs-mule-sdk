@@ -169,7 +169,6 @@ paginations:
    type: offset
    parameters:
      paginationParamName: "start"
-     initialOffset: 0
      pagingResponse:
        language: "dataweave"
        expression: "#[payload.hits]"
