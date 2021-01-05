@@ -49,17 +49,14 @@ paginated operation. These vary depending on the pagination strategy.
 
 For _offset_ pagination, the available parameters are:
 
-offsetParamName:: Indicates the name of the query parameter that must
+paginationParamName:: Indicates the name of the query parameter that must
 be passed to the API to indicate the initial position of the next page.
-
-initialOffset:: The initial value the connector passes to the
-previously indicated query parameter.
 
 ==== Marker Pagination
 
 For _marker_ pagination, the available parameters are:
 
-nextTokenParamName:: Indicates the name of the query parameter that
+paginationParamName:: Indicates the name of the query parameter that
 must be passed to the API to indicate where the next page starts.
 
 nextToken:: This is a dataweave expression that the connector
@@ -70,12 +67,11 @@ then used to request the page that follows.
 
 For _pageNumber_ pagination, the available parameters are:
 
-pageNumberParamName:: Indicates the name of the query parameter that
+paginationParamName:: Indicates the name of the query parameter that
 must be passed to the API to indicate the page number we want to get
 from the server.
 
-initialPageNumber:: The initial value the connector passes to the
-previously indicated query parameter.
+==== Paging Response
 
 The _pagingResponse_ is common to all the pagination
 strategies; it provides the expression used to extract the item data
@@ -172,7 +168,7 @@ paginations:
  content-search-pagination: #Declares a pagination strategy to be used within this API
    type: offset
    parameters:
-     offsetParamName: "start"
+     paginationParamName: "start"
      initialOffset: 0
      pagingResponse:
        language: "dataweave"
