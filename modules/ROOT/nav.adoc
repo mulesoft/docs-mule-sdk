@@ -1,6 +1,6 @@
 .xref:index.adoc[Mule SDK]
 * xref:index.adoc[Mule SDK]
-* xref:connectivity.adoc[REST SDK]
+* xref:rest-sdk/rest-sdk-connectivity.adoc[REST SDK]
  ** xref:rest-sdk/project-setup.adoc[Getting Started]
  ** xref:rest-sdk/customize-connector-descriptor.adoc[Customize the Connector Descriptor]
   *** xref:rest-sdk/configure-operations.adoc[Configure Operations]
