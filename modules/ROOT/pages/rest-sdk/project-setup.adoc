@@ -18,7 +18,7 @@ To create a connector using Rest SDK:
 
 == Install the Rest SDK Plugin
 
-A mojo is a **M**aven plain **O**ld **J**ava **O**bject.
+A _mojo_ is a Maven plain Old Java Object.
 Each mojo is an executable goal in Maven, and a *plugin* is a distribution of one or more related mojos.
 
 *This step is optional* as Maven will automatically download the plugin when you try to use it
