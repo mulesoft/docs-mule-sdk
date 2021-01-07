@@ -21,10 +21,12 @@ To create a connector using Rest SDK:
 A _mojo_ is a Maven plain Old Java Object.
 Each mojo is an executable goal in Maven, and a _plugin_ is a distribution of one or more related mojos.
 
-Maven automatically downloads the plugin when you try to use it. Optionally, you can run the following command to ensure you have access to necessary repositories and the latest plugin version:
+Maven automatically downloads the plugin when you try to use it.
+
+You can run the following command to ensure you have access to necessary repositories and the latest plugin version:
 
 ----
-mvn dependency:get -DgroupId=com.mulesoft.connectivity -DartifactId=rest-sdk-mojo -Dversion=0.1.2
+mvn dependency:get -Dartifact=com.mulesoft.connectivity:rest-sdk-mojo:RELEASE -DrepoUrl=https://repository.mulesoft.org/nexus/content/repositories/releases
 ----
 
 == Scaffold the Connector Descriptor
@@ -38,6 +40,7 @@ mvn com.mulesoft.connectivity:rest-sdk-mojo:<PLUGIN_VERSION>:createDescriptor -D
 
 * Where `<PATH_TO_SPEC>` is the path to the location of your API spec.
 * Where `<PLUGIN_VERSION>` is the version of the Rest SDK Plugin you want to use.
+You can omit this parameter, and the latest version will be used.
 
 The `createDescriptor` mojo uses the following parameters:
 
@@ -80,6 +83,7 @@ mvn com.mulesoft.connectivity:rest-sdk-mojo:<PLUGIN_VERSION>:createConnector -Da
 * Where `<PATH_TO_SPEC>` is the location of your API spec.
 * Where `<PATH_TO_DESCRIPTOR>` is the location of your descriptor.
 * Where `<PLUGIN_VERSION>` is the version of the Rest SDK Plugin you want to use.
+You can omit this parameter, and the latest version will be used.
 
 The createConnector mojo uses the following parameters:
 
