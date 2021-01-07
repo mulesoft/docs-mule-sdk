@@ -23,7 +23,7 @@ Each mojo is an executable goal in Maven, and a _plugin_ is a distribution of on
 
 Maven automatically downloads the plugin when you try to use it.
 
-You can run the following command to ensure you have access to necessary repositories and the latest plugin version:
+Run the following command to ensure you have access to necessary repositories and the latest plugin version:
 
 ----
 mvn dependency:get -Dartifact=com.mulesoft.connectivity:rest-sdk-mojo:RELEASE -DrepoUrl=https://repository.mulesoft.org/nexus/content/repositories/releases
