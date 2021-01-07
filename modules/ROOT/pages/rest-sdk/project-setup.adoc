@@ -5,8 +5,8 @@ endif::[]
 
 To create a connector using Rest SDK:
 
-* Use a Mojo to scaffold a Connector Descriptor for an API Spec.
-* Use a Mojo to create a Connector from an API Spec and a Connector Descriptor.
+* Use a _mojo_ (Maven plain Old Java Object) to scaffold a Connector Descriptor for an API Spec.
+* Use a mojo to create a Connector from an API Spec and a Connector Descriptor.
 * Perform some modifications to the Connector Descriptor for tailoring the generated connector.
 * Package the connector using Maven.
 * Publish the connector to Anypoint Exchange.
