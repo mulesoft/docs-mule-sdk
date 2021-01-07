@@ -40,7 +40,7 @@ mvn com.mulesoft.connectivity:rest-sdk-mojo:<PLUGIN_VERSION>:createDescriptor -D
 
 * Where `<PATH_TO_SPEC>` is the path to the location of your API spec.
 * Where `<PLUGIN_VERSION>` is the version of the Rest SDK Plugin you want to use.
-You can omit this parameter, and the latest version will be used.
+If you omit this parameter, the latest version is used.
 
 The `createDescriptor` mojo uses the following parameters:
 
