@@ -3,37 +3,45 @@ ifndef::env-site,env-github[]
 include::../_attributes.adoc[]
 endif::[]
 
-To create a connector using REST SDK:
+To create a connector using Rest SDK:
 
-* Use a CLI command to scaffold a Connector Descriptor for an API Spec.
-* Use a CLI command to create a Connector from an API Spec and a Connector Descriptor.
-* Perform some example modifications to the Connector Descriptor for
-tailoring the generated connector.
-* Build the connector using Maven.
+* Use a Mojo to scaffold a Connector Descriptor for an API Spec.
+* Use a Mojo to create a Connector from an API Spec and a Connector Descriptor.
+* Perform some modifications to the Connector Descriptor for tailoring the generated connector.
+* Package the connector using Maven.
 * Publish the connector to Anypoint Exchange.
 
 == Prerequisites
 
-* Download REST SDK: https://repository-master.mulesoft.org/nexus/service/local/repositories/releases/content/com/mulesoft/connectivity/rest-sdk-cli/0.1.0/rest-sdk-cli-0.1.0-jar-with-dependencies.jar[rest-sdk-cli-0.1.0.jar]
-* Install Java SDK
-* Apache Maven
+* Java 8 SDK
+* Apache Maven (3.3.9 or newer recommended)
+
+== Install the Rest SDK Plugin
+
+A mojo is a **M**aven plain **O**ld **J**ava **O**bject.
+Each mojo is an executable goal in Maven, and a *plugin* is a distribution of one or more related mojos.
+
+*This step is optional* as Maven will automatically download the plugin when you try to use it
+but it is useful as it allows you to be sure that you have access to the repositories and
+have the latest version.
+
+----
+mvn dependency:get -DgroupId=com.mulesoft.connectivity -DartifactId=rest-sdk-mojo -Dversion=0.1.2
+----
 
 == Scaffold the Connector Descriptor
 
 To scaffold the Connector Descriptor, you must run the
-`create-descriptor` command:
+`createDescriptor` mojo:
 
 ----
-java -jar
-$PATH_TO_JAR/rest-sdk-cli-0.1.0-jar-with-dependencies.jar
-create-descriptor -apiSpec $PATH_TO_SPEC/api.raml -outputDir $OUTPUT
+mvn com.mulesoft.connectivity:rest-sdk-mojo:<PLUGIN_VERSION>:createDescriptor -DapiSpec=<PATH_TO_SPEC>/api.raml
 ----
 
-* Where `$PATH_TO_JAR` is the location of the REST SDK jar file
-* Where `$PATH_TO_SPEC` is the location of your API spec
-* Where `$OUTPUT` is the location where you want your Connector Descriptor to be created
+* Where `<PATH_TO_SPEC>` is the path to the location of your API spec.
+* Where `<PLUGIN_VERSION>` is the version of the Rest SDK Plugin you want to use.
 
-The `create-descriptor` command uses the following parameters:
+The `createDescriptor` mojo uses the following parameters:
 
 [cols=",,,",options="header",]
 |===
@@ -44,19 +52,15 @@ create a Connector Descriptor. |-
 |specFormat |No a|
 The format of the API spec.
 
-Allowed values are RAML, JsonOAS, and YamlOAS
-
-|RAML
+Allowed values are RAML, JsonOAS, YamlOAS, JsonOAS3 and YamlOAS3 |RAML
 
 |outputDir |No a|
 The path where the Connector Descriptor is placed.
 
 The generated file is named output.yaml and located in the specified
-folder.
+folder. |Current directory
 
-|Current directory
-
-|mode |No |The mode in which you want the connector descriptor to be
+|descriptorMode |No |The mode in which you want the connector descriptor to be
 generated. Allowed values are MINIMAL and VERBOSE. |MINIMAL
 
 |skipValidation |No |Allows you to skip the validation step for the API
@@ -69,20 +73,17 @@ and the connector. |FALSE
 == Create Connector
 
 After you have modified the Connector Descriptor, you can generate the
-connector using the `create-connector` command:
+connector using the `createConnector` mojo:
 
 ----
-|java -jar
-$PATH_TO_JAR/rest-sdk-cli-0.1.0-jar-with-dependencies.jar
-create-connector -apiSpec $PATH_TO_SPEC/api.raml -apiDesc
-$PATH_TO_DESCRIPTOR/descriptor.yaml -outputDir $OUTPUT
+mvn com.mulesoft.connectivity:rest-sdk-mojo:<PLUGIN_VERSION>:createConnector -DapiSpec=<PATH_TO_SPEC>/api.raml -Ddescriptor=<PATH_TO_DESCRIPTOR>/descriptor.yaml
 ----
 
-* Where `$PATH_TO_JAR` is the location of the REST SDK jar file
-* Where `$PATH_TO_SPEC` is the location of your API spec
-* Where `$OUTPUT` is the location where you want your Connector Descriptor to be created
+* Where `<PATH_TO_SPEC>` is the location of your API spec.
+* Where `<PATH_TO_DESCRIPTOR>` is the location of your descriptor.
+* Where `<PLUGIN_VERSION>` is the version of the Rest SDK Plugin you want to use.
 
-The create-connector command uses the following parameters:
+The createConnector mojo uses the following parameters:
 
 [cols=",,,",options="header",]
 |===
@@ -90,7 +91,7 @@ The create-connector command uses the following parameters:
 |apiSpec |Yes |The relative path to the API spec for which you want to
 create a Connector. |-
 
-|apiDesc |Yes |The relative path to the Connector Descriptor that you
+|descriptor |Yes |The relative path to the Connector Descriptor that you
 created to customize the API spec. |-
 
 |specFormat
