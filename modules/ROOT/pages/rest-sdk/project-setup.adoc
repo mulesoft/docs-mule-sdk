@@ -83,7 +83,7 @@ mvn com.mulesoft.connectivity:rest-sdk-mojo:<PLUGIN_VERSION>:createConnector -Da
 * Where `<PATH_TO_SPEC>` is the location of your API spec.
 * Where `<PATH_TO_DESCRIPTOR>` is the location of your descriptor.
 * Where `<PLUGIN_VERSION>` is the version of the Rest SDK Plugin you want to use.
-You can omit this parameter, and the latest version will be used.
+If you omit this parameter, the latest version is used.
 
 The createConnector mojo uses the following parameters:
 
