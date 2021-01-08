@@ -23,14 +23,14 @@ Each mojo is an executable goal in Maven, and a _plugin_ is a distribution of on
 
 If you have access to the Mulesoft's repositories, Maven automatically downloads the plugin when you try to use it.
 
-=== Get access to the Mulesoft's Maven Repository
+=== Get Access to Mulesoft's Maven Repository
 
-Mulesoft repositories are public, you only need to configure Maven to access them.
+Mulesoft repositories are public. However, you must to configure Maven to access them.
 
 . Access the settings.xml Maven configuration file. +
 For Mac or Linux: `Mac/Linux: ~/.m2/settings.xml` +
 For Windows: `C:\Users\<UserName>\.m2\settings.xml`
-. Add a new plugin repository to your profile. +
+. Add a new plugin repository to your profile. For example: +
 [source,xml]
 ----
     <profiles>
