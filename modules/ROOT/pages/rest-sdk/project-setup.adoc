@@ -47,10 +47,10 @@ There, you will need to add a new plugin repository to your profile.
             </activation>
 
             <pluginRepositories>
-                <pluginRepository> <1>
+                <pluginRepository>
                     <id>mulesoft-releases</id>
                     <name>Mule Releases Repository</name>
-                    <url>https://repository-master.mulesoft.org/nexus/content/repositories/releases/</url>
+                    <url>https://repository.mulesoft.org/nexus/content/repositories/releases/</url>
                 </pluginRepository>
             </pluginRepositories>
 
