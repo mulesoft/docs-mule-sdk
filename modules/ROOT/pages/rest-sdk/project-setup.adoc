@@ -51,6 +51,7 @@ For Windows: `C:\Users\<UserName>\.m2\settings.xml`
         </profile>
     </profiles>
 ----
+. Save your changes.
 You can now use Rest SDK.
 
 
