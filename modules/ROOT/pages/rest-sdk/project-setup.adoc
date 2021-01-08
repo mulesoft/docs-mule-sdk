@@ -27,16 +27,10 @@ If you have access to the Mulesoft's repositories, Maven automatically downloads
 
 Mulesoft repositories are public, you only need to configure Maven to access them.
 
-You can find the settings.xml Maven configuration file in the following locations:
-....
-Mac/Linux: ~/.m2/settings.xml
-....
-....
-Windows: C:\Users\<UserName>\.m2\settings.xml
-....
-
-There, you will need to add a new plugin repository to your profile.
-
+. Access the settings.xml Maven configuration file. +
+For Mac or Linux: `Mac/Linux: ~/.m2/settings.xml` +
+For Windows: `C:\Users\<UserName>\.m2\settings.xml`
+. Add a new plugin repository to your profile. +
 [source,xml]
 ----
     <profiles>
@@ -59,8 +53,7 @@ There, you will need to add a new plugin repository to your profile.
 ----
 <1> The plugin repository you need to add to the settings.xml file.
 
-
-Once you have done this, you are ready to use Rest SDK.
+You can now use Rest SDK.
 
 
 == Scaffold the Connector Descriptor
