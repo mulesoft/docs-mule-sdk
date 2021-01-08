@@ -30,7 +30,7 @@ Mulesoft repositories are public. However, you must to configure Maven to access
 . Access the settings.xml Maven configuration file. +
 For Mac or Linux: `Mac/Linux: ~/.m2/settings.xml` +
 For Windows: `C:\Users\<UserName>\.m2\settings.xml`
-. Add a new plugin repository to your profile. For example: +
+. In `settings.xml`, add a new plugin repository to the `<profile>` section. For example: +
 [source,xml]
 ----
     <profiles>
