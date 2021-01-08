@@ -51,8 +51,6 @@ For Windows: `C:\Users\<UserName>\.m2\settings.xml`
         </profile>
     </profiles>
 ----
-<1> The plugin repository you need to add to the settings.xml file.
-
 You can now use Rest SDK.
 
 
