@@ -21,13 +21,38 @@ To create a connector using Rest SDK:
 A _mojo_ is a Maven plain Old Java Object.
 Each mojo is an executable goal in Maven, and a _plugin_ is a distribution of one or more related mojos.
 
-Maven automatically downloads the plugin when you try to use it.
+If you have access to the Mulesoft's repositories, Maven automatically downloads the plugin when you try to use it.
 
-Run the following command to ensure you have access to necessary repositories and the latest plugin version:
+=== Get Access to Mulesoft's Maven Repository
 
+Mulesoft repositories are public. However, you must to configure Maven to access them.
+
+. Access the settings.xml Maven configuration file. +
+For Mac or Linux: `Mac/Linux: ~/.m2/settings.xml` +
+For Windows: `C:\Users\<UserName>\.m2\settings.xml`
+. In `settings.xml`, add a new plugin repository to the `<profile>` section. For example: +
+[source,xml]
 ----
-mvn dependency:get -Dartifact=com.mulesoft.connectivity:rest-sdk-mojo:RELEASE -DrepoUrl=https://repository.mulesoft.org/nexus/content/repositories/releases
+    <profiles>
+        <profile>
+            <id>default-profile</id>
+            <activation>
+                <activeByDefault>true</activeByDefault>
+            </activation>
+
+            <pluginRepositories>
+                <pluginRepository>
+                    <id>mulesoft-releases</id>
+                    <name>Mule Releases Repository</name>
+                    <url>https://repository.mulesoft.org/nexus/content/repositories/releases/</url>
+                </pluginRepository>
+            </pluginRepositories>
+
+        </profile>
+    </profiles>
 ----
+
+You can now use Rest SDK.
 
 == Scaffold the Connector Descriptor
 
