@@ -9,7 +9,7 @@ To install the plugin:
 +
 image::add-new-software.png[]
 . In *Name*, add a name to identify the update site.
-. In *Location*, type the URL of the update site.
+. In *Location*, type the URL of the update site: `+http://studio.mulesoft.org/s2/sdk+`
 +
 image::add-new-software-url.png[]
 . Click *OK*.
