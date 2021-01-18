@@ -67,6 +67,7 @@
  ** xref:dmt.adoc[DevKit to SDK Migration Tool]
 * xref:xml-sdk.adoc[XML SDK]
 * xref:testing.adoc[Testing your Module]
+ ** xref:install-studio-plugin.adoc[Install the Testing Framework Studio Plugin]
  ** xref:testing-writing-your-first-munit-test.adoc[Writing Your First MUnit Test]
  ** xref:mtf-testing-examples.adoc[SDK Testing Examples]
   *** xref:mtf-expecting-errors.adoc[Expecting Errors]
