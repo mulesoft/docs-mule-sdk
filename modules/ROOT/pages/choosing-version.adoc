@@ -2,6 +2,7 @@
 ifndef::env-site,env-github[]
 include::_attributes.adoc[]
 endif::[]
+:page-aliases: 1.1@mule-sdk::choosing-version.adoc, 1.0@mule-sdk::choosing-version.adoc, 1.2@mule-sdk::choosing-version.adoc
 :keywords: mule, sdk, create, new, project, getting, started, version
 
 //TODO: IS THIS 1.1 ONLY, NOT 1.0

@@ -2,6 +2,7 @@
 ifndef::env-site,env-github[]
 include::_attributes.adoc[]
 endif::[]
+:page-aliases: 1.1@mule-sdk::parameter-layout.adoc, 1.0@mule-sdk::parameter-layout.adoc, 1.2@mule-sdk::parameter-layout.adoc
 
 The SDK provides a set of annotations used for customizing many aspects of the UI and UX.
 

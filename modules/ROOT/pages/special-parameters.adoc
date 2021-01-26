@@ -2,6 +2,7 @@
 ifndef::env-site,env-github[]
 include::_attributes.adoc[]
 endif::[]
+:page-aliases: 1.1@mule-sdk::special-parameters.adoc, 1.0@mule-sdk::special-parameters.adoc, 1.2@mule-sdk::special-parameters.adoc
 :keywords: mule, sdk, operation, source, MIME, MIME Type, Encoding, Typed Value, Parameter Resolver, literal
 
 == TypedValue<Type>

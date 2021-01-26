@@ -2,6 +2,7 @@
 ifndef::env-site,env-github[]
 include::_attributes.adoc[]
 endif::[]
+:page-aliases: 1.1@mule-sdk::sources-transactions.adoc, 1.0@mule-sdk::sources-transactions.adoc, 1.2@mule-sdk::sources-transactions.adoc
 :keywords: mule, sdk, sources, listener, triggers, transactions
 
 Just like operations, Message Sources support transactions. Examples of Message Sources include the JMS and VM connector listeners. Both listeners take messages out of a queue and push it to a Flow. If the message processing is successful, the transaction is committed. Otherwise, the transaction is rolled back, and the message goes back to the queue.

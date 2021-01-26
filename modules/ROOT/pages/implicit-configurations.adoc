@@ -2,6 +2,7 @@
 ifndef::env-site,env-github[]
 include::_attributes.adoc[]
 endif::[]
+:page-aliases: 1.1@mule-sdk::implicit-configurations.adoc
 
 Some configurations can be classified as implicit. A configuration can be used implicitly when none of its parameters are required. For example, suppose a `myConfig` configuration object which has a required parameter `param1`:
 

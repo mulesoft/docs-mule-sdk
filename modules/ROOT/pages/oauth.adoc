@@ -2,6 +2,7 @@
 ifndef::env-site,env-github[]
 include::_attributes.adoc[]
 endif::[]
+:page-aliases: 1.1@mule-sdk::oauth.adoc, 1.0@mule-sdk::oauth.adoc, 1.2@mule-sdk::oauth.adoc
 :keywords: mule, sdk, security, oauth
 
 OAuth 2.0 is the industry-standard protocol for authorization. OAuth 2.0 focuses on client developer simplicity while providing specific authorization flows for web applications, desktop applications, mobile phones, and livingroom devices. For more information about the OAuth 2.0 protocol, see https://oauth.net/2/[https://oauth.net/2/].

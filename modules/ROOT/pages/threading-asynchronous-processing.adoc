@@ -2,6 +2,7 @@
 ifndef::env-site,env-github[]
 include::_attributes.adoc[]
 endif::[]
+:page-aliases: 1.1@mule-sdk::threading-asynchronous-processing.adoc, 1.2@mule-sdk::threading-asynchronous-processing.adoc
 
 Most modules *should not* have concurrency concerns other than designing for Thread safety.
 

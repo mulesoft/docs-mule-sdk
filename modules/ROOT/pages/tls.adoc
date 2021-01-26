@@ -2,6 +2,7 @@
 ifndef::env-site,env-github[]
 include::_attributes.adoc[]
 endif::[]
+:page-aliases: 1.1@mule-sdk::tls.adoc, 1.0@mule-sdk::tls.adoc, 1.2@mule-sdk::tls.adoc
 :keywords: mule, sdk, security, tls
 
 Adding support for TLS configuration in your module is as simple as declaring a <<parameters#, parameter>> of type `TlsContextFactory`, for example:

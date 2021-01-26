@@ -2,6 +2,7 @@
 ifndef::env-site,env-github[]
 include::_attributes.adoc[]
 endif::[]
+:page-aliases: 1.1@mule-sdk::index.adoc, 1.0@mule-sdk::index.adoc, 1.2@mule-sdk::index.adoc
 :keywords: mule, sdk
 
 Use the Mule SDK for Java or XML to extend the Mule 4 Runtime by creating new modules that you can install in Mule apps. Examples of modules include connectors, such as HTTP, or modules with custom functionality, such as the Validations Module.

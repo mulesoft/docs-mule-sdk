@@ -2,6 +2,7 @@
 ifndef::env-site,env-github[]
 include::_attributes.adoc[]
 endif::[]
+:page-aliases: 1.1@mule-sdk::operations.adoc, 1.0@mule-sdk::operations.adoc, 1.2@mule-sdk::operations.adoc
 :keywords: mule, sdk, operation, processor, result, execution, void, payload,
 
 Operations are one of the most important Mule concepts because they represent the actions your module can perform inside a flow. You use them to process incoming messages through business logic that is implemented in the module.

@@ -2,6 +2,7 @@
 ifndef::env-site,env-github[]
 include::_attributes.adoc[]
 endif::[]
+:page-aliases: 1.1@mule-sdk::context-information-injection.adoc, 1.0@mule-sdk::context-information-injection.adoc, 1.2@mule-sdk::context-information-injection.adoc
 :keywords: mule, sdk, context, inject, event, location
 
 To get information about the context in which an operation or source is being processed, you can add parameters to the operation or source. The parameters do not appear in the UI, but they are injected by the SDK into the runtime.

@@ -2,6 +2,7 @@
 ifndef::env-site,env-github[]
 include::_attributes.adoc[]
 endif::[]
+:page-aliases: 1.1@mule-sdk::oauth-dance.adoc, 1.0@mule-sdk::oauth-dance.adoc, 1.2@mule-sdk::oauth-dance.adoc
 :keywords: mule, sdk, security, oauth
 
 The final step for using the module is to trigger the OAuth dance. <<oauth-configuring#, Configuring an OAuth-Enabled Module>> includes a parameter called

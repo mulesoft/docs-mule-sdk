@@ -2,6 +2,7 @@
 ifndef::env-site,env-github[]
 include::_attributes.adoc[]
 endif::[]
+:page-aliases: 1.1@mule-sdk::non-blocking-operations.adoc, 1.0@mule-sdk::non-blocking-operations.adoc, 1.2@mule-sdk::non-blocking-operations.adoc
 :keywords: mule, sdk, operation, non, blocking, non-blocking
 
 The Mule 4 execution engine is based on reactive streams. That means there’s top level support for non-blocking

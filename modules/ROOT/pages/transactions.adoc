@@ -2,6 +2,7 @@
 ifndef::env-site,env-github[]
 include::_attributes.adoc[]
 endif::[]
+:page-aliases: 1.1@mule-sdk::transactions.adoc, 1.0@mule-sdk::transactions.adoc, 1.2@mule-sdk::transactions.adoc
 :keywords: mule, sdk, operation, source, tx, transactions, xa
 
 The SDK supports the creation of connectors that join and create a new transaction in a Mule Flow, including Source and Operation executions that work as a unit. So, if a problem occurs inside the flow, all the components participating in the transaction will roll back their execution as a unit. All operations within the transaction are rolled back so that no one part results in partial completion.

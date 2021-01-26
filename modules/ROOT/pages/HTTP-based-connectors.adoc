@@ -2,6 +2,7 @@
 ifndef::env-site,env-github[]
 include::_attributes.adoc[]
 endif::[]
+:page-aliases: 1.1@mule-sdk::HTTP-based-connectors.adoc, 1.2@mule-sdk::HTTP-based-connectors.adoc
 
 There is a special set of considerations for connectors that access a remote system by either issuing HTTP requests or exposing HTTP endpoints.
 

@@ -2,6 +2,7 @@
 ifndef::env-site,env-github[]
 include::_attributes.adoc[]
 endif::[]
+:page-aliases: 1.1@mule-sdk::authentication-handler.adoc, 1.0@mule-sdk::authentication-handler.adoc, 1.2@mule-sdk::authentication-handler.adoc
 
 This handler allows you to configure the current context's authentication, which is used for encryption and inbound authentication, based on a given request.
 

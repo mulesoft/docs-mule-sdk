@@ -2,6 +2,7 @@
 ifndef::env-site,env-github[]
 include::_attributes.adoc[]
 endif::[]
+:page-aliases: 1.1@mule-sdk::subtypes-mapping.adoc, 1.0@mule-sdk::subtypes-mapping.adoc, 1.2@mule-sdk::subtypes-mapping.adoc
 :keywords: parameter, parameters, mule, sdk, dsl, xml, subtype, type
 
 Type definitions in the Module API affect the experience provided to the user. The right construction of types can greatly simplify the API that you expose to the user.

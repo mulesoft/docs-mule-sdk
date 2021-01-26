@@ -2,6 +2,7 @@
 ifndef::env-site,env-github[]
 include::_attributes.adoc[]
 endif::[]
+:page-aliases: 1.1@mule-sdk::best-practices.adoc, 1.0@mule-sdk::best-practices.adoc, 1.2@mule-sdk::best-practices.adoc
 
 The purpose of this documentation is to provide users of the Mule SDK with best practices for building modules and connectors in a way that makes the best use of Mule runtime engine (Mule) functionality and is consistent with MuleSoft’s UX and quality guidelines.
 

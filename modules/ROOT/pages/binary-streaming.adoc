@@ -2,6 +2,7 @@
 ifndef::env-site,env-github[]
 include::_attributes.adoc[]
 endif::[]
+:page-aliases: 1.1@mule-sdk::binary-streaming.adoc, 1.0@mule-sdk::binary-streaming.adoc, 1.2@mule-sdk::binary-streaming.adoc
 :keywords: mule, sdk, streaming, binary
 
 In binary streaming use cases, the stream is a flux of bytes that are treated in a generic way regardless of what they represent. Examples include the response of an HTTP request or retrieving and writing a file in a FTP server.

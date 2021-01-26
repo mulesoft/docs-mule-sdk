@@ -2,6 +2,7 @@
 ifndef::env-site,env-github[]
 include::_attributes.adoc[]
 endif::[]
+:page-aliases: 1.1@mule-sdk::sources.adoc, 1.0@mule-sdk::sources.adoc, 1.2@mule-sdk::sources.adoc
 :keywords: mule, sdk, sources, listener, triggers
 
 Operations are components that process a message and generate a result. Message sources are components that receive or generate new messages to be processed by the Mule Runtime.
