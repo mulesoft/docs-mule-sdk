@@ -261,7 +261,7 @@ Where not to use non-blocking I/O:
 
 ==== Non-Blocking and Asynchronous Are Not the Same
 
-It’s common to confuse asynchronous with non-blocking. They are not the same thing. This rule of favoring non-locking I/O does not mean that all I/O operations *should* be dispatched to a separate thread that is executed asynchronously just for the sake of it.
+It’s common to confuse asynchronous with non-blocking. They are not the same thing. This rule of favoring non-blocking I/O does not mean that all I/O operations *should* be dispatched to a separate thread that is executed asynchronously just for the sake of it.
 
 Be sure you have a good understanding of the principles of non-blocking IO and how it's implemented in Mule.
 
