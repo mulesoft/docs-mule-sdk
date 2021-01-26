@@ -315,5 +315,5 @@ Set<Value> streamCase = ValueBuilder.getValuesFor(valueList.stream());
 Map<String, String> valueMap = new HashMap<>();
 valueMap.put("ADMIN_USR_ROLE", "Admin");
 valueMap.put("WRITER_USR_ROLE") "Writer");
-Set<Value> mapCase = ValueBuilder.getValuesFor(futureValues);
+Set<Value> mapCase = ValueBuilder.getValuesFor(valueMap);
 ----

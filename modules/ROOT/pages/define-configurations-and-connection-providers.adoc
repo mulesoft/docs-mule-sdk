@@ -86,6 +86,44 @@ Therefore, the getAccessToken() method *must* be invoked on the state object for
 
 This consideration is especially important when using third-party client libraries that might perform caching.
 
+=== Do Not Use the Access Token in the Connection Creation
+
+The creation of the connection object in the `ConnectionProvider#connect` method must not depend on the presence of a valid access token. Connections that need to use the token to perform a one-time-only request should not rely on the creation of the connection. The request must be deferred to when the connection is first used.
+
+To adhere to this practice, you can use the `org.mule.runtime.api.util.LazyValue` class. When a value is initially used, the value is retrieved; subsequent uses get the value that was cached initially.
+
+The following example shows how to use the `org.mule.runtime.api.util.LazyValue` class:
+
+[source,java,linenums]
+----
+@AuthorizationCode(accessTokenUrl = MyConnectionProvider.ACCESS_TOKEN_URL,
+    authorizationUrl = MyConnectionProvider.AUTH_URL,
+    defaultScopes = MyConnectionProvider.DEFAULT_SCOPE)
+public class MyConnectionProvider implements ConnectionProvider<Connection> {
+
+  public static final String ACCESS_TOKEN_URL = "accessTokenUrl";
+  public static final String AUTH_URL = "authUrl";
+  public static final String DEFAULT_SCOPE = "defaultScope";
+
+  private AuthorizationCodeState state;
+
+  @Override
+  public Connection connect() throws ConnectionException {
+    return new Connection(new LazyValue(getUserId(state.getAccessToken())));
+  }
+
+  
+  private String getUserId(String accessToken){
+    ...
+  }
+
+  ...
+
+}
+----
+
+As such, the first time `LazyValue` is used, the information is retrieved, and all later usages get the value that has already been resolved.
+
 == Connection Object Must Not Expose (Nor Be) the Inner Client
 
 A common anti-pattern often found in connectors is that the ConnectionProvider generates a connection object that exposes the client or implementation used to access the external system. For example:

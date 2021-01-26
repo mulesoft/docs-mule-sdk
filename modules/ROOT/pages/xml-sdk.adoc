@@ -1310,6 +1310,105 @@ GitHub Location: https://github.com/mulesoft-labs/smart-connectors-integration-t
 </xs:schema>
 ----
 
+=== Example: Exporting Resources
+
+This example explains how to add a resource to your project so that it is exported and packaged with your connector.
+
+GitHub Location: https://github.com/mulesoft-labs/smart-connectors-integration-tests/tree/master/smart-connectors/smart-connector-exporting-resources[smart-connectors/smart-connector-exporting-resources]
+
+As the objective is to export a resource and make it available in the main mule app, the module file `module-exporting-resources.xml` does not contain any functionality.
+
+[[module-exporting-resources]]
+.module-exporting-resources.xml
+[source,xml,linenums]
+----
+<?xml version="1.0" encoding="UTF-8"?>
+<module name="module-exporting-resources"
+        doc:description="This module relies entirely in runtime provided components (no other Plugin dependencies) and exports resources"
+        xmlns="http://www.mulesoft.org/schema/mule/module"
+        xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.mulesoft.org/schema/mule/module http://www.mulesoft.org/schema/mule/module/current/mule-module.xsd">
+
+    <!--To make this module 4.1.1 compliant, we will add a property with no further use.
+    From 4.1.3 this is not necessary =] -->
+    <property name="__hiden_property_backward_compatible_do_not_use" type="string" defaultValue="do not use" />
+
+ </module>
+----
+
+The following resource file is exported:
+
+.myMappings.dwl
+[source,text,linenums]
+----
+%dw 2.0
+
+/******************************************************************************************************************************
+ NOTICE:
+    This file, `dwModule.dwl`, must be referenced in the META-INF/mule-artifact/mule-artifact.json file to properly export the
+    resource so that the the functions being consumed (`five()`, `echo(String)`, `toUpper(Person)`, `toUpper(Array<Person)`) in
+    the module `module-using-dw.xml` are accessible in the application using it (remember that smart connectors are macro
+    expanded, thus the resources must be reached by the main app)
+ ******************************************************************************************************************************/
+
+// zero-ary operation
+fun five() = 5
+
+// unary operation with simple type
+fun echo(name:String): String = name
+
+// unary operation with complex type
+type Person = {name: String, lastname: String}
+fun toUpper(p: Person): Person =
+    {
+        name:upper(p.name),
+        lastname:upper(p.lastname)
+    }
+
+// unary operation with array of complex type
+fun toUpper(persons: Array<Person>): Array<Person> =
+    persons map toUpper($)
+----
+
+The resource file *must* be placed inside a new folder named after the module's name (which was defined in the  <<module-exporting-resources], main module file>>).
+In this example, the module is named `module-exporting-resources`, so the folder must be named `module_exporting_resources`. Note that hyphens are replaced with underscores.
+All files contained in this new folder or its subfolders are automatically exported by the XML SDK.
+
+In the example, the folder structure looks like this:
+
+[source,text,linenums]
+----
+smart-connector-exporting-resources
+├── pom.xml
+└── src
+    └── main
+        └── resources
+            ├── module-exporting-resources.xml
+            └── module_exporting_resources
+                └── weirdFolder
+                    └── myMappings.dwl
+----
+
+Finally, the exported file can be used in a Mule flow. This first example illustrates how to use the dataweave functions defined in the exported file:
+[source,xml,linenums]
+----
+<flow name="set-payload-invoking-directly-dw-fun-flow">
+    <!-- showing that the application also has access to the DW functions located in the weirdFolder/myMappings.dwl
+    file defined in the module's code-->
+    <set-payload value="#[module_exporting_resources::weirdFolder::myMappings::five()]"/>
+</flow>
+----
+
+This second example shows how to access the file through its location to be used by, for instance, the
+https://docs.mulesoft.com/mule-runtime/4.3/parse-template-reference[Parse Template] component.
+[source,xml,linenums]
+----
+<flow name="read-exported-file">
+    <mule:parse-template location="module_exporting_resources/weirdFolder/myMappings.dwl" target="template"/>
+</flow>
+----
+
 === Example: Using DataWeave
 
 This example incorporates DataWeave by using the Transform (`ee:transform`) component.
