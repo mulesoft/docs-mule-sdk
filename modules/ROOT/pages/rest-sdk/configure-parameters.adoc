@@ -27,8 +27,9 @@ endpoints:
                      description: The maximum number of instances per request.
 ----
 
-The following appears in Anypoint
-Studio:image:media/image4.png[image,width=624,height=212]
+The following parameter details appear in Anypoint Studio:
+
+image::parameter-details-studio.png
 
 == Set a Description for a Parameter
 
@@ -54,8 +55,9 @@ endpoints:
                      description: The maximum number of instances per request. Default value is 25.
 ----
 
-This appears as a tooltip beside the parameter in Anypoint
-Studio:image:media/image3.png[image,width=624,height=186]
+The parameter description then appears as a tooltip beside the parameter in Anypoint Studio:
+
+image::parameter-description-tooltip.png
 
 == Ignore a Parameter
 
@@ -98,7 +100,7 @@ API implementations.
 Currently, REST SDK supports 2 formats: `comma` and `multimap`.
 
 REST SDK uses the multimap format by default if you don’t add any
-information to the Connector Descriptor, and in it every value of a
+information to the connector descriptor, and in it every value of a
 query parameter that is an array is sent by repeating the query
 parameter key for each value in the query string, such as
 `?key=value1&key=value2&key=value3`.

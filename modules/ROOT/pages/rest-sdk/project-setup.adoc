@@ -5,9 +5,9 @@ endif::[]
 
 To create a connector using Rest SDK:
 
-* Use a _mojo_ (Maven plain Old Java Object) to scaffold a Connector Descriptor for an API Spec.
-* Use a mojo to create a Connector from an API Spec and a Connector Descriptor.
-* Perform some modifications to the Connector Descriptor for tailoring the generated connector.
+* Use a _mojo_ (Maven plain Old Java Object) to scaffold a connector descriptor for an API Spec.
+* Use a mojo to create a Connector from an API Spec and a connector descriptor.
+* Perform some modifications to the connector descriptor for tailoring the generated connector.
 * Package the connector using Maven.
 * Publish the connector to Anypoint Exchange.
 
@@ -56,7 +56,7 @@ You can now use Rest SDK.
 
 == Scaffold the Connector Descriptor
 
-To scaffold the Connector Descriptor, you must run the
+To scaffold the connector descriptor, you must run the
 `createDescriptor` mojo:
 
 ----
@@ -73,7 +73,7 @@ The `createDescriptor` mojo uses the following parameters:
 |===
 |*Parameter* |*Required* |*Description* |*Default Value*
 |apiSpec |Yes |The relative path to the API spec for which you want to
-create a Connector Descriptor. |-
+create a connector descriptor. |-
 
 |specFormat |No a|
 The format of the API spec.
@@ -81,7 +81,7 @@ The format of the API spec.
 Allowed values are RAML, JsonOAS, YamlOAS, JsonOAS3 and YamlOAS3 |RAML
 
 |outputDir |No a|
-The path where the Connector Descriptor is placed.
+The path where the connector descriptor is placed.
 
 The generated file is named output.yaml and located in the specified
 folder. |Current directory
@@ -98,7 +98,7 @@ and the connector. |FALSE
 
 == Create Connector
 
-After you have modified the Connector Descriptor, you can generate the
+After you have modified the connector descriptor, you can generate the
 connector using the `createConnector` mojo:
 
 ----
@@ -118,7 +118,7 @@ The createConnector mojo uses the following parameters:
 |apiSpec |Yes |The relative path to the API spec for which you want to
 create a Connector. |-
 
-|descriptor |Yes |The relative path to the Connector Descriptor that you
+|descriptor |Yes |The relative path to the connector descriptor that you
 created to customize the API spec. |-
 
 |specFormat

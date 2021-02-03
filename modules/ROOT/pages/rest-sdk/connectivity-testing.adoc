@@ -5,7 +5,7 @@ endif::[]
 
 The test connection method allows the connector user to check whether a connection against a server is valid in design time. By default, the generated connectors and their connection providers do not include a generated test connection method.
 
-REST SDK allows defining test connection methods to the generated connection providers via a property in the Connector Descriptor.
+REST SDK allows defining test connection methods to the generated connection providers via a property in the connector descriptor.
 
 Test connection can be defined globally for all of the generated connections or for a specific connection provider.
 
