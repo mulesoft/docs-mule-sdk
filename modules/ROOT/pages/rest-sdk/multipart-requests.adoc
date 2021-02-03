@@ -5,7 +5,7 @@ endif::[]
 
 Multipart content definition in both RAML 1.0 and OAS2 lacks some
 features, such as the ability to define the content type of each part of
-a multipart body. The Connector Descriptor can amend these issues.
+a multipart body. The connector descriptor can amend these issues.
 
 In the following example, the API spec defines a multipart request:
 

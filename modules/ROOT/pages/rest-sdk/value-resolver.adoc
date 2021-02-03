@@ -14,12 +14,12 @@ The following example example shows the application of a Value Resolver declarat
 In this example, the `postMessage` method has a value resolver implemented:
 https://api.slack.com/methods/chat.postMessage
 
-image:media/image1.png[image,width=624,height=148]
+image::channel-parameter.png
 
 This endpoint has a required `channel` parameter whose possible values can be obtained by making a request to another endpoint:
 https://api.slack.com/methods/conversations.list
 
-image:media/image2.png[image,width=624,height=328]
+image:conversations-list-endpoint.png
 
 A response from this endpoint looks like this:
 

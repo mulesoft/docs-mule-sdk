@@ -7,7 +7,7 @@ endif::[]
 
 If your API spec defines a security scheme that you don’t want to be
 present in the generated connector, you can use the `ignored` property
-in the `security` node of your Connector Descriptor.
+in the `security` node of your connector descriptor.
 
 [source,yaml]
 ----
@@ -18,14 +18,14 @@ security:
 
 In this case, the API spec declares a security scheme named `passThrough`.
 The example uses the ignored annotation, so it does not get generated in
-the Connector Descriptor.
+the connector descriptor.
 
 == Set a Security Scheme Parameter Friendly Name
 
 You can set friendly names for security scheme parameters using the
 `displayName` annotation in the security scheme node of the Connector
 Descriptor. You can use the `ignored` property in the `security` node of
-your Connector Descriptor.
+your connector descriptor.
 
 [source,yaml]
 ----

@@ -6,7 +6,7 @@ endif::[]
 Neither OAS nor RAML provides a way to declare that an operation is
 paginated.
 
-You can use the Connector Descriptor to augment these specs and allow
+You can use the connector descriptor to augment these specs and allow
 pagination in the API operations.
 
 REST SDK supports the following pagination strategies:
@@ -30,7 +30,7 @@ parameters.
 === Name
 
 The pagination name can be any string that you want to use to identify
-the pagination through the Connector Descriptor. You must use the
+the pagination through the connector descriptor. You must use the
 pagination name when an operation is paged using this strategy.
 
 === Type
@@ -136,7 +136,7 @@ another field:
 }
 ----
 
-As such, Connector Descriptors must provide a
+As such, connector descriptors must provide a
 Dataweave expression to be evaluated over the response to obtain the
 page data. Notice that the expression should return the page. The
 expression doesn’t need to be able to split the elements; REST SDK does
@@ -148,7 +148,7 @@ is `#[payload.data]`.
 == Shop Connector Example
 
 The example Shop connector has a paged content search, so you can define
-a pagination strategy in the Connector Descriptor by creating a
+a pagination strategy in the connector descriptor by creating a
 pagination node inside the `paginations` property, which is located at
 the root of the document.
 

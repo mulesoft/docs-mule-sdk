@@ -63,9 +63,9 @@ endpoints:
 ----
 
 By setting this property, the operation is available to the final user
-with the display name in the UI.
+with the display name in the UI:
 
-image:media/image7.png[image,width=470,height=210]
+image::operation-display-name.png
 
 == Set a Description for an Operation
 
@@ -93,7 +93,7 @@ The `description` property can be used to give the final user of the
 connector some context or explanation of what the operation does. It
 appears in Anypoint Studio as a tooltip.
 
-image:media/image2.png[image,width=624,height=228]
+image::operation-description-tooltip.png
 
 [[select-default-media-type-for-an-operation]]
 == Select a Default Media Type for an Operation
@@ -165,7 +165,7 @@ endpoints:
 The API spec may not define an input/output type; if you need one, you
 can use the `inputType` and `outputType` properties in the Connector
 Descriptor. You can set these properties at the operation level in the
-Connector Descriptor. +
+connector descriptor. +
  +
 For example, let’s say we have the following OAS spec.
 
@@ -204,7 +204,7 @@ endpoints:
 The operation uses the type definition from that schema as input and
 output metadata. +
 The value of this property must be the path to a JSON schema relative to
-the location of the Connector Descriptor file. +
+the location of the connector descriptor file. +
  +
 In this case, the JSON schema appears as follows:
 
@@ -230,14 +230,14 @@ In this case, the JSON schema appears as follows:
 
 You can also use the inputType and outputType properties to override the
 type that is defined in the API spec. If a type is defined in the
-Connector Descriptor, the one in the API spec is ignored.
+connector descriptor, the one in the API spec is ignored.
 
 
 == Skip Output Type Validations
 
 `GET`, `POST`, `PATCH`, and `OPTIONS` operations defined in the API spec must declare a response body and a type for that body. If they do not, the connector descriptor must skip this check, define a response body for the operation, or declare it as void. +
 +
-Though is not the recommended approach, you can skip the this check using the `skipOutputTypeValidation` property in the Connector Descriptor.
+Though is not the recommended approach, you can skip the this check using the `skipOutputTypeValidation` property in the connector descriptor.
 
 It can be used at the operation level or globally.
 
@@ -263,7 +263,7 @@ If the operation does not have an output, the `voidOperation` property should be
 
 `GET`, `POST`, `PATCH`, and `OPTIONS` operations defined in the API spec must declare a response body and a type for that body. If they don't, the connector descriptor must skip this check, define a response body for the operation, or declare it as void.
 
-You can declare the operation as void using the `voidOperation` property of the operation node in the Connector Descriptor:
+You can declare the operation as void using the `voidOperation` property of the operation node in the connector descriptor:
 
 [source,yaml]
 ----

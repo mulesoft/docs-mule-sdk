@@ -9,7 +9,7 @@ You can modify your connector descriptor by adding descriptive content, addition
 == Set a Name for the Connector
 
 To set a name for the connector, you must set the `connectorName`
-property, which is located at the root of the Connector Descriptor.
+property, which is located at the root of the connector descriptor.
 
 [source,yaml]
 ----
@@ -31,13 +31,13 @@ baseUri:
 
 The name you set for the connector appears in the Mule Palette in Anypoint Studio and when you xref:exchange::to-publish-assets-maven.adoc[publish the connector to Anypoint Exchange].
 
-image:media/image1.png[image,width=624,height=361]
+image::shop-studio-config.png
 
 == Set A Description for the Connector
 
 To set a description for the connector, you must set the
 `connectorDescription` property, which is located at the root of the
-Connector Descriptor.
+connector descriptor.
 
 [source,yaml]
 ----
@@ -65,7 +65,7 @@ property.
 == Set the Connector’s GAV
 
 You can define a Maven GAV for the connector using the `connectorGav`
-property, which is located at the root of the Connector Descriptor. You
+property, which is located at the root of the connector descriptor. You
 must select a `groupId`, `artifactId`, and `version` which appear in the
 generated connector POM and identify it as a Maven asset.
 
@@ -92,7 +92,7 @@ baseUri:
 
 You can select a category for the connector using the
 `connectorCategory` property, which is located at the root of the
-Connector Descriptor.
+connector descriptor.
 
 The possible values for this property are `select` and `premium`.
 
@@ -121,7 +121,7 @@ This property indicates who is able to use this connector.
 == Set the connector’s namespace
 
 You can select the XML prefix for the connector using the `extensionXml`
-property, which is located at the root of the Connector Descriptor.
+property, which is located at the root of the connector descriptor.
 
 The value for the `extensionXml` property must be assigned to a valid
 XML namespace.
@@ -170,7 +170,7 @@ select the base package over which the rest of the project structure is
 built.
 
 You can set the base Java package by using the `baseJavaPackage`, which
-is located at the root of the Connector Descriptor.
+is located at the root of the connector descriptor.
 
 [source,yaml]
 ----
@@ -194,12 +194,12 @@ baseUri:
 
 The base Java package is used as the root package:
 
-image:media/image5.png[image,width=282,height=144]
+image::base-java-package.png
 
 == Select a Base URI
 
 You can select the XML prefix for the connector using the `baseUri`
-property, which is located at the root of the Connector Descriptor.
+property, which is located at the root of the connector descriptor.
 
 [source,yaml]
 ----
@@ -237,7 +237,7 @@ This base URI is used as the base URI for all operations.
 
 The generated connector configuration appears as follows
 
-image:media/image6.png[image,width=370,height=349]
+image::shop-studio-config.png
 
 The user gets the default value preloaded, and they can edit it.
 
