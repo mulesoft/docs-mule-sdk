@@ -65,7 +65,7 @@ endpoints:
 By setting this property, the operation is available to the final user
 with the display name in the UI:
 
-image::operation-display-name.png
+image::operation-display-name.png[]
 
 == Set a Description for an Operation
 
@@ -93,7 +93,7 @@ The `description` property can be used to give the final user of the
 connector some context or explanation of what the operation does. It
 appears in Anypoint Studio as a tooltip.
 
-image::operation-description-tooltip.png
+image::operation-description-tooltip.png[]
 
 [[select-default-media-type-for-an-operation]]
 == Select a Default Media Type for an Operation

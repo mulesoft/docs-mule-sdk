@@ -29,7 +29,7 @@ endpoints:
 
 The following parameter details appear in Anypoint Studio:
 
-image::parameter-details-studio.png
+image::parameter-details-studio.png[]
 
 == Set a Description for a Parameter
 
@@ -57,7 +57,7 @@ endpoints:
 
 The parameter description then appears as a tooltip beside the parameter in Anypoint Studio:
 
-image::parameter-description-tooltip.png
+image::parameter-description-tooltip.png[]
 
 == Ignore a Parameter
 
