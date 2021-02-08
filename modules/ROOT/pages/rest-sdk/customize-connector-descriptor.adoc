@@ -31,7 +31,7 @@ baseUri:
 
 The name you set for the connector appears in the Mule Palette in Anypoint Studio and when you xref:exchange::to-publish-assets-maven.adoc[publish the connector to Anypoint Exchange].
 
-image::shop-studio-config.png
+image::shop-studio-list.png[]
 
 == Set A Description for the Connector
 
@@ -194,7 +194,7 @@ baseUri:
 
 The base Java package is used as the root package:
 
-image::base-java-package.png
+image::base-java-package.png[]
 
 == Select a Base URI
 
@@ -237,7 +237,7 @@ This base URI is used as the base URI for all operations.
 
 The generated connector configuration appears as follows
 
-image::shop-studio-config.png
+image::shop-studio-config.png[]
 
 The user gets the default value preloaded, and they can edit it.
 

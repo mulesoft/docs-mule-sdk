@@ -36,6 +36,7 @@ so on.
 
 The following features are available in REST SDK:
 
+* Maven distribution framework
 * Support for RAML 1.0, OAS 2.0, and OAS 3.0
 * Support for paginated operations
 * Security Scheme support for:
@@ -59,6 +60,9 @@ operation levels
 ** Add message sources, expression functions, and so on
 ** Add dynamic DataSense resolver
 * Ability to ignore specific API resources
+* Triggers
+* Value providers
+* Sample data resolvers
 
 On the non-functional side, these connectors are fully
 https://docs.mulesoft.com/mule-sdk/1.1/non-blocking-operations[non-blocking]
