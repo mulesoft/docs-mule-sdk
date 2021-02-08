@@ -31,7 +31,7 @@ baseUri:
 
 The name you set for the connector appears in the Mule Palette in Anypoint Studio and when you xref:exchange::to-publish-assets-maven.adoc[publish the connector to Anypoint Exchange].
 
-image::shop-studio-config.png[]
+image::shop-studio-list.png[]
 
 == Set A Description for the Connector
 
