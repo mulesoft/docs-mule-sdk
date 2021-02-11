@@ -1,17 +1,17 @@
-= Define a Value Resolver
+= Define a Value Provider
 ifndef::env-site,env-github[]
 include::../_attributes.adoc[]
 endif::[]
 
-Value resolvers provide the possible values of an operation’s parameter.
+Value providers give the possible values of an operation’s parameter.
 
-Value resolvers also enable the connector to make a request to an endpoint and get the possible values from there, providing capabilities to extract the actual values from the server response.
+Value providers also enable the connector to make a request to an endpoint and get the possible values from there, providing capabilities to extract the actual values from the server response.
 
-== Example: Simple Value Resolver
+== Example: Simple Value Provider
 
-The following example example shows the application of a Value Resolver declaration and usage using in the Slack API.
+The following example example shows the application of a Value Provider declaration and usage using in the Slack API.
 
-In this example, the `postMessage` method has a value resolver implemented:
+In this example, the `postMessage` method has a value provider implemented:
 https://api.slack.com/methods/chat.postMessage
 
 image::channel-parameter.png[]
@@ -44,11 +44,11 @@ A response from this endpoint looks like this:
 }
 ----
 
-Given this, you can create a simple value resolver that enables you to provide the possible values for the `channels` parameter.
+Given this, you can create a simple value provider that enables you to provide the possible values for the `channels` parameter.
 
 [source,yaml]
 ----
-valueResolvers:
+valueProviders:
  channels:
    path: /conversations.list
    method: GET
@@ -61,13 +61,13 @@ valueResolvers:
          expression: “#[item.id]”
 ----
 
-According to the example, the value resolver must make a `GET` request to the `/conversations.list` endpoint using the path and method properties respectively.
+According to the example, the value provider must make a `GET` request to the `/conversations.list` endpoint using the path and method properties respectively.
 
-Next, the resolver extracts the array of values from the response with the `extraction` expression, and for each one of these items, `name` property is returned as *displayName*, and the `id` property is returned as *value*.
+Next, the provider extracts the array of values from the response with the `extraction` expression, and for each one of these items, `name` property is returned as *displayName*, and the `id` property is returned as *value*.
 
 The user sees *displayName* in the dropdown for the possible channel values, and *value* is sent to the server.
 
-You can then add this value resolver to the channel parameter in the operation as shown:
+You can then add this value provider to the channel parameter in the operation as shown:
 
 [source,yaml]
 ----
@@ -78,17 +78,17 @@ endpoints:
        expects:
          queryParameter:
            channel:
-             valueResolver:
+             valueProvider:
                id: channels
 ----
 
-== Example: Value Resolver with Parameters
+== Example: Value Provider with Parameters
 
-This example contains the previous parameter resolver and adds some intelligence. This value resolver uses the operation’s parameters in order to query for the appropriate type of channels.
+This example contains the previous parameter provider and adds some intelligence. This value provider uses the operation’s parameters in order to query for the appropriate type of channels.
 
 [source,yaml]
 ----
-valueResolvers:
+valueProviders:
  channels:
    path: /conversations.list
    method: GET
@@ -109,8 +109,8 @@ valueResolvers:
          expression: “[item.id]”
 ----
 
-This value resolver resembles the previous one with the exception of the addition of the `binding` node. +
-This is a way of forwarding parameters set in the operation to the value resolver. These bound parameters can be later used to build the value resolver request.
+This value provider resembles the previous one with the exception of the addition of the `binding` node. +
+This is a way of forwarding parameters set in the operation to the value provider. These bound parameters can be later used to build the value provider request.
 
 In this example, the `channelType` query parameter is bound to the value provided in the operation `uriChannelType` URI parameter.
 
@@ -122,17 +122,17 @@ In this example, the `channelType` query parameter is bound to the value provide
        expects:
          queryParameter:
            channel:
-             valueResolver:
+             valueProvider:
                id: channels
                arguments:
                   channelType:
                     Value: uriParameter.uriChannelType
 ----
 
-Setting the value resolver to the operation is as simple as in the previous example, only that in this case it is validated that the bound parameters exist in the operation before generating the connector code.
+Setting the value provider to the operation is as simple as in the previous example, only that in this case it is validated that the bound parameters exist in the operation before generating the connector code.
 
 
-== Value Resolver Expressions
+== Value Provider Expressions
 
 Depending on the context, the expressions have access to the following variables.
 
@@ -144,7 +144,7 @@ attributes:: The response attributes returned from the server. This resembles th
 
 item:: When the response from the server is extracted and split, the _item_ variable contains each of those split values.
 
-parameters:: Contains a map with the parameter names and values sent to this value resolver from the operation.
+parameters:: Contains a map with the parameter names and values sent to this value provider from the operation.
 
 The availability of these variables depending on the expressions is as follows:
 
