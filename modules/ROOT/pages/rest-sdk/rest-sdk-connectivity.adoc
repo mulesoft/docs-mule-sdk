@@ -36,33 +36,33 @@ so on.
 
 The following features are available in REST SDK:
 
+* Instant connector generation from RAML 1.0, OAS 2.0, and OAS 3.0
 * Maven distribution framework
-* Support for RAML 1.0, OAS 2.0, and OAS 3.0
 * Support for paginated operations
+* Triggers
+* Value providers
+* Sample data
 * Security Scheme support for:
 ** Basic Authentication
 ** Digest Authentication
 ** Pass Through
 ** OAuth 2.0 Client Credentials
 ** OAuth 2.0 Authorization Code
-* Support for TLS support
-* Support for custom headers and query parameters at the global and
+* TLS support
+* Filter out specific API operations
+* Custom headers and query parameters at the global and
 operation levels
-* Ability to configure global and operation-specific timeouts
+* Global and operation-specific timeouts
 * Support for reconnection
 * HTTP proxy support
-* DataSense support
 * Automatic error handling
 * Support for multiple base URLs
-* Ability to modify or extend the generated connector. You can:
+* Ability to modify or extend the generated connector using Java SDK. You can:
 ** Add additional security schemes
 ** Customize operations
-** Add message sources, expression functions, and so on
-** Add dynamic DataSense resolver
-* Ability to ignore specific API resources
-* Triggers
-* Value providers
-* Sample data resolvers
+** Add message sources, expression functions, etc
+** Add Dynamic DataSense
+** Describe custom authentication
 
 On the non-functional side, these connectors are fully
 https://docs.mulesoft.com/mule-sdk/1.1/non-blocking-operations[non-blocking]
