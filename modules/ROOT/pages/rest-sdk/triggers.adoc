@@ -292,6 +292,5 @@ The availability of these variables depending on the expressions is as follows:
 
 == Trigger limitations
 
-As the trigger works with a [polling source](https://beta.docs.stgx.mulesoft.com/beta-mule-sdk/mule-sdk/1.1/polling-sources) under the hood, it is mandatory that the items to work with are ordered in ascendant way (from older to newer) so that the extraction of the watermark holds the right date.   
-
+Because triggers work with a xref:polling-sources[polling source] on the backend, the items must be in ascending order (from older to newer) so that the extraction of the watermark has the correct date.   
 
