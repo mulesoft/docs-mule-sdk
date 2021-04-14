@@ -10,7 +10,7 @@ the experience of configuring and adjusting reconnection rules is the same
 across connectors.
 
 [IMPORTANT]
-HTTP Requester *does not* use the reconnection strategy for retries.
+HTTP Requester does not use the reconnection strategy for retries.
 
 == How the SDK Knows When to Trigger a Reconnection
 
