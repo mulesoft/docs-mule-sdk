@@ -9,6 +9,9 @@ to all connectors that work with connections. This support is generic, so
 the experience of configuring and adjusting reconnection rules is the same
 across connectors.
 
+[IMPORTANT]
+HTTP Requester does not use the reconnection strategy for retries. See https://docs.mulesoft.com/http-connector/1.5/http-request-ref#retry-mechanisms[HTTP Request Configuration Reference] for additional information.
+
 == How the SDK Knows When to Trigger a Reconnection
 
 The SDK and Mule provide the reconnection engine, but the connector is responsible for communicating when a reconnection should occur, when a connection is down, and when a new connection is required.
