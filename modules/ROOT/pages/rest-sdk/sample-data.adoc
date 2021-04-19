@@ -3,21 +3,26 @@ ifndef::env-site,env-github[]
 include::../_attributes.adoc[]
 endif::[]
 
-Sample Data Resolvers provide an example of how an operation's output looks like. It is the main insight of an operation's output, as it not only shows the data structure, but it shows a real example of that structure and sample values for each field in the structure.
-
-Sample Data Resolvers can be applied to operations (paged or not) and triggers.
+Sample Data Resolvers provide an example of the output of an operation. They show the data structure as well as a real example of that structure and sample values for each field. Sample Data Resolvers can be applied to operations (paged or not) and triggers.
 
 == Definition
-There are two types of Sample Data Resolver: `Http Request`, which allows defining a custom HTTP request and transforming its result to generate the sample, and `Same Operation`, which replicates the request and transformations the operation/trigger does to generate the sample data.
+There are two types of Sample Data Resolvers.
++
+* Http Request
++
+Defines a custom HTTP request and transforms its result to generate the sample data
+* Same Operation
++
+Replicates the request and transforms the operation or trigger to generate the sample data
 
 === HTTP Request Definition
 An HTTP Sample Data definition has two elements: a request and an optional transformation of that request's result.
 
-The `request` node is an <<../rest-sdk/data-expressions.adoc#HTTP Request, HTTP Request Data Expression>>. It will be used to make a request to the server where the sample data must be obtained from.
+The `request` node is an <<../rest-sdk/data-expressions.adoc#HTTP Request, HTTP Request Data Expression>>. It is used to make a request to the server where the sample data must be obtained from.
 
-The `transform` node describes how the server response will be manipulated in order to generate the sample. This transformation is optional and can be omitted if the server response matches the operation/trigger output.
+The `transform` node describes how the server response will be manipulated to generate the sample data. This transformation is optional and can be omitted if the server response matches the output of the operation or trigger.
 
-The transform expression has access to the `payload` and `attributes` variables, that contain the server response body and the server response attributes respectively.
+The transform expression has access to the `payload` and `attributes` variables, which contain the server response body and the server response attributes respectively.
 
 ==== HTTP Request Sample Data Example
 [source, yaml]
@@ -44,12 +49,12 @@ triggers:
         expression: "#[payload.flights[0]]"
 
 ----
-This example shows the implementation of sample data for a trigger.
-This trigger polls for new flights on the `/flight/since/{flightId}` endpoint.
-The sample data definition makes a request to `/flight/since/2021-01-01` and gets a list of flights, then uses the `"#[payload.flights[0]]"` expression to extract the first item from the results. This way it replicates how a result from a trigger actually looks (As triggers propagate the response items one by one)
+This example shows the implementation of the sample data for a trigger.
++
+This trigger polls for new flights on the `/flight/since/{flightId}` endpoint. The sample data definition makes a request to `/flight/since/2021-01-01` to get a list of flights, and then uses the `"#[payload.flights[0]]"` expression to extract the first item from the results. It replicates a result from the trigger, as triggers propagate the response items one by one.
 
 === Same Operation Definition
-Same Operation definitions are the easies way to declare Sample Data if you just want to replicate the operation/trigger behaviour to get the sample. Doing that consist only on declaring it, and Rest SDK will handle the generation.
+Same Operation definitions are the easiest way to replicate the operation or trigger behavior to get the sample. Using this definition requires only declaration since REST SDK will handle the generation.
 
 ==== Sample Data Same Operation Example
 [source, yaml]
@@ -69,16 +74,21 @@ triggers:
     sampleData:
       type: sameOperation
 ----
-This example shows that implementing same operation sample data consists in just onle line of yaml.
-What this sample data implementation will do is making a request to the operation/trigger path `/flight/since/{flightId}` using the `flightId` parameter that the user fills in the UI. It will then transform the server response using the trigger item extraction expression `"#[payload.flights]"` and get the first result from that array to show as sample.
+This example shows that implementing the Same Operation sample data consists of one line of yaml.
++
+This implementation sends a request to the operation or trigger path `/flight/since/{flightId}` using the `flightId` parameter that the user fills in the UI. It then transforms the server response using the trigger item extraction expression `"#[payload.flights]"` and gets the first result from that array to show as a sample.
 
 
 == Reusability
 
-As other resolvers, Sample Data Resolvers can be declared locally - inline - or globally. When declared globally they can be referenced multiple times from the different places where they are used.
+Similar to other resolvers, Sample Data Resolvers can be declared locally (inline) or globally. When declared globally, they can be referenced multiple times from the different places they are used in.
 
 === Inline Declaration
-Inline definitions are the simpler case. This can be useful for small Connector Descriptors that don't need reusability. Inline definitions in operations have access to the `queryParameter`, `uriParameter` and `header` variables, those are maps that contain the respective parameters declared in the operation. For triggers, it has access to the `parameters` variable, that contains all the trigger parameters.
+Inline definitions can be useful for shorter Connector Descriptors that don't need reusability.
++
+Inline definitions in operations have access to the `queryParameter`, `uriParameter`, and `header` variables, which are maps that contain the respective parameters declared in the operation.
++
+Inline definitions in triggers have access to the `parameters` variable, which contain all the parameters declared in the trigger.
 
 ==== Inline Sample Data Resolver example
 
@@ -100,10 +110,10 @@ endpoints:
             language: "dataweave"
             expression: "#[payload.channels[0]]"
 ----
-This inline Sample Data Resolver makes a `GET` request to the `/conversations.list` endpoint, and extracts the first channel from the response. The declaration has access to the operation context, so it can access the `queryParameter.types` parameter from the operation to use it as a binding for the HTTP request.
+This inline Sample Data Resolver makes a `GET` request to the `/conversations.list` endpoint and extracts the first channel from the response. The declaration has access to the operation context, so it can access the `queryParameter.types` parameter from the operation to use it as a binding for the HTTP request.
 
 === Global Declaration
-Global definitions provide reuse capabilities. A globally declared Sample Data Resolver allows defining parameters that must be provided by the referer to build a context where it can be executed.
+Global definitions provide reuse capabilities. A globally declared Sample Data Resolver allows defining parameters to build a context of where it can be executed.
 
 ==== Global value provider example
 
@@ -137,5 +147,6 @@ endpoints:
               value: queryParameter.types
 ----
 
-As this Sample Data Resolver is declared globally, it doesn't have access to the operation parameters. Instead it needs to declare a parameter that the referer operation will then pass a value to.
-A `conversationType` parameter is being declared in the `parameters` section of the global declaration. A value is assigned to it in the `arguments` section of the Sample Data reference. And is is then used in the HTTP Request binding using the `parameters` variable. All the declared parameters will be present in that map.
+Since this Sample Data Resolver is declared globally, it doesn't have access to the operation parameters. Instead, it needs to declare a parameter that the referer operation will then pass a value onto.
++
+A `conversationType` parameter is declared in the `parameters` section of the global declaration. A value is assigned to it in the `arguments` section of the Sample Data reference. It is then used in the HTTP Request binding using the `parameters` variable. All of the declared parameters are present in that map.
