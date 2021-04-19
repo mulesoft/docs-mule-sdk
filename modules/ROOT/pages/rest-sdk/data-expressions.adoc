@@ -3,20 +3,10 @@ ifndef::env-site,env-github[]
 include::../_attributes.adoc[]
 endif::[]
 
-Data Expressions are small semantic snippets that are used in several sections of the Connector Descriptor to describe actions as an HTTP Request or the execution of a script.
+Data Expressions are semantic snippets used in the Connector Descriptor to describe actions such as an HTTP Request or an execution of a script.
 
 === HTTP Request
-Describes an HTTP Request against the API.
-
-It consists on a path, the HTTP method and parameter bindings.
-
-[cols=",,",options="header",]
-|===
-| Property | Required | Description
-| path | Yes | The path where to make the HTTP request. Relative to the API base URI.
-| method | Yes | The HTTP method to use in the request. The allowed values are: `get`, `post`, `put`, `patch`, `delete`, `head`, `options`.
-| binding | No | Describes the parameters that will be sent in the request. Allows adding `uriParameter`, `queryParameter` and `header` bindings. Each of those lists can contain multiple parameter bindings.
-|===
+Describes an HTTP Request against the API. It consists of a path, the HTTP method, and parameter bindings.
 
 [source, yaml]
 ----
@@ -31,19 +21,28 @@ request:
         value: "#[10]"
 ----
 
+[cols=",,",options="header",]
+|===
+| Property | Required | Description
+| path | Yes | The path that makes the HTTP request. Relative to the API base URI.
+| method | Yes | The HTTP method used in the request. The allowed values are `get`, `post`, `put`, `patch`, `delete`, `head`, and `options`.
+| binding | No | Describes the parameters that will be sent in the request. The allowed values are `uriParameter`, `queryParameter`, and `header`. Each of these can contain multiple parameter bindings.
+|===
+
+
 ==== HTTP Binding Context
 
-The HTTP Request Data Expression will have access to the context where it is declared.
+The HTTP Request Data Expression has access to the context depending on where it is declared.
 
-- If it is declared in an *Operation* context, it will have access to the `uriParameter`, `queryParameter` and `header` variables, containing the operation's uriParameters, queryParameters and headers respectively.
+- If it is declared in an *Operation*, it has access to the `uriParameter`, `queryParameter`, and `header` variables, which has the operation's uriParameters, queryParameters, and headers.
 
-- If it is declared in a *Trigger*, it will have access to the `parameter` variable, containing all the declared trigger parameters.
+- If it is declared in a *Trigger*, it has access to the `parameter` variable, which has all the declared trigger parameters.
 
-- If it is declared in a *global resolver* definition -Such as a global sample data or value provider definition-, it will have access to the `parameter` variable, containing all the global resolver declared parameters.
+- If it is declared in a *global resolver* definition, such as a global sample data or value provider definition, it has access to the `parameter` variable, which has all the global resolver declared parameters.
 
 
 === Script
-Describes the execution of a script.
+Describes the execution of a script. It consists of an expression and a language.
 
 [source, yaml]
 ----
@@ -56,5 +55,5 @@ script:
 |===
 | Property | Required | Description
 | expression | Yes | The actual script expression.
-| language | No | The expression language. Default: `dataweave`.
+| language | No | The expression language. The default is `dataweave`.
 |===
