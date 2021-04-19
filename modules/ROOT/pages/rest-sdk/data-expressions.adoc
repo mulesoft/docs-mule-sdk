@@ -1,9 +1,8 @@
-= Configure Operations
+= Data Expressions
 ifndef::env-site,env-github[]
 include::../_attributes.adoc[]
 endif::[]
 
-== Data Expressions
 Data Expressions are small semantic snippets that are used in several sections of the Connector Descriptor to describe actions as an HTTP Request or the execution of a script.
 
 === HTTP Request

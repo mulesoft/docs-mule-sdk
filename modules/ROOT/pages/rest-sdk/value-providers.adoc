@@ -29,7 +29,7 @@ Depending on the context, the expressions have access to the following variables
 
 payload:: The full response returned from the server.
 
-attributes:: The response attributes returned from the server. These resemble the xref:https://docs.mulesoft.com/http-connector/1.5/http-documentation#HttpResponseAttributes [HTTP Connector Response Attributes].
+attributes:: The response attributes returned from the server. These resemble the https://docs.mulesoft.com/http-connector/1.5/http-documentation#HttpResponseAttributes [HTTP Connector Response Attributes].
 
 item:: When the response from the server is extracted and split, the _item_ variable contains each of those split values.
 
