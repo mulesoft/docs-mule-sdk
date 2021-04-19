@@ -127,23 +127,24 @@ endpoints:
                   channelKind: queryParameter.kind
 ----
 
-As this value provider is declared globally, it doesn't have access to the operation parameters. Instead it needs to declare a parameter that the referer operation will then pass an argument to.
-A `channelKind` parameter is being declared in the `parameters` section of the global declaration. A value is assigned to it in the `arguments` section of the value provider reference. And is is then used in the HTTP Request binding using the `parameters` variable. All the declared parameters will be present in that map.
+Since this value provider is declared globally, it doesn't have access to the operation parameters. Instead, it needs to declare a parameter that the referer operation will then pass an argument onto.
++
+A `channelKind` parameter is declared in the `parameters` section of the global declaration. A value is assigned to it in the `arguments` section of the value provider reference. It is then used in the HTTP Request binding using the `parameters` variable. All of the declared parameters are present in that map.
 
 
 == Example: Simple Value Provider
 
-The following example example shows the application of a Value Provider declaration and usage using in the Slack API.
+The following example shows the application of a Value Provider declaration and usage using the Slack API.
 
 In this example, the `postMessage` method has a value provider implemented:
 https://api.slack.com/methods/chat.postMessage
 
 image::channel-parameter.png[]
 
-This endpoint has a required `channel` parameter whose possible values can be obtained by making a request to another endpoint:
+This endpoint has a required `channel` parameter with possible values that can be obtained by making a request to another endpoint:
 https://api.slack.com/methods/conversations.list
 
-image:conversations-list-endpoint.png
+image:conversations-list-endpoint.png[]
 
 A response from this endpoint looks like this:
 
@@ -168,7 +169,7 @@ A response from this endpoint looks like this:
 }
 ----
 
-Given this, you can create a simple value provider that enables you to provide the possible values for the `channels` parameter.
+With this, you can create a simple value provider that provides the possible values for the `channels` parameter.
 
 [source,yaml]
 ----
@@ -189,11 +190,11 @@ valueProviders:
 
 According to the example, the value provider must make a `GET` request to the `/conversations.list` endpoint using the path and method properties respectively.
 
-Next, the provider extracts the array of values from the response with the `extraction` expression, and for each one of these items, `name` property is returned as *displayName*, and the `id` property is returned as *value*.
+The provider then extracts the array of values from the response with the `extraction` expression, and for each one of these items, `name` property is returned as *displayName*, and the `id` property is returned as *value*.
 
 The user sees *displayName* in the dropdown for the possible channel values, and *value* is sent to the server.
 
-You can then add this value provider to the channel parameter in the operation as shown:
+You can then add this value provider to the `channels` parameter in the operation as shown:
 
 [source,yaml]
 ----
@@ -211,7 +212,7 @@ endpoints:
 
 == Example: Value Provider with Parameters
 
-This example contains the previous parameter provider and adds some intelligence. This value provider uses the operation’s parameters in order to query for the appropriate type of channels.
+This example contains the previous parameter provider with more intelligence. This value provider uses the operation’s parameters to query for the appropriate type of channels.
 
 [source,yaml]
 ----
@@ -239,7 +240,8 @@ valueProviders:
 ----
 
 This value provider resembles the previous one with the exception of the addition of the `binding` node. +
-This is a way of forwarding parameters set in the operation to the value provider. These bound parameters can be later used to build the value provider request.
+
+This example demonstrates forwarding parameters set in the operation of the value provider. These bound parameters can be used later to build the value provider request. +
 
 In this example, the `channelType` query parameter is bound to the value provided in the operation `uriChannelType` URI parameter.
 
@@ -260,4 +262,4 @@ endpoints:
                       value: uriParameter.uriChannelType
 ----
 
-Setting the value provider to the operation is as simple as in the previous example, only that in this case it is validated that the bound parameters exist in the operation before generating the connector code.
+Setting the value provider to the operation is as simple as in the previous example, however in this case the bound parameters exist in the operation before generating the connector code.
