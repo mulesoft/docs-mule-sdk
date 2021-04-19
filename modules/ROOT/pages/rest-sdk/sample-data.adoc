@@ -16,11 +16,11 @@ Defines a custom HTTP request and transforms its result to generate the sample d
 Replicates the request and transforms the operation or trigger to generate the sample data
 
 === HTTP Request Definition
-An HTTP Sample Data definition has two elements: a request and an optional transformation of that request's result.
+An HTTP Sample Data has two elements: a request and an optional transformation of that request's result.
 
 The `request` node is an <<../rest-sdk/data-expressions.adoc#HTTP Request, HTTP Request Data Expression>>. It is used to make a request to the server where the sample data must be obtained from.
 
-The `transform` node describes how the server response will be manipulated to generate the sample data. This transformation is optional and can be omitted if the server response matches the output of the operation or trigger.
+The `transform` node describes how the server response is manipulated to generate the sample data. This transformation is optional and can be omitted if the server response matches the output of the operation or trigger.
 
 The transform expression has access to the `payload` and `attributes` variables, which contain the server response body and the server response attributes respectively.
 
