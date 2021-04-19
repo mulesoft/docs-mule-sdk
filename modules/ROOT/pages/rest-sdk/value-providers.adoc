@@ -50,7 +50,7 @@ Similar to other resolvers, Value Providers can be declared locally (inline) or 
 
 === Inline Declaration
 Inline definitions can be useful for shorter Connector Descriptors that don't need reusability.
-+
+
 Inline definitions have access to the `queryParameter`, `uriParameter` and `header` variables, which are maps that contain the respective parameters declared in the operation.
 
 ==== Inline value provider example
@@ -128,7 +128,7 @@ endpoints:
 ----
 
 Since this value provider is declared globally, it doesn't have access to the operation parameters. Instead, it needs to declare a parameter that the referer operation will then pass an argument onto.
-+
+
 A `channelKind` parameter is declared in the `parameters` section of the global declaration. A value is assigned to it in the `arguments` section of the value provider reference. It is then used in the HTTP Request binding using the `parameters` variable. All of the declared parameters are present in that map.
 
 

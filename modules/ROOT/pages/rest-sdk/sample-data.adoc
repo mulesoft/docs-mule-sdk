@@ -7,12 +7,13 @@ Sample Data Resolvers provide an example of the output of an operation. They sho
 
 == Definition
 There are two types of Sample Data Resolvers.
-+
+
 * Http Request
-+
+
 Defines a custom HTTP request and transforms its result to generate the sample data
+
 * Same Operation
-+
+
 Replicates the request and transforms the operation or trigger to generate the sample data
 
 === HTTP Request Definition
@@ -50,7 +51,7 @@ triggers:
 
 ----
 This example shows the implementation of the sample data for a trigger.
-+
+
 This trigger polls for new flights on the `/flight/since/{flightId}` endpoint. The sample data definition makes a request to `/flight/since/2021-01-01` to get a list of flights, and then uses the `"#[payload.flights[0]]"` expression to extract the first item from the results. It replicates a result from the trigger, as triggers propagate the response items one by one.
 
 === Same Operation Definition
@@ -75,7 +76,7 @@ triggers:
       type: sameOperation
 ----
 This example shows that implementing the Same Operation sample data consists of one line of yaml.
-+
+
 This implementation sends a request to the operation or trigger path `/flight/since/{flightId}` using the `flightId` parameter that the user fills in the UI. It then transforms the server response using the trigger item extraction expression `"#[payload.flights]"` and gets the first result from that array to show as a sample.
 
 
@@ -85,9 +86,9 @@ Similar to other resolvers, Sample Data Resolvers can be declared locally (inlin
 
 === Inline Declaration
 Inline definitions can be useful for shorter Connector Descriptors that don't need reusability.
-+
+
 Inline definitions in operations have access to the `queryParameter`, `uriParameter`, and `header` variables, which are maps that contain the respective parameters declared in the operation.
-+
+
 Inline definitions in triggers have access to the `parameters` variable, which contain all the parameters declared in the trigger.
 
 ==== Inline Sample Data Resolver example
@@ -148,5 +149,5 @@ endpoints:
 ----
 
 Since this Sample Data Resolver is declared globally, it doesn't have access to the operation parameters. Instead, it needs to declare a parameter that the referer operation will then pass a value onto.
-+
+
 A `conversationType` parameter is declared in the `parameters` section of the global declaration. A value is assigned to it in the `arguments` section of the Sample Data reference. It is then used in the HTTP Request binding using the `parameters` variable. All of the declared parameters are present in that map.
