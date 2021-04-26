@@ -5,7 +5,7 @@ endif::[]
 
 Sample Data Resolvers provide an example of the output of an operation. They show the data structure as well as a real example of that structure and sample values for each field. Sample Data Resolvers can be applied to operations (paged or not) and triggers.
 
-image::sample-data-output.png[scaledwidth="25%"]
+image::sample-data-output.png[alt=Sample Data Output,width=150,height=300]
 .This is how sample data appears in MuleSoft Composer.
 
 == Definition
