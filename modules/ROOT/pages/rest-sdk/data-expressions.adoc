@@ -1,0 +1,59 @@
+= Data Expressions
+ifndef::env-site,env-github[]
+include::../_attributes.adoc[]
+endif::[]
+
+Data Expressions are semantic snippets used in the Connector Descriptor to describe actions such as an HTTP Request or an execution of a script.
+
+=== HTTP Request
+Describes an HTTP Request against the API. It consists of a path, the HTTP method, and parameter bindings.
+
+[source, yaml]
+----
+request:
+  path: /channels
+  method: get
+  binding:
+    queryParameter:
+      kind:
+        value: "#[parameter.channelType]"
+      count:
+        value: "#[10]"
+----
+
+[cols=",,",options="header",]
+|===
+| Property | Required | Description
+| path | Yes | The path that makes the HTTP request. Relative to the API base URI.
+| method | Yes | The HTTP method used in the request. The allowed values are `get`, `post`, `put`, `patch`, `delete`, `head`, and `options`.
+| binding | No | Describes the parameters that will be sent in the request. The allowed values are `uriParameter`, `queryParameter`, and `header`. Each of these can contain multiple parameter bindings.
+|===
+
+
+==== HTTP Binding Context
+
+The HTTP Request Data Expression has access to the context depending on where it is declared.
+
+- If it is declared in an *Operation*, it has access to the `uriParameter`, `queryParameter`, and `header` variables, which has the operation's uriParameters, queryParameters, and headers.
+
+- If it is declared in a *Trigger*, it has access to the `parameter` variable, which has all the declared trigger parameters.
+
+- If it is declared in a *global resolver* definition, such as a global sample data or value provider definition, it has access to the `parameter` variable, which has all the global resolver declared parameters.
+
+
+=== Script
+Describes the execution of a script. It consists of an expression and a language.
+
+[source, yaml]
+----
+script:
+  language: "dataweave"
+  expression: "#[payload.data[0]]"
+----
+
+[cols=",,",options="header",]
+|===
+| Property | Required | Description
+| expression | Yes | The actual script expression.
+| language | No | The expression language. The default is `dataweave`.
+|===
