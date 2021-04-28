@@ -1,0 +1,48 @@
+= REST SDK Release Notes
+ifndef::env-site,env-github[]
+include::../_attributes.adoc[]
+endif::[]
+
+REST SDK is a tool that allows you to create connectors based on an API specification supplying additional connector capabilities via a connector descriptor.
+
+== 0.2.0
+
+*April 28, 2021*
+
+=== What’s New
+
+* Added Simple Composition. (RSDK-209)
+* Hiding operations for Composer. (RSDK-344)
+* Changing operation names for Composer. (RSDK-348)
+
+== 0.1.6
+
+*April 27, 2021*
+
+=== What’s New
+
+* Sample Data Providers transformations. (RSDK-286)
+* Sample Data performance and maintainability. (RSDK-277)
+* Updated type discriminators in dialect for consistency. (RSDK-268)
+* Use DataWeave to generate operation ID in the connector descriptor. (RSDK-282, RSDK-213)
+* Removed automatic parameter name disambiguations to now use specific names to avoid collisions. (RSDK-290)
+* Removed fixed content names. These are now generated based on the operation name. (RSDK-293, RSDK-335)
+* No longer required to specify the specification type, for example, RAML, OAS_YAML, or OAS3_JSON, as it will be automatically inferred from the file. (RSDK-54)
+* Added support for HyperMedia paged operations. (RSDK-26)
+* Added support for HTTP Bearer security scheme. (RSDK-273)
+* Custom properties for OAuth dance as you can customize security schemes and define custom parameters in the connector descriptor. (RSDK-285)
+* Added a declarative way to handle OAuth reconnection in non standard scenarios. (RSDK-111)
+
+=== Fixed Issues
+
+[%header%autowidth.spread]
+|===
+|Issue|Number
+|Generated connector did not compile because collection parameters did not have plural names. | (RSDK-222)
+|All display name properties are now named ‘displayName’ to avoid ambiguities. | (RSDK-296)
+|Display names were specified in the connector descriptor but not in the generated connector. | (RSDK-297)
+|@Content parameters XML DSL were not consistent. | (RSDK-291)
+|Syntax errors from the API spec when parsed using AMF were not clear. | (RSDK-128)
+|Errors when API spec was invalid were not clear. | (RSDK-191)
+|Parameters generated with the same name but different type did not compile. | (RSDK-221)
+|===
