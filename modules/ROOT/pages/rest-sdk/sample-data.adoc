@@ -1,0 +1,157 @@
+= Define a Sample Data Resolver
+ifndef::env-site,env-github[]
+include::../_attributes.adoc[]
+endif::[]
+
+Sample Data Resolvers provide an example of the output of an operation. They show the data structure as well as a real example of that structure and sample values for each field. Sample Data Resolvers can be applied to operations (paged or not) and triggers.
+
+image::sample-data-output.png[alt=Sample Data Output,width=200,height=500]
+
+This is how sample data appears in MuleSoft Composer.
+
+== Definition
+There are two types of Sample Data Resolvers.
+
+* Http Request
+
+Defines a custom HTTP request and transforms its result to generate the sample data
+
+* Same Operation
+
+Replicates the request and transforms the operation or trigger to generate the sample data
+
+=== HTTP Request Definition
+An HTTP Sample Data has two elements: a request and an optional transformation of that request's result.
+
+The `request` node is an <<../rest-sdk/data-expressions.adoc#HTTP Request, HTTP Request Data Expression>>. It is used to make a request to the server where the sample data must be obtained from.
+
+The `transform` node describes how the server response will be manipulated to generate the sample data. This transformation is optional and can be omitted if the server response matches the output of the operation or trigger.
+
+The transform expression has access to the `payload` and `attributes` variables, which contain the server response body and the server response attributes respectively.
+
+==== HTTP Request Sample Data Example
+[source, yaml]
+----
+triggers:
+  onNewFlightInline:
+    displayName: On New Flight Inline
+    path: /flight/since/{flightId}
+    method: get
+
+    items:
+      extraction:
+        expression: "#[payload.flights]"
+
+    #[...]
+
+    sampleData:
+      type: http
+      request:
+        path: /flight/since/2021-01-01
+        method: get
+      transform:
+        language: "dataweave"
+        expression: "#[payload.flights[0]]"
+
+----
+This example shows the implementation of the sample data for a trigger.
+
+This trigger polls for new flights on the `/flight/since/{flightId}` endpoint. The sample data definition makes a request to `/flight/since/2021-01-01` to get a list of flights, and then uses the `"#[payload.flights[0]]"` expression to extract the first item from the results. It replicates a result from the trigger, as triggers propagate the response items one by one.
+
+=== Same Operation Definition
+Same Operation definitions are the easiest way to replicate the operation or trigger behavior to get the sample. Using this definition requires only declaration since REST SDK will handle the generation.
+
+==== Sample Data Same Operation Example
+[source, yaml]
+----
+triggers:
+  onNewFlightInline:
+    displayName: On New Flight Inline
+    path: /flight/since/{flightId}
+    method: get
+
+    items:
+      extraction:
+        expression: "#[payload.flights]"
+
+    #[...]
+
+    sampleData:
+      type: sameOperation
+----
+This example shows that implementing the Same Operation sample data consists of one line of yaml.
+
+This implementation sends a request to the operation or trigger path `/flight/since/{flightId}` using the `flightId` parameter that the user fills in the UI. It then transforms the server response using the trigger item extraction expression `"#[payload.flights]"` and gets the first result from that array to show as a sample.
+
+
+== Reusability
+
+Similar to other resolvers, Sample Data Resolvers can be declared locally (inline) or globally. When declared globally, they can be referenced multiple times from the different places they are used in.
+
+=== Inline Declaration
+Inline definitions can be useful for shorter Connector Descriptors that don't need reusability.
+
+Inline definitions in operations have access to the `queryParameter`, `uriParameter`, and `header` variables, which are maps that contain the respective parameters declared in the operation.
+
+Inline definitions in triggers have access to the `parameters` variable, which contain all the parameters declared in the trigger.
+
+==== Inline Sample Data Resolver example
+
+[source, yaml]
+----
+endpoints:
+  /conversations.list:
+    operations:
+      get:
+        sampleData:
+          type: http
+          request:
+            path: /conversations.list
+            method: get
+            binding:
+              queryParameter:
+                channelType: "#[queryParameter.types]"
+          transform:
+            language: "dataweave"
+            expression: "#[payload.channels[0]]"
+----
+This inline Sample Data Resolver makes a `GET` request to the `/conversations.list` endpoint and extracts the first channel from the response. The declaration has access to the operation context, so it can access the `queryParameter.types` parameter from the operation to use it as a binding for the HTTP request.
+
+=== Global Declaration
+Global definitions provide reuse capabilities. A globally declared Sample Data Resolver allows defining parameters to build a context of where it can be executed.
+
+==== Global value provider example
+
+[source, yaml]
+----
+sampleData:
+  sampleConversation:
+    parameters:
+      conversationType:
+        type: string
+    definition:
+      request:
+        path: /conversations.list
+        method: get
+        binding:
+          queryParameter:
+            channelType: "#[parameter.conversationType]"
+      transform:
+        language: "dataweave"
+        expression: "#[payload.channels[0]]"
+
+endpoints:
+  /conversations.list:
+    operations:
+      get:
+        sampleData:
+          type: reference
+          id: sampleConversation
+          arguments:
+            conversationType:
+              value: queryParameter.types
+----
+
+Since this Sample Data Resolver is declared globally, it doesn't have access to the operation parameters. Instead, it needs to declare a parameter that the referer operation will then pass a value onto.
+
+A `conversationType` parameter is declared in the `parameters` section of the global declaration. A value is assigned to it in the `arguments` section of the Sample Data reference. It is then used in the HTTP Request binding using the `parameters` variable. All of the declared parameters are present in that map.

@@ -1,0 +1,53 @@
+= REST SDK Release Notes
+ifndef::env-site,env-github[]
+include::../_attributes.adoc[]
+endif::[]
+
+REST SDK is a tool that allows you to create connectors based on an API specification supplying additional connector capabilities via a connector descriptor.
+
+== 0.2.0
+
+*April 28, 2021*
+
+=== What’s New
+
+* Hiding operations for Composer (RSDK-344)
+* Changing operation names for Composer (RSDK-348)
+* Sample data transformations (RSDK-286)
+* Response validation (RSDK-111)
+* Naming algorithm improvements (RSDK-254)
+* Hypermedia Pagination (RSDK-26)
+* Custom properties for OAuth Dance (RSDK-371)
+* Auto-detecting API spec formats (RSDK-54)
+
+=== Fixed Issues
+
+[%header%autowidth.spread]
+|===
+|Issue|Number
+|Pagination in triggers |(RSDK-85)
+|Pagination enhancement | (RSDK-272)
+|Token refresh in triggers |(RSDK-238)
+|Request body modifications | (RSDK-181)
+|===
+
+== 0.1.5
+
+*March 15, 2021*
+
+=== What’s New
+
+* OAS 3 support (RSDK-41)
+* Maven distribution framework (RSDK-152)
+* Validation error improvements (RSDK-16)
+* Short term testing framework (RSDK-123)
+
+=== Fixed Issues
+
+[%header%autowidth.spread]
+|===
+|Issue|Number
+|Redefining trigger metadata | (RSDK-91)
+|Use of multiple REST SDK connectors in the same app | (RSDK-232)
+|Value providers for error responses | (RSDK-228)
+|===

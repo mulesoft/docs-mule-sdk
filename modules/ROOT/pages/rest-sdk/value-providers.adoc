@@ -4,27 +4,151 @@ include::../_attributes.adoc[]
 endif::[]
 :page-aliases: value-resolver.adoc
 
-Value providers give the possible values of an operation’s parameter.
+Value providers give the possible values of the parameters of an operation.
 
-Value providers also enable the connector to make a request to an endpoint and get the possible values from there, providing capabilities to extract the actual values from the server response.
+Value providers also enable the connector to send a request to an endpoint and get the possible values from there, providing capabilities to extract the actual values from the server response.
+
+== Definition
+A Value Provider has two elements: a request and an item.
+
+The `request` node is an <<../rest-sdk/data-expressions.adoc#HTTP Request, HTTP Request Data Expression>>. It is used to make a request to the server where the sample data must be obtained from.
+
+The `items` node describes how the server response is manipulated to extract the parameter values. It consists of three expressions: `extraction`, `value` and `displayName`.
+
+[cols=",,",options="header",]
+|===
+| Expression | Required | Description
+| extraction | Yes | Extracts an array of items from the server response. Each of these items is iterated to get its value and displayName.
+| value | Yes | Gets the value for an item. This is the actual value the parameter will contain.
+| displayName | No | Gets the display name for an item. The value is used as a display name if the expression is not provided.
+|===
+
+== Expression Context
+
+Depending on the context, the expressions have access to the following variables.
+
+payload:: The full response returned from the server.
+
+attributes:: The response attributes returned from the server. These resemble the https://docs.mulesoft.com/http-connector/1.5/http-documentation#HttpResponseAttributes[HTTP Connector Response Attributes].
+
+item:: When the response from the server is extracted and split, the item variable contains each of those split values.
+
+The availability of these variables depending on the expressions is shown below:
+
+[cols=",,,,",options="header",]
+|===
+| |payload |attributes |item |parameters
+|Item Display Name |Yes |Yes |Yes |-
+|Item Value |Yes |Yes |Yes |-
+|Item Extraction |Yes |Yes |- |-
+|===
+
+
+== Reusability
+
+Similar to other resolvers, Value Providers can be declared locally (inline) or globally. When declared globally, they can be referenced multiple times from the different places they are used in.
+
+=== Inline Declaration
+Inline definitions can be useful for shorter Connector Descriptors that don't need reusability.
+
+Inline definitions have access to the `queryParameter`, `uriParameter` and `header` variables, which are maps that contain the respective parameters declared in the operation.
+
+==== Inline value provider example
+
+[source, yaml]
+----
+endpoints:
+  /message:
+    operations:
+      post:
+        expects:
+          queryParameter:
+            channel:
+              valueProvider:
+                type: inline
+                request:
+                  path: /channels
+                  method: get
+                  binding:
+                    queryParameter:
+                      kind:
+                        value: "#[queryParameter.kind]"
+                items:
+                  extraction:
+                    expression: "#[payload.channels]"
+                  value:
+                    expression: "#[item.channelId]"
+                  displayName:
+                    expression: "#[item.channelName]"
+----
+
+This value provider sends a request to the `/channels` endpoint. It has access to the declared parameters of the operation. The HTTP Request uses the `queryParameter.kind` parameter that is declared in the API specification and binds its value to the `kind` query parameter that the server expects.
+
+
+=== Global Declaration
+Global definitions provide reuse capabilities. A globally declared Value Provider allows defining parameters to build a context of where it can be executed.
+
+==== Global value provider example
+
+[source, yaml]
+----
+valueProviders:
+  channels:
+    parameters:
+      channelKind:
+        type: string
+    definition:
+      request:
+        path: /channels
+        method: get
+        binding:
+          queryParameter:
+            kind:
+              value: "#[parameters.channelKind]"
+      items:
+        extraction:
+          expression: "#[payload.channels]"
+        value:
+          expression: "#[item.channelId]"
+        displayName:
+          expression: "#[item.channelName]"
+
+endpoints:
+  /message:
+    operations:
+      post:
+        expects:
+          queryParameter:
+            channel:
+              valueProvider:
+                type: reference
+                id: channels
+                arguments:
+                  channelKind: queryParameter.kind
+----
+
+Since this value provider is declared globally, it doesn't have access to the operation parameters. Instead, it needs to declare a parameter that the referer operation will then pass an argument onto.
+
+A `channelKind` parameter is declared in the `parameters` section of the global declaration. A value is assigned to it in the `arguments` section of the value provider reference. It is then used in the HTTP Request binding using the `parameters` variable. All of the declared parameters are present in that map.
+
 
 == Example: Simple Value Provider
 
-The following example example shows the application of a Value Provider declaration and usage using in the Slack API.
+The following example shows the application of a Value Provider declaration and usage using the Slack API.
 
 In this example, the `postMessage` method has a value provider implemented:
 https://api.slack.com/methods/chat.postMessage
 
 image::channel-parameter.png[]
 
-This endpoint has a required `channel` parameter whose possible values can be obtained by making a request to another endpoint:
+This endpoint has a required `channel` parameter with possible values that can be obtained by making a request to another endpoint:
 https://api.slack.com/methods/conversations.list
 
-image:conversations-list-endpoint.png
+image:conversations-list-endpoint.png[]
 
 A response from this endpoint looks like this:
 
-[source,yaml]
+[source,json5]
 ----
 {
     "ok": true,
@@ -45,30 +169,32 @@ A response from this endpoint looks like this:
 }
 ----
 
-Given this, you can create a simple value provider that enables you to provide the possible values for the `channels` parameter.
+With this, you can create a simple value provider that provides the possible values for the `channels` parameter.
 
 [source,yaml]
 ----
 valueProviders:
  channels:
-   path: /conversations.list
-   method: GET
-   items:
-      extraction:
+   definition:
+     request:
+       path: /conversations.list
+       method: get
+     items:
+       extraction:
          expression: “#[payload.channels]”
-      displayName:
+       displayName:
          expression: “#[item.name]”
-      value:
+       value:
          expression: “#[item.id]”
 ----
 
 According to the example, the value provider must make a `GET` request to the `/conversations.list` endpoint using the path and method properties respectively.
 
-Next, the provider extracts the array of values from the response with the `extraction` expression, and for each one of these items, `name` property is returned as *displayName*, and the `id` property is returned as *value*.
+The provider then extracts the array of values from the response with the `extraction` expression, and for each one of these items, `name` property is returned as *displayName*, and the `id` property is returned as *value*.
 
 The user sees *displayName* in the dropdown for the possible channel values, and *value* is sent to the server.
 
-You can then add this value provider to the channel parameter in the operation as shown:
+You can then add this value provider to the `channels` parameter in the operation as shown:
 
 [source,yaml]
 ----
@@ -80,27 +206,30 @@ endpoints:
          queryParameter:
            channel:
              valueProvider:
+               type: reference
                id: channels
 ----
 
 == Example: Value Provider with Parameters
 
-This example contains the previous parameter provider and adds some intelligence. This value provider uses the operation’s parameters in order to query for the appropriate type of channels.
+This example contains the previous parameter provider with more intelligence. This value provider uses the operation’s parameters to query for the appropriate type of channels.
 
 [source,yaml]
 ----
 valueProviders:
  channels:
-   path: /conversations.list
-   method: GET
    parameters:
       channelType:
         type: string
-   binding:
-     queryParams:
-       channelType:
-         value:
-           expression: “#[if(parameters.channelType != null) parameters.channelType else ‘all’]”
+   definition:
+     request:
+         path: /conversations.list
+         method: get
+         binding:
+           queryParameter:
+             channelType:
+               value:
+                 expression: “#[if(parameters.channelType != null) parameters.channelType else ‘all’]”
    items:
       extraction:
          expression: “#[payload.channels]”
@@ -111,54 +240,26 @@ valueProviders:
 ----
 
 This value provider resembles the previous one with the exception of the addition of the `binding` node. +
-This is a way of forwarding parameters set in the operation to the value provider. These bound parameters can be later used to build the value provider request.
+
+This example demonstrates forwarding parameters set in the operation of the value provider. These bound parameters can be used later to build the value provider request. +
 
 In this example, the `channelType` query parameter is bound to the value provided in the operation `uriChannelType` URI parameter.
 
 [source,yaml]
 ----
-/chat.postMessage/{uriChannelType}:
-   operations:
-     post:
-       expects:
-         queryParameter:
-           channel:
-             valueProvider:
-               id: channels
-               arguments:
-                  channelType:
-                    Value: uriParameter.uriChannelType
+endpoints:
+  /chat.postMessage/{uriChannelType}:
+     operations:
+       post:
+         expects:
+           queryParameter:
+             channel:
+               valueProvider:
+                 type: reference
+                 id: channels
+                 arguments:
+                    channelType:
+                      value: uriParameter.uriChannelType
 ----
 
-Setting the value provider to the operation is as simple as in the previous example, only that in this case it is validated that the bound parameters exist in the operation before generating the connector code.
-
-
-== Value Provider Expressions
-
-Depending on the context, the expressions have access to the following variables.
-
-payload:: The full response returned from the server.
-
-attributes:: The response attributes returned from the server. This resembles the attributes from a request done using http connector.
-
-//http connector?
-
-item:: When the response from the server is extracted and split, the _item_ variable contains each of those split values.
-
-parameters:: Contains a map with the parameter names and values sent to this value provider from the operation.
-
-The availability of these variables depending on the expressions is as follows:
-
-[cols=",,,,",options="header",]
-|===
-| |payload |attributes |item |parameters
-a|
-Item
-
-Display Name
-
-|Yes |Yes |Yes |-
-|Item Value |Yes |Yes |Yes |-
-|Item Extraction |Yes |Yes |- |-
-|Parameter Binding |- |- |- |Yes
-|===
+Setting the value provider to the operation is as simple as in the previous example, however in this case the bound parameters exist in the operation before generating the connector code.
