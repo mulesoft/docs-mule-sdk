@@ -15,6 +15,7 @@
   *** xref:rest-sdk/data-expressions.adoc[Data Expressions]
   *** xref:rest-sdk/sample-data.adoc[Sample Data]
   *** xref:rest-sdk/rest-sdk-connectivity.adoc[Connectivity using the REST SDK]
+ ** xref:rest-sdk/simple-composition.adoc[Simple Composition]
 * xref:getting-started.adoc[Java SDK]
  ** xref:choosing-version.adoc[Choosing the SDK version]
  ** xref:module-structure.adoc[Module Structure]
