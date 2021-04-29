@@ -11,7 +11,7 @@
   *** xref:rest-sdk/connectivity-testing.adoc[Connectivity Testing]
   *** xref:rest-sdk/triggers.adoc[Triggers]
   *** xref:rest-sdk/value-providers.adoc[Value Providers]
-  *** xref:rest-sdk/simple-composition.adoc[Simple Composition]
+ ** xref:rest-sdk/simple-composition.adoc[Simple Composition]
 * xref:getting-started.adoc[Java SDK]
  ** xref:choosing-version.adoc[Choosing the SDK version]
  ** xref:module-structure.adoc[Module Structure]
