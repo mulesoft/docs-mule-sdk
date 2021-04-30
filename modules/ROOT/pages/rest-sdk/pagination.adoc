@@ -21,6 +21,9 @@ returned.
 Page number:: For APIs which do paging based on a query param which
 represents the page number to get.
 
+Hypermedia paging:: For APIs which do paging retrieving in the
+response body o in the Link header the URL of the next page.
+
 
 == Pagination Configuration Parameters
 
@@ -37,8 +40,8 @@ pagination name when an operation is paged using this strategy.
 
 The type defines the behavior of the pagination strategy.
 
-As indicated previously, there are 3 possible strategies: _offset_,
-_marker_, and _pageNumber_.
+As indicated previously, there are 4 possible strategies: _offset_,
+_marker_, _pageNumber_ and _hypermedia_.
 
 === Parameters
 
@@ -76,6 +79,17 @@ from the server.
 
 initialPageNumber:: The initial value the connector passes to the
 previously indicated query parameter.
+
+pageCount:: A dataweave expression used to extract the total page count.
+The connector will stop the pagination once that page is retrieved.
+This is an optional parameter.
+
+==== Hypermedia Pagination
+
+For _hypermedia_ pagination, the available parameters are:
+
+nextUrl:: This is a dataweave expression that the connector
+uses to extract the next url from the API response.
 
 ==== Paging Response
 
@@ -193,3 +207,72 @@ allows the connector to extract the results from the response.
 
 You must also define that the content search operation uses that
 pagination strategy.
+
+== Hypermedia Paging Example
+
+==== Next URL in response body
+
+In case the next URL is defined in the response body:
+
+[source,json]
+----
+{
+ "data": [
+   {
+     "name": "Tony Stark",
+     "age": 45,
+     "alias": "Iron Man"
+   },
+   {
+     "name": "Steve Rodgers",
+     "age": 95,
+     "alias": "Captain America"
+   },
+   {
+     "name": "Dr. Stephen Strange",
+     "age": 40,
+     "alias": "Sorcerer Supreme"
+   }
+ ],
+ "nextUrl": "https://myhost.com/api?page=2"
+}
+----
+
+The pagination should be defined:
+
+[source,yaml]
+----
+paginations:
+  hypermedia-body-pagination:
+    type: hypermedia
+    parameters:
+      nextUrl:
+        language: "dataweave"
+        expression: "#[payload.nextUrl]"
+      pagingResponse:
+        language: "dataweave"
+        expression: "#[payload.data]"
+----
+
+==== Next URL in Link header
+
+In case the next URL is defined in Link header:
+
+----
+link: <https://myhost.com/api?page=2>;rel="next", <https://myhost.com/api?page=10>; rel="last"
+----
+
+The pagination should be defined:
+
+----
+paginations:
+  hypermedia-body-pagination:
+    type: hypermedia
+    parameters:
+      nextUrl:
+        language: "dataweave"
+        expression: "#[link.next]"
+      pagingResponse:
+        language: "dataweave"
+        expression: "#[payload.data]"
+----
