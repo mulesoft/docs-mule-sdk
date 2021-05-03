@@ -80,7 +80,7 @@ The format of the API spec.
 
 Allowed values are RAML, JsonOAS, YamlOAS, JsonOAS3 and YamlOAS3.
 
-If not specified will autodetect format based on file extension and content.|-
+If not specified, it will autodetect the format based on the file extension and content.|-
 
 |outputDir |No a|
 The path where the connector descriptor is placed.
@@ -129,7 +129,7 @@ a|The format of the API spec.
 
 Allowed values are RAML, JsonOAS, YamlOAS, JsonOAS3, and YamlOAS3.
 
-If not specified will autodetect format based on file extension and content.
+If not specified, it will autodetect the format based on the file extension and content.
 |-
 
 |outputDir

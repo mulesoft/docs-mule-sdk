@@ -11,18 +11,18 @@ pagination in the API operations.
 
 REST SDK supports the following pagination strategies:
 
-Offset based paging:: For APIs which do paging based on an offset query
+Offset based paging:: For APIs that do paging based on an offset query
 parameter which requests results starting from result number N.
 
-Marker-based paging:: For APIs which do paging based on a marker
+Marker-based paging:: For APIs that do paging based on a marker
 query parameter which points to a position in the dataset to be
 returned.
 
-Page number:: For APIs which do paging based on a query param which
+Page number:: For APIs that do paging based on a query param which
 represents the page number to get.
 
-Hypermedia paging:: For APIs which do paging retrieving in the
-response body o in the Link header the URL of the next page.
+Hypermedia paging:: For APIs that do paging retrieving in the
+response body of the Link header in the URL of the next page.
 
 
 == Pagination Configuration Parameters
@@ -81,15 +81,15 @@ initialPageNumber:: The initial value the connector passes to the
 previously indicated query parameter.
 
 pageCount:: A dataweave expression used to extract the total page count.
-The connector will stop the pagination once that page is retrieved.
+The connector stops the pagination once that page is retrieved.
 This is an optional parameter.
 
 ==== Hypermedia Pagination
 
 For _hypermedia_ pagination, the available parameters are:
 
-nextUrl:: This is a dataweave expression that the connector
-uses to extract the next url from the API response.
+nextUrl:: A dataweave expression that the connector
+uses to extract the next URL from the API response.
 
 ==== Paging Response
 
