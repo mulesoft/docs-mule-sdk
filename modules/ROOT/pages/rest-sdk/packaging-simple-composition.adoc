@@ -45,7 +45,26 @@ operations:
 
 * *Base*
 +
-description
-* *comp policy*
+This refers to the base artifact. It is the Group, Artifact, Version (GAV)
+coordinate of the connector that supplies the base components used in the
+composition. This is a fix version reference and it allows the base connector
+and Composer teams to evolve at their own pace without unexpected changes.
+* *Composition Policy*
 +
-description
+This allows high level controls for which components are visible in the
+resulting composite artifact.
+** *Exclusive*
++
+Only components present in this descriptor are included. Any
+operation or trigger present in the base connector but not referenced here
+is hidden automatically.
+** *Merge*
++
+The new components described in the descriptor coexist with those in
+the base connector, except for those explicitly removed through the
+removedComponents directive. Composite components cannot have the same names
+as those in the base connector.
+* *Remove Components*
++
+You can use this to list components in the base connector that should be
+removed from the composite connector.
