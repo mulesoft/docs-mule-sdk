@@ -21,8 +21,8 @@ returned.
 Page number:: For APIs that do paging based on a query param which
 represents the page number to get.
 
-Hypermedia paging:: For APIs that do paging retrieving in the
-response body of the Link header in the URL of the next page.
+Hypermedia paging:: For APIs that do paging retrieving the URL of
+the next page in the response body or in the Link header.
 
 
 == Pagination Configuration Parameters
