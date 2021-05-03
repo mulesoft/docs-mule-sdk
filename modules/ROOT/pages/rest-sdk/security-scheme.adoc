@@ -40,10 +40,10 @@ In this case, the API spec defines the security scheme name `passThrough`
 which has a parameter named `passThroughHeader` defined. The `displayName`
 property is assigned the value `Auth Header`.
 
-== Add parameters for Oauth authorization
+== Add Parameters for OAuth Authorization
 
 You can define new parameters to be added in the `Authorize` endpoint for
-Oauth 2.0 authorization in the descriptor.
+OAuth 2.0 authorization in the descriptor.
 ----
 security:
   oauth2:
