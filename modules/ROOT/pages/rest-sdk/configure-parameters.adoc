@@ -6,7 +6,7 @@ endif::[]
 == Set a Name for a Parameter
 
 To select a display name for a parameter, you must use the
-`friendlyName` property under the parameter node. It applies for any
+`displayName` property under the parameter node. It applies for any
 parameter type. You can define parameters using the `queryParameter`,
 `uriParameter`, or `header` nodes, and they refer to the corresponding
 parameter defined in the API spec.
@@ -18,12 +18,12 @@ endpoints:
       operations:
          get:
             pagination: content-search-pagination
-            name: Get Content Search
+            displayName: Get Content Search
             description: Provides keyword and refinement search functionality for content assets.
             expects:
                queryParameter:
                   count:
-                     friendlyName: count
+                     displayName: count
                      description: The maximum number of instances per request.
 ----
 
@@ -46,12 +46,12 @@ endpoints:
       operations:
          get:
             pagination: content-search-pagination
-            name: Get Content Search
+            displayName: Get Content Search
             description: Provides keyword and refinement search functionality for content assets.
             expects:
                queryParameter:
                   count:
-                     friendlyName: count
+                     displayName: count
                      description: The maximum number of instances per request. Default value is 25.
 ----
 

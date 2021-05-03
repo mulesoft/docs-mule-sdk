@@ -42,7 +42,7 @@ will be generated for this resource.
 
 == Set a Display Name for an Operation Name
 
-You can define the display name of an operation by using the `name`
+You can define the display name of an operation by using the `displayName`
 property in the operation node.
 
 [source,yaml]
@@ -52,13 +52,13 @@ endpoints:
       operations:
          get:
             pagination: content-search-pagination
-            name: Get Content Search
+            displayName: Get Content Search
             description: Provides keyword and refinement search functionality for content assets.
             outputMediaType: application/json
             expects:
                queryParameter:
                   count:
-                     friendlyName: count
+                     displayName: count
                      description: The maximum number of instances per request.
 ----
 
@@ -79,13 +79,13 @@ endpoints:
       operations:
          get:
             pagination: content-search-pagination
-            name: Get Content Search
+            displayName: Get Content Search
             description: Provides keyword and refinement search functionality for content assets.
             outputMediaType: application/json
             expects:
                queryParameter:
                   count:
-                     friendlyName: count
+                     displayName: count
                      description: The maximum number of instances per request.
 ----
 
@@ -122,14 +122,14 @@ endpoints:
       operations:
          get:
             pagination: content-search-pagination
-            name: Get Content Search
+            displayName: Get Content Search
             description: Provides keyword and refinement search functionality for content assets.
             inputMediaType: application/json
             outputMediaType: application/json
             expects:
                queryParameter:
                   count:
-                     friendlyName: count
+                     displayName: count
                      description: The maximum number of instances per request.
 ----
 
@@ -151,12 +151,12 @@ endpoints:
       operations:
          get:
             pagination: content-search-pagination
-            name: Get Content Search
+            displayName: Get Content Search
             description: Provides keyword and refinement search functionality for content assets.
             expects:
                queryParameter:
                   count:
-                     friendlyName: count
+                     displayName: count
                      description: The maximum number of instances per request.
 ----
 

@@ -33,9 +33,27 @@ security:
   passThrough:
     headers:
       passThroughHeader:
-        friendlyName: 'Auth Header'
+        displayName: 'Auth Header'
 ----
 
 In this case, the API spec defines the security scheme name `passThrough`
-which has a parameter named `passThroughHeader` defined. The `friendlyName`
+which has a parameter named `passThroughHeader` defined. The `displayName`
 property is assigned the value `Auth Header`.
+
+== Add parameters for Oauth authorization
+
+You can define new parameters to be added in the `Authorize` endpoint for
+Oauth 2.0 authorization in the descriptor.
+----
+security:
+  oauth2:
+    queryParameters:
+      prompt:
+        additional: true
+        type: string
+        displayName: 'Prompt'
+        description: 'Set to consent'
+        default: 'consent'
+----
+
+In this case, the query parameter `prompt` will be added on the Authorization endpoint.

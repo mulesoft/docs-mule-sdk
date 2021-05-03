@@ -40,7 +40,7 @@ endpoints:
        expects:
          part:
            requestid:
-             friendlyName: "Request-ID"
+             displayName: "Request-ID"
              description: The tracking ID for this request
            attributes:
              contentType: application/json
@@ -53,7 +53,7 @@ endpoints:
 == Define a Friendly Part Name
 
 Parameters in the request body can supply an alternative name using the
-`friendlyName` property. In the example above, the final connector UI
+`displayName` property. In the example above, the final connector UI
 shows `requestid` as `Request-ID`.
 
 [source,yaml]
@@ -65,7 +65,7 @@ endpoints:
        expects:
          part:
            requestid:
-             friendlyName: "Request-ID"
+             displayName: "Request-ID"
 ----
 
 == Define a Description for a Part
