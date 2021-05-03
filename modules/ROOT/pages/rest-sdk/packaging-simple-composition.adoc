@@ -1,0 +1,51 @@
+= Packaging Simple Composition
+ifndef::env-site,env-github[]
+include::../_attributes.adoc[]
+endif::[]
+
+The use cases for simple composition can be generalized into a series of
+patterns that can be declared through metadata. It is important to focus on
+where these declarations live, how they are linked to the base connector
+artifact, and the associated software development life cycle (SDLC).
+
+== Composition Descriptor
+
+Simple composition must:
+* Be defined outside of the base connector artifact
+* Have a separate release cycle than the base connector
+* Not be limited to REST SDK connectors
+
+Because of these requirements, simple composition is defined in a new
+file called the Composition Descriptor. This file is authored, versioned,
+and released separately from the base connector.
+
+Here is a simple example of a Composition Descriptor as shown below.
+
+[source,yaml]
+----
+#% Simple Composition 1.0
+
+base:
+  groupId: com.mulesoft.connector
+  artifactId: salesforce-connector
+  version: 11.1.4
+
+compositionPolicy: "MERGE|EXCLUSIVE"
+
+removeComponents:
+  - someAdvancedOperation
+  - someOperationComposerDoesntNeed
+  - someTriggerWhichDoesntApply
+
+operations:
+  adapters:
+    create-single:
+      ...
+----
+
+* *Base*
++
+description
+* *comp policy*
++
+description
