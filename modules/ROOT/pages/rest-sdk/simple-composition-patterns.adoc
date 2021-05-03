@@ -97,8 +97,9 @@ In this example, the pattern will have a single parameter exposed. The
 result payload and attributes are combined into a single option and the
 operation is changed to return no attributes.
 
-Unlike the xref:rest-sdk/simple-composition-patterns.adoc#Salesforce Create Single Object[previous example for create-single],
-you do not need to redefine parameters as the original parameter declaration will be respected.
+Unlike the <<Salesforce Create Single Object, previous example for create-single>>,
+you do not need to redefine parameters since the original parameter declaration
+will be respected.
 
 == Hiding Parameters
 
@@ -148,8 +149,11 @@ operations:
 
 This pattern involves changing the default value of a parameter. This can be
 used for:
+
 * Changing the default value of an optional parameter
+
 * Turning an optional parameter into one that is required (no more default value)
+
 * Turning a required parameter into one that is optional (add a default value)
 
 The use cases described above can all be expressed through a required and
@@ -159,7 +163,7 @@ defaultValue directive.
 
 === Making an Optional Parameter Required
 
-For instance, in the xref:rest-sdk/simple-composition-patterns.adoc#Salesforce Create Single Object[example for create-single],
+For instance, in the <<Salesforce Create Single Object, example for create-single>>,
 suppose that instead of creating a new object parameter you wanted to reuse
 the `content` parameter already present in the base connector. However, you
 want to change it from optional with default #[payload] to required.
@@ -208,7 +212,7 @@ the default value.
 
 === Making a Required Parameter Optional
 
-Consider the opposite case of the xref:rest-sdk/simple-composition-patterns.adoc#Making an Optional Parameter Required[previous example].
+Consider the opposite case of the <<Making an Optional Parameter Required, previous example>>.
 Suppose you want to redefine the `type` parameter and make it optional and default to "Lead".
 
 [source,text,linenums]
@@ -249,58 +253,3 @@ operations:
             language: "dw"
             value: "#[payload[0]]"
 ----
-
-== Generalization
-
-This pattern can be generalized as one that composes of one operation with a
-set of input or output transformations. The operation exposes only a subset of
-the parameters of the base operation and can change each parameter's
-signature, for example, the name, default value, or type. The operation can
-also add additional custom parameters. A binding transformation maps each of
-the composed operation parameters to those of the base operation. A
-transformation can also be used optionally to change the output type.
-
-== Examples of Generalization
-
-=== Salesforce Create Single
-
-This example exposes a reduced set of parameters. The bindings section
-transforms the single object into a one element array. The output is also
-transformed by returning the first item in the response array.
-
-[source,text,linenums]
-----
-adapters:
-  create-single:
-  path: /createObjects/{objectType}
-  method: POST
-  displayName: Create Single
-  description: Creates one single object
-
-  parameters:
-    type:
-      displayName: Object Type
-      type: string
-      required: true
-    object:
-      displayName: Object
-      type: object
-      required: true
-
-  binding:
-    uriParameter:
-      objectType:
-        value: "#[parameters.type]"
-    body:
-      expression: '#[[parameters.object]]'
-
-  returns:
-    payload:
-      expression: "#[payload[0]]"
-----
-
-=== Gmail Get Messages
-
-This example exposes one parameter with a different default value. The result
-payload and attributes are combined into a single option, and the operation is
-changed to return no attributes.
