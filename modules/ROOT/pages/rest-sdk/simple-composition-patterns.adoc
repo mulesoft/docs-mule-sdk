@@ -7,100 +7,6 @@ There are specific pre-identified use cases that fit a general pattern in the
 target API. You can identify these patterns and use declarative metadata to
 express them.
 
-== Operation Adapter
-
-This pattern is used when the input or output types of one operation need to
-be changed. The composed operation exposes only a subset of the parameters of
-the base operation and has the ability to change the signature of
-each parameter, such as the name, default value, or type. The composed
-operation can also add additional custom parameters.
-
-== Examples of Operation Adapter
-
-=== Salesforce Create Single Object
-
-The Salesforce API defines a createObjects endpoint that allows you to create
-up to 200 objects of a particular type.
-
-[source,text,linenums]
-----
-<sfdc:create-objects type="CUSTOMERS">
-  <sfdc:content>#[ ...Array of objects ]</sfdc:content>
-<sfdc:create-objects>
-----
-
-The operation then returns a List<Result>, where Result is an object that has
-information about the creation of one particular object, for example, whether
-it was inserted or if there are any errors.
-
-However, the input and output array of objects returned by this scenario is
-too complex for Composer. Instead, you can use Operation Adapter to work in
-terms of one single record. This pattern declares an adapter with a reduced
-set of parameters and the bindings section maps the parameters of the adapter
-to those of the base operation.
-
-In this case, it will transform the single object into a single element array.
-The output is also transformed by returning the first item in the response
-array and the output type of the operation is automatically recalculated based
-on the output transformation expression.
-
-[source,text,linenums]
-----
-operations:
-  adapters:
-    create-single:
-      base: createObjects
-      displayName: Create Single
-      description: Creates one single object
-
-      parameters:
-        type:
-          displayName: Object Type
-          type: string
-          required: true
-
-        object:
-          displayName: Object
-          type: object
-          required: true
-
-        binding:
-          objectType:
-            expression:
-              language: "dw"
-              value: "#[parameters.type]"
-          content:
-            expression:
-              language: "dw"
-              value: "#[[parameters.object]]"
-
-      returns:
-        payload:
-          expression:
-            language: "dw"
-            value: "#[payload[0]]"
-----
-
-=== Gmail List Messages
-
-Similarly, Gmail Connector has operations that fetch emails and return a
-List<Message>. The message payload contains the email body and an attributes
-object with information such as the sender, the recipients, timestamps, or
-attachments per the Mule message structure.
-
-However, Composer does not have the concept of Mule message and does not
-benefit the Mule message structure. Instead, you can use Operation Adapter
-to have one single structure with a subset of the attributes object and
-a body attribute containing the payload.
-
-In this example, the pattern will have a single parameter exposed. The
-result payload and attributes are combined into a single option and the
-operation is changed to return no attributes.
-
-Unlike the <<Salesforce Create Single Object, previous example for create-single>>,
-you do not need to redefine parameters since the original parameter declaration
-will be respected.
-
 == Hiding Parameters
 
 This pattern is used to hide parameters by not declaring them in the
@@ -163,8 +69,7 @@ defaultValue directive.
 
 === Making an Optional Parameter Required
 
-For instance, in the <<Salesforce Create Single Object, example for create-single>>,
-suppose that instead of creating a new object parameter you wanted to reuse
+Suppose that instead of creating a new object parameter you wanted to reuse
 the `content` parameter already present in the base connector. However, you
 want to change it from optional with default #[payload] to required.
 
