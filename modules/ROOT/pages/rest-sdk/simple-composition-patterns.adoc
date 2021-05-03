@@ -3,19 +3,60 @@ ifndef::env-site,env-github[]
 include::../_attributes.adoc[]
 endif::[]
 
-There are specific pre-identified use cases that fit a general pattern in the target API. You can identify these patterns and use declarative metadata to express them.
+There are specific pre-identified use cases that fit a general pattern in the
+target API. You can identify these patterns and use declarative metadata to
+express them.
 
-=== Generalization
+== Operation Adapter
 
-This pattern can be generalized as one that composes of one operation with a set of input or output transformations. The operation exposes only a subset of the parameters of the base operation and can change each parameter's signature, for example, the name, default value, or type.
-The operation can also add additional custom parameters. A binding transformation maps each of the composed operation parameters to those of the base operation. A transformation can also be used optionally to change the output type.
+This pattern is used when the input or output types of one operation need to
+be changed. The composed operation exposes only a subset of the parameters of
+the base operation and has the ability to change the signature of
+each parameter, such as the name, default value, or type. The composed
+operation can also add additional custom parameters.
 
-==== Examples of Generalization
+=== Examples of Operation Adapter
 
-===== Salesforce Create Single
+==== Salesforce Create Single Object
 
-This example exposes a reduced set of parameters. The bindings section transforms the single object into a one element array.
-The output is also transformed by returning the first item in the response array.
+The Salesforce API defines a createObjects endpoint that allows you to create
+up to 200 objects of a particular type.
+
+[source,text,linenums]
+----
+<sfdc:create-objects type="CUSTOMERS">
+  <sfdc:content>#[ ...Array of objects ]</sfdc:content>
+<sfdc:create-objects>
+----
+
+The operation then returns a List<Result>, where Result is an object that has
+information about the creation of one particular object, for example, whether
+it was inserted or if there are any errors.
+
+==== Gmail List Messages
+
+Similarly, Gmail Connector has operations that fetch emails and return a
+List<Message>. The message payload contains the email body and an attributes
+object with information such as the sender, the recipients, timestamps, or
+attachments.
+
+== Generalization
+
+This pattern can be generalized as one that composes of one operation with a
+set of input or output transformations. The operation exposes only a subset of
+the parameters of the base operation and can change each parameter's
+signature, for example, the name, default value, or type. The operation can
+also add additional custom parameters. A binding transformation maps each of
+the composed operation parameters to those of the base operation. A
+transformation can also be used optionally to change the output type.
+
+=== Examples of Generalization
+
+==== Salesforce Create Single
+
+This example exposes a reduced set of parameters. The bindings section
+transforms the single object into a one element array. The output is also
+transformed by returning the first item in the response array.
 
 [source,text,linenums]
 ----
@@ -48,6 +89,8 @@ adapters:
       expression: "#[payload[0]]"
 ----
 
-===== Gmail Get Messages
+==== Gmail Get Messages
 
-This example exposes one parameter with a different default value. The result payload and attributes are combined into a single option, and the operation is changed to return no attributes.
+This example exposes one parameter with a different default value. The result
+payload and attributes are combined into a single option, and the operation is
+changed to return no attributes.
