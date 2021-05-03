@@ -1,57 +1,27 @@
-= Simple Composition
+= Simple Composition for Composer
 ifndef::env-site,env-github[]
 include::../_attributes.adoc[]
 endif::[]
 
-Simple composition can be used to build a DSL through declarative metadata.
+== About Composition
+Composition allows us to take an immutable version of a specialist connector
+and generate net new assets that add new layers of functionality. These newly
+generated composite artifacts can have its own release lifecycle and evolve
+separately from the base connector.
 
-== Simple Composition Patterns
+Composition allows for no code duplication and new versions of the specialist
+connector. In addition, changes in the Composer version will not affect the
+specialist version nor will it break backwards compatibility.
 
-There are specific pre-identified use cases that fit a general pattern in the target API. You can identify these patterns and use declarative metadata to express them.
+== Simple Composition
 
-=== Generalization
+Simple composition for Composer connectors can be used to automatically
+generate connectors based on REST SDK metadata in the Composer UI.
 
-This pattern can be generalized as one that composes of one operation with a set of input or output transformations. The operation exposes only a subset of the parameters of the base operation and can change each parameter's signature, for example, the name, default value, or type.
-The operation can also add additional custom parameters. A binding transformation maps each of the composed operation parameters to those of the base operation. A transformation can also be used optionally to change the output type.
-
-==== Examples of Generalization
-
-===== Salesforce Create Single
-
-This example exposes a reduced set of parameters. The bindings section transforms the single object into a one element array.
-The output is also transformed by returning the first item in the response array.
-
-[source,text,linenums]
-----
-adapters:
-  create-single:
-  path: /createObjects/{objectType}
-  method: POST
-  displayName: Create Single
-  description: Creates one single object
-
-  parameters:
-    type:
-      displayName: Object Type
-      type: string
-      required: true
-    object:
-      displayName: Object
-      type: object
-      required: true
-
-  binding:
-    uriParameter:
-      objectType:
-        value: "#[parameters.type]"
-    body:
-      expression: '#[[parameters.object]]'
-
-  returns:
-    payload:
-      expression: "#[payload[0]]"
-----
-
-===== Gmail Get Messages
-
-This example exposes one parameter with a different default value. The result payload and attributes are combined into a single option, and the operation is changed to return no attributes.
+Simple composition involves use cases for composition that can be generalized
+into a set of standard patterns, such as transforming input and output
+types or hiding top level parameters. These patterns are agnostic of the
+target system domain model, can easily be expressed through declarative
+metadata, and can include components from one single connector. For
+information about specific simple composition patterns for Composer connectors,
+see xref:rest-sdk/simple-composition-patterns.adoc[Simple Composition Patterns].
