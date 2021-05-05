@@ -26,23 +26,6 @@ metadata, and can include components from one single connector. For
 information about specific simple composition patterns for Composer connectors,
 see xref:rest-sdk/simple-composition-patterns.adoc[Simple Composition Patterns].
 
-== Create a composite Connector
-
-The simple composition feature is a part of the standard connector creation flow.
-The only difference is that multiple connector descriptors must be specified in the create connector command.
-So, for example, the create connector command could look like this:
-
-----
-mvn com.mulesoft.connectivity:rest-sdk-mojo:<PLUGIN_VERSION>:createConnector -DapiSpec=api.raml -Ddescriptor=specialist-descriptor.yaml,citizen-descriptor.yaml
-----
-
-The descriptors are used in the order they are specified, in this case the `specialist-descriptor.yaml` will be applied first, and then overwritten by the `citizen-descriptor.yaml`.
-
-
-== Composing descriptors
-
-When composing standard connector descriptors, the properties declared in a descriptor will override the ones declared in the previous ones.
-So, for example, if the connector name and description are set in a first layer, and then the name is overwritten in a second layer, the final result will have the name of the second layer and the description of the first one.
 
 === Hiding Operations
 Operations declared in a previous layer can be hidden by just ignoring them in a descriptor layer.

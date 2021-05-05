@@ -7,154 +7,87 @@ There are specific pre-identified use cases that fit a general pattern in the
 target API. You can identify these patterns and use declarative metadata to
 express them.
 
-== Hiding Parameters
+== Hiding Operations
 
-This pattern is used to hide parameters by not declaring them in the
-parameters section. Hidden parameters can still be assigned a value through
-the bindings section.
+This pattern is used to hide operations. Operations declared in a previous layer
+can be hidden by ignoring them in a descriptor layer.
 
-== Examples of Hiding Parameters
-
-For example, suppose that instead of a generic
-*create-single* operation you want a type specific operation called
-*create-lead*. This would be the same as *create-single* but the type
-parameter will be hidden and changed to "Lead".
-
-[source,text,linenums]
+For example, take the following descriptor as the base layer:
 ----
-operations:
-  adapters:
-    create-lead:
-      base: createObjects
-      displayName: Create Lead
-      description: Creates a Lead
+#% Rest Connect Connector Descriptor 1.0
 
-      parameters:
-        lead:
-          displayName: Object
-          type:
-            inherit: content
-          required: true
+apiSpec:
+ url: http://myhost.com/resources/shop-api.yaml
 
-    binding:
-            content:
-              expression:
-                language: "dw"
-                value: "#[[parameters.object]]"
-            objectType:
-              value: "Lead"
+connectorName: Shop Connector
 
-      returns:
-        payload:
-          expression:
-            language: "dw"
-            value: "#[payload[0]]"
+connectorGav:
+ groupId: com.mulesoft.connectors
+ artifactId: shop-connector
+ version: 1.0.0
 ----
 
-== Changing Parameter Default Values
+This will generate all the operations of the connector declared in the API specification.
+To generate a connector with only a subset of the operations while also maintaining
+all the customizations declared in this descriptor, a new descriptor layer can be used:
 
-This pattern involves changing the default value of a parameter. This can be
-used for:
-
-* Changing the default value of an optional parameter
-
-* Turning an optional parameter into one that is required (no more default value)
-
-* Turning a required parameter into one that is optional (add a default value)
-
-The use cases described above can all be expressed through a required and
-defaultValue directive.
-
-== Examples of Changing Parameter Default Values
-
-=== Making an Optional Parameter Required
-
-Suppose that instead of creating a new object parameter you wanted to reuse
-the `content` parameter already present in the base connector. However, you
-want to change it from optional with default #[payload] to required.
-
-[source,text,linenums]
 ----
-operations:
-  adapters:
-    create-single:
-      base: createObjects
-      displayName: Create Single
-      description: Creates one single object
+#% Rest Connect Connector Descriptor 1.0
 
-      parameters:
-        type:
-          displayName: Object Type
-          type: string
-          required: true
+connectorGav:
+ groupId: com.mulesoft.connectors
+ artifactId: composed-shop-connector
+ version: 1.0.0
 
-        content:
-          displayName: Content
-          type:
-            inherit: content
-          required: true
-
-      binding:
-        objectType:
-          expression:
-            language: "dw"
-            value: "#[parameters.type]"
-        content:
-          expression:
-            language: "dw"
-            value: "#[[parameters.object]]"
-
-      returns:
-        payload:
-          expression:
-            language: "dw"
-            value: "#[payload[0]]"
+endpoints:
+    /users:
+        ignored: true
 ----
 
-By specifying that the `content` parameter is now required and maps to the
-original content parameter, you make the parameter required and remove
-the default value.
+All the operations under the '/users' endpoint are ignored and are not present
+in the generated connector.
 
-=== Making a Required Parameter Optional
+=== Renaming Operations
 
-Consider the opposite case of the <<Making an Optional Parameter Required, previous example>>.
-Suppose you want to redefine the `type` parameter and make it optional and default to "Lead".
+This pattern is used to customize operation names.
 
-[source,text,linenums]
+For example, take the following descriptor as the base layer:
+
 ----
-operations:
-  adapters:
-    create-single:
-      base: createObjects
-      displayName: Create Single
-      description: Creates one single object
+#% Rest Connect Connector Descriptor 1.0
 
-      parameters:
-        type:
-          displayName: Object Type
-          type: string
-          required: false
-          defaultValue: "Lead"
+apiSpec:
+ url: http://myhost.com/resources/shop-api.yaml
 
-        content:
-          displayName: Content
-          type:
-            inherit: content
-          required: true
+connectorName: Shop Connector
 
-      binding:
-        objectType:
-          expression:
-            language: "dw"
-            value: "#[parameters.type]"
-        content:
-          expression:
-            language: "dw"
-            value: "#[[parameters.object]]"
+connectorGav:
+ groupId: com.mulesoft.connectors
+ artifactId: shop-connector
+ version: 1.0.0
 
-      returns:
-        payload:
-          expression:
-            language: "dw"
-            value: "#[payload[0]]"
+endpoints:
+    /users:
+        operations:
+            get:
+                displayName: Get Users
 ----
+
+The `Get Users` operation can be renamed to `Get All Users` in the descriptor:
+
+----
+#% Rest Connect Connector Descriptor 1.0
+
+connectorGav:
+ groupId: com.mulesoft.connectors
+ artifactId: composed-shop-connector
+ version: 1.0.0
+
+endpoints:
+    /users:
+        operations:
+            get:
+                displayName: Get All Users
+----
+
+The operation is now renamed in the generated connector.
