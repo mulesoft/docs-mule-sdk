@@ -1,0 +1,31 @@
+= Composition Descriptor
+ifndef::env-site,env-github[]
+include::../_attributes.adoc[]
+endif::[]
+
+Simple composition is defined in a new file called the Composition Descriptor.
+This file is authored, versioned, and released separately from the base connector.
+
+== Create a Composite Connector
+
+This simple composition feature is a part of the standard connector creation flow.
+The only difference is that multiple connector descriptors can be specified in
+the create connector command.
+
+An example of what the create connector command could look like:
+----
+mvn com.mulesoft.connectivity:rest-sdk-mojo:<PLUGIN_VERSION>:createConnector -DapiSpec=api.raml -Ddescriptor=specialist-descriptor.yaml,citizen-descriptor.yaml
+----
+
+The descriptors are used in the order they are specified. In this case,
+the `specialist-descriptor.yaml` is applied first, and is then overwritten by
+the `citizen-descriptor.yaml`.
+
+== Composing Descriptors
+
+When composing standard connector descriptors, the properties declared in a
+descriptor overrides those declared in the previous ones.
+
+For example, if the connector name and description are set in a first layer
+and then the connector name is overwritten in a second layer, the final result
+will have the name of the second layer and the description of the first one.

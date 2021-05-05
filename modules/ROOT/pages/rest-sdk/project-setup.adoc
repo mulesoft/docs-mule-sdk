@@ -79,8 +79,7 @@ create a connector descriptor. |-
 The format of the API spec.
 
 Allowed values are RAML, JsonOAS, YamlOAS, JsonOAS3 and YamlOAS3.
-
-If not specified, it will autodetect the format based on the file extension and content.|-
+|If not specified, it will autodetect the format based on the file extension and content.
 
 |outputDir |No a|
 The path where the connector descriptor is placed.
@@ -94,8 +93,8 @@ generated. Allowed values are MINIMAL and VERBOSE. |MINIMAL
 |skipValidation |No |Allows you to skip the validation step for the API
 specification. Users should not skip the validations as the successful
 parsing of an invalid API spec is not guaranteed. Users who skip
-validation might experience issues generating the connector descriptor
-and the connector. |FALSE
+validation may experience issues generating the connector descriptor.
+|FALSE
 |===
 
 == Create Connector
@@ -117,11 +116,12 @@ The createConnector mojo uses the following parameters:
 [cols=",,,",options="header",]
 |===
 |*Parameter* |*Required* |*Description* |*Default Value*
-|apiSpec |Yes |The relative path to the API spec for which you want to
-create a Connector. |-
+|apiSpec |Yes
+|The relative path to the API spec for which you want to
+create a connector. |-
 
-|descriptor |Yes |The relative path to the connector descriptor that you
-created to customize the API spec. |-
+|descriptor |Yes
+|The relative paths to the connector descriptors that will be used to customize the connector. The value for this parameter can be a single relative path to a connector descriptor or a list of those, split with commas.|-
 
 |specFormat
 |No
@@ -129,8 +129,7 @@ a|The format of the API spec.
 
 Allowed values are RAML, JsonOAS, YamlOAS, JsonOAS3, and YamlOAS3.
 
-If not specified, it will autodetect the format based on the file extension and content.
-|-
+|If not specified, it will autodetect the format based on the file extension and content.
 
 |outputDir
 |No
@@ -145,8 +144,8 @@ folder.
 |No
 |Allows you to skip the validation step for the API
 spec. Users should not skip the validations as the successful parsing of
-an invalid API spec is not guaranteed. Users who skip validation might
-experience issues generating the connector descriptor and the connector.
+an invalid API spec is not guaranteed. Users who skip validation may
+experience issues generating the connector.
 |FALSE
 
 
@@ -155,11 +154,6 @@ experience issues generating the connector descriptor and the connector.
 |Creates backwards compatible Dynamic Metadata for Operations.
 |FALSE
 
-
-|forceContentParameter
-|No
-|Forces the content parameters names to always be 'content'.
-|FALSE
 |===
 
 == What's Next?
