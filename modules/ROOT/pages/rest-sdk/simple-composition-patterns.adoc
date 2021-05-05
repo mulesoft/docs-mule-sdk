@@ -47,7 +47,7 @@ endpoints:
 All the operations under the '/users' endpoint are ignored and are not present
 in the generated connector.
 
-=== Renaming Operations
+== Renaming Operations
 
 This pattern is used to customize operation names.
 

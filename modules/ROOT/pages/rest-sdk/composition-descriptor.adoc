@@ -9,7 +9,7 @@ This file is authored, versioned, and released separately from the base connecto
 == Create a Composite Connector
 
 This simple composition feature is a part of the standard connector creation flow.
-The only difference is that multiple connector descriptors must be specified in
+The only difference is that multiple connector descriptors can be specified in
 the create connector command.
 
 An example of what the create connector command could look like:
