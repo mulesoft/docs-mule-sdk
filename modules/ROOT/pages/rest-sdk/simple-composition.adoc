@@ -25,3 +25,100 @@ target system domain model, can easily be expressed through declarative
 metadata, and can include components from one single connector. For
 information about specific simple composition patterns for Composer connectors,
 see xref:rest-sdk/simple-composition-patterns.adoc[Simple Composition Patterns].
+
+== Create a composite Connector
+
+The simple composition feature is a part of the standard connector creation flow.
+The only difference is that multiple connector descriptors must be specified in the create connector command.
+So, for example, the create connector command could look like this:
+
+----
+mvn com.mulesoft.connectivity:rest-sdk-mojo:<PLUGIN_VERSION>:createConnector -DapiSpec=api.raml -Ddescriptor=specialist-descriptor.yaml,citizen-descriptor.yaml
+----
+
+The descriptors are used in the order they are specified, in this case the `specialist-descriptor.yaml` will be applied first, and then overwritten by the `citizen-descriptor.yaml`.
+
+
+== Composing descriptors
+
+When composing standard connector descriptors, the properties declared in a descriptor will override the ones declared in the previous ones.
+So, for example, if the connector name and description are set in a first layer, and then the name is overwritten in a second layer, the final result will have the name of the second layer and the description of the first one.
+
+=== Hiding Operations
+Operations declared in a previous layer can be hidden by just ignoring them in a descriptor layer.
+
+For example, taking the following descriptor as the base layer:
+----
+#% Rest Connect Connector Descriptor 1.0
+
+apiSpec:
+ url: http://myhost.com/resources/shop-api.yaml
+
+connectorName: Shop Connector
+
+connectorGav:
+ groupId: com.mulesoft.connectors
+ artifactId: shop-connector
+ version: 1.0.0
+----
+
+It will generate operations in the connector for all the operations declared in the API specification.
+
+To generate a connector with only a subset of the operations, but maintaining all the customizations declared in this descriptor, a new descriptor layer can be used:
+
+----
+#% Rest Connect Connector Descriptor 1.0
+
+connectorGav:
+ groupId: com.mulesoft.connectors
+ artifactId: composed-shop-connector
+ version: 1.0.0
+
+endpoints:
+    /users:
+        ignored: true
+----
+
+All the operations under the '/users' endpoint will be ignored and not present in the generated connector.
+
+=== Renaming Operations
+
+Similar to the previous example, renaming operations is an easy task.
+Having this first descriptor layer:
+
+----
+#% Rest Connect Connector Descriptor 1.0
+
+apiSpec:
+ url: http://myhost.com/resources/shop-api.yaml
+
+connectorName: Shop Connector
+
+connectorGav:
+ groupId: com.mulesoft.connectors
+ artifactId: shop-connector
+ version: 1.0.0
+
+endpoints:
+    /users:
+        operations:
+            get:
+                displayName: Get Users
+----
+
+The `Get Users` operation can be renamed to `Get All Users` by composing it with this descriptor:
+
+----
+#% Rest Connect Connector Descriptor 1.0
+
+connectorGav:
+ groupId: com.mulesoft.connectors
+ artifactId: composed-shop-connector
+ version: 1.0.0
+
+endpoints:
+    /users:
+        operations:
+            get:
+                displayName: Get All Users
+----
