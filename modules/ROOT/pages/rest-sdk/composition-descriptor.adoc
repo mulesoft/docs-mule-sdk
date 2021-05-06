@@ -3,8 +3,10 @@ ifndef::env-site,env-github[]
 include::../_attributes.adoc[]
 endif::[]
 
-Simple composition is defined in a new file called the Composition Descriptor.
-This file is authored, versioned, and released separately from the base connector.
+Simple composition is defined in a file called the Composition Descriptor, an
+instance of an existing descriptor. 
+The result of the connector created using this file is versioned and released
+separately from the base connector.
 
 == Create a Composite Connector
 
