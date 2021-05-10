@@ -4,24 +4,26 @@ include::../_attributes.adoc[]
 endif::[]
 
 == About Composition
-Composition allows us to take an immutable version of a specialist connector
+
+Composition enables you to take an immutable version of a connector
 and generate net new assets that add new layers of functionality. These newly
-generated composite artifacts can have its own release lifecycle and evolve
+generated composite artifacts can have their own release lifecycle and be developed
 separately from the base connector.
 
-Composition allows for no code duplication and new versions of the specialist
-connector. In addition, changes in the Composer version will not affect the
-specialist version nor will it break backwards compatibility.
+Using composition enables you to develop new versions of the base connector without duplicating code. In addition, changes that are made in the Composer version will not affect the base version of the connector, nor will it break backwards compatibility.
 
 == Simple Composition
 
-Simple composition for Composer connectors can be used to automatically
+Use simple composition for Composer connectors to automatically
 generate connectors based on REST SDK metadata in the Composer UI.
 
-Simple composition involves use cases for composition that can be generalized
-into a set of standard patterns, such as transforming input and output
-types or hiding top level parameters. These patterns are agnostic of the
-target system domain model, can easily be expressed through declarative
-metadata, and can include components from one single connector. For
-information about specific simple composition patterns for Composer connectors,
+Use cases for simple composition can be generalized into standard patterns, such as transforming input and output types or hiding top level parameters. 
+
+These patterns:
+
+* Are agnostic of the target system domain model
+* Are easily expressed through declarative mmetadata
+* Include components from one single connector 
+
+For information about specific simple composition patterns for Composer connectors,
 see xref:rest-sdk/simple-composition-patterns.adoc[Simple Composition Patterns].
