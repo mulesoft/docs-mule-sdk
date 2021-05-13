@@ -11,7 +11,7 @@ express them.
 
 This pattern is used to hide operations. Operations declared in the connector's first (base) layer can be hidden by ignoring them in a subsequent descriptor layer to generate a connector with a subset of operations.
 
-=== Base Layer Example
+=== Hiding Operations Example
 
 The following example shows the descriptor's base layer:
 
@@ -30,8 +30,6 @@ connectorGav:
 ----
 
 This will generate all the operations of the connector that are declared in the source API specification.
-
-=== Hidden Operations Example
 
 To generate a connector with only a subset of the operations from the API specification while also maintaining all the customizations declared in the descriptor's base layer, you can use a new descriptor layer to hide some operations:
 
@@ -55,6 +53,8 @@ in the generated connector.
 
 This pattern is used to customize operation names.
 
+=== Renaming Operations Example
+
 The following example shows the descriptor's base layer:
 
 ----
@@ -77,7 +77,9 @@ endpoints:
                 displayName: Get Users
 ----
 
-In the following example, the `Get Users` operation is renamed to `Get All Users` in the `/users` section of the descriptor:
+The operation is currently named `Get Users`.
+
+You can rename an operation in the `/users` section of the descriptor:
 
 ----
 #% Rest Connect Connector Descriptor 1.0
