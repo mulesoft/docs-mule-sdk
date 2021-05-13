@@ -9,10 +9,12 @@ express them.
 
 == Hiding Operations
 
-This pattern is used to hide operations. Operations declared in a previous layer
-can be hidden by ignoring them in a descriptor layer.
+This pattern is used to hide operations. Operations declared in the connector's first (base) layer can be hidden by ignoring them in a subsequent descriptor layer to generate a connector with a subset of operations.
 
-For example, take the following descriptor as the base layer:
+=== Hiding Operations Example
+
+The following example shows the descriptor's base layer:
+
 ----
 #% Rest Connect Connector Descriptor 1.0
 
@@ -27,9 +29,9 @@ connectorGav:
  version: 1.0.0
 ----
 
-This will generate all the operations of the connector declared in the API specification.
-To generate a connector with only a subset of the operations while also maintaining
-all the customizations declared in this descriptor, a new descriptor layer can be used:
+This will generate all the operations of the connector that are declared in the source API specification.
+
+To generate a connector with only a subset of the operations from the API specification while also maintaining all the customizations declared in the descriptor's base layer, you can use a new descriptor layer to hide some operations:
 
 ----
 #% Rest Connect Connector Descriptor 1.0
@@ -44,14 +46,16 @@ endpoints:
         ignored: true
 ----
 
-All the operations under the '/users' endpoint are ignored and are not present
+All the operations under the `/users` endpoint are ignored and will not be present
 in the generated connector.
 
 == Renaming Operations
 
 This pattern is used to customize operation names.
 
-For example, take the following descriptor as the base layer:
+=== Renaming Operations Example
+
+The following example shows the descriptor's base layer:
 
 ----
 #% Rest Connect Connector Descriptor 1.0
@@ -73,7 +77,9 @@ endpoints:
                 displayName: Get Users
 ----
 
-The `Get Users` operation can be renamed to `Get All Users` in the descriptor:
+The operation is currently named `Get Users`.
+
+You can rename an operation in the `/users` section of the descriptor:
 
 ----
 #% Rest Connect Connector Descriptor 1.0
@@ -90,4 +96,4 @@ endpoints:
                 displayName: Get All Users
 ----
 
-The operation is now renamed in the generated connector.
+In the generated connector, the operation is now renamed `Get All Users`.
