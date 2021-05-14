@@ -94,7 +94,7 @@ You can select a category for the connector using the
 `connectorCategory` property, which is located at the root of the
 connector descriptor.
 
-The possible values for this property are `select` and `premium`.
+The possible values for this property are `select`, `premium`, `community` and `certified`.
 
 [source,yaml]
 ----
@@ -117,6 +117,8 @@ baseUri:
 ----
 
 This property indicates who is able to use this connector.
+
+If the category is `select` or `premium` their respective license will be added.
 
 == Set the connector’s namespace
 
