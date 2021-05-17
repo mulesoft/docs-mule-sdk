@@ -49,6 +49,11 @@ endpoints:
 All the operations under the `/users` endpoint are ignored and will not be present
 in the generated connector.
 
+By using this metadata, you can select which operation is and is not available
+to the user when you choose an event in Composer.
+
+image::composer-hiding-operations.png[]
+
 == Renaming Operations
 
 This pattern is used to customize operation names.
@@ -97,3 +102,8 @@ endpoints:
 ----
 
 In the generated connector, the operation is now renamed `Get All Users`.
+
+By using this metadata, you can rename an operation for the user when you
+choose an event in Composer.
+
+image::composer-renaming-operations.png[]
