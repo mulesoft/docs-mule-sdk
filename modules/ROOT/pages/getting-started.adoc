@@ -80,6 +80,18 @@ Find the `@Extension` annotated class and
  examine <<module-structure#, module structure>> and the different
 elements that you can add to a module. Use these elements to modify a connector.
 
+[[customicon]]
+== Develop Custom Module Icons
+
+Module icons are files in the SVG format.
+
+To customize the icon of a connector, add an icon.svg file that contains the custom icon under the icon folder in the root of the connector tree.
+
+The following image shows an example of the folder structure for the icon:
+image::icon-svg-change.png[The connector root directory has a folder named icon that contains the icon.svg file.]
+
+Once you add the icon to your custom connector, it will appear in Exchange and Anypoint Studio.
+
 == Add Your Connector to Studio
 
 Once your connector is working, you can try it in Anypoint Studio.
@@ -104,4 +116,4 @@ its `groupId`, `artifactId`, and `version`.
 ...
 ----
 
-NOTE: Different features are available in different vesions of the SDK for Java. See xref:choosing-version.adoc[Choosing the SDK version] to pick the right version for your connector.
+NOTE: Different features are available in different versions of the SDK for Java. See xref:choosing-version.adoc[Choosing the SDK version] to pick the right version for your connector.
