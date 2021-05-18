@@ -97,7 +97,7 @@ The generated Mule 4 extension appears in the target folder.
 @RequiresEntitlement(name = “sap-hybris-connector")
 ----
 +
-. Set the connector icon. See xref:getting-started.adoc#customicon[Develop Custom Module Icons].
+. Set the connector icon. See xref:getting-started.adoc#customicon[Add a Custom Icon to Your Module].
 +
 . Add folders for `doc` and `demo`.
 * Add the https://drive.google.com/file/d/1jB4uDCjOFhPtEttmnTxYERktdzd0AwSF/view[user-manual.adoc] and https://drive.google.com/file/d/1ZzJGJAN8pIOx_mI9d2xKTAXt-tubcwSS/view?usp=sharing[release-notes.adoc] to the `doc` folder.

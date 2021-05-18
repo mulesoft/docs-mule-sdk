@@ -81,7 +81,7 @@ Find the `@Extension` annotated class and
 elements that you can add to a module. Use these elements to modify a connector.
 
 [[customicon]]
-== Develop Custom Module Icons
+== Add a Custom Icon to Your Module
 
 Module icons are files in the SVG format.
 

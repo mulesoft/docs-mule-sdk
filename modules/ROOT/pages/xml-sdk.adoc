@@ -583,7 +583,7 @@ Number of tests run: 2 - Failed: 0 - Errors: 0 - Skipped: 0 - Time elapsed: 2246
 You can now use this connector from your Studio palette.
 +
 
-== Develop Custom Module Icons
+== Add a Custom Icon to Your Module
 
 Module icons are files in the SVG format.
 
