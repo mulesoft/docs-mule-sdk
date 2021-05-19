@@ -1,3 +1,5 @@
+:page-aliases: mule-sdk::_partials/set-custom-icon.adoc
+
 [[set-custom-icon]]
 
 == Add a Custom Icon to Your Module
