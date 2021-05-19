@@ -4,10 +4,10 @@
 
 Module icons are files in the SVG format.
 
-To customize the icon of a connector, add an icon.svg file that contains the custom icon under the icon folder in the root of the connector tree.
+To customize the icon of a connector, add an `icon.svg` file that contains the custom icon under the `icon` folder in the root of the connector tree.
 
 The following image shows an example of the folder structure for the icon:
 
 image::icon-svg-change.png[The connector root directory has a folder named icon that contains the icon.svg file.]
 
-Once you add the icon to your custom connector, it will appear in Exchange and Anypoint Studio.
+After you add the icon to your custom connector, it will appear in Exchange and Anypoint Studio.
