@@ -52,7 +52,7 @@ in the generated connector.
 By using this metadata, you can select which operation is and is not available
 to the user when you choose an event in Composer.
 
-image::composer-hiding-operations.png[]
+image::composer-hiding-operations.png[Composer view for hiding operations]
 
 == Renaming Operations
 
@@ -106,4 +106,4 @@ In the generated connector, the operation is now renamed `Get All Users`.
 By using this metadata, you can rename an operation for the user when you
 choose an event in Composer.
 
-image::composer-renaming-operations.png[]
+image::composer-renaming-operations.png[Composer view for renaming operations]
