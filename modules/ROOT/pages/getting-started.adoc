@@ -81,17 +81,7 @@ Find the `@Extension` annotated class and
 elements that you can add to a module. Use these elements to modify a connector.
 
 [[customicon]]
-== Add a Custom Icon to Your Module
-
-Module icons are files in the SVG format.
-
-To customize the icon of a connector, add an icon.svg file that contains the custom icon under the icon folder in the root of the connector tree.
-
-The following image shows an example of the folder structure for the icon:
-
-image::icon-svg-change.png[The connector root directory has a folder named icon that contains the icon.svg file.]
-
-Once you add the icon to your custom connector, it will appear in Exchange and Anypoint Studio.
+include::partial$set-custom-icon.adoc[]
 
 == Add Your Connector to Studio
 
