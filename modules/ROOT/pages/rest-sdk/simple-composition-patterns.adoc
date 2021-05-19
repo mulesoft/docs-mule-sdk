@@ -19,13 +19,13 @@ The following example shows the descriptor's base layer:
 #% Rest Connect Connector Descriptor 1.0
 
 apiSpec:
- url: http://myhost.com/resources/shop-api.yaml
+ url: http://myhost.com/resources/slack-api.yaml
 
-connectorName: Shop Connector
+connectorName: Slack Connector
 
 connectorGav:
  groupId: com.mulesoft.connectors
- artifactId: shop-connector
+ artifactId: slack-connector
  version: 1.0.0
 ----
 
@@ -38,7 +38,7 @@ To generate a connector with only a subset of the operations from the API specif
 
 connectorGav:
  groupId: com.mulesoft.connectors
- artifactId: composed-shop-connector
+ artifactId: composed-slack-connector
  version: 1.0.0
 
 endpoints:
@@ -66,13 +66,13 @@ The following example shows the descriptor's base layer:
 #% Rest Connect Connector Descriptor 1.0
 
 apiSpec:
- url: http://myhost.com/resources/shop-api.yaml
+ url: http://myhost.com/resources/slack-api.yaml
 
-connectorName: Shop Connector
+connectorName: Slack Connector
 
 connectorGav:
  groupId: com.mulesoft.connectors
- artifactId: shop-connector
+ artifactId: slack-connector
  version: 1.0.0
 
 endpoints:
@@ -91,7 +91,7 @@ You can rename an operation in the `/users` section of the descriptor:
 
 connectorGav:
  groupId: com.mulesoft.connectors
- artifactId: composed-shop-connector
+ artifactId: composed-slack-connector
  version: 1.0.0
 
 endpoints:
