@@ -79,10 +79,10 @@ endpoints:
     /users:
         operations:
             get:
-                displayName: Get Users
+                displayName: Get users by email
 ----
 
-The operation is currently named `Get Users`.
+The operation is currently named `Get users by email`.
 
 You can rename an operation in the `/users` section of the descriptor:
 
@@ -98,10 +98,10 @@ endpoints:
     /users:
         operations:
             get:
-                displayName: Get All Users
+                displayName: Get all users by email
 ----
 
-In the generated connector, the operation is now renamed `Get All Users`.
+In the generated connector, the operation is now renamed `Get all users by email`.
 
 By using this metadata, you can rename an operation for the user when you
 choose an event in Composer.
