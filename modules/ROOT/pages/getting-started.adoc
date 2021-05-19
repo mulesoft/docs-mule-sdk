@@ -80,7 +80,7 @@ Find the `@Extension` annotated class and
  examine <<module-structure#, module structure>> and the different
 elements that you can add to a module. Use these elements to modify a connector.
 
-[[set-custom-icon]]
+[[customicon]]
 include::partial$set-custom-icon.adoc[]
 
 == Add Your Connector to Studio
