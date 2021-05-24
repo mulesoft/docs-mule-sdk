@@ -1,9 +1,9 @@
-= Composition Descriptor
+= Customization Layer
 ifndef::env-site,env-github[]
 include::../_attributes.adoc[]
 endif::[]
 
-Simple composition is defined in a composition descriptor file, which is an
+Simple composition is defined in a customization layer file, which is an
 instance of an existing connector descriptor. When you create a connector using this file, the connector is versioned and released
 separately from the base connector.
 
@@ -15,12 +15,12 @@ the create connector command.
 
 The following is an example of what the create connector command looks like:
 ----
-mvn com.mulesoft.connectivity:rest-sdk-mojo:<PLUGIN_VERSION>:createConnector -DapiSpec=api.raml -Ddescriptor=specialist-descriptor.yaml,citizen-descriptor.yaml
+mvn com.mulesoft.connectivity:rest-sdk-mojo:<PLUGIN_VERSION>:createConnector -DapiSpec=api.raml -Ddescriptor=specialist-descriptor.yaml,customization-layer.yaml
 ----
 
 The descriptors are used in the order they are specified. In this case,
 the `specialist-descriptor.yaml` is applied first, and is then overwritten by
-the `citizen-descriptor.yaml`.
+the `customization-layer.yaml`.
 
 == Composing Descriptors
 
