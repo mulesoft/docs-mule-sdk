@@ -16,7 +16,7 @@
   *** xref:rest-sdk/sample-data.adoc[Sample Data]
   *** xref:rest-sdk/rest-sdk-connectivity.adoc[Connectivity using the REST SDK]
  ** xref:rest-sdk/simple-composition.adoc[Simple Composition for Composer]
-  *** xref:rest-sdk/composition-descriptor.adoc[Composition Descriptor]
+  *** xref:rest-sdk/composition-descriptor.adoc[Customization Layer]
   *** xref:rest-sdk/simple-composition-patterns.adoc[Simple Composition Patterns]
 * xref:getting-started.adoc[Java SDK]
  ** xref:choosing-version.adoc[Choosing the SDK version]
