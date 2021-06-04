@@ -43,7 +43,7 @@ will be generated for this resource.
 == Ignore a Trigger
 
 To ignore a trigger that was declared on a previous layer,
-you can use the `ignored` property.
+you can use the `ignored` property:
 
 [source,yaml]
 ----
