@@ -37,7 +37,7 @@ endpoints:
       ignored: true
 ----
 
-In this case, all the endpoint verbs will be ignored. No operations
+In this case, all of the endpoint verbs will be ignored. No operations
 will be generated for this resource.
 
 == Ignore a Trigger
@@ -52,23 +52,22 @@ triggers:
      ignored: true
 ----
 
-In this example, 'myTrigger' will not be generated.
+In this example, 'myTrigger' is ignored and will not be generated.
 
 
-== Ignore Operations and Triggers by default
+== Ignore Operations and Triggers by Default
 
-All operations and triggers can be ignored using the `ignoreOperations` property,
-at the root of the descriptor.
+All operations and triggers can be ignored using the `ignoreOperations` property at the root of the descriptor.
 
-Using this property is similar to adding a `ignored` property in all the operations and triggers.
+Set `ignoreOperations` to `true` to ignore previously declared operations and triggers. You can use this property to select only a small subset of operations and triggers for the connector to generate.
 
-You can choose to set it's value to `true` or `false` using this global value.
+If an operation or trigger is ignored in a previous layer but `ignoreOperations` is set to `false`,
+the operation or trigger will be generated in the connector.
 
-If an operation was ignored in a previous layer, but `ignoreOperations` is set to `false`,
-that operations will get generated in the connector.
+If an operation or trigger is not ignored in a previous layer but `ignoreOperations` is set to `true`,
+the operation or trigger will not be generated in the connector.
 
-If an operation was not ignored in a previous layer, but `ignoreOperations` is set to `true`,
-that operations will not get generated in the connector.
+Using this property is similar to adding an `ignored` property to all of the operations and triggers.
 
 [source,yaml]
 ----
@@ -81,8 +80,7 @@ endpoints:
       ignored: false
 ----
 
-In this example, only the operations under the `/flights/{ID}` path will be generated in the connector,
-all other operations and triggers won't.
+In this example, only the operations and triggers under the `/flights/{ID}` path will be generated.
 
 
 == Set a Display Name for an Operation Name
