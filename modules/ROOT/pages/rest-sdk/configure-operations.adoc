@@ -80,7 +80,7 @@ endpoints:
       ignored: false
 ----
 
-In this example, only the operations and triggers under the `/flights/{ID}` path will be generated.
+In this example, only the operations under the `/flights/{ID}` path will be generated. All of the other operations and triggers will be ignored. 
 
 
 == Set a Display Name for an Operation Name
