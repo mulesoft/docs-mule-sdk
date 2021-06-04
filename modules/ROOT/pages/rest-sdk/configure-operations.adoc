@@ -40,6 +40,49 @@ endpoints:
 In this case, all of the endpoint verbs will be ignored. No operations
 will be generated for this resource.
 
+== Ignore a Trigger
+
+To ignore a trigger that was declared on a previous layer,
+you can use the `ignored` property:
+
+[source,yaml]
+----
+triggers:
+   myTrigger:
+     ignored: true
+----
+
+In this example, 'myTrigger' is ignored and will not be generated.
+
+
+== Ignore Operations and Triggers by Default
+
+All operations and triggers can be ignored using the `ignoreOperations` property at the root of the descriptor.
+
+Set `ignoreOperations` to `true` to ignore previously declared operations and triggers. You can use this property to select only a small subset of operations and triggers for the connector to generate.
+
+If an operation or trigger is ignored in a previous layer but `ignoreOperations` is set to `false`,
+the operation or trigger will be generated in the connector.
+
+If an operation or trigger is not ignored in a previous layer but `ignoreOperations` is set to `true`,
+the operation or trigger will not be generated in the connector.
+
+Using this property is similar to adding an `ignored` property to all of the operations and triggers.
+
+[source,yaml]
+----
+#% Rest Connector Descriptor 1.0
+
+ignoreOperations: true
+
+endpoints:
+   /flights/{ID}:
+      ignored: false
+----
+
+In this example, only the operations under the `/flights/{ID}` path will be generated. All of the other operations and triggers will be ignored. 
+
+
 == Set a Display Name for an Operation Name
 
 You can define the display name of an operation by using the `displayName`
