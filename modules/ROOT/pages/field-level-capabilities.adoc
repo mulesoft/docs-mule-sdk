@@ -14,14 +14,14 @@ them without upgrading their Minimum Mule Version.
 == Defining a Value Provider for a Part of a Parameter
 
 You can declare a value provider for a field of a parameter by using the
-annotation @FieldValues.
+annotation *@FieldValues*.
 
-The @FieldValues annotation requires:
+The *@FieldValues* annotation requires:
 
-* `value`
+* *value*
 +
 Provides values for a field.
-* `targetSelectors`
+* *targetSelectors*
 +
 Describes which part of a parameter holds values given by the value provider.
 It is defined through the DataWeave syntax to describe the selector through
@@ -47,7 +47,7 @@ connection and retrieves possible workspaces.
 == Defining a Value Provider for Several Parts of a Parameter
 
 Parameters can have more than one part where values are provided.
-The @FieldValues annotation is a repeatable annotation, so parameters can be
+The *@FieldValues* annotation is a repeatable annotation, so parameters can be
 annotated multiple times.
 
 The following is an example of an operation with a parameter named
@@ -75,7 +75,7 @@ You can use multilevel value providers for several parts of a parameter.
 Suppose in the previous example you want the values for the *channelId* field
 to depend on the values for the *routingInfo.workspace* field.
 
-To define this, the *targetSelectors* attribute from the @FieldValues annotation
+To define this, the *targetSelectors* attribute from the *@FieldValues* annotation
 must receive an array of strings. If more than one string is given, a multilevel
 value provider is defined. Each given field defines the value parts of the
 value provider, the order in the array, and the order of the value part.
@@ -152,8 +152,8 @@ When no binding is defined for an acting parameter, the same implicit binding
 will be applied. The name of the acting parameter must be the same as the name
 of the parameter in the component to take that parameter’s value.
 
-Use the @Binding annotation to define an acting parameter. The @FieldValues
-annotation and the @SampleData annotation can be given an array of bindings
+Use the *@Binding* annotation to define an acting parameter. The *@FieldValues*
+annotation and the *@SampleData* annotation can be given an array of bindings
 to define the values the acting parameter must take.
 
 When a binding is defined, it declares the value an acting parameter will
@@ -211,7 +211,7 @@ of the component.
 
 == Sample Data Example
 
-The following is an example of @SampleData annotation binding an acting
+The following is an example of *@SampleData* annotation binding an acting
 parameter to the value of a field of a parameter in the component:
 
 ----
@@ -225,7 +225,7 @@ public class ChatOperations {
 ----
 
 In the *ChatMessageSampleDatatProvider*, there is a parameter named *workspace*
-that is used to provide the sample data. The value of this acting parameter
+that provides the sample data. The value of this acting parameter
 is taken from the extraction expression defined in the binding.
 
 == Extraction Expression Restrictions
@@ -241,8 +241,8 @@ name of a parameter from the component.
 
 When executing the extraction expression to give values to the acting
 parameters of a value provider or sample data provider, the output media type
-will always be application/java. This means that the provider must not expect
-other media types, such as application/json or application/xml.
+will always be `application/java`. This means that the provider must not expect
+other media types, such as `application/json` or `application/xml`.
 
 == Parameters Static Metadata
 
