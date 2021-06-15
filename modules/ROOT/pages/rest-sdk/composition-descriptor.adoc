@@ -7,7 +7,7 @@ Simple composition is defined in a customization layer file, which is an
 instance of an existing connector descriptor. When you create a connector using this file, the connector is versioned and released
 separately from the base connector.
 
-== Create a Composite Connector
+== Create a Customization Layer for Composer
 
 This simple composition feature is a part of the standard connector creation flow.
 The only difference is that multiple connector descriptors can be specified in
@@ -15,11 +15,11 @@ the create connector command.
 
 The following is an example of what the create connector command looks like:
 ----
-mvn com.mulesoft.connectivity:rest-sdk-mojo:<PLUGIN_VERSION>:createConnector -DapiSpec=api.raml -Ddescriptor=specialist-descriptor.yaml,customization-layer.yaml
+mvn com.mulesoft.connectivity:rest-sdk-mojo:<PLUGIN_VERSION>:createConnector -DapiSpec=api.raml -Ddescriptor=connector-descriptor.yaml,customization-layer.yaml
 ----
 
 The descriptors are used in the order they are specified. In this case,
-the `specialist-descriptor.yaml` is applied first, and is then overwritten by
+the `connector-descriptor.yaml` is applied first, and is then overwritten by
 the `customization-layer.yaml`.
 
 == Composing Descriptors

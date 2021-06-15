@@ -1,4 +1,4 @@
-= Simple Composition for Composer
+= Customize Composer Connectors
 ifndef::env-site,env-github[]
 include::../_attributes.adoc[]
 endif::[]
