@@ -1,4 +1,4 @@
-= Customize a Connector Descriptor
+= Customize Anypoint Connectors
 ifndef::env-site,env-github[]
 include::../_attributes.adoc[]
 endif::[]
