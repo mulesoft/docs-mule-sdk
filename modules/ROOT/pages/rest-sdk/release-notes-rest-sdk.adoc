@@ -5,6 +5,24 @@ endif::[]
 
 REST SDK is a tool that allows you to create connectors based on an API specification supplying additional connector capabilities via a connector descriptor.
 
+== 0.4.0
+
+*June 23, 2021*
+
+=== What’s New
+
+* Added support for operation adapters for L3. (RSDK-331, RSDK-434)
+* Added support for value providers at the body level. (RSDK-71, RSDK-419)
+
+=== Fixed Issues
+
+[%header%autowidth.spread]
+|===
+|Issue|Number
+|Changed the default timeout unit from minutes to seconds. | (RSDK-305)
+|Fixed issues with some validation rules for triggers. | (RSDK-436)
+|===
+
 == 0.3.0
 
 *June 3, 2021*
