@@ -86,8 +86,9 @@ public class DocsMetadataSource extends Source<Map<String, Object>, Void> {
     //...
   }
 ----
+NOTE: For Sources, the method described above is the only way to support metadata keys. Do not set the resolver at the `@MetadataKeyId` annotation when defining sources.
 
-Be aware that setting the `@MetadataScope` annotation at the operation class definition level indicates that *all* of its operations provide metadata and thus they all must have a parameter annotated with `@MetadataKeyId`, while they inherit the resolver from the scope. However, if you only wish to set a key resolver for a single operation you can do so like this:
+Be aware that setting the `@MetadataScope` annotation at the operation class definition level (like the example given above) indicates that *all* of its operations provide metadata and thus they all must have a parameter annotated with `@MetadataKeyId`, while they inherit the resolver from the scope. However, if you only wish to set a key resolver for a single operation you can do so like this:
 
 [source,java,linenums]
 ----
@@ -104,7 +105,7 @@ public class MyOperations {
 }
 ----
 
-If there is a `@MetadataScope` annotation at the operation class definition level, setting a value for the `@MetadataKeyId` annotation in a parameter will override the resolver defined at the scope level.
+Another useful feature is that, if there is a `@MetadataScope` annotation at the operation class definition level, setting a value for the `@MetadataKeyId` annotation in a parameter will override the resolver defined at the scope level only for that operation:
 [source,java,linenums]
 ----
 @MetadataScope(keysResolver = ClassLevelResolver.class)
@@ -120,6 +121,8 @@ public class MyOperations {
     }
 }
 ----
+
+IMPORTANT: The two features described above (setting the resolver at the parameter level and overriding the inherited resolver from the scope) only work when defining Operations, not for Sources.
 
 //TODO multilevel metadata keys
 
