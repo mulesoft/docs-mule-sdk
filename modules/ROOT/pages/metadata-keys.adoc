@@ -131,13 +131,16 @@ An user-defined `MetadataKey` is one that is provided freely by the end user and
 For example, this is a very common case in queries, where you use the whole query
 that the end user wants to execute as a `MetadataKey`.
 
-In order to declare it, you simply annotate a parameter with `@MetadataKeyId`, but you do not provide a `TypesKeyResolver`.
+In order to declare it, you simply annotate a parameter with `@MetadataKeyId`, but you do not provide a `TypesKeyResolver` neither for the parameter annotation nor for the `@MetadataScope` annotation should it be present at the class definition.
 
 [source,java,linenums]
 ----
+public class MyOperations {
+
   public void query(@MetadataKeyId String query){
       //...
   }
+}
 ----
 
 == Optional MetadataKey Parameters
