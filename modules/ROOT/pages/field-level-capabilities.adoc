@@ -123,7 +123,7 @@ public class ChatMultiLevelValueProvider implements ValueProvider {
 == Defining a Value Provider for XML Attributes
 
 Target selectors use the DataWeave syntax. If a parameter of an operation is an
-XML, you can use this syntax to define a value provider for an attribute that
+XML element, you can use this syntax to define a value provider for an attribute that
 is a part of that parameter.
 
 The following example shows how the DataWeave syntax defines a value provider
