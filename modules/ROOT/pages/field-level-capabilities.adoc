@@ -9,7 +9,7 @@ value providers for parameter fields, or to use parameter fields as acting
 parameters for either a value provider or sample data.
 
 These features are available for Mule 4.4.0, however, connectors can use
-them without upgrading their Minimum Mule Version.
+the features without upgrading their minimum Mule version.
 
 == Defining a Value Provider for a Part of a Parameter
 
