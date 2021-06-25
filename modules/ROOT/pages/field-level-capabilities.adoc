@@ -205,7 +205,7 @@ public class ChannelsValueProvider implements ValueProvider {
 }
 ----
 
-The *workspace* acting parameter defined in the value provider is bound to the
+The `workspace` acting parameter defined in the value provider is bound to the
 extraction expression that takes the value of the field from the context
 of the component.
 
