@@ -28,7 +28,7 @@ It is defined through the DataWeave syntax to describe the selector through
 nested fields, XML attributes, or fields that contain spaces in their names.
 
 The following is an example of an operation that includes values provided for
-a parameter named *body*, which is a JSON input stream:
+a parameter named `body`, which is a JSON input stream:
 
 ----
 public class ChatOperations {
@@ -40,8 +40,8 @@ public class ChatOperations {
 }
 ----
 
-The *body* parameter has a field named *routingInfo*, which has a field named
-*workspace*. *WorkspacesValueProvider* is a value provider that uses the
+The `body` parameter has a field named *routingInfo*, which has a field named
+`workspace`. *WorkspacesValueProvider* is a value provider that uses the
 connection and retrieves possible workspaces.
 
 == Defining a Value Provider for Several Parts of a Parameter
@@ -51,7 +51,7 @@ The *@FieldValues* annotation is a repeatable annotation, so parameters can be
 annotated multiple times.
 
 The following is an example of an operation with a parameter named
-*body*, which is a JSON input stream that has two parts with values that
+`body`, which is a JSON input stream that has two parts with values that
 can be provided:
 
 ----
@@ -65,7 +65,7 @@ public class ChatOperations {
 }
 ----
 
-The parameter *body* defines values for two fields (*routingInfo.workspace* and
+The parameter `body` defines values for two fields (*routingInfo.workspace* and
 *channelId*) that have values that are independent of each other.
 
 == Defining a Multilevel Value Provider for Several Parts of a Parameter
@@ -137,7 +137,7 @@ public class ChatOperations {
 }
 ----
 
-In this example, the *body* parameter is an XML element that has a root tag named
+In this example, the `body` parameter is an XML element that has a root tag named
 *message*, which has a *target* that has the *channelId* attribute and an
 associated value provider.
 
@@ -153,7 +153,7 @@ will be applied. The name of the acting parameter must be the same as the name
 of the parameter in the component to take that parameter’s value.
 
 Use the *@Binding* annotation to define an acting parameter. The *@FieldValues*
-annotation and the *@SampleData* annotation can be given an array of bindings
+annotation and the `@SampleData` annotation can be given an array of bindings
 to define the values the acting parameter must take.
 
 When a binding is defined, it declares the value an acting parameter will
@@ -224,7 +224,7 @@ public class ChatOperations {
 }
 ----
 
-In the *ChatMessageSampleDatatProvider*, there is a parameter named *workspace*
+In the *ChatMessageSampleDatatProvider*, there is a parameter named `workspace`
 that provides the sample data. The value of this acting parameter
 is taken from the extraction expression defined in the binding.
 
