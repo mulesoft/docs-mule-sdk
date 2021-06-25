@@ -23,7 +23,7 @@ The *@FieldValues* annotation requires:
 Provides values for a field.
 * *targetSelectors*
 +
-Describes which part of a parameter holds values given by the value provider.
+Describes which part of a parameter contains the values that are given by the value provider.
 It is defined through the DataWeave syntax to describe the selector through
 nested fields, XML attributes, or fields that contain spaces in their names.
 
