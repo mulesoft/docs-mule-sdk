@@ -137,7 +137,7 @@ public class ChatOperations {
 }
 ----
 
-In this example, the *body* parameter is an XML that has a root tag named
+In this example, the *body* parameter is an XML element that has a root tag named
 *message*, which has a *target* that has the *channelId* attribute and an
 associated value provider.
 
