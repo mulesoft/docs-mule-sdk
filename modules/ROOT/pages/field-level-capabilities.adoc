@@ -40,7 +40,7 @@ public class ChatOperations {
 }
 ----
 
-The *body* parameter has a field named *routingInfo* which has a field named
+The *body* parameter has a field named *routingInfo*, which has a field named
 *workspace*. *WorkspacesValueProvider* is a value provider that uses the
 connection and retrieves possible workspaces.
 
