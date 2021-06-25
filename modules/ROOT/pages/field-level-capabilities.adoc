@@ -211,7 +211,7 @@ of the component.
 
 == Sample Data Example
 
-The following is an example of *@SampleData* annotation binding an acting
+The following is an example of a `@SampleData` annotation that binds an acting
 parameter to the value of a field of a parameter in the component:
 
 ----
