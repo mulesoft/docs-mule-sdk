@@ -241,7 +241,7 @@ name of a parameter from the component.
 
 When executing the extraction expression to give values to the acting
 parameters of a value provider or sample data provider, the output media type
-will always be `application/java`. This means that the provider must not expect
+is always `application/java`. This means that the provider must not expect
 other media types, such as `application/json` or `application/xml`.
 
 == Parameters Static Metadata
