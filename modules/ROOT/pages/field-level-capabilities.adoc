@@ -66,7 +66,7 @@ public class ChatOperations {
 ----
 
 The parameter *body* defines values for two fields (*routingInfo.workspace* and
-*channelId*, that have values that are independent from each other.
+*channelId*) that have values that are independent of each other.
 
 == Defining a Multilevel Value Provider for Several Parts of a Parameter
 
