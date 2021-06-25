@@ -13,7 +13,7 @@ the features without upgrading their minimum Mule version.
 
 == Defining a Value Provider for a Part of a Parameter
 
-You can declare a value provider for a field of a parameter by using the
+You can declare a value provider for a parameter field by using the
 annotation *@FieldValues*.
 
 The *@FieldValues* annotation requires:
