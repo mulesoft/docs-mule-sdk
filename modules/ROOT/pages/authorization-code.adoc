@@ -115,6 +115,14 @@ public @interface AuthorizationCode {
    */
   String defaultScopes() default "";
 
+  /**
+   * Allows to customize the placement that the client credentials will have in the request.
+   *
+   * @Since 1.4
+   *
+   * @return the selected {@link CredentialsPlacement}. Defaults to {@link CredentialsPlacement#BODY}
+   */
+  CredentialsPlacement credentialsPlacement() default BODY;
 }
 ----
 
