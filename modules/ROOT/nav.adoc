@@ -70,7 +70,7 @@
   *** xref:config-override.adoc[Configuration Overrides]
   *** xref:context-information-injection.adoc[Context Information Injection]
   *** xref:exclusive-optionals.adoc[Exclusive Optional]
-  *** xref:field-level-capabilities.adoc[Field Level Capabilities]
+  *** xref:field-level-capabilities.adoc[Field-Level Capabilities]
   *** xref:imported-types.adoc[Importing Types From Other Modules]
   *** xref:mule-service-injection.adoc[Mule Service Injection]
   *** xref:null-safe.adoc[Null Safe]
