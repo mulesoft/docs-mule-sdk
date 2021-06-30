@@ -5,6 +5,19 @@ endif::[]
 
 REST SDK is a tool that allows you to create connectors based on an API specification supplying additional connector capabilities via a connector descriptor.
 
+== 0.4.1
+
+*June 30, 2021*
+
+=== Fixed Issues
+
+[%header%autowidth.spread]
+|===
+|Issue|Number
+|Using certain authentication methods caused an error that made the connection optional. | (RSDK-210)
+|Execution error for hypermedia pagination. | (RSDK-453)
+|===
+
 == 0.4.0
 
 *June 23, 2021*
