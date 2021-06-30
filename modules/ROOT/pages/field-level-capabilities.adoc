@@ -11,7 +11,7 @@ parameters for either a value provider or sample data.
 These features are available for Mule 4.4.0, however, connectors can use
 the features without upgrading their minimum Mule version.
 
-== Defining a Value Provider for a Part of a Parameter
+== Defining a Value Provider for One Part of a Parameter
 
 You can declare a value provider for a parameter field by using the
 annotation *@FieldValues*.
