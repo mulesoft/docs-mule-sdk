@@ -114,22 +114,6 @@ public @interface AuthorizationCode {
    * @return The default set of scopes to be requested, as a comma separated list. Empty string means no default scopes.
    */
   String defaultScopes() default "";
-
-  /**
-   * Customizes the placement of the client credentials in the request.
-   *
-   * @Since 1.4
-   *
-   * @return the selected {@link CredentialsPlacement}. Defaults to {@link CredentialsPlacement#BODY}.
-   */
-  CredentialsPlacement credentialsPlacement() default BODY;
-
-  /**
-   * Whether the redirect_uri parameter should be included in the refresh token request. Defaults to {@code true}
-   *
-   * @since 1.4.0
-   */
-  boolean includeRedirectUriInRefreshTokenRequest() default true;
 }
 ----
 
