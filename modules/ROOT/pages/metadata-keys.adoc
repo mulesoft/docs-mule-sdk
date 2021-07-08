@@ -88,7 +88,7 @@ public class DocsMetadataSource extends Source<Map<String, Object>, Void> {
 ----
 
 [NOTE]
-The example described above is the only way to support metadata keys for sources. Do not set the resolver at the `@MetadataKeyId` annotation when defining sources.
+The previous example is the only way to support metadata keys for sources. Do not set the resolver at the `@MetadataKeyId` annotation when defining sources.
 
 Setting the `@MetadataScope` annotation at the operation class definition level indicates that all of its operations provide metadata and that they must all have a parameter annotated with `@MetadataKeyId` while they inherit the resolver from the scope.
 
