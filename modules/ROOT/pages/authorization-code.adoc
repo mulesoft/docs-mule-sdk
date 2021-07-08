@@ -114,7 +114,6 @@ public @interface AuthorizationCode {
    * @return The default set of scopes to be requested, as a comma separated list. Empty string means no default scopes.
    */
   String defaultScopes() default "";
-
 }
 ----
 

@@ -69,4 +69,4 @@ They represent configurable elements that accept the values for elements to exec
 
 == Other Elements
 
-A module can have other element types, for example, <<routers#, Routers>>, <<scopes#, Scopes>>, <<functions#, Functions>>, or <<errors#, Errors>>. The ones described here are the core elements that most modules are likely have.
+A module can have other element types, for example, <<routers#, Routers>>, <<scopes#, Scopes>>, <<functions#, Functions>>, or <<errors#, Errors>>. The ones described here are the core elements that most modules are likely going to have.
