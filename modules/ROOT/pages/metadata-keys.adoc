@@ -92,7 +92,7 @@ The previous example is the only way to support metadata keys for sources. Do no
 
 Setting the `@MetadataScope` annotation at the operation class definition level indicates that all of its operations provide metadata and that they must all have a parameter annotated with `@MetadataKeyId` while they inherit the resolver from the scope.
 
-However, you can also set a key resolver for a single operation:
+You can also set a key resolver for a single operation:
 
 [source,java,linenums]
 ----
