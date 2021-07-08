@@ -128,7 +128,7 @@ public class MyOperations {
 ----
 
 [IMPORTANT]
-The two examples described above (setting the resolver at the parameter level and overriding the inherited resolver from the scope) work only when defining operations. These features are not available for sources.
+The two previous examples (setting the resolver at the parameter level and overriding the inherited resolver from the scope) work only when defining operations. These features are not available for sources.
 
 //TODO multilevel metadata keys
 
