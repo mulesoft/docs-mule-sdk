@@ -1,4 +1,4 @@
-= Field Level Capabilities
+= Field-Level Capabilities
 ifndef::env-site,env-github[]
 include::_attributes.adoc[]
 endif::[]
@@ -8,26 +8,26 @@ for value providers and sample data. Using these features enables you to define
 value providers for parameter fields, or to use parameter fields as acting
 parameters for either a value provider or sample data.
 
-These features are available for Mule 4.4.0, however, connectors can use
-the features without upgrading their minimum Mule version.
+These features are compatible with Mule 4.4.0, however, all Anypoint Connectors
+can use these features, regardless of their Mule version.
 
 == Defining a Value Provider for One Part of a Parameter
 
-You can declare a value provider for a parameter field by using the
-annotation *@FieldValues*.
+Define a value provider for a parameter field by using the
+annotation `@FieldValues`.
 
-The *@FieldValues* annotation requires:
+The `@FieldValues` annotation requires:
 
 * *value*
 +
 Provides values for a field.
 * *targetSelectors*
 +
-Describes which part of a parameter contains the values that are given by the value provider.
+Describes which part of a parameter contains the values supplied by the value provider.
 It is defined through the DataWeave syntax to describe the selector through
 nested fields, XML attributes, or fields that contain spaces in their names.
 
-The following is an example of an operation that includes values provided for
+The following example shows an operation that includes values provided for
 a parameter named `body`, which is a JSON input stream:
 
 ----
@@ -47,7 +47,7 @@ connection and retrieves possible workspaces.
 == Defining a Value Provider for Several Parts of a Parameter
 
 Parameters can have more than one part where values are provided.
-The *@FieldValues* annotation is a repeatable annotation, so parameters can be
+The `@FieldValues` annotation is a repeatable annotation, so parameters can be
 annotated multiple times.
 
 The following is an example of an operation with a parameter named
@@ -70,12 +70,12 @@ The parameter `body` defines values for two fields (*routingInfo.workspace* and
 
 == Defining a Multilevel Value Provider for Several Parts of a Parameter
 
-You can use multilevel value providers for several parts of a parameter.
+Use multilevel value providers for several parts of a parameter.
 
 Suppose in the previous example you want the values for the *channelId* field
 to depend on the values for the *routingInfo.workspace* field.
 
-To define this, the *targetSelectors* attribute from the *@FieldValues* annotation
+To define this, the *targetSelectors* attribute from the `@FieldValues` annotation
 must receive an array of strings. If more than one string is given, a multilevel
 value provider is defined. Each given field defines the value parts of the
 value provider, the order in the array, and the order of the value part.
@@ -123,7 +123,7 @@ public class ChatMultiLevelValueProvider implements ValueProvider {
 == Defining a Value Provider for XML Attributes
 
 Target selectors use the DataWeave syntax. If a parameter of an operation is an
-XML element, you can use this syntax to define a value provider for an attribute that
+XML element, use this syntax to define a value provider for an attribute that
 is a part of that parameter.
 
 The following example shows how the DataWeave syntax defines a value provider
@@ -152,7 +152,7 @@ When no binding is defined for an acting parameter, the same implicit binding
 will be applied. The name of the acting parameter must be the same as the name
 of the parameter in the component to take that parameter’s value.
 
-Use the *@Binding* annotation to define an acting parameter. The *@FieldValues*
+Use the `@Binding` annotation to define an acting parameter. The `@FieldValues`
 annotation and the `@SampleData` annotation can be given an array of bindings
 to define the values the acting parameter must take.
 
