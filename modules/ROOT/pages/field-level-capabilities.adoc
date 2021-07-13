@@ -165,7 +165,7 @@ parameters. The expression must start with the name of the parameter of the
 component. If the value comes from a part of the parameter, the expression
 follows the selector to the desired field.
 
-The following is an example where a parameter named `body` has a field with
+The following example shows a parameter named `body` that has a field with
 values that depend on the acting parameter `workspace`:
 
 ----
