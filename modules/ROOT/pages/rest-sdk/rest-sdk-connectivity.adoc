@@ -1,4 +1,4 @@
-= Connectivity using the REST SDK
+= Connector Descriptor
 ifndef::env-site,env-github[]
 include::../_attributes.adoc[]
 endif::[]
@@ -18,12 +18,12 @@ You can use the following steps to create a connector:
 look as specified.
 . Generate the connector using REST SDK.
 
-== Connector Descriptor
+== Using a Connector Descriptor
 
 A _connector descriptor_ is a YAML file that allows you to describe a
 connector, customize aspects of the generated connector (such as name,
 Maven GAV, operation names, layout information, and so on), and provide
-additional metadata that is specific to Mulesoft’s connectors.
+additional metadata that is specific to MuleSoft’s connectors.
 
 When you create a connector descriptor, you should not edit the API
 spec. If you modify your API spec and a new version of an API spec is

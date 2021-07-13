@@ -1,11 +1,7 @@
-= Simple Composition Patterns
+= Hiding or Renaming Operations
 ifndef::env-site,env-github[]
 include::../_attributes.adoc[]
 endif::[]
-
-There are specific pre-identified use cases that fit a general pattern in the
-target API. You can identify these patterns and use declarative metadata to
-express them.
 
 == Hiding Operations
 
