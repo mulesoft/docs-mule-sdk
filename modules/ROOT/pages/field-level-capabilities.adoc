@@ -148,7 +148,7 @@ These bindings enable an acting parameter of the provider to take the value of
 the evaluated DataWeave expression.
 
 When no binding is defined for an acting parameter, the same implicit binding
-will be applied. The name of the acting parameter must be the same as the name
+is applied. The name of the acting parameter must be the same as the name
 of the parameter in the component to take that parameter’s value.
 
 Use the `@Binding` annotation to define an acting parameter. The `@FieldValues`
