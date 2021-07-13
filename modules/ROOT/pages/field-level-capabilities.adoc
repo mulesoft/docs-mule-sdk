@@ -50,7 +50,7 @@ Parameters can have more than one part where values are provided.
 The `@FieldValues` annotation is a repeatable annotation, so parameters can be
 annotated multiple times.
 
-The following is an example of an operation with a parameter named
+The following example shows an operation with a parameter named
 `body`, which is a JSON input stream that has two parts with values that
 can be provided:
 
