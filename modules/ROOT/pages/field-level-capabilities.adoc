@@ -71,8 +71,7 @@ The parameter `body` defines values for two fields (*routingInfo.workspace* and
 == Defining a Multilevel Value Provider for Several Parts of a Parameter
 
 Use multilevel value providers for several parts of a parameter.
-
-Suppose in the previous example you want the values for the *channelId* field
+you want the values for the *channelId* field
 to depend on the values for the *routingInfo.workspace* field.
 
 To define this, the *targetSelectors* attribute from the `@FieldValues` annotation
