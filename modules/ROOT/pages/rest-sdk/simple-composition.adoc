@@ -24,6 +24,3 @@ These patterns:
 * Are agnostic of the target system domain model
 * Are easily expressed through declarative metadata
 * Include components from one single connector
-
-For information about specific simple composition patterns for Composer connectors,
-see xref:rest-sdk/simple-composition-patterns.adoc[Simple Composition Patterns].
