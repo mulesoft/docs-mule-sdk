@@ -223,7 +223,7 @@ public class ChatOperations {
 }
 ----
 
-In the *ChatMessageSampleDatatProvider*, there is a parameter named `workspace`
+*ChatMessageSampleDatatProvider* contains a parameter named `workspace`
 that provides the sample data. The value of this acting parameter
 is taken from the extraction expression defined in the binding.
 
