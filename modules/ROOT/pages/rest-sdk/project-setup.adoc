@@ -21,11 +21,11 @@ To create a connector using Rest SDK:
 A _mojo_ is a Maven plain Old Java Object.
 Each mojo is an executable goal in Maven, and a _plugin_ is a distribution of one or more related mojos.
 
-If you have access to the Mulesoft's repositories, Maven automatically downloads the plugin when you try to use it.
+If you have access to the MuleSoft's repositories, Maven automatically downloads the plugin when you try to use it.
 
-=== Get Access to Mulesoft's Maven Repository
+=== Get Access to MuleSoft's Maven Repository
 
-Mulesoft repositories are public. However, you must to configure Maven to access them.
+MuleSoft repositories are public. However, you must to configure Maven to access them.
 
 . Access the settings.xml Maven configuration file. +
 For Mac or Linux: `Mac/Linux: ~/.m2/settings.xml` +

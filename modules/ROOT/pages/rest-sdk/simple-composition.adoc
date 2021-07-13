@@ -12,12 +12,12 @@ separately from the base connector.
 
 Using composition enables you to develop new versions of the base connector without duplicating code. In addition, changes that are made in the Composer version will not affect the base version of the connector, nor will it break backwards compatibility.
 
-== Simple Composition
+== Using Composition
 
-Use simple composition for Composer connectors to automatically
+Use composition for Composer connectors to automatically
 generate connectors based on REST SDK metadata in the Composer UI.
 
-Use cases for simple composition can be generalized into standard patterns, such as transforming input and output types or hiding top level parameters.
+Use cases for composition can be generalized into standard patterns, such as transforming input and output types or hiding top level parameters.
 
 These patterns:
 
