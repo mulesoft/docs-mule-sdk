@@ -181,7 +181,7 @@ public class ChatOperations {
 
 This acting parameter is taken from the same `body` parameter.
 
-The following shows the value provider used in this example:
+The following syntax shows the value provider used in this example:
 
 ----
 public class ChannelsValueProvider implements ValueProvider {
