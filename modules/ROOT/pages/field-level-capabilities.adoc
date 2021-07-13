@@ -155,8 +155,8 @@ Use the `@Binding` annotation to define an acting parameter. The `@FieldValues`
 annotation and the `@SampleData` annotation can be given an array of bindings
 to define the values the acting parameter must take.
 
-When a binding is defined, it declares the value an acting parameter will
-take by giving an extraction expression. This extraction expression is a
+A defined binding declares the value that an acting parameter 
+takes by providing an extraction expression. This extraction expression is a
 DataWeave expression that uses only selectors to retrieve the value for the
 acting parameter.
 
