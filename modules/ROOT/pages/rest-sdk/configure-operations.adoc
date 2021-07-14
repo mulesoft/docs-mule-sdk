@@ -3,6 +3,59 @@ ifndef::env-site,env-github[]
 include::../_attributes.adoc[]
 endif::[]
 
+== Operations Identifier
+REST SDK heavily relies on the operation identifier for the resources’ classes generation, that operation identifier could be fetched from the OAS model under `operationId` or if it’s from a RAML model it will default to null.
+
+The importance of the identifier is that it must not collide with other resources (nor triggers, or any other type of REST SDK component) and that it can be modified in the descriptor by comprehension. REST SDK does provide a default mechanism for generating that resource identifier, in which if there’s a valid operationId (from an OAS context) with a non null value, it will use it, or it execute the fallback of using the HTTP method plus the resource name (which is unique in an API).
+
+But there are scenarios where that default mechanism might need a tweak, and to do so we are externalizing a way to input your own custom Weave script to change how the operations identifiers are generated. The important thing is that there are 3 bindings available for you to use:
+
+[%header%autowidth.spread]
+|===
+|Binding name|Type|Description
+|`operationId` | `String \| null` | identifier of the operation, might be null.
+|`method` | `String` | HTTP method, not nullable.
+|`path` | `String` | HTTP full path, not nullable.
+|===
+
+To do so, we will add a root `operationIdentifier` key to the descriptor file with the complete weave script. The following example is current default Weave script REST SDK is using
+
+[source,yaml]
+----
+#% Rest Connector Descriptor 1.0
+...
+operationIdentifier:
+  expression: |
+    #[%dw 2.0
+    output text/plain
+    ---
+    operationId default (method ++ path)
+    ]
+----
+
+This identifier is not only important in the Java class generation but also in the DSL and also the display name of a given operation, and because of that there will be cases in which it will make sense to change the default Weave script for the `operationIdentifier`.
+
+Let’s assume that some API has dates and extensions in the resources, something that’s not useful to a consumer of the connector, and it comes without an `operationId` (either it’s empty in the OAS spec, or it’s a RAML spec), e.g.: `/2010-04-01/Accounts/{id}/Messages/SMS/Media.json`, both `/2010-04-01/` and `.json` are useless to the user, so we will need a Weave script like:
+
+[source,yaml]
+----
+#% Rest Connector Descriptor 1.0
+....
+operationIdentifier:
+  expression: |
+    #[%dw 2.0
+    output text/plain
+    fun removeUnwantedStuff(aPath: String)=
+        aPath replace ".json" with ""
+          replace "/2010-04-01" with ""
+    ---
+    method ++ removeUnwantedStuff(path)
+    ]
+----
+
+Which will take a resource like `/2010-04-01/Accounts/{id}/Messages/SMS/Media.json` leaving it as `/Accounts/{id}/Messages/SMS/Media` improving significantly the naming around the resource (for both XML DSL as well as the UI experience)
+
+
 == Ignore Operations or Endpoints
 
 If you don’t want to generate an operation in the connector for a
@@ -80,10 +133,10 @@ endpoints:
       ignored: false
 ----
 
-In this example, only the operations under the `/flights/{ID}` path will be generated. All of the other operations and triggers will be ignored. 
+In this example, only the operations under the `/flights/{ID}` path will be generated. All of the other operations and triggers will be ignored.
 
 
-== Set a Display Name for an Operation Name
+== Set a Display Name for Operations
 
 You can define the display name of an operation by using the `displayName`
 property in the operation node.
@@ -109,6 +162,82 @@ By setting this property, the operation is available to the final user
 with the display name in the UI:
 
 image::operation-display-name.png[]
+
+If there happens to be an API in which you need to change the display name by comprehension rather than by extension, REST SDK provides a Weave script to delegate to. This is useful for those scenarios which there's a common pattern that wants to be removed from all displays names in a generic way.
+
+REST SDK does provide a default script for the displays names, that tries to rely in the `operationId` if not null, or the conjunction of the `method` and the `path`.
+
+[source,yaml]
+----
+#% Rest Connector Descriptor 1.0
+....
+operationDisplayName:
+  expression: |
+        #[%dw 2.0
+          output text/plain
+          import * from connectivity::RestSdk
+          ---
+          displayNameFromOperationId(operationId)
+            default displayNameFromMethodAndPath(method, path)
+        ]
+----
+
+For further information about those 2 Weave functions, see the following link https://github.com/mulesoft/rest-sdk-all/blob/master/rest-sdk-connector-model/src/main/resources/connectivity/RestSdk.dwl[RestSdk.dwl]
+
+But there are scenarios where that default mechanism might need a tweak, and to do so we are externalizing a way to input your own custom Weave script to change how the displays names are generated. The important thing is that there are 4 bindings available for you to use:
+
+[%header%autowidth.spread]
+|===
+|Binding name|Type|Description
+|`operationId` | `String \| null` | identifier of the operation, might be null.
+|`method` | `String` | HTTP method, not nullable.
+|`path` | `String` | HTTP full path, not nullable.
+|`summary` | `String \| null` | the summary of the operation (matches with the summary in OAS), might be null.
+|===
+
+Let’s assume that some API has dates and extensions in the resources, something that’s not useful to a consumer of the connector, and it comes without an `operationId` (either it’s empty in the OAS spec, or it’s a RAML spec), e.g.: `/2010-04-01/Accounts/Messages/SMS/Media.json`, both `/2010-04-01/` and `.json` are useless to the user, so we will need a Weave script like:
+
+[source,yaml]
+----
+#% Rest Connector Descriptor 1.0
+...
+operationDisplayName:
+  expression: |
+    #[%dw 2.0
+    output text/plain
+    import * from dw::core::Strings
+    fun removeUnwantedStuff(aPath: String)=
+      aPath replace ".json" with ""
+        replace "/2010-04-01" with ""
+          replace "/" with " "
+    ---
+    capitalize(method) ++ removeUnwantedStuff(path)
+    ]
+----
+
+Notice how we even didn't use the `operationId` as we know it will be null for this scenario.
+And for and endpoint like `/2010-04-01/Accounts/Messages/SMS/Media.json` will generate a display name (assuming the `method` is `"POST"`) `"Post Accounts Messages SMS Media"`
+
+Our Weave script library does contain helper functions, see https://github.com/mulesoft/rest-sdk-all/blob/master/rest-sdk-connector-model/src/main/resources/connectivity/RestSdk.dwl[RestSdk.dwl], that you could leverage into by importing it, for example:
+
+[source,yaml]
+----
+#% Rest Connector Descriptor 1.0
+...
+operationDisplayName:
+  expression: |
+    #[%dw 2.0
+    output text/plain
+    import * from connectivity::RestSdk
+    fun removeUnwantedStuff(aPath: String)=
+      aPath replace ".json" with ""
+        replace "/2010-04-01" with ""
+    ---
+    displayNameFromMethodAndPath(method, removeTwilioStuff(path))
+    ]
+----
+
+With the above Weave script, an endpoint like `/2010-04-01/Accounts/Messages/SMS/Media.json` with a `"POST"` `method` will generate the display name `"Create Accounts Messages SMS Media"`
 
 == Set a Description for an Operation
 
