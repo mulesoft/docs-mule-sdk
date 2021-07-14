@@ -142,7 +142,7 @@ associated value provider.
 == Parameters Static Metadata
 
 When resolving acting parameter values, always know the media types of the
-parameters from the component to execute the extraction expression and give
+parameters from the component that executes the extraction expression and that gives
 the acting parameter its value.
 
 Use the static metadata of the parameter to retrieve the media type of the parameter.
