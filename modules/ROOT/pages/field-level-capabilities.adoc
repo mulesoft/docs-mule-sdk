@@ -1,0 +1,250 @@
+= Field-Level Capabilities
+ifndef::env-site,env-github[]
+include::_attributes.adoc[]
+endif::[]
+
+Java SDK includes several features that support field-level capabilities
+for value providers and sample data. Using these features enables you to define
+value providers for parameter fields, or to use parameter fields as acting
+parameters for either a value provider or sample data.
+
+These features are compatible with Mule 4.4.0, however, all Anypoint Connectors
+can use these features, regardless of their Mule version.
+
+== Defining a Value Provider for One Part of a Parameter
+
+Define a value provider for a parameter field by using the
+annotation `@FieldValues`.
+
+The `@FieldValues` annotation requires:
+
+* *value*
++
+Provides values for a field.
+* *targetSelectors*
++
+Describes which part of a parameter contains the values supplied by the value provider.
+The DataWeave syntax defines this part of the annotation to describe the selector through
+nested fields, XML attributes, or fields that contain spaces in their names.
+
+The following example shows an operation that includes values provided for
+a parameter named `body`, which is a JSON input stream:
+
+----
+public class ChatOperations {
+ public void sendChatMessage(@Connection ChatConnection chatConnection,
+       @FieldValues(value = WorkspacesValueProvider.class, targetSelectors = "routingInfo.workspace")
+       @TypeResolver(ChatMessageResolver.class) @Content InputStream body) {
+    // Do message sending
+  }
+}
+----
+
+The `body` parameter has a field named *routingInfo*, which has a field named
+`workspace`. *WorkspacesValueProvider* is a value provider that uses the
+connection and retrieves possible workspaces.
+
+== Defining a Value Provider for Several Parts of a Parameter
+
+Parameters can have more than one part where values are provided.
+The `@FieldValues` annotation is a repeatable annotation, so parameters can be
+annotated multiple times.
+
+The following example shows an operation with a parameter named
+`body`, which is a JSON input stream that has two parts with value providers:
+
+----
+public class ChatOperations {
+ public void sendChatMessage(@Connection ChatConnection chatConnection,
+       @FieldValues(value = WorkspacesValueProvider.class, targetSelectors = "routingInfo.workspace")
+       @FieldValues(value = ChannelIdValueProvider.class, targetSelectors = "channelId")
+       @TypeResolver(ChatMessageResolver.class) @Content InputStream body) {
+    // Do message sending
+  }
+}
+----
+
+The parameter `body` defines values for two fields (*routingInfo.workspace* and
+*channelId*) that have values that are independent of each other.
+
+== Defining a Multilevel Value Provider for Several Parts of a Parameter
+
+Use multilevel value providers for several parts of a parameter.
+you want the values for the *channelId* field
+to depend on the values for the *routingInfo.workspace* field.
+
+To define this, the *targetSelectors* attribute from the `@FieldValues` annotation
+always receives an array of strings. If more than one string is given, a multilevel
+value provider is defined. Each given field defines the value parts of the
+value provider, the order in the array, and the order of the value part.
+
+The following example shows how to define multilevel value providers
+for parameter parts:
+
+----
+public class ChatOperations {
+ public void sendChatMessage(@Connection ChatConnection chatConnection,
+      @FieldValues(value = ChatMultiLevelValueProvider.class,  targetSelectors = {"workspace", "channelId"})
+      @TypeResolver(ChatMessageResolver.class) @Content InputStream body) {}
+}
+----
+
+The multilevel value provider is included like any other value provider.
+
+The following is an example of what a multilevel value provider looks like:
+
+----
+public class ChatMultiLevelValueProvider implements ValueProvider {
+
+ @Connection
+ private ChatConnection chatConnection;
+
+ @Override
+ public Set<Value> resolve() {
+   Set<Value> values = new HashSet<>();
+   List<String> workspaces = chatConnection.getWorkspaces();
+   workspaces.stream().forEach(workspace -> {
+     ValueBuilder valueBuilder = newValue(workspace);
+     chatConnection.getChannels(workspace).stream().forEach(channel -> valueBuilder.withChild(newValue(channel)));
+     values.add(valueBuilder.build());
+   });
+   return values;
+ }
+
+ @Override
+ public String getId() {
+   return "Chat multilevel value provider";
+ }
+}
+----
+
+== Defining a Value Provider for XML Attributes
+
+Target selectors use the DataWeave syntax. If a parameter of an operation is an
+XML element, use this syntax to define a value provider for an attribute that
+is a part of that parameter.
+
+The following example shows how the DataWeave syntax defines a value provider
+for an attribute:
+
+----
+public class ChatOperations {
+ public void sendChatMessage(@Connection ChatConnection chatConnection,
+      @FieldValues(value = ChannelIdValueProvider.class,  targetSelectors = "message.target.@channelId")
+      @TypeResolver(XmlChatMessageResolver.class) @Content InputStream body) {}
+}
+----
+
+In this example, the `body` parameter is an XML element that has a root tag named
+*message*, which has a *target* that has the *channelId* attribute and an
+associated value provider.
+
+== Parameters Static Metadata
+
+When resolving acting parameter values, always know the media types of the
+parameters from the component to execute the extraction expression and give
+the acting parameter its value.
+
+Use the static metadata of the parameter to retrieve the media type of the parameter.
+For example, if the parameter is a JSON input stream but the static
+metadata does not reflect this, the parts of the parameter cannot be used as
+acting parameters.
+
+== Define Acting Parameters as Parts of Parameters
+
+To define acting parameters as parts of parameters, components must define
+bindings for their references for value providers and sample data providers.
+These bindings enable an acting parameter of the provider to take the value of
+the evaluated DataWeave expression.
+
+When no binding is defined for an acting parameter, the same implicit binding
+is applied. The name of the acting parameter must be the same as the name
+of the parameter in the component to take that parameter’s value.
+
+Use the `@Binding` annotation to define an acting parameter. The `@FieldValues`
+annotation and the `@SampleData` annotation takes an array of bindings
+to define the values the acting parameter takes.
+
+A defined binding declares the value that an acting parameter
+takes by providing an extraction expression. This extraction expression is a
+DataWeave expression that uses only selectors to retrieve the value for the
+acting parameter.
+
+The extraction expression used for the extraction of the value of the acting
+parameter has some limitations:
+
+* It does not aggregate any data from the context. It is limited to
+access only the value of a field in the parameter.
+* The first part of the extraction expression corresponds only to the
+name of a parameter from the component.
+* The output media type is always `application/java` when executing the extraction
+expression to give values to the acting parameters of a value provider or sample
+data provider. This means that the provider does not expect other media types,
+such as `application/json` or `application/xml`.
+
+The available context for the expression has the value of all the component's
+parameters. The expression must start with the name of the parameter of the
+component. If the value comes from a part of the parameter, the expression
+follows the selector to the desired field.
+
+The following example shows a parameter named `body` that has a field with
+values that depend on the acting parameter `workspace`:
+
+----
+public class ChatOperations {
+ public void sendChatMessage(@Connection ChatConnection chatConnection,
+       @FieldValues(value = ChannelsValueProvider.class, targetSelectors = "channelId",
+     bindings = {@Binding(actingParameter = "workspace",  extractionExpression = "body.routingInfo.workspace")}))
+       @TypeResolver(ChatMessageResolver.class) @Content InputStream body) {
+    // Do message sending
+  }
+}
+----
+
+This acting parameter is taken from the same `body` parameter.
+
+The following syntax shows the value provider used in this example:
+
+----
+public class ChannelsValueProvider implements ValueProvider {
+
+ @Connection
+ private ChatConnection chatConnection;
+
+ @Parameter
+ private String workspace;
+
+ @Override
+ public Set<Value> resolve() {
+   return ValueBuilder.getValuesFor(chatConnection.getChannels(workspace));
+ }
+
+ @Override
+ public String getId() {
+   return "Channels value provider";
+ }
+}
+----
+
+The `workspace` acting parameter defined in the value provider is bound to the
+extraction expression that takes the value of the field from the context
+of the component.
+
+== Sample Data Example
+
+The following example illustrates a `@SampleData` annotation that binds an acting
+parameter to the value of a field of a parameter in the component:
+
+----
+public class ChatOperations {
+@SampleData(value = ChatMessageSampleDatatProvider.class, bindings = {@Binding(actingParameter = "workspace",  extractionExpression = "body.routingInfo.workspace")}))
+ public Result<InputStream, ChatAttributes> retrieveChatMessage(@Connection ChatConnection chatConnection,
+         @TypeResolver(ChatMessageResolver.class) @Content InputStream body) {
+    // Do chat message retrieval
+  }
+}
+----
+
+*ChatMessageSampleDatatProvider* contains a parameter named `workspace`
+that provides the sample data. The value of this acting parameter
+is taken from the extraction expression defined in the binding.
