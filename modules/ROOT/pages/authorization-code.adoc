@@ -207,6 +207,22 @@ public interface AuthorizationCodeState {
    * @return The external callback url that the user configured or {@link Optional#empty()} if none was provided
    */
   Optional<String> getExternalCallbackUrl();
+
+  /**
+   * Customizes the placement of the client credentials in the request.
+   *
+   * @Since 1.4
+   *
+   * @return the selected {@link CredentialsPlacement}. Defaults to {@link CredentialsPlacement#BODY}.
+   */
+  CredentialsPlacement credentialsPlacement() default BODY;
+
+  /**
+   * Whether the redirect_uri parameter should be included in the refresh token request. Defaults to {@code true}
+   *
+   * @since 1.4.0
+   */
+  boolean includeRedirectUriInRefreshTokenRequest() default true;
 }
 ----
 
