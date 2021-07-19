@@ -5,6 +5,25 @@ endif::[]
 
 REST SDK is a tool that allows you to create connectors based on an API specification supplying additional connector capabilities via a connector descriptor.
 
+== 0.5.0
+
+*July 19, 2021*
+
+=== What’s New
+
+* Added code regeneration capabilities for REST SDK projects. (RSDK-484)
+* It is now possible to generate custom operations as Composer sidecars. (RSDK-482)
+
+=== Fixed Issues
+
+[%header%autowidth.spread]
+|===
+|Issue|Number
+|Fixed a NullPointerException that occurred when working with REST SDK 0.5.0. | (RSDK-495)
+|Generated class names for Enums no longer collide with each other. | (RSDK-514)
+|Fixed RestSampleDataProvider definition. | (RSDK-499)
+|===
+
 == 0.4.1
 
 *June 30, 2021*
