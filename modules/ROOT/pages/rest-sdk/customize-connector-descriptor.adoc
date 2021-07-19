@@ -1,0 +1,316 @@
+= Customize Anypoint Connectors
+ifndef::env-site,env-github[]
+include::../_attributes.adoc[]
+endif::[]
+
+The connector descriptor you created during the xref:rest-sdk/project-setup.adoc[project setup] has the same functionality as your API spec.
+You can modify your connector descriptor by adding descriptive content, additional operations, parameters, and so on.
+
+== Set a Name for the Connector
+
+To set a name for the connector, you must set the `connectorName`
+property, which is located at the root of the connector descriptor.
+
+[source,yaml]
+----
+#% Rest Connect Connector Descriptor 1.0
+apiSpec:
+ url: http://myhost.com/resources/shop-api.yaml
+
+connectorName: Shop Connector
+
+connectorGav:
+ groupId: com.mulesoft.connectors
+ artifactId: shop-connector
+ version: 1.0.0
+
+baseUri:
+ value: https://myhost.com/shop/api
+ type: parameter
+----
+
+The name you set for the connector appears in the Mule Palette in Anypoint Studio and when you xref:exchange::to-publish-assets-maven.adoc[publish the connector to Anypoint Exchange].
+
+image::shop-studio-list.png[]
+
+== Set A Description for the Connector
+
+To set a description for the connector, you must set the
+`connectorDescription` property, which is located at the root of the
+connector descriptor.
+
+[source,yaml]
+----
+#% Rest Connect Connector Descriptor 1.0
+
+apiSpec:
+ url: http://myhost.com/resources/shop-api.yaml
+
+connectorName: Shop Connector
+connectorDescription: This is the connector for the Shop API located in https://myhost.com/shop/api
+
+connectorGav:
+ groupId: com.mulesoft.connectors
+ artifactId: shop-connector
+ version: 1.0.0
+
+baseUri:
+ value: https://myhost.com/shop/api
+ type: parameter
+----
+
+This description appears in the Connector POM file’s `<description>`
+property.
+
+== Set the Connector’s GAV
+
+You can define a Maven GAV for the connector using the `connectorGav`
+property, which is located at the root of the connector descriptor. You
+must select a `groupId`, `artifactId`, and `version` which appear in the
+generated connector POM and identify it as a Maven asset.
+
+[source,yaml]
+----
+#% Rest Connect Connector Descriptor 1.0
+
+apiSpec:
+ url: http://myhost.com/resources/shop-api.yaml
+
+connectorName: Shop Connector
+
+connectorGav:
+ groupId: com.mulesoft.connectors
+ artifactId: shop-connector
+ version: 1.0.0
+
+baseUri:
+ value: https://myhost.com/shop/api
+ type: parameter
+----
+
+== Select a Category for the Connector
+
+You can select a category for the connector using the
+`connectorCategory` property, which is located at the root of the
+connector descriptor.
+
+The possible values for this property are `select`, `premium`, `community` and `certified`.
+
+[source,yaml]
+----
+#% Rest Connect Connector Descriptor 1.0
+
+apiSpec:
+ url: http://myhost.com/resources/shop-api.yaml
+
+connectorName: Shop Connector
+connectorCategory: select
+
+connectorGav:
+ groupId: com.mulesoft.connectors
+ artifactId: shop-connector
+ version: 1.0.0
+
+baseUri:
+ value: https://myhost.com/shop/api
+ type: parameter
+----
+
+This property indicates who is able to use this connector.
+
+If the category is `select` or `premium` their respective license will be added.
+
+== Set the connector’s namespace
+
+You can select the XML prefix for the connector using the `extensionXml`
+property, which is located at the root of the connector descriptor.
+
+The value for the `extensionXml` property must be assigned to a valid
+XML namespace.
+
+[source,yaml]
+----
+#% Rest Connect Connector Descriptor 1.0
+
+apiSpec:
+ url: http://myhost.com/resources/shop-api.yaml
+
+connectorName: Shop Connector
+extensionXml: shop
+
+connectorGav:
+ groupId: com.mulesoft.connectors
+ artifactId: shop-connector
+ version: 1.0.0
+
+baseUri:
+ value: https://myhost.com/shop/api
+ type: parameter
+----
+
+The value set for the `extensionXml` property defines how the XML for
+using this connector in the Mule runtime has to look.
+
+The following example shows use of a connector’s operation whose prefix
+is `shop`:
+
+[source,xml]
+----
+<shop:get-content-search
+			doc:name="Get Content Search"
+			doc:id="fa0f9783-c704-4ac2-bbf1-fee0f9987024"
+			config-ref="Shop_Connector_Config_Client_Id"
+			q="#[attributes.uriParams['query']]"
+			count="1"
+			initialOffset="#[attributes.uriParams['start']]"/>
+----
+
+== Select a Base Java Package
+
+The generated connector is Java based, and you can use this property to
+select the base package over which the rest of the project structure is
+built.
+
+You can set the base Java package by using the `baseJavaPackage`, which
+is located at the root of the connector descriptor.
+
+[source,yaml]
+----
+#% Rest Connect Connector Descriptor 1.0
+
+apiSpec:
+ url: http://myhost.com/resources/shop-api.yaml
+
+connectorName: Shop Connector
+baseJavaPackage: com.mulesoft.connectors
+
+connectorGav:
+ groupId: com.mulesoft.connectors
+ artifactId: shop-connector
+ version: 1.0.0
+
+baseUri:
+ value: https://myhost.com/shop/api
+ type: parameter
+----
+
+The base Java package is used as the root package:
+
+image::base-java-package.png[]
+
+== Select a Base URI
+
+You can select the XML prefix for the connector using the `baseUri`
+property, which is located at the root of the connector descriptor.
+
+[source,yaml]
+----
+#% Rest Connect Connector Descriptor 1.0
+
+apiSpec:
+ url: http://myhost.com/resources/shop-api.yaml
+
+connectorName: Shop Connector
+
+connectorGav:
+ groupId: com.mulesoft.connectors
+ artifactId: shop-connector
+ version: 1.0.0
+
+baseUri:
+ value: https://myhost.com/shop/api
+ type: parameter
+----
+
+There are 3 types of base URIs:
+
+* Parameter
+* Fixed
+* Multiple
+
+=== Parameter URI
+
+The parameter base URI allows the developer to set a value by default,
+and then the final user can change it. This is for cases where the API
+can be hosted by the user, or there are different environments that the
+final users want to access using this connector.
+
+This base URI is used as the base URI for all operations.
+
+The generated connector configuration appears as follows
+
+image::shop-studio-config.png[]
+
+The user gets the default value preloaded, and they can edit it.
+
+=== Fixed URI
+
+Fixed base URIs are similar to parameter URIs, although the user cannot
+edit fixed URIs As such, all the operations in the generated connector
+always access the same server. You can use fixed URIs when there is a
+centralized server that has a fixed location, such as a connector for
+GitHub.
+
+[source,yaml]
+----
+#% Rest Connect Connector Descriptor 1.0
+
+connectorName: Twitter Connector
+
+connectorGav:
+ groupId: com.mulesoft.connectors
+ artifactId: twitter-connector
+ version: 1.0.0
+
+baseUri:
+ value: https://api.twitter.com
+ type: fixed
+----
+
+In this case, the `baseUri` field does not appear in the connector
+configuration and the user cannot change it.
+
+=== Multiple URI
+
+Multiple base URIs work as a set of predefined fixed base URIs.
+
+This is useful in the case where your API has to hit APIs located in
+different places, such as an API that manages users, but also allows you
+to upload files to a different server.
+
+[source,yaml]
+----
+#% Rest Connect Connector Descriptor 1.0
+
+connectorName: Complex API Connector
+
+connectorGav:
+ groupId: com.mulesoft.connectors
+ artifactId: twitter-connector
+ version: 1.0.0
+
+baseUri:
+   type: multiple
+   mapping:
+       uriUser:
+           value: "https://users.com"
+           default: true
+       uriUpload:
+           value: "https://upload.users.com"
+
+endpoints:
+   /api/users:
+       baseUri: uriUser #Select the base uri for the endpoint (This is optional as it is the default base URI)
+   /api/upload:
+       baseUri: uriUpload #Select the base uri for the endpoint
+----
+
+In this case, all operations defined under `/api/users` access the
+https://users.com/api/users[https://users.com/api/users] endpoint, and
+the ones defined under `/api/upload` access
+https://users.com/api/upload[https://upload.users.com/api/upload].
+
+=== TLS Support
+
+TLS support is automatically generated and does not need to be specified in the connector descriptor.
+The only requirement for TLS support to be generated in the connector Configuration is that the API spec must declare support for the HTTPS protocol.

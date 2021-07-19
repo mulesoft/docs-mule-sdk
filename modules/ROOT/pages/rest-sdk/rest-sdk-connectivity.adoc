@@ -1,0 +1,87 @@
+= Connector Descriptor
+ifndef::env-site,env-github[]
+include::../_attributes.adoc[]
+endif::[]
+
+You can create a connector from an API specification, or _API spec_ (OAS or RAML), by using REST
+SDK.
+
+Creating a connector involves creating a connector descriptor that
+articulates how the connector should look. You can then combine the
+connector descriptor with an API spec and generate a connector.
+
+You can use the following steps to create a connector:
+
+[arabic]
+. Scaffold the connector descriptor from the API Spec.
+. Customize your connector descriptor to make the connector behave and
+look as specified.
+. Generate the connector using REST SDK.
+
+== Using a Connector Descriptor
+
+A _connector descriptor_ is a YAML file that allows you to describe a
+connector, customize aspects of the generated connector (such as name,
+Maven GAV, operation names, layout information, and so on), and provide
+additional metadata that is specific to MuleSoft’s connectors.
+
+When you create a connector descriptor, you should not edit the API
+spec. If you modify your API spec and a new version of an API spec is
+released, you must move all changes from the old version to the new
+version. API specs should be as complete as possible and provide rich
+schemas for every input/output type, examples, security information, and
+so on.
+
+== Features in REST SDK
+
+The following features are available in REST SDK:
+
+* Instant connector generation from RAML 1.0, OAS 2.0, and OAS 3.0
+* Maven distribution framework
+* Support for paginated operations
+* Triggers
+* Value providers
+* Sample data
+* Security Scheme support for:
+** Basic Authentication
+** Digest Authentication
+** Pass Through
+** OAuth 2.0 Client Credentials
+** OAuth 2.0 Authorization Code
+* TLS support
+* Filter out specific API operations
+* Custom headers and query parameters at the global and
+operation levels
+* Global and operation-specific timeouts
+* Support for reconnection
+* HTTP proxy support
+* Automatic error handling
+* Support for multiple base URLs
+* Ability to modify or extend the generated connector using Java SDK. You can:
+** Add additional security schemes
+** Customize operations
+** Add message sources, expression functions, etc
+** Add Dynamic DataSense
+** Describe custom authentication
+
+On the non-functional side, these connectors are fully
+https://docs.mulesoft.com/mule-sdk/1.1/non-blocking-operations[non-blocking]
+and also provide reduced and optimized _extension models_.
+
+
+== Differences with Rest Connect
+
+The main differences between the REST SDK and the Rest Connect v1 are:
+
+* Unlike Rest Connect v1 which generates and deploys an unmodifiable
+connector, REST SDK generates source code that you can version, modify,
+and extend manually.
+* REST SDK does not publish the generated connectors automatically. You
+can deploy the connector at your convenience.
+* The generated source code uses the Java SDK instead of the XML source
+code.
+
+
+== What's Next?
+
+xref:rest-sdk/project-setup.adoc[Getting Started]
