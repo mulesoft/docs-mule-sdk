@@ -20,8 +20,8 @@ REST SDK is a tool that allows you to create connectors based on an API specific
 |===
 |Issue|Number
 |Fixed a NullPointerException that occurred when working with REST SDK 0.5.0. | (RSDK-495)
-|Generated class names for Enums no longer collide with each other. | (RSDK-514)
-|Fixed RestSampleDataProvider definition. | (RSDK-499)
+|Generated class names for ENUMS that no longer collide with each other. | (RSDK-514)
+|Fixed the RestSampleDataProvider definition. | (RSDK-499)
 |===
 
 == 0.4.1
