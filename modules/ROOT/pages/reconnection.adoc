@@ -148,7 +148,7 @@ Connection connection = connectionProvider.connect();
   try {
     connection.startStreaming();
   } catch(Exception e){
-    throw new ConnectionException(e, connection); //<1>
+    sourceCallback.onConnectionException(new ConnectionException(e, connection));
   }
 }
 ----
