@@ -44,6 +44,7 @@ property is assigned the value `Auth Header`.
 
 You can define new parameters to be added in the `Authorize` endpoint for
 OAuth 2.0 authorization in the descriptor.
+
 [source,yaml]
 ----
 security:
@@ -59,11 +60,18 @@ security:
 
 In this case, the query parameter `prompt` will be added on the Authorization endpoint.
 
-== Customizing OAuth refresh token condition
+== Customize OAuth Refresh Token Condition
 
-The standard behavior of refreshing OAuth access tokens on the presence of "401" HTTP status errors, falls short in some scenarios.
+Refreshing OAuth access tokens with 401 HTTP status errors using the standard
+behavior does not work in all scenarios.
 
-There is a way to customize this behavior using a refreshTokenCondition expression extending an OAuth security scheme as in:
+Customize this behavior with a refreshTokenCondition expression that
+extends an OAuth security scheme. This feature is supported by Mule 4.4.0 or later.
+
+The available expression bindings in refreshTokenCondition are response payload
+and response attributes.
+
+The following example illustrates a customized refreshTokenCondition:
 
 [source,yaml]
 ----
@@ -81,28 +89,28 @@ security:
       expression: "#[attributes.statusCode == 403]"
 ----
 
-On the presence of response errors, this will be now the detection condition used to verify if a refresh access token is needed.
+If there are response errors, the refreshTokenCondition expression will be a
+detection condition used to verify if a refresh access token is needed.
 
-The available expression bindings in refreshTokenCondition are:
-
-- response payload
-- response attributes
-
-Note that this detection support will be applied on detected error responses, this means it will be applied on the presence of http client errors "4xx" or server errors "5xx", but not on "2xx" responses.
+Note that this detection support is applied on detected error responses.
+It is applied on the presence of 4xx HTTP client errors or 5xx
+server errors, but not on 2xx responses.
 
 === Example
 
-Let's illustrate its usage in a real world use case:
+Imagine there is a SaaS Box API that uses a combination of 401 status code and
+www-authenticate standard header to represent a response scenario needing
+access token refresh, such as:
 
-The SaaS Box API uses a combination of "401" status code and standard header "www-authenticate" as in:
 ----
 www-authenticate: Bearer realm="Service", error="invalid_token", error_description="The access token provided is invalid."
 ----
-to represent a response scenario needing access token refresh.
 
-This scenario requires customization, since not all "401" errors will indicate access token expirations.
+Use customization since not all 401 errors indicate access token expirations.
 
-A customized refresh token condition could be used to handle it:
+The following example illustrates a customized refreshTokenCondition for
+this scenario:
+
 [source,yaml]
 ----
 security:
@@ -112,7 +120,3 @@ security:
       language: "dataweave"
       expression: "#[attributes.statusCode == 401 and (attributes.headers[\"www-authenticate\"] contains \"error=\\\"invalid_token\\\"\")]"
 ----
-
-*Observation:*
-
-REST-SDK relays on MuleSoft Runtime to handle refresh token signal and perform automatic reconnection and this feature is available in MuleSoft Runtimes >= 4.4.0.
