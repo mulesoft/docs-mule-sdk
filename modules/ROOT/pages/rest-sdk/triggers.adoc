@@ -141,7 +141,7 @@ The `parameters` section defines the parameters the user sees. These don’t nee
 
 In this case, the user should choose the SObject they want to query, so the *objectName* parameter exists for the user to provide that name.
 The `displayName` and `description` properties define how the user sees this parameter in the UI.
-`required` indicates whether the user must give a value to this parameter. If the parameter is not required and the user does not specify a value for it, `required` receives a null value.
+`required` indicates whether the user must give a value to this parameter. If the parameter is not required and the user does not specify a value for it, `required` receives a `true` value.
 Finally, the `type` parameter defines the type of data this parameter stores. This adds restrictions to what the user can input there. Allowed values for the type field are integer, number, string, localDateTime, zonedDateTime and boolean.
 
 The user must provide a start date from where starting querying for updates. The `startDate` parameter fulfills this requirement.
