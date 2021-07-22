@@ -133,7 +133,7 @@ could make the reconnection mechanism fail to work properly.
 [[starting-source]]
 ==== Starting Source
 
-A source is in the starting source stage when the onStart() method executes. If
+A source is in the starting source stage when the `onStart()` method executes. 
 a connection error exists, it must be communicated through the SourceCallback
 using the onConnectionException() method. The source will stop and attempt to
 reconnect.
