@@ -134,7 +134,7 @@ could make the reconnection mechanism fail to work properly.
 ==== Starting Source
 
 A source is in the starting source stage when the `onStart()` method executes. 
-a connection error exists, it must be communicated through the SourceCallback
+Connection errors must be communicated through the `SourceCallback`
 using the onConnectionException() method. The source will stop and attempt to
 reconnect.
 
