@@ -6,16 +6,17 @@ endif::[]
 == Operation Identifiers
 
 REST SDK relies on an operation identifier to generate classes for resources.
-Fetch an operation identifier from an OAS model under `operationId`. If fetched
-from a RAML model, the operation identifier defaults to null.
 
-The identifier cannot collide with resources, triggers, or other REST
-SDK components. REST SDK provides a default mechanism to generate an operation
+REST SDK provides a default mechanism to generate an operation
 identifier if there is a valid `operationId` from an OAS context with a non
-null value. It also executes a fallback if there is an HTTP method and
-unique resource name, and executes only if `operationId` is null.
+null value. It also executes a fallback if there is an HTTP method and unique
+resource name, and executes only if `operationId` is null. The identifier cannot
+collide with resources, triggers, or other REST
+SDK components.
 
-Customize the default mechanism by modifying the descriptor. Input your own
+REST SDK provides a default mechanism to generate an operation
+identifier if there is a valid `operationId` from an OAS context with a non
+null value. Customize the default mechanism by modifying the descriptor. Input your own
 custom DataWeave script to change how the operation identifiers are generated.
 
 Use these three bindings to modify the mechanism:
