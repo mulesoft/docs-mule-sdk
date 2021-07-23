@@ -44,6 +44,8 @@ property is assigned the value `Auth Header`.
 
 You can define new parameters to be added in the `Authorize` endpoint for
 OAuth 2.0 authorization in the descriptor.
+
+[source,yaml]
 ----
 security:
   oauth2:
@@ -57,3 +59,64 @@ security:
 ----
 
 In this case, the query parameter `prompt` will be added on the Authorization endpoint.
+
+== Customize OAuth Refresh Token Condition
+
+Refreshing OAuth access tokens with 401 HTTP status errors using the standard
+behavior does not work in all scenarios.
+
+Customize this behavior with a refreshTokenCondition expression that
+extends an OAuth security scheme. This feature is supported by Mule 4.4.0 or later.
+
+The available expression bindings in refreshTokenCondition are response payload
+and response attributes.
+
+The following example illustrates a customized refreshTokenCondition:
+
+[source,yaml]
+----
+security:
+  oauth_2_0:
+    headers:
+      authorization:
+        friendlyName: 'Authorization header'
+    queryParameters:
+      access_token:
+        friendlyName: 'Access token'
+    # ...
+    refreshTokenCondition:
+      language: "dataweave"
+      expression: "#[attributes.statusCode == 403]"
+----
+
+If there are response errors, the refreshTokenCondition expression will be a
+detection condition used to verify if a refresh access token is needed.
+
+Note that this detection support is applied on detected error responses.
+It is applied on the presence of 4xx HTTP client errors or 5xx
+server errors, but not on 2xx responses.
+
+=== Example
+
+Imagine there is a SaaS Box API that uses a combination of 401 status code and
+www-authenticate standard header to represent a response scenario needing
+access token refresh, such as:
+
+----
+www-authenticate: Bearer realm="Service", error="invalid_token", error_description="The access token provided is invalid."
+----
+
+Use customization since not all 401 errors indicate access token expirations.
+
+The following example illustrates a customized refreshTokenCondition for
+this scenario:
+
+[source,yaml]
+----
+security:
+  oauth_2_0:
+    # ...
+    refreshTokenCondition:
+      language: "dataweave"
+      expression: "#[attributes.statusCode == 401 and (attributes.headers[\"www-authenticate\"] contains \"error=\\\"invalid_token\\\"\")]"
+----
