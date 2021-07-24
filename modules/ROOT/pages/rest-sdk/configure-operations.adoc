@@ -24,7 +24,7 @@ Use these three bindings to modify the mechanism:
 [%header%autowidth.spread]
 |===
 |Binding name|Type|Description
-|`operationId` | `String` | null | Identifier of the operation. Can be null.
+|`operationId` | `String` \| `null` | Identifier of the operation. Can be null.
 |`method` | `String` | HTTP method. Not nullable.
 |`path` | `String` | HTTP full path. Not nullable.
 |===
@@ -219,10 +219,10 @@ Use these four bindings to modify the mechanism:
 [%header%autowidth.spread]
 |===
 |Binding name|Type|Description
-|`operationId` | `String` | null | Identifier of the operation. Can be null.
+|`operationId` | `String` \| `null` | Identifier of the operation. Can be null.
 |`method` | `String` | HTTP method. Not nullable.
 |`path` | `String` | HTTP full path. Not nullable.
-|`summary` | `String` | null | Summary of the operation that matches the summary in OAS. Can be null.
+|`summary` | `String` \| `null` | Summary of the operation that matches the summary in OAS. Can be null.
 |===
 
 Imagine there is an API that contains dates and extensions in the resources, which is
