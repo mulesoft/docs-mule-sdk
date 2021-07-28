@@ -393,7 +393,7 @@ defined failure code.
 == OAuth Token Refresh
 
 If your operation or source uses an OAuth connection, trigger a token
-refresh in the provider by throwing an *AccessTokenExpiredException* inside
+refresh in the provider by throwing an `AccessTokenExpiredException` error inside
 the getSample() method, as done for
 https://docs.mulesoft.com/mule-sdk/1.1/oauth-token-expiration[operations or sources].
 
