@@ -72,7 +72,9 @@ public interface SampleDataProvider<T, A> {
 
 Streaming is not supported for:
 
-* Operations or sources that return an InputStream. The resolver always returns
+* Operations or sources that return an InputStream value. 
++
+The resolver always returns
 implementations that do not require a connection, such as a ByteArrayInputStream
 or any other offline implementations that have already procured the entire data
 stream before returning the getSample() method, as the InputStream is fully
