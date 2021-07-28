@@ -382,7 +382,7 @@ public class ObjectSampleDataProvider implements SampleDataProvider<InputStream,
 ----
 
 Both components have the same type signature as the sample data provider. They
-define the same parameters that the resolver needs, but they both have
+define the same parameters required by the resolver, but each has its own parameters that are not required by the resolver.
 different additional parameters that the resolver does not require. The resolver
 accesses the parameters, connection, and configuration the same way a
 value provider does.
