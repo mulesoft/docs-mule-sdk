@@ -470,5 +470,5 @@ is thrown otherwise.
 * Streaming
 
 Although streaming is not supported, this is not enforced.
-extension developer should follow best practices and comply with the overall
+Your extension developer should follow best practices and comply with the overall
 contract.
