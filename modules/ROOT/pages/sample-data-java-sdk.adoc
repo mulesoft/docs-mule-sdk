@@ -82,7 +82,7 @@ consumable even after the underlying connection is closed. Avoid using temporal
 buffer files as well.
 * Operations that return a PagingProvider<C, T> value, because they are considered
 streaming. The limitations explained in the previous bullet apply. In these
-cases, a List<T> of the same item type is returned instead.
+cases, a List<T> value of the same item type is returned instead.
 
 === SampleDataException
 
