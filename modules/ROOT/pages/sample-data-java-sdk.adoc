@@ -7,7 +7,7 @@ Sample data enables operations and sources to provide examples of the output
 they produce. These examples show information obtained from a live system
 through a connection or the output format from a connectionless example.
 
-Sample data is supported by Mule 4.4.0 or later, however, all Anypoint Connectors
+Sample data is supported by Mule 4.4.0 or later. However, all Anypoint Connectors
 can use this feature, regardless of their Mule version.
 
 == SDK APIs
