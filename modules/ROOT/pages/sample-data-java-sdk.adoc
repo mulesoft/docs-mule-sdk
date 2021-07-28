@@ -469,6 +469,6 @@ is thrown otherwise.
 
 * Streaming
 
-Streaming is not supported. However, there is no enforcement of this but the
+Although streaming is not supported, this is not enforced.
 extension developer should follow best practices and comply with the overall
 contract.
