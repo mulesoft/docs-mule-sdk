@@ -35,7 +35,7 @@ Implementations can access parameters, configurations, and connections to
 generate the sample data through the `@Parameter`, `@Config`, and `@Connection`
 annotations.
 
-For connectors, implementations are the most valuable when returning real data
+For connectors, implementations are most valuable when returning real data
 from the system they connect to instead of returning hard coded values.
 
 The following example illustrates a SampleDataResolver API:
