@@ -36,7 +36,7 @@ generate the sample data through the `@Parameter`, `@Config`, and `@Connection`
 annotations.
 
 For connectors, implementations are most valuable when returning real data
-from the system they connect to instead of returning hard coded values.
+from the system they connect to instead of returning hard-coded values.
 
 The following example illustrates a SampleDataResolver API:
 
