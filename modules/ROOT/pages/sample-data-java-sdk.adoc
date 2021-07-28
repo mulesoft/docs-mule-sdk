@@ -80,7 +80,7 @@ or any other offline implementations that have already procured the entire data
 stream before returning the getSample() method, as the InputStream is fully
 consumable even after the underlying connection is closed. Avoid using temporal
 buffer files as well.
-* Operations that return a PagingProvider<C, T> as they are considered
+* Operations that return a PagingProvider<C, T> value, because they are considered
 streaming. The limitations explained in the previous bullet apply. In these
 cases, a List<T> of the same item type is returned instead.
 
