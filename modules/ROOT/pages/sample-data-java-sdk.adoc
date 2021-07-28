@@ -10,7 +10,15 @@ through a connection or the output format from a connectionless example.
 Sample data is supported by Mule 4.4.0 or later. However, all Anypoint Connectors
 can use this feature, regardless of their Mule version.
 
+With sample data, you can:
+
+* Implement SDK APIs
+* Provide examples using operation parameters
+* Provide examples using configuration and connection
+
 == SDK APIs
+
+Use SDK APIs to provide sample data, communicate errors, and enhance components.
 
 === SampleDataResolver
 
@@ -22,7 +30,9 @@ Implementations must:
 
 * Provide a default constructor.
 * Provide samples for both the payload and the message attributes, which
-return a Result<T,A> object. Generic types always match the return types of
+return a Result<T,A> object.
++
+Generic types always match the return types of
 the enhanced component. For components that return dynamic types, each
 implementation returns instances of the correct dynamic type. If the
 operation does not return attributes, use Result<T, Void>.
@@ -72,12 +82,12 @@ public interface SampleDataProvider<T, A> {
 
 Streaming is not supported for:
 
-* Operations or sources that return an InputStream value. 
+* Operations or sources that return an InputStream value.
 +
 The resolver always returns
 implementations that do not require a connection, such as a ByteArrayInputStream value
 or any other offline implementations that have already procured the entire data
-stream before returning the getSample() method, as the InputStream is fully
+stream before returning the getSample() method, because the InputStream value is fully
 consumable even after the underlying connection is closed. Avoid using temporal
 buffer files as well.
 * Operations that return a PagingProvider<C, T> value, because they are considered
@@ -117,18 +127,18 @@ public class SampleDataException extends MuleException {
  public final static String CONNECTION_FAILURE = "CONNECTION_FAILURE";
 
  /**
-  * Indicates that Sample Data resolution was attempted on a {@link Location} which doesn't exist
+  * Indicates that Sample Data resolution was attempted on a {@link Location} that doesn't exist
   */
  public final static String INVALID_LOCATION = "INVALID_LOCATION";
 
  /**
   * Indicates that the Sample Data resolution was attempted but the underlying {@link SampleDataProvider} has required parameters
-  * which weren't supplied
+  * that weren't supplied
   */
  public final static String MISSING_REQUIRED_PARAMETERS = "MISSING_REQUIRED_PARAMETERS";
 
  /**
-  * Indicates that Sample Data resolution was attempted on a component which doesn't support that capability
+  * Indicates that Sample Data resolution was attempted on a component that doesn't support that capability
   */
  public final static String NOT_SUPPORTED = "NOT_SUPPORTED";
 
@@ -203,15 +213,17 @@ public @interface SampleData {
 
 == Sample Data Examples
 
-=== Using Only Operation Parameters
+Obtain sample data through an operation or through configuration and connection.
 
-Use this example to provide static sample data without using a connection.
+=== Obtain Sample Data Through a Direct Operation
+
+Use this example to provide static sample data through an operation without using
+a connection.
 
 Imagine there is a new GitHub connector that contains an operation that
-retrieves information for a given user in JSON format. However, you do not want
-to consume an API call while providing sample data because there are a limited
-number of calls or because it is too costly. Instead, directly implement
-the operation.
+retrieves information in JSON format. However, you do not want
+to consume an API call while providing sample data to consume one of a limited
+number or costly API calls, so you directly implement the operation.
 
 The following example illustrates a definition of the operation with the provider attached
 through the `@SampleData` annotation:
@@ -224,9 +236,10 @@ public Result<InputStream, Void> getUserInfo(String username, @Connection GitHub
 }
 ----
 
-The following example illustrates the sample data provider implementation, which uses the same
-mechanism to inject parameters. The `@Parameter` annotation has the same name
-and type as the operation’s parameter, which is *username*:
+The following example illustrates the sample data provider implementation, which
+uses the implementation shown previous to this to inject parameters.
+The `@Parameter` annotation has the same name and type as the operation’s
+parameter, which is `username`:
 
 [source,java,linenums]
 ----
@@ -263,7 +276,7 @@ public class JsonSampleDataProvider implements SampleDataProvider<InputStream, V
 }
 ----
 
-Imagine the value for the *username* parameter is John Doe. The provider
+Imagine the value for the `username` parameter is `John Doe`. The provider
 returns the following JSON:
 
 [source,json5]
@@ -276,7 +289,7 @@ returns the following JSON:
 }
 ----
 
-=== Using Configuration and Connection
+=== Obtain Sample Data Using Configuration Values and a Connection
 
 Use this example to provide dynamic sample data according to parameter and
 configuration values, while also requiring a connection.
@@ -285,10 +298,10 @@ Imagine there is a new GitHub connector that contains both an operation and
 source that:
 
 * Have an *objectType* parameter that controls the type of entity retrieved, with
-possible values such as `pullRequest`, `issue`, or `commit`.
-* Have an optional *status* parameter that filters the results.
-* Use a connection for the GitHub API.
-* Return a Result<InputStream, ObjectAttributes> object.
+possible values such as `pullRequest`, `issue`, or `commit`
+* Have an optional *status* parameter that filters the results
+* Use a connection for the GitHub API
+* Return a Result<InputStream, ObjectAttributes> object
 
 The following example illustrates the operation definition:
 
@@ -387,7 +400,7 @@ different additional parameters that the resolver does not require. The resolver
 accesses the parameters, connection, and configuration the same way a
 value provider does.
 
-If no data is available, the resolver throws a *SampleDataException* with a
+If no data is available, the resolver throws a `SampleDataException` error with a
 defined failure code.
 
 == OAuth Token Refresh
@@ -429,8 +442,8 @@ public class RefreshedOAuthSampleDataProvider implements SampleDataProvider<Stri
 
 == Aliases and Acting Parameters
 
-Parameter resolution works in the same way as value providers. Aliases are
-supported consistently, similar to defining an acting parameter as part of a
+You can resolve parameters in the same way you resolve value providers.
+You can define aliases similar to defining an acting parameter as part of a
 parameter.
 
 == Error Conditions
@@ -453,7 +466,7 @@ thrown otherwise.
 
 * Connection and Configuration Usage Check
 
-The SDK validates that if a sample data provider uses a connection and/or
+The SDK validates that if a sample data provider uses a connection or
 configuration, the related component also uses them. A validation error is
 thrown otherwise.
 
@@ -470,5 +483,4 @@ is thrown otherwise.
 * Streaming
 
 Although streaming is not supported, this is not enforced.
-Your extension developer should follow best practices and comply with the overall
-contract.
+Your extension developer should follow best practices and comply with the contract.
