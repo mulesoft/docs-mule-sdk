@@ -86,7 +86,7 @@ cases, a List<T> value of the same item type is returned instead.
 
 === SampleDataException
 
-This class communicates errors while fetching sample data so the
+This class communicates errors while fetching sample data so that the
 runtime can handle them accordingly. Use the predefined failure code
 messages described in this class if necessary.
 
