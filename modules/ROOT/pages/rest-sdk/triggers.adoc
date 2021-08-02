@@ -38,7 +38,7 @@ The trigger declaration for this endpoint might look as follows:
 triggers:
    onUpdatedObject:
      path: /v48.0/sobjects/{SObjectName}/updated/
-     method: GET
+     method: get
      displayName: SObjects Updated
      description: Query for updated instances of a specified SObject
 
@@ -58,10 +58,10 @@ triggers:
          required: true
 
      binding:
-       uriParams:
+       uriParameter:
          SObjectName:
             value: "#[parameters.objectName]"
-       queryParams:
+       queryParameter:
          start:
            value: "#[if(context.watermark == null) parameters.startDate else context.watermark]"
 
