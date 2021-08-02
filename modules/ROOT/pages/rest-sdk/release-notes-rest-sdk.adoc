@@ -5,6 +5,25 @@ endif::[]
 
 REST SDK is a tool that allows you to create connectors based on an API specification supplying additional connector capabilities via a connector descriptor.
 
+== 0.6.0
+
+*August 2, 2021*
+
+=== What’s New
+
+* Added support for custom Composer metadata in IO metadata types. (RSDK-495, RSDK-242)
+* Min mule version is now 4.3.0 for all generated connectors. (RSDK-521)
+
+=== Fixed Issues
+
+[%header%autowidth.spread]
+|===
+|Issue|Number
+|Added support for Long and Int64 type parameters defined in API specifications. | (RSDK-526)
+|nextUrl is not incorrectly modified anymore for hypermedia pagination. | (RSDK-500)
+|RestSampleDataProvider now generates the corresponding output attributes. | (RSDK-509)
+|===
+
 == 0.5.0
 
 *July 19, 2021*
