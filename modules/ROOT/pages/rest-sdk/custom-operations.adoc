@@ -1,0 +1,898 @@
+= Custom Operations
+ifndef::env-site,env-github[]
+include::../_attributes.adoc[]
+endif::[]
+
+== Context
+
+Up to now, REST-SDK was able to pick API Spec declarations describing backend system endpoints, and based on them automatically assemble equivalent connectivity operations or natural operations for the backend system.
+
+Various enrichments could be added with the main purpose of enhancing design time experience but the functional connectivity was completely defined by the system level functionality described for the SaaS API.
+
+Once we cross Level 3 boundaries, connectivity built is expected to feature a more client oriented consumption experience whose main purpose is bridging the semantic gap between the user conceptual model and the system conceptual model.
+
+== Expressing L3 concerns on REST-SDK…
+
+As we said, the leading use case is designing and developing a consumption experience with its own domain model on top of a system domain.
+
+The following paragraphs illustrate with an example the process a citizen connectivity developer would go through in order to define this new consumption experience using REST-SDK.
+
+=== … the base connectivity
+
+Since we are following a Layered architecture, the path would start with a given base connectivity.
+
+A fictional SaaS “Offices API” is described by the following RAML API Spec
+
+api.yaml
+[source,yaml]
+----
+#%RAML 1.0
+
+title: Offices API
+protocols: [HTTP, HTTPS]
+mediaType: application/json
+baseUri: http://localhost/office
+
+types:
+    Location:
+        type: object
+        properties:
+            location: string
+            zone: string
+            offset: string
+            code: string
+
+/locations:
+    post:
+        body:
+            application/json:
+                type: Location
+        responses:
+            200:
+                body:
+                    application/json:
+                        type: Location
+    /{id}:
+        description: Location of the office by Id.
+        get:
+            queryParameters:
+              offset?: string
+              code:
+                type: string
+                required: true
+            responses:
+                200:
+                    body:
+                        application/json:
+                            type: Location
+        delete:
+            responses:
+                204:
+----
+
+Base connectivity for Offices API is declared in a REST SDK descriptor offices-descriptor.yaml
+
+offices-descriptor.yaml
+[source,yaml]
+----
+#% Rest Connector Descriptor 1.0
+
+apiSpec:
+    url: './api.raml'
+
+connectorName: Offices
+
+connectorGav:
+    groupId: com.mulesoft.connectors
+    artifactId: offices-api
+    version: 1.0.0
+
+defaultInputMediaType: application/json
+defaultOutputMediaType: application/json
+----
+
+Defining Citizen connectivity on top of the system domain connectivity represented by api.raml and offiices-descriptor.yaml.
+
+=== … the required citizen connectivity
+
+System connectivity developers have a couple of standardized description formats such as formats OAS/RAML for specifying REST APIs.
+
+This is not the case yet for citizen connectivity developers. We will assume a human readable description (ie: Citizen Connectivity Requirements) provided that would provides a citizen connectivity with:
+
+- definition of the citizen domain for consumption
+- functional mapping on how this citizen domain is mapped to a given system domain declared as specialist connectivity.
+
+*OPERATION*
+|===
+|Operation |Description |Implementation notes
+
+|Find Location
+|Find location by its part specification
+|Corresponds to a GET on /locations/{id} in system domain
+|===
+
+*INPUTS*
+|===
+|Field |Description |Req | Implementation notes
+
+|Part A
+|First part of the identifier of an office location
+|true
+|auxiliar
+
+|Part B
+|Second part of the identifier of an office location
+|true
+|auxiliar
+
+|
+|
+|
+| Identifer {id} is built as the text “<Part A>-<Part B>”
+
+|
+|
+|
+| Code and Offset are low level data not exposed in this experience since are fixed to code=code-1 and offset=offset-1 in the subdomain we expose.
+
+|===
+
+*OUTPUT*
+|===
+|Field |Description | Implementation notes
+
+|Location
+|Location identifer
+|System domain location
+
+|Zone
+|Zone for this location
+|System domain zone
+
+|
+|
+| Code and offset from retrieved location is not exposed to user.
+
+|===
+
+
+*OPERATION*
+|===
+|Operation |Description |Implementation notes
+
+|Create Location
+|Creates a Location
+|Corresponds to a POST on /locations
+|===
+
+*INPUTS*
+|===
+|Field |Description |Req | Implementation notes
+
+|Location
+|Full identifier of an office location
+|true
+|auxiliar
+
+|Zone
+|Zone for office location
+|true
+|auxiliar
+
+|
+|
+|
+| Location identifier and zone mapped to corresponding fields.
+
+|
+|
+|
+| Code and Offset are low level data sent as corresponding for this domain code='code-1' and offset='offset-1'.
+
+|===
+
+*OUTPUT*
+|===
+|Field |Description | Implementation notes
+
+|Location
+|Location identifer
+|System domain location
+
+|Zone
+|Zone for this location
+|System domain zone
+
+|
+|
+| Code and offset from created location is not exposed to user.
+
+|===
+
+The citizen connectivity developer starts implementing this new domain in its own space for declarations, an “Offices Citizen” REST-SDK descriptor…
+
+offices-citizen-descriptor.yaml
+[source,yaml]
+----
+#% Rest Connector Descriptor 1.0
+
+connectorName: Offices Citizen Connector
+
+connectorGav:
+   groupId: com.mulesoft.connectors
+   artifactId: citizen-offices-api
+   version: 1.0.0
+----
+
+These declarations act as an overlay on top of system declarations. The composition of them constitute citizen connectivity.
+
+=== ... developing citizen operations
+
+The Citizen Connectivity Requirements defines a “Find Location” experience operation in terms of a GET over /locations/{id} endpoint.
+
+We could recur to an endpoint declaration overriding display name and description and let REST SDK generate the natural operation for it (A natural operation would be an operation exposing 1-1 functionality of REST operation)...
+
+[source,yaml]
+----
+endpoints:
+    /locations/{id}:
+        operations:
+            get:
+                displayName: "Find Location"
+----
+
+...but then the description goes on describing the expected requirements to be met by inputs and outputs, and they are different from what we can achieve with endpoint declarations.
+
+What we need is something that lets us have much more control in the way this connectivity operation is assembled by REST SDK.
+
+And this is where Layer 3 features give the kind of expressiveness we need…
+
+=== ... designing new operations out of single endpoints
+
+==== adding an operations declaration section
+
+We start by adding an operations section in which we are going to define our own operations instead of letting REST-SDK infer them from endpoints.
+
+[source,yaml]
+----
+#% Rest Connector Descriptor 1.0
+#...
+operations:
+----
+
+...and define a new operation ‘findLocation’ there...
+
+[source,yaml]
+----
+#% Rest Connector Descriptor 1.0
+#...
+operations:
+    #...
+    findLocation:
+----
+
+==== ...reuse existing connectivity metadata...
+
+This findLocation is defined as an experience on top of a base connectivity so we will refer to that base connectivity to collect all the metadata defined for it, and then express only the customization that adds the experience we need.
+
+For findLocation as we see in the requirements it is defined in terms of a GET on /locations/{id} endpoint… and we will declare that...
+
+[source,yaml]
+----
+#% Rest Connector Descriptor 1.0
+...
+operations:
+    ...
+    findLocation:
+        displayName: Find Location
+        description: Find location by its part specification
+        base: get/locations/{id}
+----
+
+==== ...enrich with display name, description...
+
+We are enriching base operation with a new experience customization so we are adding its own display name and description...
+
+[source,yaml]
+----
+#% Rest Connector Descriptor 1.0
+...
+operations:
+    ...
+    findLocation:
+        displayName: Find Location
+        description: Find location by its part specification
+        base: get/locations/{id}
+----
+
+...add custom parameters...
+
+The experience being asked in the requirements refers to inputs we need from a user that are not part of the base connectivity itself. We define this experience specific inputs as auxiliary parameters by declaring them in a parameters section…
+
+[source,yaml]
+----
+#% Rest Connector Descriptor 1.0
+...
+operations:
+    ...
+    findLocation:
+        base: get/locations/{id}
+        displayName: Find Location
+        description: Find location by its part specification
+        parameters:
+            partA:
+                displayName: part A
+                type: string
+                required: true
+            partB:
+                displayName: part B
+                type: string
+                required: true
+----
+
+Note that only the new experience parameters need to be declared here, all the parameterization required by the base connectivity is automatically handled later by REST-SDK.
+
+==== ...customize existing request bindings...
+
+We now need to customize the way those auxiliar inputs are part of the request bindings. In this specific case experience, we want to hide user from dealing with the id of locations giving a more semantic way of building those identifiers.
+
+We also avoid exposing code and offset query parameters from base connectivity since we will be working with a subdomain of data that restricts locations to specific data.
+
+[source,yaml]
+----
+#% Rest Connector Descriptor 1.0
+...
+operations:
+    ...
+    findLocation:
+        base: get/locations/{id}
+        displayName: Find Location
+        description: Find location by its part specification
+        parameters:
+            partA:
+                displayName: part A
+                type: string
+                required: true
+            partB:
+                displayName: part B
+                type: string
+                required: true
+        request:
+            uriParameter:
+                id:
+                    value: "#[parameters.partA ++ '-' ++ parameters.partB]"
+            queryParameter:
+                code:
+                    value: code-1
+                offset:
+                    value: offset-1
+----
+
+We should note here how these new declarations affect the way REST SDK ends assembling connectivity.
+
+==== ...brief digression here...
+
+The mechanism used to support L3 experiences features relies on the same principle of metadata based declarations and composition that is the foundation of REST-SDK. In fact it is just opening a bit the model REST-SDK uses to interpret and generate connectivity for user declarations so that we can achieve a bit more expressiveness.
+
+Let’s illustrate it in the context of this example...
+
+When we declare connectivity by means of an API spec or descriptor
+
+[source,yaml]
+----
+endpoints:
+  ...
+  /locations/{id}:
+    operations:
+      get:
+        expects:
+          uriParameter:
+            id:
+          queryParameter:
+            offset:
+            code:
+----
+
+REST SDK builds an internal model of the entire associated metadata it could gather from those declarations to model and then assemble connectivity for it.
+
+This internal model is what we call an effective connectivity. A simplification of the interpreted and assembled connectivity in this example would be...
+
+[source,yaml]
+----
+  getLocationsById:
+      parameters:
+        id: # auto-bind
+          type: string
+        offset: # auto-bind
+          type: string
+        code: # auto-bind
+          type: string
+      request:
+          uriParameter:
+            id:
+              value: "#[parameters.id]"
+          queryParameter:
+            offset:
+              value: "#[parameters.offset]"
+            code:
+              value: "#[parameters.code]"
+----
+
+This assembled abstract connectivity is the one that will be eventually used by the generative layer of REST-SDK in order to generate an specific materialization (ie: a Mule connector).
+
+The case for these newly declared operations follow exactly the same approach and are expressed in terms of the same model.
+
+Let’s analyze a bit deeper how this findLocation operation customization ends generating connectivity using the previous model.
+
+The original declaration was...
+
+[source,yaml]
+----
+operations:
+    ...
+    findLocation:
+        base: get/locations/{id}
+        parameters:
+            partA:
+                displayName: part A
+                type: string
+                required: true
+            partB:
+                displayName: part B
+                type: string
+                required: true
+        request:
+            uriParameter:
+                id:
+                    value: "#[parameters.partA ++ '-' ++ parameters.partB]"
+            queryParameter:
+                offset:
+                    value: offset-1
+----
+
+This user declaration is then interpreted as a new operation in metadata domain...
+
+[source,yaml]
+----
+    findLocation:
+        base: get/locations/{id}
+        parameters:
+        request:
+----
+
+Since the declared metadata has expandable features (ie: base prototype) then the expansion of those declarations take place...
+
+[source,yaml]
+----
+    findLocation:
+        parameters:
+          id: # auto-bind
+            type: string
+          offset: # auto-bind
+            type: string
+          code: # auto-bind
+            type: string
+        request:
+          uriParameter:
+            id:
+              value: "#[parameters.id]"
+          queryParameter:
+            offset:
+              value: "#[parameters.offset]"
+            code:
+              value: "#[parameters.code]"
+----
+
+Then the user customizations are processed on top this...
+
+[source,yaml]
+----
+    findLocation:
+        parameters:
+          id: # auto-bind
+            type: string
+          offset: # auto-bind
+            type: string
+          code: # auto-bind
+            type: string
+          partA:
+            type: string
+          partB:
+            type: string
+        request:
+            uriParameter:
+              id:
+                value: "#[parameters.partA ++ '-' ++ parameters.partB]"
+            queryParameter:
+              offset:
+                value: offset-1
+              code:
+                value: "#[parameters.code]"
+----
+
+To finally optimize it (ie: remove unused auto-bind parameters)...
+
+[source,yaml]
+----
+    findLocation:
+        parameters:
+          code: # auto-bind
+            type: string
+          partA:
+            type: string
+          partB:
+            type: string
+        request:
+          uriParameter:
+            id:
+              value: "#[parameters.partA ++ '-' ++ parameters.partB]"
+          queryParameter:
+            offset:
+              value: offset-1
+            code:
+              value: "#[parameters.code]"
+----
+
+And this is the effective interpreted operation that REST-SDK will be using in order to generate connectivity.
+
+With these considerations in mind, let’s resume the original exercise...
+
+==== ...customize response...
+
+As much as the PRD determines the experience on the input required from the user, it also adds it’s requirements for the outputs.
+
+We are asked to hide from user those code and offset fields, so we are declaring a way to customize how the response we want is built out of the base response.
+
+We do this by declaring how we want to interpret the REST response from the response of the actual request made.
+
+[source,yaml]
+----
+#% Rest Connector Descriptor 1.0
+...
+operations:
+    ...
+    findLocation:
+        base: get/locations/{id}
+        displayName: Find Location
+        description: Find location by its part specification
+        parameters:
+            partA:
+                displayName: part A
+                type: string
+                required: true
+            partB:
+                displayName: part B
+                type: string
+                required: true
+        request:
+            uriParameter:
+                id:
+                    value: "#[parameters.partA ++ '-' ++ parameters.partB]"
+            queryParameter:
+                code:
+                    value: code-1
+                offset:
+                    value: offset-1
+        response:
+            body:
+                schemaType: result-schema.type
+                value: "#[payload -- ['code', 'offset']]"
+----
+
+And with this we have finished the first experience requested.
+
+For the second operation, we follow the same approach, but now we are defining experience on top of a POST operation...
+
+==== ...customize existing request body binding...
+
+So we define a way to assemble the body in terms of input data we want to be provided by the user.
+
+[source,yaml]
+----
+#% Rest Connector Descriptor 1.0
+...
+operations:
+    ...
+    findLocation:
+      ...
+    createLocation:
+        base: post/locations
+        displayName: Create Location
+        description: Creates a location
+        parameters:
+            location:
+                displayName: Location
+                type: string
+                required: true
+            zone:
+                displayName: Zone
+                type: string
+                required: true
+        request:
+            body:
+                value: "#[
+                {
+                   'location': parameters.location,
+                   'zone': parameters.zone,
+                   'offset': 'offset-1',
+                   'code': 'code-1'
+                }]"
+        response:
+            body:
+                typeSchema: ./create-location-output-body-schema.json
+                mediaType: application/json
+                value: "#[payload -- ['code', 'offset']]"
+----
+
+Of course we have complete control on the way this data is offered by the user.
+
+So as much as a set of auxiliary top level parameters we can perfectly have done it using a richer structure...
+
+[source,yaml]
+----
+#% Rest Connector Descriptor 1.0
+...
+operations:
+    ...
+    findLocation:
+      ...
+    createLocation:
+        base: post/locations
+        displayName: Create Location
+        description: Creates a location
+        parameters:
+            content:
+                displayName: Body
+                typeSchema: ./create-location-input-body-schema.json
+                mediaType: application/json
+                required: true
+        request:
+            body:
+                value: "#[
+                {
+                   'location': parameters.content.location,
+                   'zone': parameters.content.zone,
+                   'offset': 'offset-1',
+                   'code': 'code-1'
+                }]"
+        response:
+            body:
+                typeSchema: ./create-location-output-body-schema.json
+                mediaType: application/json
+                value: "#[payload -- ['code', 'offset']]"
+----
+
+And with these two operation customizations we have completed the exercise asked in the PRD for defining connectivity experience on top of an underlying system connectivity.
+
+
+== Use cases
+
+=== reusing same endpoint for two operations
+
+=== Hiding top level parameters
+
+=== Removing input/output fields
+
+=== Changing a parameters to a default literal value
+
+=== Transforming input/output types
+
+== Single
+
+Using declarative sidecars
+
+== Reference
+
+*ConnectorDescriptor*
+|===
+|Field |Type |Description
+
+|...
+|
+|
+
+|operations
+|OperationCustomization[]
+|Section for adding new operations to connectivity descriptor.
+|===
+
+*OperationCustomization*
+|===
+|Field |Type |Description
+
+|name
+|string
+|Name for the operation.
+
+|base
+|string
+|Prototype endpoint from where to capture base metadata
+
+|displayName
+|string
+|Display name for operation.
+
+|description
+|string
+|Description for operation.
+
+|parameters
+|OperationCustomizationParameter[]
+|List of auxiliar parameters needed for the supported experience.
+
+|request
+|OperationCustomizationRequest
+|Customization of request on underlying connectivity.
+
+|response
+|OperationCustomizationResponse
+|Customization of response obtained from underlying connectivity.
+
+|pagination
+|string
+|Pagination to use on operation.
+
+|sampleData
+|SampleDataExpression
+|Sample data to use on operation.
+|===
+
+
+*OperationCustomizationParameter*
+|===
+|Field |Type |Description
+
+|name
+|string
+|Name for the auxiliar parameter.
+
+|displayName
+|string
+|Display name for the auxiliar parameter.
+
+|description
+|string
+|Description for the auxiliar parameter.
+
+|required
+|boolean
+|Optionality for the auxiliar parameter.
+
+|default
+|string
+|Default value for the auxiliar parameter.
+
+|type
+|String enum simple types
+|Primitive type for parameter. Exclusive with Schema Type.
+
+|schemaType
+|string
+|Schema specifying parameter value shape. Exclusive with Type.
+
+|mediaType
+|string
+|Media type to be used for value interpretation for schema defined parameters.
+
+|valueProvider
+|ValueProviderExpression
+|Provider of dynamic values  for this parameter.
+|===
+
+*OperationCustomizationRequest*
+|===
+|Field |Type |Description
+
+|uriParameter
+|OperationCustomizationRequestParameter[]
+|Uri parameter customizations on the request.
+
+|queryParameter
+|OperationCustomizationRequestParameter[]
+|Query parameter customizations on the request.
+
+|header
+|OperationCustomizationRequestParameter[]
+|Header parameter customizations on the request.
+
+|multipartBody
+|OperationCustomizationRequestParameter[]
+|Multipart body parameter customizations on the request.
+
+|body
+|Expression
+|Body bind expression or literal value to use on request.
+
+|===
+
+*OperationCustomizationRequestParameter*
+|===
+|Field |Type |Description
+
+|name
+|string
+|Name for request parameter.
+
+|displayName
+|string
+|Display name for request parameter.
+
+|description
+|string
+|Description for request parameter.
+
+|ignored
+|boolean
+|Inclusion on request parameter.
+
+|required
+|boolean
+|Optionality for request parameter.
+
+|default
+|string
+|Default value  for request parameter.
+
+|type
+|String enum simple types
+|Primitive type for parameter. Exclusive with Schema Type.
+
+|schemaType
+|string
+|Schema specifying parameter value shape. Exclusive with Type.
+
+|mediaType
+|string
+|Media type to be used for value interpretation for schema defined parameters.
+
+|valueProvider
+|ValueProviderExpression
+|Provider of dynamic values  for this parameter.
+
+|value
+|Expression
+|Expression or literal value to bind on request parameter.
+|===
+
+*OperationCustomizationResponse*
+|===
+|Field |Type |Description
+
+|header
+|OperationCustomizationResponseParameter[]
+|Header parameter customizations on the response.
+
+|multipartBody
+|OperationCustomizationResponseParameter[]
+|Multi part body customizations on the response.
+
+|body
+|Expression
+|Body bind expression or literal value to use on response.
+|===
+
+*OperationCustomizationResponseParameter*
+|===
+|Field |Type |Description
+
+|name
+|string
+|
+
+|type
+|String enum simple types
+|Primitive type for parameter. Exclusive with Schema Type.
+
+|schemaType
+|string
+|Schema specifying parameter value shape. Exclusive with Type.
+
+|mediaType
+|string
+|Media type to be used for value interpretation for schema defined parameters.
+
+|value
+|Expression
+|Expression or literal value to bind on response parameter.
+|===
+
