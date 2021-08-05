@@ -266,9 +266,10 @@ Setting the value provider to the operation is as simple as in the previous exam
 
 == Example: Value Provider at Body Level
 
-The following example shows the application of a Value Provider for a body field.
+The following example shows the application of a value provider for a body field.
 
-Given the endpoint:
+The endpoint used for this example is:
+
 ----
 POST /chat.postMessage
 {
@@ -277,7 +278,9 @@ POST /chat.postMessage
 }
 ----
 
-In this example, the `postMessage` method will have a Value Provider for the body field `channel` with possible values that can be obtained by making a request to another endpoint `/conversations.list`
+In this example, the `postMessage` method has a value provider for the body
+field `channel` with possible values obtained from making a request to another
+endpoint `/conversations.list`.
 
 [source,yaml]
 ----
@@ -296,7 +299,7 @@ valueProviders:
          expression: “#[item.id]”
 ----
 
-You can then add this value provider to the channels field in the body as shown:
+You can then add this value provider to the `channels` field in the body:
 
 [source,yaml]
 ----
@@ -315,9 +318,10 @@ endpoints:
 
 == Example: Value Provider at Body Level with Parameters
 
-This example contains the previous parameter provider with more intelligence. This value provider uses other body field to query for the appropriate type of channels.
+The following example contains the previous parameter provider with more intelligence.
+This value provider uses the other body field to query for the appropriate type of channels.
 
-Given the endpoint:
+The endpoint used for this example is:
 ----
 POST /chat.postMessage
 {
@@ -329,7 +333,9 @@ POST /chat.postMessage
 }
 ----
 
-In this example, the `postMessage` method will have a Value Provider for the body field `channel` with possible values that can be obtained by making a request to another endpoint `/conversations.list` with a query parameter `channelType`.
+In this example, the `postMessage` method has a value provider for the body
+field `channel` with possible values obtained from making a request
+to another endpoint `/conversations.list` with a query parameter `channelType`.
 
 
 [source,yaml]
@@ -357,11 +363,14 @@ valueProviders:
          expression: “[item.id]”
 ----
 
-This value provider resembles the previous one with the exception of the addition of the binding node.
+This value provider resembles the previous one except this one
+adds a binding node.
 
-This example demonstrates forwarding parameters set in the operation of the value provider. These bound parameters can be used later to build the value provider request.
+This example demonstrates forwarding parameters set in the operation of the
+value provider. These bound parameters are used later to build the value provider request.
 
-In this example, the channelType query parameter is bound to the value provided in the body field `uri` inside the nested object `channelType`.
+In this example, the `channelType` query parameter is bound to the value provided
+in the body field `uri` inside the nested object `channelType`.
 
 [source,yaml]
 ----
