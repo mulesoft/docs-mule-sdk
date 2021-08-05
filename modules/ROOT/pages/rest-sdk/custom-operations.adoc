@@ -669,17 +669,465 @@ And with these two operation customizations we have completed the exercise asked
 
 === reusing same endpoint for two operations
 
+[source,yaml]
+----
+operations:
+    createContact:
+        base: updateOrCreateContacts
+        displayName: Create Contact
+        description: Create contact
+        parameters:
+            CreateContactContent:
+                displayName: Content
+                typeSchema: ./schemas/CreateContact-Request-Content-schema.json
+                mediaType: application/json
+                required: true
+        request:
+            queryParameter:
+                summarizeErrors:
+                    value: "#[true]"
+            body:
+                language: "dw"
+                expression: "#[
+                var contact = parameters.CreateContactContent.Contact
+                var address = contact.Address default null
+                var phone = contact.Phone default null
+                var contactPerson = contact.ContactPerson default null
+                ---
+                {
+                    \"Contacts\": [
+                        {
+                            (contact.&Name),
+                            (contact.&ContactNumber),
+                            (contact.&ContactStatus),
+                            (contact.&FirstName),
+                            (contact.&LastName),
+                            (contact.&EmailAddress),
+                            (contact.&SkypeUserName),
+                            (contact.&BankAccountDetails),
+                            (contact.&TaxNumber),
+                            (contact.&AccountsReceivableTaxType),
+                            (contact.&AccountsPayableTaxType),
+                            (if (address != null) {
+                            Addresses: [
+                            {
+                                (address.&AddressType),
+                                (address.&AddressLine1),
+                                (address.&AddressLine2),
+                                (address.&AddressLine3),
+                                (address.&AddressLine4),
+                                (address.&City),
+                                (address.&Region),
+                                (address.&PostalCode),
+                                (address.&Country),
+                                (address.&AttentionTo)
+                            }
+                            ]} else {}),
+                            (if (phone != null) {
+                            Phones:  [
+                            {
+                                (phone.&PhoneType),
+                                (phone.&PhoneNumber),
+                                (phone.&PhoneAreaCode),
+                                (phone.&PhoneCountryCode)
+                            }
+                            ]} else {}),
+                            (contact.&DefaultCurrency),
+                            (if (contactPerson != null) {
+                            ContactPersons:  [
+                                {
+                                    (contactPerson.&FirstName),
+                                    (contactPerson.&LastName),
+                                    (contactPerson.&EmailAddress),
+                                    (contactPerson.&IncludeInEmails)
+                                }
+                            ]} else {})
+                        }
+                    ]
+                }
+                ]"
+        response:
+            body:
+                typeSchema: ./schemas/CreateContact-Response-schema.json
+                mediaType: application/json
+                expression: "#[
+                var contact = payload.Contacts[0] default null
+                ---
+                {
+                    (if (contact != null) {
+                    Contact:
+                        {
+                            (contact.&Name),
+                            (contact.&ContactID),
+                            (contact.&ContactNumber),
+                            (contact.&ContactStatus)
+                        }
+                    } else {})
+                }
+                ]"
+
+----
+
+[source,yaml]
+----
+    updateContact:
+        base: updateOrCreateContacts
+        displayName: Update Contact
+        description: Update contact
+        parameters:
+            UpdateContactContent:
+                displayName: Content
+                typeSchema: ./schemas/UpdateContact-Request-Content-schema.json
+                mediaType: application/json
+                required: true
+        request:
+            queryParameter:
+                summarizeErrors:
+                    value: "#[true]"
+            body:
+                language: "dw"
+                expression: "#[
+                var contact = parameters.UpdateContactContent.Contact
+                var address = contact.Address default null
+                var phone = contact.Phone default null
+                var contactPerson = contact.ContactPerson default null
+                ---
+                {
+                    \"Contacts\": [
+                        {
+                            (contact.&Name),
+                            (contact.&ContactNumber),
+                            (contact.&ContactStatus),
+                            (contact.&FirstName),
+                            (contact.&LastName),
+                            (contact.&EmailAddress),
+                            (contact.&SkypeUserName),
+                            (contact.&BankAccountDetails),
+                            (contact.&TaxNumber),
+                            (contact.&AccountsReceivableTaxType),
+                            (contact.&AccountsPayableTaxType),
+                            (if (address != null) {
+                            Addresses: [
+                            {
+                                (address.&AddressType),
+                                (address.&AddressLine1),
+                                (address.&AddressLine2),
+                                (address.&AddressLine3),
+                                (address.&AddressLine4),
+                                (address.&City),
+                                (address.&Region),
+                                (address.&PostalCode),
+                                (address.&Country),
+                                (address.&AttentionTo)
+                            }
+                            ]} else {}),
+                            (if (phone != null) {
+                            Phones:  [
+                            {
+                                (phone.&PhoneType),
+                                (phone.&PhoneNumber),
+                                (phone.&PhoneAreaCode),
+                                (phone.&PhoneCountryCode)
+                            }
+                            ]} else {}),
+                            (contact.&DefaultCurrency),
+                            (if (contactPerson != null) {
+                            ContactPersons:  [
+                                {
+                                    (contactPerson.&FirstName),
+                                    (contactPerson.&LastName),
+                                    (contactPerson.&EmailAddress),
+                                    (contactPerson.&IncludeInEmails)
+                                }
+                            ]} else {})
+                        }
+                    ]
+                }
+                ]"
+        response:
+            body:
+                typeSchema: ./schemas/UpdateContact-Response-schema.json
+                mediaType: application/json
+                expression: "#[
+                var contact = payload.Contacts[0] default null
+                ---
+                {
+                    (if (contact != null) {
+                    Contact:
+                        {
+                            (contact.&Name),
+                            (contact.&ContactID),
+                            (contact.&ContactNumber),
+                            (contact.&ContactStatus)
+                        }
+                    } else {})
+                }
+                ]"
+
+----
+
+
 === Hiding top level parameters
+
+[source,yaml]
+----
+
+    findLocation:
+        base: GET-/locations/{id}
+        displayName: Find Location
+        description: This is my own find location
+        parameters:
+            #...
+        request:
+            #...
+            queryParameter:
+                code:
+                    ignored: true
+                offset:
+                    ignored: true
+        #...
+
+----
 
 === Removing input/output fields
 
+[source,yaml]
+----
+    updateContact:
+        base: updateOrCreateContacts
+        displayName: Update Contact
+        description: Update contact
+        parameters:
+            UpdateContactContent:
+                displayName: Content
+                ## ...
+                typeSchema: ./schemas/UpdateContact-Request-Content-schema.json
+                mediaType: application/json
+                required: true
+        request:
+            body:
+                language: "dw"
+                expression: "#[
+                var contact = parameters.UpdateContactContent.Contact
+                ---
+                {
+                    (contact.&Name),
+                    (contact.&ContactNumber),
+                    (contact.&FirstName),
+                    (contact.&LastName),
+                    // ...
+                    ContactStatus: \"ACTIVE\",
+                }
+                ]"
+        response:
+            body:
+                ## ...
+----
+
+[source,yaml]
+----
+    createLocation:
+        base: POST-/locations
+        displayName: Create Location 2
+        description: This is my own create location with content
+        parameters:
+            content:
+                displayName: Body
+                typeSchema: ./location-schema.json
+                mediaType: application/json
+                required: true
+        request:
+            ## ...
+        response:
+            body:
+                ##
+                typeSchema: ./location-schema.json
+                mediaType: application/json
+                expression: "#[payload - 'code' - 'offset']"
+----
+
 === Changing a parameters to a default literal value
+
+[source,yaml]
+----
+
+    findLocation:
+        base: GET-/locations/{id}
+        displayName: Find Location
+        description: This is my own find location
+        parameters:
+            #...
+        request:
+            #...
+            queryParameter:
+                code:
+                    value: AA1231
+                offset:
+                    value: ZZZ399
+        #...
+
+----
+
+[source,yaml]
+----
+    updateContact:
+        base: updateOrCreateContacts
+        displayName: Update Contact
+        description: Update contact
+        parameters:
+            UpdateContactContent:
+                displayName: Content
+                ## ...
+                typeSchema: ./schemas/UpdateContact-Request-Content-schema.json
+                mediaType: application/json
+                required: true
+        request:
+            body:
+                language: "dw"
+                expression: "#[
+                var contact = parameters.UpdateContactContent.Contact
+                ---
+                {
+                    (contact.&Name),
+                    (contact.&ContactNumber),
+                    (contact.&FirstName),
+                    (contact.&LastName),
+                    // ...
+                    ContactStatus: \"ACTIVE\",
+                }
+                ]"
+        response:
+            body:
+                ## ...
+----
 
 === Transforming input/output types
 
-== Single
+[source,yaml]
+----
+    searchContacts:
+        base: getContacts
+        displayName: Search Contacts
+        description: Search Contacts
+        parameters:
+            ContactName:
+                displayName: Contact Name
+                description: The name of contact
+                type: string
+                required: false
+            ContactEmailAddress:
+                displayName: Contact Email Address
+                description: The email address  of the contact
+                type: string
+                required: false
+            ContactAccountNumber:
+                displayName: Contact Account Number
+                description: The account number of the contact
+                type: string
+                required: false
+        request:
+            queryParameter:
+                where:
+                    value: "#[
+                        %dw 2.0
+                        output application/json
+                        var ContactName = parameters.ContactName default null
+                        var ContactEmailAddress = parameters.ContactEmailAddress default null
+                        var ContactAccountNumber = parameters.ContactAccountNumber default null
+                        ---
+                        {
+                            (if (ContactName != null) {Name: ContactName} else {} ),
+                            (if (ContactEmailAddress != null) {EmailAddress: ContactEmailAddress} else {} ),
+                            (if (ContactAccountNumber != null) {AccountNumber: ContactAccountNumber} else {} )
+                        }
+                        pluck ((value, key, index) -> key ++ \"=\\\"\" ++ value ++ \"\\\"\") joinBy \" AND \"
+                    ]"
+        response:
+            bodyParts:
+                main:
+                    typeSchema: ./schemas/SearchContacts-Response-schema.json
+                    mediaType: application/json
+                    value: "#[
+                        {
+                            Contacts: payload.Contacts map (contact, index) ->
+                                {
+                                    (contact.&ContactID),
+                                    (contact.&Name),
+                                    (contact.&ContactNumber),
+                                    (contact.&ContactStatus),
+                                    (contact.&FirstName),
+                                    (contact.&LastName),
+                                    (contact.&EmailAddress),
+                                    (contact.&SkypeUserName),
+                                    (contact.&BankAccountDetails),
+                                    (contact.&TaxNumber),
+                                    (contact.&AccountsReceivableTaxType),
+                                    (contact.&AccountsPayableTaxType),
+                                    (contact.&Addresses),
+                                    (contact.&Phones),
+                                    (contact.&DefaultCurrency),
+                                    (contact.&ContactPersons)
+                                }
+                        }
+                    ]"
+----
 
-Using declarative sidecars
+== Single Using declarative sidecars
+
+[source,yaml]
+----
+##
+sidecarOperations: true
+
+operations:
+    getContactByID:
+        base: getContact
+        displayName: Get Contact By ID
+        description: Get contact by ID
+        parameters:
+            ContactID:
+                displayName: ContactID
+                type: string
+                required: true
+        request:
+            uriParameter:
+                ContactID:
+                    value: "#[parameters.ContactID]"
+        response:
+            bodyParts:
+                main:
+                    typeSchema: ./schemas/GetContactByID-Response-schema.json
+                    mediaType: application/json
+                    value: "#[
+                    var contact = payload.Contacts[0] default null
+                    ---
+
+                    {
+                        (if (contact != null) {
+                        Contact:
+                            {
+                                (contact.&ContactID),
+                                (contact.&Name),
+                                (contact.&ContactNumber),
+                                (contact.&ContactStatus),
+                                (contact.&FirstName),
+                                (contact.&LastName),
+                                (contact.&EmailAddress),
+                                (contact.&SkypeUserName),
+                                (contact.&BankAccountDetails),
+                                (contact.&TaxNumber),
+                                (contact.&AccountsReceivableTaxType),
+                                (contact.&AccountsPayableTaxType),
+                                (contact.&Addresses),
+                                (contact.&Phones),
+                                (contact.&DefaultCurrency),
+                                (contact.&ContactPersons)
+                            }
+                        } else {})
+                    }
+                    ]"
+
+----
 
 == Reference
 
@@ -828,10 +1276,6 @@ Using declarative sidecars
 |required
 |boolean
 |Optionality for request parameter.
-
-|default
-|string
-|Default value  for request parameter.
 
 |type
 |String enum simple types
