@@ -4,7 +4,7 @@ include::../_attributes.adoc[]
 endif::[]
 :page-aliases: value-resolver.adoc
 
-Value providers give the possible values of the parameters of an operation.
+Value providers give the possible values of the parameters or body fields of an operation.
 
 Value providers also enable the connector to send a request to an endpoint and get the possible values from there, providing capabilities to extract the actual values from the server response.
 
@@ -263,3 +263,129 @@ endpoints:
 ----
 
 Setting the value provider to the operation is as simple as in the previous example, however in this case the bound parameters exist in the operation before generating the connector code.
+
+== Example: Value Provider at Body Level
+
+The following example shows the application of a value provider for a body field.
+
+The endpoint used for this example is:
+
+----
+POST /chat.postMessage
+{
+  "channel": "YOUR_CHANNEL_ID",
+  "text": "Hello"
+}
+----
+
+In this example, the `postMessage` method has a value provider for the body
+field `channel` with possible values obtained from making a request to another
+endpoint `/conversations.list`.
+
+[source,yaml]
+----
+valueProviders:
+ channels:
+   definition:
+     request:
+       path: /conversations.list
+       method: get
+     items:
+       extraction:
+         expression: “#[payload.channels]”
+       displayName:
+         expression: “#[item.name]”
+       value:
+         expression: “#[item.id]”
+----
+
+You can then add this value provider to the `channels` field in the body:
+
+[source,yaml]
+----
+endpoints:
+ /chat.postMessage:
+   operations:
+     post:
+       expects:
+         body:
+           schema:
+             channel:
+               valueProvider:
+                 type: reference
+                 id: channels
+----
+
+== Example: Value Provider at Body Level with Parameters
+
+The following example contains the previous parameter provider with more intelligence.
+This value provider uses the other body field to query for the appropriate type of channels.
+
+The endpoint used for this example is:
+----
+POST /chat.postMessage
+{
+  "channel":"YOUR_CHANNEL_ID",
+  "channelType":{
+    "uri":"YOUR_URI_CHANNEL_TYPE"
+  },
+  "text":"Hello"
+}
+----
+
+In this example, the `postMessage` method has a value provider for the body
+field `channel` with possible values obtained from making a request
+to another endpoint `/conversations.list` with a query parameter `channelType`.
+
+
+[source,yaml]
+----
+valueProviders:
+ channels:
+   parameters:
+      channelType:
+        type: string
+   definition:
+     request:
+         path: /conversations.list
+         method: get
+         binding:
+           queryParameter:
+             channelType:
+               value:
+                 expression: “#[if(parameters.channelType != null) parameters.channelType else ‘all’]”
+   items:
+      extraction:
+         expression: “#[payload.channels]”
+      displayName:
+         expression: “#[item.name]”
+      value:
+         expression: “[item.id]”
+----
+
+This value provider resembles the previous one except this one
+adds a binding node.
+
+This example demonstrates forwarding parameters set in the operation of the
+value provider. These bound parameters are used later to build the value provider request.
+
+In this example, the `channelType` query parameter is bound to the value provided
+in the body field `uri` inside the nested object `channelType`.
+
+[source,yaml]
+----
+endpoints:
+ /chat.postMessage:
+   operations:
+     post:
+       expects:
+         body:
+           schema:
+             channel:
+               valueProvider:
+                 type: reference
+                 id: channels
+                 arguments:
+                    channelType:
+                      value: body.channelType.uri
+----
