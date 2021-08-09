@@ -1,10 +1,10 @@
-= Performing the OAuth Dance with an OAuth-Enabled Module
+= Performing the OAuth Dance with an OAuth-Enabled Connector or Module
 ifndef::env-site,env-github[]
 include::_attributes.adoc[]
 endif::[]
 :keywords: mule, sdk, security, oauth
 
-The final step for using the module is to trigger the OAuth dance. <<oauth-configuring#, Configuring an OAuth-Enabled Module>> includes a parameter called
+The final step for using the module is to trigger the OAuth dance. <<oauth-configuring#, Configuring an OAuth-Enabled Connector or Module>> includes a parameter called
 `authorizePath` through which the end user configures the path of an automatically created HTTP endpoint that is needed to hit a browser and start the OAuth dance.
 
 Tip: Remember that the Authorization Code grant type that the SDK supports requires human interaction through a web browser.
@@ -38,7 +38,7 @@ After the dance is complete, you execute an operation using the access token obt
 
 Multi-tenancy implies the ability to invalidate the access token of a particular `resourceOwnerId`. Invalidating the token causes the associated token information to be deleted.
 
-To invalidate an access token, the SDK automatically adds an operation called `unauthorize` to every OAuth-enabled module. Returning to the example above, you might invalidate the obtained token with any of the following statements:
+To invalidate an access token, the SDK automatically adds an operation called `unauthorize` to every OAuth-enabled connector or module. Returning to the example above, you might invalidate the obtained token with any of the following statements:
 
 [source,xml,linenums]
 ----
