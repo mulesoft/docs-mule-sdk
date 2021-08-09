@@ -48,6 +48,7 @@ The following features are available in REST SDK:
 ** Pass Through
 ** OAuth 2.0 Client Credentials
 ** OAuth 2.0 Authorization Code
+** Bearer Authentication
 * TLS support
 * Filter out specific API operations
 * Custom headers and query parameters at the global and
