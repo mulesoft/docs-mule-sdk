@@ -18,6 +18,7 @@
  ** xref:rest-sdk/simple-composition.adoc[Customize Composer Connectors]
   *** xref:rest-sdk/composition-descriptor.adoc[Customization Layer]
   *** xref:rest-sdk/hide-rename-operations.adoc[Hiding or Renaming Operations]
+  *** xref:rest-sdk/customizing-composer-metadata.adoc[Customizing Metadata Types for Composer]
 * xref:getting-started.adoc[Java SDK]
  ** xref:choosing-version.adoc[Choosing the SDK version]
  ** xref:module-structure.adoc[Module Structure]
