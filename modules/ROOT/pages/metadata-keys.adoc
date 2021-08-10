@@ -60,8 +60,7 @@ The `id` element, like `Author_id` is used internally and must be unique for eac
 // image::<missing>metadata/keys_single_drop.png[MetadataKeys Single Level Dropdown]
 
 After the resolver is defined, you can use it as an operation or source by adding a `@MetadataScope` annotation with its `keysResolver` value at the class definition level and also annotating the parameter that is the key with `@MetadataKeyId`.
-Metadata keys are not resolved unless the InputTypeResolver or OutputTypeResolver has the same CategoryName as its 'keysResolver'.
-
+All metadata resolvers must be of the same category in an operation or source.
 
 [source,java,linenums]
 ----
