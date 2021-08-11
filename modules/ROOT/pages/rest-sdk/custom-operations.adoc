@@ -5,17 +5,15 @@ endif::[]
 
 == Context
 
-Up to now, REST-SDK was able to pick API Spec declarations describing backend system endpoints, and based on them automatically assemble equivalent connectivity operations or natural operations for the backend system.
+Up to what we saw on previous sections, REST-SDK can pick an API Spec describing backend system endpoints, and automatically assemble equivalent connectivity operations.
 
-Various enrichments could be added with the main purpose of enhancing design time experience but the functional connectivity was completely defined by the system level functionality described for the SaaS API.
+Various enrichments could be added with the main purpose of enhancing design time experience, but the functional connectivity is completely defined by the system level functionality described for the SaaS API.
 
-Once we cross Level 3 boundaries, connectivity built is expected to feature a more client oriented consumption experience whose main purpose is bridging the semantic gap between the user conceptual model and the system conceptual model.
+This kind of support falls short to express client oriented consumption experience, whose main purpose is bridging the semantic gap between the user conceptual model and the system conceptual model.
 
-== Expressing L3 concerns on REST-SDK…
+== Defining a connectivity experience from REST-SDK…
 
-As we said, the leading use case is designing and developing a consumption experience with its own domain model on top of a system domain.
-
-The following paragraphs illustrate with an example the process a citizen connectivity developer would go through in order to define this new consumption experience using REST-SDK.
+The following paragraphs illustrate, by means of a leading example, the process a citizen connectivity developer would go through in order to define a new consumption experience using REST-SDK.
 
 === … the base connectivity
 
@@ -91,16 +89,16 @@ defaultInputMediaType: application/json
 defaultOutputMediaType: application/json
 ----
 
-Defining Citizen connectivity on top of the system domain connectivity represented by api.raml and offiices-descriptor.yaml.
+=== … the consumer experience
 
-=== … the required citizen connectivity
+We will define consumer experience (ie: citizen connectivity) on top of base connectivity.
 
-System connectivity developers have a couple of standardized description formats such as formats OAS/RAML for specifying REST APIs.
+We Will develop the experience described in the following description (ie: Citizen Connectivity Requirements), containing:
 
-This is not the case yet for citizen connectivity developers. We will assume a human readable description (ie: Citizen Connectivity Requirements) provided that would provides a citizen connectivity with:
+- a definition of the citizen experience domain for consumption
+- a functional mapping from citizen domain to the base system domain
 
-- definition of the citizen domain for consumption
-- functional mapping on how this citizen domain is mapped to a given system domain declared as specialist connectivity.
+We will consider this description as our Product Requirements Document (PRD) for the connector we are required to build.
 
 *OPERATION*
 |===
@@ -228,7 +226,7 @@ These declarations act as an overlay on top of system declarations. The composit
 
 === ... developing citizen operations
 
-The Citizen Connectivity Requirements defines a “Find Location” experience operation in terms of a GET over /locations/{id} endpoint.
+The Citizen Connectivity Requirements define a “Find Location” experience operation in terms of a GET over /locations/{id} endpoint.
 
 We could recur to an endpoint declaration overriding display name and description and let REST SDK generate the natural operation for it (A natural operation would be an operation exposing 1-1 functionality of REST operation)...
 
@@ -244,8 +242,6 @@ endpoints:
 ...but then the description goes on describing the expected requirements to be met by inputs and outputs, and they are different from what we can achieve with endpoint declarations.
 
 What we need is something that lets us have much more control in the way this connectivity operation is assembled by REST SDK.
-
-And this is where Layer 3 features give the kind of expressiveness we need…
 
 === ... designing new operations out of single endpoints
 
@@ -305,9 +301,9 @@ operations:
         base: get/locations/{id}
 ----
 
-...add custom parameters...
+==== ...add custom parameters...
 
-The experience being asked in the requirements refers to inputs we need from a user that are not part of the base connectivity itself. We define this experience specific inputs as auxiliary parameters by declaring them in a parameters section…
+The experience being asked in the requirements refers to inputs we need from a user, that are not part of the base connectivity itself. We define this experience specific inputs as auxiliary parameters by declaring them in a parameters section…
 
 [source,yaml]
 ----
@@ -368,13 +364,13 @@ operations:
                     value: offset-1
 ----
 
-We should note here how these new declarations affect the way REST SDK ends assembling connectivity.
-
 ==== ...brief digression here...
 
-The mechanism used to support L3 experiences features relies on the same principle of metadata based declarations and composition that is the foundation of REST-SDK. In fact it is just opening a bit the model REST-SDK uses to interpret and generate connectivity for user declarations so that we can achieve a bit more expressiveness.
+We should note here how these new declarations affect the way REST SDK ends assembling connectivity.
 
-Let’s illustrate it in the context of this example...
+The mechanism used rerlays on the same principle of metadata based declarations and composition that is the foundation of REST-SDK. In fact it is just opening a bit the model REST-SDK uses to interpret and generate connectivity for user declarations so that we can achieve a bit more expressiveness.
+
+Let’s illustrate this in the context of an example...
 
 When we declare connectivity by means of an API spec or descriptor
 
@@ -395,7 +391,18 @@ endpoints:
 
 REST SDK builds an internal model of the entire associated metadata it could gather from those declarations to model and then assemble connectivity for it.
 
-This internal model is what we call an effective connectivity. A simplification of the interpreted and assembled connectivity in this example would be...
+[source,yaml]
+----
+  getLocationsById:
+      request:
+          uriParameter:
+            id:
+          queryParameter:
+            offset:
+            code:
+----
+
+REST SDK finally promotes to operation parameter any unbind request parameter.
 
 [source,yaml]
 ----
@@ -417,6 +424,9 @@ This internal model is what we call an effective connectivity. A simplification 
             code:
               value: "#[parameters.code]"
 ----
+
+This internal model is what we call an effective connectivity. A simplification of the interpreted and assembled connectivity in this example would be...
+
 
 This assembled abstract connectivity is the one that will be eventually used by the generative layer of REST-SDK in order to generate an specific materialization (ie: a Mule connector).
 
@@ -460,27 +470,17 @@ This user declaration is then interpreted as a new operation in metadata domain.
         request:
 ----
 
-Since the declared metadata has expandable features (ie: base prototype) then the expansion of those declarations take place...
+Since the declared metadata has a base prototype, the expansion of those declarations take place...
 
 [source,yaml]
 ----
     findLocation:
-        parameters:
-          id: # auto-bind
-            type: string
-          offset: # auto-bind
-            type: string
-          code: # auto-bind
-            type: string
         request:
           uriParameter:
             id:
-              value: "#[parameters.id]"
           queryParameter:
             offset:
-              value: "#[parameters.offset]"
             code:
-              value: "#[parameters.code]"
 ----
 
 Then the user customizations are processed on top this...
@@ -489,12 +489,6 @@ Then the user customizations are processed on top this...
 ----
     findLocation:
         parameters:
-          id: # auto-bind
-            type: string
-          offset: # auto-bind
-            type: string
-          code: # auto-bind
-            type: string
           partA:
             type: string
           partB:
@@ -507,10 +501,9 @@ Then the user customizations are processed on top this...
               offset:
                 value: offset-1
               code:
-                value: "#[parameters.code]"
 ----
 
-To finally optimize it (ie: remove unused auto-bind parameters)...
+Finally promotes any unbind parameter just like before...
 
 [source,yaml]
 ----
@@ -533,7 +526,7 @@ To finally optimize it (ie: remove unused auto-bind parameters)...
               value: "#[parameters.code]"
 ----
 
-And this is the effective interpreted operation that REST-SDK will be using in order to generate connectivity.
+This is the effective interpreted operation that REST-SDK will be using in order to generate connectivity.
 
 With these considerations in mind, let’s resume the original exercise...
 
@@ -579,7 +572,7 @@ operations:
                 value: "#[payload -- ['code', 'offset']]"
 ----
 
-And with this we have finished the first experience requested.
+With this we have finished the first experience requested.
 
 For the second operation, we follow the same approach, but now we are defining experience on top of a POST operation...
 
@@ -667,7 +660,15 @@ And with these two operation customizations we have completed the exercise asked
 
 == Use cases
 
+I this next section we are covering a couple of common patterns present when developing experience connectivity.
+
 === reusing same endpoint for two operations
+
+With operation customizations we can define as much operation variations of a top level endpoint operation as we want.
+
+In this specific example we are building two operations, createContact and updateContact, on top of a base endpoint operation updateOrCreateContacts...
+
+Our createContact operation...
 
 [source,yaml]
 ----
@@ -768,6 +769,8 @@ operations:
 
 ----
 
+And the updateContact operation...
+
 [source,yaml]
 ----
     updateContact:
@@ -866,8 +869,9 @@ operations:
 
 ----
 
-
 === Hiding top level parameters
+
+We can also hide from the connectivity experience, low level parameters that we do not want to be surfacing the high level operation.
 
 [source,yaml]
 ----
@@ -889,64 +893,11 @@ operations:
 
 ----
 
-=== Removing input/output fields
-
-[source,yaml]
-----
-    updateContact:
-        base: updateOrCreateContacts
-        displayName: Update Contact
-        description: Update contact
-        parameters:
-            UpdateContactContent:
-                displayName: Content
-                ## ...
-                typeSchema: ./schemas/UpdateContact-Request-Content-schema.json
-                mediaType: application/json
-                required: true
-        request:
-            body:
-                language: "dw"
-                expression: "#[
-                var contact = parameters.UpdateContactContent.Contact
-                ---
-                {
-                    (contact.&Name),
-                    (contact.&ContactNumber),
-                    (contact.&FirstName),
-                    (contact.&LastName),
-                    // ...
-                    ContactStatus: \"ACTIVE\",
-                }
-                ]"
-        response:
-            body:
-                ## ...
-----
-
-[source,yaml]
-----
-    createLocation:
-        base: POST-/locations
-        displayName: Create Location 2
-        description: This is my own create location with content
-        parameters:
-            content:
-                displayName: Body
-                typeSchema: ./location-schema.json
-                mediaType: application/json
-                required: true
-        request:
-            ## ...
-        response:
-            body:
-                ##
-                typeSchema: ./location-schema.json
-                mediaType: application/json
-                expression: "#[payload - 'code' - 'offset']"
-----
+Note the difference from doing this in the customized operation instead of on the base operation that would affect not only this customized operation but also the base operation.
 
 === Changing a parameters to a default literal value
+
+We can hide it from the connectivity experience but including it in requests with a literal value.
 
 [source,yaml]
 ----
@@ -968,6 +919,14 @@ operations:
 
 ----
 
+=== Removing input/output fields
+
+We can as well define which are the fields we want to expose to the final user defining a new reshaped version of the base connectivity request body.
+
+In this case for example we are hiding the ContactStatus field since we are only allowing creating ACTIVE users.
+
+Note that this reshaped schema is specified in the auxiliar parameter typeSchema.
+
 [source,yaml]
 ----
     updateContact:
@@ -1001,7 +960,33 @@ operations:
                 ## ...
 ----
 
+Same thing applies also to output fields as we can see in the following customized operation that hides code and offset from the response to the user.
+
+[source,yaml]
+----
+    createLocation:
+        base: POST-/locations
+        displayName: Create Location
+        description: This is my own create location with content
+        parameters:
+            content:
+                displayName: Body
+                typeSchema: ./location-schema.json
+                mediaType: application/json
+                required: true
+        request:
+            ## ...
+        response:
+            body:
+                ##
+                typeSchema: ./location-schema.json
+                mediaType: application/json
+                expression: "#[payload - 'code' - 'offset']"
+----
+
 === Transforming input/output types
+
+We can also have more complex transformations between input/output auxiliar parameters and the actual request/response binding parameters.
 
 [source,yaml]
 ----
@@ -1074,6 +1059,10 @@ operations:
 
 == Single Using declarative sidecars
 
+We can also be able to generate this customized operations using declarative sidecars on the generated connector when including base and experience connectivity in the same artifact.
+
+The sidecarOperations directive generates all customized operations as sidecars. Directive is scoped for the descriptor. Its default value is false.
+
 [source,yaml]
 ----
 ##
@@ -1130,6 +1119,8 @@ operations:
 ----
 
 == Reference
+
+The following is a full reference of the constructions available to define customized operations.
 
 *ConnectorDescriptor*
 |===
