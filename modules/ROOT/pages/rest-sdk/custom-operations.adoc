@@ -660,7 +660,7 @@ And with these two operation customizations we have completed the exercise asked
 
 == Use cases
 
-I this next section we are covering a couple of common patterns present when developing experience connectivity.
+In this next section we are covering a couple of common patterns present when developing experience connectivity.
 
 === reusing same endpoint for two operations
 
@@ -1057,7 +1057,7 @@ We can also have more complex transformations between input/output auxiliar para
                     ]"
 ----
 
-== Single Using declarative sidecars
+== Using declarative sidecars
 
 We can also be able to generate this customized operations using declarative sidecars on the generated connector when including base and experience connectivity in the same artifact.
 
