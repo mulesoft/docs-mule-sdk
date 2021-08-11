@@ -1,7 +1,9 @@
-= Customize Multipart Requests
+= Customize the Connector's Multipart Requests
 ifndef::env-site,env-github[]
 include::../_attributes.adoc[]
 endif::[]
+
+== Define a Multipart Request
 
 Multipart content definition in both RAML 1.0 and OAS2 lacks some
 features, such as the ability to define the content type of each part of
@@ -50,7 +52,7 @@ endpoints:
              file: true
 ----
 
-== Define a Friendly Part Name
+== Set a Display Name for a Part
 
 Parameters in the request body can supply an alternative name using the
 `displayName` property. In the example above, the final connector UI
@@ -68,7 +70,7 @@ endpoints:
              displayName: "Request-ID"
 ----
 
-== Define a Description for a Part
+== Set a Description for a Part
 
 The previous example assigned descriptions to 2 of the parts defined in
 the body. This appears to the users as a contextual tooltip when working

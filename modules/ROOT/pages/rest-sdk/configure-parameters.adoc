@@ -1,9 +1,9 @@
-= Configure Parameters
+= Customize the Connector's Parameters
 ifndef::env-site,env-github[]
 include::../_attributes.adoc[]
 endif::[]
 
-== Set a Name for a Parameter
+== Set a Display Name for a Parameter
 
 To select a display name for a parameter, you must use the
 `displayName` property under the parameter node. It applies for any
@@ -92,7 +92,7 @@ In the previous example, the `Authorization` header was ignored from the
 when there is an OAuth scheme defined. The example also shows how to
 ignore a query parameter from an operation.
 
-== Query Parameter Array Format
+== Select a Query Parameter Array Format
 
 Query parameter arrays are handled in different ways in different REST
 API implementations.

@@ -1,9 +1,11 @@
-= Define a Trigger
+= Customize the Connector's Triggers
 ifndef::env-site,env-github[]
 include::../_attributes.adoc[]
 endif::[]
 
-== Example: Complete Trigger Descriptor
+== Declare a Trigger
+
+=== Example: Complete Trigger Descriptor
 
 The following example shows the creation of a _trigger_, or a polling source, for the following endpoint from the Salesforce’s Sales Cloud API.
 
@@ -80,7 +82,7 @@ triggers:
          expression: "#[item.id]"
 ----
 
-== Detailed Explanation
+=== Detailed Explanation
 
 [source,yaml]
 ----
@@ -94,19 +96,19 @@ triggers:
 
 The first thing we see in this trigger declaration are the basic details.
 
-`triggers`:: 
+`triggers`::
 The section of the connector descriptor where all triggers must be declared.
 
-`onUpdatedObject`:: 
+`onUpdatedObject`::
 The name of this trigger. The generated class name is generated based on this. It must be unique.
 
 `path`::
 The path that is polled to check if a new event needs to be triggered. If an object has been updated, in this case -, and to get the mentioned updated entities.
 
-`method`:: 
+`method`::
 Defines the HTTP verb that is used when making this request.
 
-`displayName` and `description`:: 
+`displayName` and `description`::
 Define a friendly name and description that the user sees.
 
 [source,yaml]
@@ -115,10 +117,10 @@ Define a friendly name and description that the user sees.
     outputMediaType: application/json
 ----
 
-`outputType`:: 
+`outputType`::
 The property that defines the trigger output metadata. It must be a path to a Json Schema, relative to the Descriptor file location.
 
-`outputMediaType`:: 
+`outputMediaType`::
 The property that overrides the trigger default output media type that comes from the API spec.
 
 
@@ -216,6 +218,47 @@ For the `extraction`, you use the `#[payload.latestDateCovered]` to extract the 
 
 The `identity` section sets the `item id`, or each instance of an element from the split payload, as identity. By setting this value, each `id` only triggers an event once per poll. As such, if the `id` appears more than once, the application is not notified.
 
+== Ignore a Trigger
+
+To ignore a trigger that was declared on a previous layer,
+you can use the `ignored` property:
+
+[source,yaml]
+----
+triggers:
+   myTrigger:
+     ignored: true
+----
+
+In this example, 'myTrigger' is ignored and will not be generated.
+
+== Ignore Operations and Triggers by Default
+
+All operations and triggers can be ignored using the `ignoreOperations` property at the root of the descriptor.
+
+Set `ignoreOperations` to `true` to ignore previously declared operations and triggers. You can use this property to select only a small subset of operations and triggers for the connector to generate.
+
+If an operation or trigger is ignored in a previous layer but `ignoreOperations` is set to `false`,
+the operation or trigger will be generated in the connector.
+
+If an operation or trigger is not ignored in a previous layer but `ignoreOperations` is set to `true`,
+the operation or trigger will not be generated in the connector.
+
+Using this property is similar to adding an `ignored` property to all of the operations and triggers.
+
+[source,yaml]
+----
+#% Rest Connector Descriptor 1.0
+
+ignoreOperations: true
+
+endpoints:
+   /flights/{ID}:
+      ignored: false
+----
+
+In this example, only the operations under the `/flights/{ID}` path will be generated. All of the other operations and triggers will be ignored.
+
 == Trigger Expressions
 
 Wherever an expression is supported, you can provide the described expression object or a simple string value.
@@ -290,7 +333,6 @@ The availability of these variables depending on the expressions is as follows:
 |===
 
 
-== Trigger limitations
+== Trigger Limitations
 
-Because triggers work with a xref:polling-sources[polling source] on the backend, the items must be in ascending order (from older to newer) so that the extraction of the watermark has the correct date.   
-
+Because triggers work with a xref:polling-sources[polling source] on the backend, the items must be in ascending order (from older to newer) so that the extraction of the watermark has the correct date.
