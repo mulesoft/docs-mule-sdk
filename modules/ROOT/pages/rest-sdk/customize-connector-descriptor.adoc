@@ -1,12 +1,9 @@
-= Customize Anypoint Connectors
+= Customize the Connector's Content
 ifndef::env-site,env-github[]
 include::../_attributes.adoc[]
 endif::[]
 
-The connector descriptor you created during the xref:rest-sdk/project-setup.adoc[project setup] has the same functionality as your API spec.
-You can modify your connector descriptor by adding descriptive content, additional operations, parameters, and so on.
-
-== Set a Name for the Connector
+== Set a Display Name for the Connector
 
 To set a name for the connector, you must set the `connectorName`
 property, which is located at the root of the connector descriptor.
@@ -33,7 +30,7 @@ The name you set for the connector appears in the Mule Palette in Anypoint Studi
 
 image::shop-studio-list.png[]
 
-== Set A Description for the Connector
+== Set a Description for the Connector
 
 To set a description for the connector, you must set the
 `connectorDescription` property, which is located at the root of the
@@ -120,7 +117,7 @@ This property indicates who is able to use this connector.
 
 If the category is `select` or `premium` their respective license will be added.
 
-== Set the connector’s namespace
+== Set the Connector’s Namespace
 
 You can select the XML prefix for the connector using the `extensionXml`
 property, which is located at the root of the connector descriptor.

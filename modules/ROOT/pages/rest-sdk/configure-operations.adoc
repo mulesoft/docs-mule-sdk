@@ -1,4 +1,4 @@
-= Configure Operations
+= Customize the Connector's Operations
 ifndef::env-site,env-github[]
 include::../_attributes.adoc[]
 endif::[]
@@ -78,88 +78,7 @@ The operation identifier for the operation that maps to the resource `/2010-04-0
 `/Accounts/{id}/Messages/SMS/Media`, which significantly improves the naming
 around the resource for the XML DSL as well as the UI experience.
 
-
-== Ignore Operations or Endpoints
-
-If you don’t want to generate an operation in the connector for a
-resource that is present in the API spec, you must use the `ignored`
-property. You can define the ignored property at endpoint or operation
-level.
-
-If you ignore an endpoint, none of the operations defined under the
-endpoint are generated.
-
-If you ignore an operation, only that operation is not generated; the
-rest of the operations for that endpoint are generated.
-
-== Ignore an Operation
-
-[source,yaml]
-----
-endpoints:
-   /flights/{ID}:
-      operations:
-         delete:
-            ignored: true
-----
-
-In this case, only the DELETE verb is ignored. Operations are still
-generated for the other verbs in the resource.
-
-[source,yaml]
-----
-endpoints:
-   /flights/{ID}:
-      ignored: true
-----
-
-In this case, all of the endpoint verbs will be ignored. No operations
-will be generated for this resource.
-
-== Ignore a Trigger
-
-To ignore a trigger that was declared on a previous layer,
-you can use the `ignored` property:
-
-[source,yaml]
-----
-triggers:
-   myTrigger:
-     ignored: true
-----
-
-In this example, 'myTrigger' is ignored and will not be generated.
-
-
-== Ignore Operations and Triggers by Default
-
-All operations and triggers can be ignored using the `ignoreOperations` property at the root of the descriptor.
-
-Set `ignoreOperations` to `true` to ignore previously declared operations and triggers. You can use this property to select only a small subset of operations and triggers for the connector to generate.
-
-If an operation or trigger is ignored in a previous layer but `ignoreOperations` is set to `false`,
-the operation or trigger will be generated in the connector.
-
-If an operation or trigger is not ignored in a previous layer but `ignoreOperations` is set to `true`,
-the operation or trigger will not be generated in the connector.
-
-Using this property is similar to adding an `ignored` property to all of the operations and triggers.
-
-[source,yaml]
-----
-#% Rest Connector Descriptor 1.0
-
-ignoreOperations: true
-
-endpoints:
-   /flights/{ID}:
-      ignored: false
-----
-
-In this example, only the operations under the `/flights/{ID}` path will be generated. All of the other operations and triggers will be ignored.
-
-
-== Set a Display Name for Operations
+== Set a Display Name for an Operation
 
 You can define the display name of an operation by using the `displayName`
 property in the operation node.
@@ -277,7 +196,6 @@ operationDisplayName:
 For the `/2010-04-01/Accounts/Messages/SMS/Media.json` endpoint, the generated
 display name is `Create Accounts Messages SMS Media`, assuming the `method` is POST.
 
-
 == Set a Description for an Operation
 
 You can define the description of an operation by using the
@@ -371,7 +289,164 @@ endpoints:
                      description: The maximum number of instances per request.
 ----
 
-== Redefine an Operation Input/Output Type
+== Ignore an Operation
+
+[source,yaml]
+----
+endpoints:
+   /flights/{ID}:
+      operations:
+         delete:
+            ignored: true
+----
+
+In this case, only the DELETE verb is ignored. Operations are still
+generated for the other verbs in the resource.
+
+[source,yaml]
+----
+endpoints:
+   /flights/{ID}:
+      ignored: true
+----
+
+In this case, all of the endpoint verbs will be ignored. No operations
+will be generated for this resource.
+
+== Ignore an Operation or Endpoint
+
+If you don’t want to generate an operation in the connector for a
+resource that is present in the API spec, you must use the `ignored`
+property. You can define the ignored property at endpoint or operation
+level.
+
+If you ignore an endpoint, none of the operations defined under the
+endpoint are generated.
+
+If you ignore an operation, only that operation is not generated; the
+rest of the operations for that endpoint are generated.
+
+== Ignore Operations and Triggers by Default
+
+All operations and triggers can be ignored using the `ignoreOperations` property at the root of the descriptor.
+
+Set `ignoreOperations` to `true` to ignore previously declared operations and triggers. You can use this property to select only a small subset of operations and triggers for the connector to generate.
+
+If an operation or trigger is ignored in a previous layer but `ignoreOperations` is set to `false`,
+the operation or trigger will be generated in the connector.
+
+If an operation or trigger is not ignored in a previous layer but `ignoreOperations` is set to `true`,
+the operation or trigger will not be generated in the connector.
+
+Using this property is similar to adding an `ignored` property to all of the operations and triggers.
+
+[source,yaml]
+----
+#% Rest Connector Descriptor 1.0
+
+ignoreOperations: true
+
+endpoints:
+   /flights/{ID}:
+      ignored: false
+----
+
+In this example, only the operations under the `/flights/{ID}` path will be generated. All of the other operations and triggers will be ignored.
+
+== Hide an Operation
+
+This pattern is used to hide operations. Operations declared in the connector's first (base) layer can be hidden by ignoring them in a subsequent descriptor layer to generate a connector with a subset of operations.
+
+The following example shows the descriptor's base layer:
+
+----
+#% Rest Connect Connector Descriptor 1.0
+
+apiSpec:
+ url: http://myhost.com/resources/slack-api.yaml
+
+connectorName: Slack Connector
+
+connectorGav:
+ groupId: com.mulesoft.connectors
+ artifactId: slack-connector
+ version: 1.0.0
+----
+
+This will generate all the operations of the connector that are declared in the source API specification.
+
+To generate a connector with only a subset of the operations from the API specification while also maintaining all the customizations declared in the descriptor's base layer, you can use a new descriptor layer to hide some operations:
+
+----
+#% Rest Connect Connector Descriptor 1.0
+
+connectorGav:
+ groupId: com.mulesoft.connectors
+ artifactId: composed-slack-connector
+ version: 1.0.0
+
+endpoints:
+    /users:
+        ignored: true
+----
+
+All the operations under the `/users` endpoint are ignored and will not be present
+in the generated connector.
+
+By using this metadata, you can select which operation is and is not available
+to the user when you choose an event in Composer.
+
+== Rename an Operation
+
+This pattern is used to customize operation names.
+
+The following example shows the descriptor's base layer:
+
+----
+#% Rest Connect Connector Descriptor 1.0
+
+apiSpec:
+ url: http://myhost.com/resources/slack-api.yaml
+
+connectorName: Slack Connector
+
+connectorGav:
+ groupId: com.mulesoft.connectors
+ artifactId: slack-connector
+ version: 1.0.0
+
+endpoints:
+    /users:
+        operations:
+            get:
+                displayName: Get users by email
+----
+
+The operation is currently named `Get users by email`.
+
+You can rename an operation in the `/users` section of the descriptor:
+
+----
+#% Rest Connect Connector Descriptor 1.0
+
+connectorGav:
+ groupId: com.mulesoft.connectors
+ artifactId: composed-slack-connector
+ version: 1.0.0
+
+endpoints:
+    /users:
+        operations:
+            get:
+                displayName: Get all users by email
+----
+
+In the generated connector, the operation is now renamed `Get all users by email`.
+
+By using this metadata, you can rename an operation for the user when you
+choose an event in Composer.
+
+== Redefine an Operation Input or Output Type
 
 The API spec may not define an input/output type; if you need one, you
 can use the `inputType` and `outputType` properties in the Connector
@@ -437,12 +512,11 @@ In this case, the JSON schema appears as follows:
 }
 ----
 
-== Override an Operation Input/Output Type
+== Override an Operation Input or Output Type
 
 You can also use the inputType and outputType properties to override the
 type that is defined in the API spec. If a type is defined in the
 connector descriptor, the one in the API spec is ignored.
-
 
 == Skip Output Type Validations
 

@@ -1,26 +1,9 @@
-= Security Scheme
+= Customize the Connector's Security Scheme
 ifndef::env-site,env-github[]
 include::../_attributes.adoc[]
 endif::[]
 
-== Ignore a Security Scheme
-
-If your API spec defines a security scheme that you don’t want to be
-present in the generated connector, you can use the `ignored` property
-in the `security` node of your connector descriptor.
-
-[source,yaml]
-----
-security:
-  passThrough:
-    ignored: true
-----
-
-In this case, the API spec declares a security scheme named `passThrough`.
-The example uses the ignored annotation, so it does not get generated in
-the connector descriptor.
-
-== Set a Security Scheme Parameter Friendly Name
+== Set a Display Name for a Security Scheme Parameter
 
 You can set friendly names for security scheme parameters using the
 `displayName` annotation in the security scheme node of the Connector
@@ -39,6 +22,23 @@ security:
 In this case, the API spec defines the security scheme name `passThrough`
 which has a parameter named `passThroughHeader` defined. The `displayName`
 property is assigned the value `Auth Header`.
+
+== Ignore a Security Scheme
+
+If your API spec defines a security scheme that you don’t want to be
+present in the generated connector, you can use the `ignored` property
+in the `security` node of your connector descriptor.
+
+[source,yaml]
+----
+security:
+  passThrough:
+    ignored: true
+----
+
+In this case, the API spec declares a security scheme named `passThrough`.
+The example uses the ignored annotation, so it does not get generated in
+the connector descriptor.
 
 == Add Parameters for OAuth Authorization
 

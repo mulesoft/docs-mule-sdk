@@ -1,4 +1,4 @@
-= Define a Value Provider
+= Customize the Connector's Value Provider
 ifndef::env-site,env-github[]
 include::../_attributes.adoc[]
 endif::[]
@@ -9,6 +9,7 @@ Value providers give the possible values of the parameters or body fields of an 
 Value providers also enable the connector to send a request to an endpoint and get the possible values from there, providing capabilities to extract the actual values from the server response.
 
 == Definition
+
 A Value Provider has two elements: a request and an item.
 
 The `request` node is an <<../rest-sdk/data-expressions.adoc#HTTP Request, HTTP Request Data Expression>>. It is used to make a request to the server where the sample data must be obtained from.
@@ -49,11 +50,12 @@ The availability of these variables depending on the expressions is shown below:
 Similar to other resolvers, Value Providers can be declared locally (inline) or globally. When declared globally, they can be referenced multiple times from the different places they are used in.
 
 === Inline Declaration
+
 Inline definitions can be useful for shorter Connector Descriptors that don't need reusability.
 
 Inline definitions have access to the `queryParameter`, `uriParameter` and `header` variables, which are maps that contain the respective parameters declared in the operation.
 
-==== Inline value provider example
+==== Example: Inline Value Provider
 
 [source, yaml]
 ----
@@ -88,7 +90,7 @@ This value provider sends a request to the `/channels` endpoint. It has access t
 === Global Declaration
 Global definitions provide reuse capabilities. A globally declared Value Provider allows defining parameters to build a context of where it can be executed.
 
-==== Global value provider example
+==== Example: Global Value Provider
 
 [source, yaml]
 ----

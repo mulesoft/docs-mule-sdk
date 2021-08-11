@@ -1,4 +1,4 @@
-= Paginated Operations
+= Customize the Connector's Pagination Strategy
 ifndef::env-site,env-github[]
 include::../_attributes.adoc[]
 endif::[]
@@ -97,7 +97,7 @@ The _pagingResponse_ is common to all the pagination
 strategies; it provides the expression used to extract the item data
 from the response.
 
-== Payload Dataweave Expression
+== Payload DataWeave Expression
 
 Some APIs return the pages directly in the response body, either through
 a JSON array or as an XML document. For example:
@@ -151,7 +151,7 @@ another field:
 ----
 
 As such, connector descriptors must provide a
-Dataweave expression to be evaluated over the response to obtain the
+DataWeave expression to be evaluated over the response to obtain the
 page data. Notice that the expression should return the page. The
 expression doesn’t need to be able to split the elements; REST SDK does
 that automatically.
@@ -159,7 +159,7 @@ that automatically.
 For the first example, the expression is `#[payload]` and the second one
 is `#[payload.data]`.
 
-== Shop Connector Example
+== Example: Shop Connector
 
 The example Shop connector has a paged content search, so you can define
 a pagination strategy in the connector descriptor by creating a
@@ -208,9 +208,9 @@ allows the connector to extract the results from the response.
 You must also define that the content search operation uses that
 pagination strategy.
 
-== Hypermedia Paging Example
+== Example: Hypermedia Pagination
 
-==== Next URL in response body
+=== Next URL in response body
 
 In case the next URL is defined in the response body:
 
@@ -254,7 +254,7 @@ paginations:
         expression: "#[payload.data]"
 ----
 
-==== Next URL in Link header
+=== Next URL in Link header
 
 In case the next URL is defined in Link header:
 

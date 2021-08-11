@@ -1,4 +1,4 @@
-= Define a Sample Data Resolver
+= Customize the Connector's Sample Data
 ifndef::env-site,env-github[]
 include::../_attributes.adoc[]
 endif::[]
@@ -10,9 +10,10 @@ image::sample-data-output.png[alt=Sample Data Output,width=200,height=500]
 This is how sample data appears in MuleSoft Composer.
 
 == Definition
+
 There are two types of Sample Data Resolvers.
 
-* Http Request
+* HTTP Request
 
 Defines a custom HTTP request and transforms its result to generate the sample data
 
@@ -20,7 +21,8 @@ Defines a custom HTTP request and transforms its result to generate the sample d
 
 Replicates the request and transforms the operation or trigger to generate the sample data
 
-=== HTTP Request Definition
+== HTTP Request
+
 An HTTP Sample Data has two elements: a request and an optional transformation of that request's result.
 
 The `request` node is an <<../rest-sdk/data-expressions.adoc#HTTP Request, HTTP Request Data Expression>>. It is used to make a request to the server where the sample data must be obtained from.
@@ -29,7 +31,8 @@ The `transform` node describes how the server response will be manipulated to ge
 
 The transform expression has access to the `payload` and `attributes` variables, which contain the server response body and the server response attributes respectively.
 
-==== HTTP Request Sample Data Example
+=== Example: HTTP Request Sample Data
+
 [source, yaml]
 ----
 triggers:
@@ -58,10 +61,12 @@ This example shows the implementation of the sample data for a trigger.
 
 This trigger polls for new flights on the `/flight/since/{flightId}` endpoint. The sample data definition makes a request to `/flight/since/2021-01-01` to get a list of flights, and then uses the `"#[payload.flights[0]]"` expression to extract the first item from the results. It replicates a result from the trigger, as triggers propagate the response items one by one.
 
-=== Same Operation Definition
+== Same Operation
+
 Same Operation definitions are the easiest way to replicate the operation or trigger behavior to get the sample. Using this definition requires only declaration since REST SDK will handle the generation.
 
-==== Sample Data Same Operation Example
+=== Example: Same Operation Sample Data
+
 [source, yaml]
 ----
 triggers:
@@ -83,19 +88,19 @@ This example shows that implementing the Same Operation sample data consists of 
 
 This implementation sends a request to the operation or trigger path `/flight/since/{flightId}` using the `flightId` parameter that the user fills in the UI. It then transforms the server response using the trigger item extraction expression `"#[payload.flights]"` and gets the first result from that array to show as a sample.
 
-
 == Reusability
 
 Similar to other resolvers, Sample Data Resolvers can be declared locally (inline) or globally. When declared globally, they can be referenced multiple times from the different places they are used in.
 
 === Inline Declaration
+
 Inline definitions can be useful for shorter Connector Descriptors that don't need reusability.
 
 Inline definitions in operations have access to the `queryParameter`, `uriParameter`, and `header` variables, which are maps that contain the respective parameters declared in the operation.
 
 Inline definitions in triggers have access to the `parameters` variable, which contain all the parameters declared in the trigger.
 
-==== Inline Sample Data Resolver example
+==== Example: Inline Sample Data Resolver
 
 [source, yaml]
 ----
@@ -118,9 +123,10 @@ endpoints:
 This inline Sample Data Resolver makes a `GET` request to the `/conversations.list` endpoint and extracts the first channel from the response. The declaration has access to the operation context, so it can access the `queryParameter.types` parameter from the operation to use it as a binding for the HTTP request.
 
 === Global Declaration
+
 Global definitions provide reuse capabilities. A globally declared Sample Data Resolver allows defining parameters to build a context of where it can be executed.
 
-==== Global value provider example
+==== Example: Global Sample Data Resolver
 
 [source, yaml]
 ----

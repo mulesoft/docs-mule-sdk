@@ -1,11 +1,12 @@
-= Data Expressions
+= Customize the Connector's Data Expressions
 ifndef::env-site,env-github[]
 include::../_attributes.adoc[]
 endif::[]
 
 Data Expressions are semantic snippets used in the Connector Descriptor to describe actions such as an HTTP Request or an execution of a script.
 
-=== HTTP Request
+== HTTP Request
+
 Describes an HTTP Request against the API. It consists of a path, the HTTP method, and parameter bindings.
 
 [source, yaml]
@@ -30,7 +31,7 @@ request:
 |===
 
 
-==== HTTP Binding Context
+=== HTTP Binding Context
 
 The HTTP Request Data Expression has access to the context depending on where it is declared.
 
@@ -41,7 +42,7 @@ The HTTP Request Data Expression has access to the context depending on where it
 - If it is declared in a *global resolver* definition, such as a global sample data or value provider definition, it has access to the `parameter` variable, which has all the global resolver declared parameters.
 
 
-=== Script
+== Script
 Describes the execution of a script. It consists of an expression and a language.
 
 [source, yaml]
