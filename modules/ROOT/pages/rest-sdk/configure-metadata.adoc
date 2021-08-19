@@ -1,0 +1,87 @@
+= Customize the Connector's Metadata
+ifndef::env-site,env-github[]
+include::../_attributes.adoc[]
+endif::[]
+
+Use metadata customization to change the display name, description, or field
+order of an object metadata definition.
+
+With REST SDK, metadata can be provided directly on JSON schemas used 
+to define that metadata. If the metadata definition is inlined in the API
+specification, these customizations can also be applied there directly.
+
+== Set a Display Name and Description for Metadata
+
+Customize a field name and description by following the
+JSON schema standard. The `title` and `description` properties are available by
+default in JSON schemas. REST SDK understands these
+properties and can map them to the `name` and `description` values respectively.
+
+[source, json]
+----
+{
+  "type": "object",
+  "title": "An Object",
+  "description": "Description for Object",
+    "properties": {
+      "number": {
+        "type": "number",
+        "title": "A Number",
+        "description": "Description for Number"
+      },
+      "street_name": { "type": "string" },
+      "street_type": { "type": "string" }
+    },
+  "additionalProperties": false
+}
+----
+
+In this example, the `title` and `description` fields are used to provide
+this additional metadata.
+
+== Reorder the Fields of a Metadata Type
+
+The JSON schema standard does not support field ordering. Instead, use a custom property
+that REST SDK can understand. This new property is called `propertyOrder`
+and references as `x-propertyOrder`. You can include this additional metadata
+in either a JSON schema or a YAML OAS file.
+
+[source, json]
+----
+{
+  "type": "object",
+  "title": "An Object",
+  "description": "Description for Object",
+    "properties": {
+      "number": { "type": "number" },
+      "street_name": { "type": "string" },
+      "street_type": { "type": "string" }
+   },
+  "propertyOder": ["street_type", "street_name", "number"],
+  "additionalProperties": false
+}
+----
+
+This example shows how to include this additional metadata in a JSON schema
+using the custom `propertyOrder` property.
+
+[source, yaml]
+----
+components:
+  schemas:
+    AmericanFlight:
+      type: object
+      additionalProperties: true
+      required:
+        - code
+        - price
+      x-propertyOrder: ["code", "ID"]
+      properties:
+        ID:
+          type: integer
+        code:
+          type: string
+----
+
+This example shows how to include this additional metadata in a type definition
+in a YAML OAS file using the `x-propertyOrder` property.
