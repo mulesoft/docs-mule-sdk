@@ -92,7 +92,7 @@ create a connector descriptor. |-
 |specFormat |No a|
 The format of the API spec.
 
-Allowed values are RAML, JsonOAS, YamlOAS, JsonOAS3 and YamlOAS3.
+Allowed values are RAML, JsonOAS, YamlOAS, JsonOAS3 and YamlOAS3. For specFormats that are not supported, use https://www.apimatic.io/transformer/[API Transformer] by APIMatic to transform them into OAS or RAML to use the tooling provided by REST SDK.
 |If not specified, it will autodetect the format based on the file extension and content.
 
 |outputDir |No a|
@@ -141,7 +141,7 @@ create a connector. |-
 |No
 a|The format of the API spec.
 
-Allowed values are RAML, JsonOAS, YamlOAS, JsonOAS3, and YamlOAS3.
+Allowed values are RAML, JsonOAS, YamlOAS, JsonOAS3, and YamlOAS3. For specFormats that are not supported, use https://www.apimatic.io/transformer/[API Transformer] by APIMatic to transform them into OAS or RAML to use the tooling provided by REST SDK.
 
 |If not specified, it will autodetect the format based on the file extension and content.
 
