@@ -6,7 +6,7 @@ endif::[]
 Use metadata customization to change the display name, description, or field
 order of an object metadata definition.
 
-With REST SDK, metadata can be provided directly on JSON schemas used 
+With REST SDK, metadata can be provided directly on JSON schemas used
 to define that metadata. If the metadata definition is inlined in the API
 specification, these customizations can also be applied there directly.
 
@@ -43,8 +43,8 @@ this additional metadata.
 
 The JSON schema standard does not support field ordering. Instead, use a custom property
 that REST SDK can understand. This new property is called `propertyOrder`
-and references as `x-propertyOrder`. You can include this additional metadata
-in either a JSON schema or a YAML OAS file.
+and references as `x-propertyOrder`. Use `propertyOrder` in a JSON schema or
+`x-propertyOrder` in a YAML OAS file.
 
 [source, json]
 ----
