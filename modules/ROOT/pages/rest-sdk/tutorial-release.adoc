@@ -84,10 +84,11 @@ KPROD:
 ----
 +
 
-. Create or update the corresponding prod test for the connector. Changes should
-be similar to these diffs:
-
+. Create or update the corresponding prod test for the connector. Refer to
 https://github.com/mulesoft/citizen-platform-connectors-models-service/blob/master/citizen-platform-connectors-models-service/src/test/java/com/mulesoft/citizen/platform/connectors_models/mocks/ConnectorsMocks.java[ConnectorsMocks.java]
+and https://github.com/mulesoft/citizen-platform-connectors-models-service/blob/master/citizen-platform-connectors-models-service/src/test/java/com/mulesoft/citizen/platform/connectors_models/controllers/ConnectorsControllerTest.java[ConnectorsControllerTest.java].
+Changes should be similar to these diffs:
+
 
 +
 [source, java, linenums]
@@ -104,8 +105,6 @@ https://github.com/mulesoft/citizen-platform-connectors-models-service/blob/mast
    // ...
 ----
 +
-
-https://github.com/mulesoft/citizen-platform-connectors-models-service/blob/master/citizen-platform-connectors-models-service/src/test/java/com/mulesoft/citizen/platform/connectors_models/controllers/ConnectorsControllerTest.java[ConnectorsControllerTest.java]
 
 +
 [source, java, linenums]
