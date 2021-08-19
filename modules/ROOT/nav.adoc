@@ -7,6 +7,7 @@
   *** xref:rest-sdk/configure-operations.adoc[Operations]
   *** xref:rest-sdk/triggers.adoc[Triggers]
   *** xref:rest-sdk/configure-parameters.adoc[Parameters]
+  *** xref:rest-sdk/configure-metadata.adoc[Metadata]
   *** xref:rest-sdk/pagination.adoc[Pagination Strategy]
   *** xref:rest-sdk/security-scheme.adoc[Security Scheme]
   *** xref:rest-sdk/multipart-requests.adoc[Multipart Requests]
