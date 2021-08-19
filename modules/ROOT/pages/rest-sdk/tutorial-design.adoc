@@ -128,20 +128,16 @@ https://github.com/mulesoft/cfm/blob/master/docs/connection-ui-autogeneration/cr
 to learn how to create a Connection Schema Metadata file. The file name must be
 based on the connection schema's GAV: `{groupId}-{artifactId}-{version}.json`.
 .. Validate the Connection Schema Metadata with the xAPI by pushing a `test/`
-branch with your metadata and hitting the endpoint.
-
-+
-`curl --location --request GET 'https://devx.composer.mulesoft.com/citizen-xapi/api/v1/organizations/ORG_ID/connection-schemas/connectors/CONNECTOR_NAME' \
---header 'Authorization: Bearer ANYPOINT_ACCESS_TOKEN'`
-
-
-
-As a result, the
+branch with your metadata and hitting the endpoint. As a result, the
 connectionSchemaModel property appears in the response with the
 generated Connection Schema Model with its Metadata. The customizations are shown
 in the metadata of the endpoint's response. Alternatively, validate it against
 the CFM Connectivity Service.
-+
+
+
+`curl --location --request GET 'https://devx.composer.mulesoft.com/citizen-xapi/api/v1/organizations/ORG_ID/connection-schemas/connectors/CONNECTOR_NAME' \
+--header 'Authorization: Bearer ANYPOINT_ACCESS_TOKEN'`
+
 
 . Part 3: Validate the Auto Generated Connection UI
 
@@ -297,7 +293,7 @@ both the conenctor and transformation.
 .. Rename the version folder.
 .. Add the *schedulingStrategy* transformation. For each source in the
 `transformation_model.json`, add an entry on the transformations entry like this:
-
+The following examples show the entry and the final transformation:
 +
 [source,json5]
 ----
@@ -324,10 +320,8 @@ both the conenctor and transformation.
   }
 }
 ----
-+
 
-+
-The final transformation would then look like this:
+
 
 
 [source,json5]
