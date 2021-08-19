@@ -1,0 +1,160 @@
+= Step 3: Iterate Over the Connector Design
+
+Iterate over the connector design by using a new version of the API specification
+to add more features via metadata or Java code and fix bugs.
+
+== Step 3.1: Add Desired Changes
+
+To add your desired changes, you can either upload a new API specification or
+make changes to customization-layer.yaml (L3). Custom code changes moved to the
+overwrite folder will be preserved.
+
+== Step 3.2: Compare your Changes
+
+For conflicts and changes with custom code, use diffs view in IntelliJ to compare
+the differences and manually fix them.
+
+== Step 3.3: Update the Connector Onto Lower Environments
+
+Update the existing connector using the following steps:
+
+. Go to the customizations folder.
+. Update the version.
+
+[source,yaml]
+----
+# ...
+artifactGav:
+  groupId: com.mulesoft.connectors
+  artifactId: mule-trello-connector
+  version: 1.2.0  # <- Change this
+# ...
+----
+
+. Make any necessary changes to the model, if any.
+. Generate models using the cli tool.
+
+`./cli connector trello
+./cli transformation trello`
+
+Alternatively, use `./cli both trello` to generate both the conenctor and
+transformation.
+
+. Patch the generated output.
+.. Rename the version folder.
+.. Add the *schedulingStrategy* transformation. For each source in the
+`transformation_model.json`, add an entry on the transformations entry like this:
+
+[source,json5]
+----
+{
+  "type": "multipleTypedField",
+  "name": "schedulingStrategy",
+  "path": "General.schedulingStrategy",
+  "dynamic": false,
+  "typeId": "FixedFrequencyScheduler",
+  "value": {
+    "FixedFrequencyScheduler": {
+      "frequency": 15,
+      "timeUnit": "SECONDS",
+      "startDelay": 0
+    },
+    "CronScheduler": {
+      "expression": "*****",
+      "timeZone": "-3 GTM"
+    }
+  },
+  "subtypes": {
+    "FixedFrequencyScheduler": "org.mule.runtime.core.api.source.scheduler.FixedFrequencyScheduler",
+    "CronScheduler": "org.mule.runtime.core.api.source.scheduler.CronScheduler"
+  }
+}
+----
+
+
+The final transformation would then look like this:
+
+[source,json5]
+----
+{
+  // ...
+  "components": {
+    // ...
+    "source1": {
+      "type": "source",
+      "transformations": [
+        // ...
+        {
+          "type": "multipleTypedField",
+          "name": "schedulingStrategy",
+          "path": "General.schedulingStrategy",
+          "dynamic": false,
+          "typeId": "FixedFrequencyScheduler",
+          "value": {
+            "FixedFrequencyScheduler": {
+              "frequency": 15,
+              "timeUnit": "SECONDS",
+              "startDelay": 0
+            },
+            "CronScheduler": {
+              "expression": "*****",
+              "timeZone": "-3 GTM"
+            }
+          },
+          "subtypes": {
+            "FixedFrequencyScheduler": "org.mule.runtime.core.api.source.scheduler.FixedFrequencyScheduler",
+            "CronScheduler": "org.mule.runtime.core.api.source.scheduler.CronScheduler"
+          }
+        }
+        // ...
+      ]
+    }
+    // ...
+  }
+  // ...
+}
+----
+
+
+. Expose the new connector by adding the relevant entries to
+https://github.com/mulesoft/citizen-platform-connectors-models-service/blob/master/citizen-platform-connectors-models-service/src/main/resources/application.yml[application.yaml]
+under the path's `connectors.environments.<KDEV & KQA>.foo` and adding the
+new version.
+
+[source,yaml]
+----
+# ...
+connectors:
+  environments:
+    KDEV:
+      # ...
+      trello: 1.2.0
+    KQA:
+      # ...
+      trello: 1.3.0
+    # ...
+# ...
+----
+
+. Update the connector on the unit tests, for which you should add similar entries
+to https://github.com/mulesoft/citizen-platform-connectors-models-service/blob/master/citizen-platform-connectors-models-service/src/test/resources/connectors-configuration-test.yml[connectors-configuration-test.yml]:
+
+[source,yaml]
+----
+KDEV:
+  # ...
+  trello: 1.2.0
+KQA:
+  # ...
+  trello: 1.3.0
+# ...
+----
+
+. Run `mvn clean test` to validate that the build passes.
+. Create a pull request for your newly onboarded connector.
+. Merge the pull request.
+
+== What's Next?
+
+After adding your final touches while creating new features or fixing bugs, you
+can start the process to release the connector to staging and production. 
