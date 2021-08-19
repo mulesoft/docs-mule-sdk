@@ -120,31 +120,33 @@ a Connection Schema Metadata file through a pull request. The following
 https://github.com/mulesoft/citizen-platform-xapi-service/pull/278[pull request]
 shows an example of that for Trello Connector.
 
-* Create a JSON file with the Connection Schema Metadata. Refer to the following
+** Create a JSON file with the Connection Schema Metadata. Refer to the following
 https://github.com/mulesoft/cfm/blob/master/docs/connection-ui-autogeneration/creating-connection-schema-metadata.md[link]
 to learn how to create a Connection Schema Metadata file. The file name must be
 based on the connection schema's GAV: `{groupId}-{artifactId}-{version}.json`.
-* Validate the Connection Schema Metadata with the xAPI by pushing a `test/`
-branch with your metadata and hitting the endpoint.
+** Validate the Connection Schema Metadata with the xAPI by pushing a `test/`
+branch with your metadata and hitting the endpoint. As a result, the
+connectionSchemaModel property appears in the response with the
+generated Connection Schema Model with its Metadata. The customizations are shown
+in the metadata of the endpoint's response. Alternatively, validate it against
+the CFM Connectivity Service.
 +
 `curl --location --request GET 'https://devx.composer.mulesoft.com/citizen-xapi/api/v1/organizations/ORG_ID/connection-schemas/connectors/CONNECTOR_NAME' \
 --header 'Authorization: Bearer ANYPOINT_ACCESS_TOKEN'`
 +
-As a result, the connectionSchemaModel property appears in the response with the
-generated Connection Schema Model with its Metadata. The customizations are shown
-in the metadata of the endpoint's response. Alternatively, validate it against
-the CFM Connectivity Service.
+
+
 
 . Part 3: Validate the Auto Generated Connection UI
 
 To validate that the Connection Creation UI is generated as expected, you must:
 
-* Open the Composer UI.
-* Create a new flow.
-* Select the connector which the Connection Schema was created for. Note that if
+** Open the Composer UI.
+** Create a new flow.
+** Select the connector which the Connection Schema was created for. Note that if
 the connector does not have any triggers, it will not appear here and you will need
 to search for the connector inside the flow.
-* Once, you have selected your connector, a loading spinner may appear and
+** Once, you have selected your connector, a loading spinner may appear and
 when it goes away the form is generated.
 
 If you added metadata and want to test it integrated with the UI, push a `test/`
