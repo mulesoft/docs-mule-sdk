@@ -130,12 +130,12 @@ based on the connection schema's GAV: `{groupId}-{artifactId}-{version}.json`.
 .. Validate the Connection Schema Metadata with the xAPI by pushing a `test/`
 branch with your metadata and hitting the endpoint.
 
-+
+
 `curl --location --request GET 'https://devx.composer.mulesoft.com/citizen-xapi/api/v1/organizations/ORG_ID/connection-schemas/connectors/CONNECTOR_NAME' \
 --header 'Authorization: Bearer ANYPOINT_ACCESS_TOKEN'`
-+
 
-+
+
+
 As a result, the
 connectionSchemaModel property appears in the response with the
 generated Connection Schema Model with its Metadata. The customizations are shown
@@ -157,10 +157,9 @@ to search for the connector inside the flow.
 .. Once, you have selected your connector, a loading spinner may appear and
 when it goes away the form is generated.
 
-+
 If you added metadata and want to test it integrated with the UI, push a `test/`
 or `integration/` branch with the added metadata and repeat the previous steps.
-+
+
 
 == Step 2.7: Onboard onto OCS (Optional)
 
@@ -325,9 +324,9 @@ both the conenctor and transformation.
 ----
 +
 
-+
+
 The final transformation would then look like this:
-+
+
 
 +
 [source,json5]
