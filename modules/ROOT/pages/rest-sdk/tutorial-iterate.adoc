@@ -32,13 +32,9 @@ artifactGav:
 ----
 
 . Make any necessary changes to the model, if any.
-. Generate models using the cli tool.
-
-`./cli connector trello
-./cli transformation trello`
-
-Alternatively, use `./cli both trello` to generate both the conenctor and
-transformation.
+. Generate models using the cli tool by running `./cli connector trello` and then
+`./cli transformation trello`. Alternatively, run `./cli both trello` to generate
+both the conenctor and transformation.
 
 . Patch the generated output.
 .. Rename the version folder.
@@ -157,4 +153,4 @@ KQA:
 == What's Next?
 
 After adding your final touches while creating new features or fixing bugs, you
-can start the process to release the connector to staging and production. 
+can start the process to release the connector to staging and production.
