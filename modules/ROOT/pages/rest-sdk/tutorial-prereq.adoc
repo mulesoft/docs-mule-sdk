@@ -1,9 +1,9 @@
 = Step 1. Prerequisites
 
-Before you start building your connector, verify that you have the basic tools
+Before you start building your new connector, verify that you have the basic tools
 needed.
 
 * https://www.jetbrains.com/idea/download/#section=mac[IntelliJ IDEA]
 +
 You need IntelliJ IDEA to begin this process. Install the IntelliJ plugin to
-unlock autocomplete and the project structure. 
+unlock autocomplete and the project structure.

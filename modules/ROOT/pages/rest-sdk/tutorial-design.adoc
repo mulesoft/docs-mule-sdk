@@ -20,7 +20,7 @@ shows an example of the L3 capabilities added to Trello Connector.
 
 == Step 2.3: Generate Java Code
 
-Use customization-layer.yaml to generate a Connector with specific Java code.
+Use customization-layer.yaml to generate a connector with specific Java code.
 The generated code is packaged inside `target/generated-sources`.
 
 Optionally, extend the code using custom Java. It is important to note that
@@ -103,55 +103,57 @@ Ensure the Connection Schema is already onboarded before proceeding with the
 following steps:
 
 . Part 1: Standard Connection UI (no manual work needed)
-
-* Once the Connection Schema is onboarded, the Connectivity Service generates
++
+.. Once the Connection Schema is onboarded, the Connectivity Service generates
 a standard Connection Schema Model, inferring as much information as possible
 from the schema.
-* The UI retrieves that Connection Schema Model when the user wants to create
+.. The UI retrieves that Connection Schema Model when the user wants to create
 a connection for the schema's connector.
-* The UI reads the retrieved Connection Schema Model from the API's response
+.. The UI reads the retrieved Connection Schema Model from the API's response
 and generates a form with the fields needed for creating a connection for that
 connector.
-
++
 . Part 2: Customize the Connection UI.
-
++
 Customize the standard UI by providing
 a Connection Schema Metadata file through a pull request. The following
 https://github.com/mulesoft/citizen-platform-xapi-service/pull/278[pull request]
 shows an example of that for Trello Connector.
-
-** Create a JSON file with the Connection Schema Metadata. Refer to the following
++
+.. Create a JSON file with the Connection Schema Metadata. Refer to the following
 https://github.com/mulesoft/cfm/blob/master/docs/connection-ui-autogeneration/creating-connection-schema-metadata.md[link]
 to learn how to create a Connection Schema Metadata file. The file name must be
 based on the connection schema's GAV: `{groupId}-{artifactId}-{version}.json`.
-** Validate the Connection Schema Metadata with the xAPI by pushing a `test/`
-branch with your metadata and hitting the endpoint. As a result, the
-connectionSchemaModel property appears in the response with the
-generated Connection Schema Model with its Metadata. The customizations are shown
-in the metadata of the endpoint's response. Alternatively, validate it against
-the CFM Connectivity Service.
+.. Validate the Connection Schema Metadata with the xAPI by pushing a `test/`
+branch with your metadata and hitting the endpoint.
 +
 `curl --location --request GET 'https://devx.composer.mulesoft.com/citizen-xapi/api/v1/organizations/ORG_ID/connection-schemas/connectors/CONNECTOR_NAME' \
 --header 'Authorization: Bearer ANYPOINT_ACCESS_TOKEN'`
 +
 
 
+As a result, the
+connectionSchemaModel property appears in the response with the
+generated Connection Schema Model with its Metadata. The customizations are shown
+in the metadata of the endpoint's response. Alternatively, validate it against
+the CFM Connectivity Service.
++
 
 . Part 3: Validate the Auto Generated Connection UI
 
 To validate that the Connection Creation UI is generated as expected, you must:
-
-** Open the Composer UI.
-** Create a new flow.
-** Select the connector which the Connection Schema was created for. Note that if
++
+.. Open the Composer UI.
+.. Create a new flow.
+.. Select the connector which the Connection Schema was created for. Note that if
 the connector does not have any triggers, it will not appear here and you will need
 to search for the connector inside the flow.
-** Once, you have selected your connector, a loading spinner may appear and
+.. Once, you have selected your connector, a loading spinner may appear and
 when it goes away the form is generated.
 
 If you added metadata and want to test it integrated with the UI, push a `test/`
 or `integration/` branch with the added metadata and repeat the previous steps.
-
++
 == Step 2.7: Onboard onto OCS (Optional)
 
 Optionally onboard onto OCS using the following
@@ -167,10 +169,7 @@ an already onboarded connector.
 
 . Create a customization model, for example, by using the
 `./cli template trello` command. This creates a new file inside the
-customization folder. You can remove all of the `TODO` and placeholder `???`.
-For now, fill in the `artifactGav` with the information of the specialist Connector that
-corresponds to the Composer Connector. The following example is for Trello
-Connector:
+customization folder:
 
 [source,yaml]
 ----
@@ -209,6 +208,12 @@ operations: []  # TODO
 #        # ...
 #    # ...
 ----
++
+You can remove all of the `TODO` and placeholder `???`.
+For now, fill in the `artifactGav` with the information of the specialist Connector that
+corresponds to the Composer Connector. The following example is for Trello
+Connector:
++
 
 [source,yaml]
 ----
@@ -219,7 +224,7 @@ artifactGav:
   version: 1.2.0
 # ...
 ----
-
++
 . Optionally, download the extension model to use as a reference while completing
 the rest of the customization model by using the `./cli extension trello` command.
 This downloads the file into a JSON file.
@@ -264,7 +269,7 @@ operations:
         # ...
   # ...
 ----
-
++
 . Run validations of the customization model while building it by using the
 `./cli validate foo` command.
 . Generate models using the cli tool by running `./cli connector trello` and then
@@ -273,8 +278,7 @@ both the conenctor and transformation.
 . Patch the generated output.
 .. Rename the version folder.
 .. Add the *schedulingStrategy* transformation. For each source in the
-`transformation_model.json`, add an entry on the transformations entry like this.
-The following examples show the entry and the final transformation:
+`transformation_model.json`, add an entry on the transformations entry like this:
 
 [source,json5]
 ----
@@ -301,6 +305,11 @@ The following examples show the entry and the final transformation:
   }
 }
 ----
+
++
+
+The final transformation would then look like this:
++
 
 [source,json5]
 ----
@@ -342,7 +351,7 @@ The following examples show the entry and the final transformation:
   // ...
 }
 ----
-
++
 
 . Expose the new connector by adding the relevant entries to
 https://github.com/mulesoft/citizen-platform-connectors-models-service/blob/master/citizen-platform-connectors-models-service/src/main/resources/application.yml[application.yaml]
@@ -364,6 +373,7 @@ connectors:
 # ...
 ----
 
++
 . Add the connector to the unit tests, for which you should add similar entries
 to https://github.com/mulesoft/citizen-platform-connectors-models-service/blob/master/citizen-platform-connectors-models-service/src/test/resources/connectors-configuration-test.yml[connectors-configuration-test.yml]:
 
@@ -377,7 +387,7 @@ KQA:
   trello: 1.2.0
 # ...
 ----
-
++
 . Run `mvn clean test` to validate that the build passes.
 . Create a pull request for your newly onboarded connector.
 . Merge the pull request.
@@ -425,7 +435,7 @@ the following steps:
       ...
   }
 ----
-
++
 
 . To onboard connector version `1.2.0`, the schema would look like this. Note that
 some schema fields were omitted with `...` for brevity. Only the
@@ -454,7 +464,7 @@ assets section should be modified:
     ...
 }
 ----
-
++
 
 . Get your changes deployed.
 
