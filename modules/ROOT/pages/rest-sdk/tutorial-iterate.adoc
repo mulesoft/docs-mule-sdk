@@ -21,6 +21,7 @@ Update the existing connector using the following steps:
 . Go to the customizations folder.
 . Update the version.
 
++
 [source,yaml]
 ----
 # ...
@@ -31,6 +32,7 @@ artifactGav:
 # ...
 ----
 +
+
 . Make any necessary changes to the model, if any.
 . Generate models using the cli tool by running `./cli connector trello` and then
 `./cli transformation trello`. Alternatively, run `./cli both trello` to generate
@@ -39,7 +41,8 @@ both the conenctor and transformation.
 .. Rename the version folder.
 .. Add the *schedulingStrategy* transformation. For each source in the
 `transformation_model.json`, add an entry on the transformations entry like this:
-
+The following examples show the entry and the final transformation:
++
 [source,json5]
 ----
 {
@@ -67,9 +70,7 @@ both the conenctor and transformation.
 ----
 +
 
-The final transformation would then look like this:
 +
-
 [source,json5]
 ----
 {
@@ -117,6 +118,7 @@ https://github.com/mulesoft/citizen-platform-connectors-models-service/blob/mast
 under the path's `connectors.environments.<KDEV & KQA>.foo` and adding the
 new version.
 
++
 [source,yaml]
 ----
 # ...
@@ -132,9 +134,11 @@ connectors:
 # ...
 ----
 +
+
 . Update the connector on the unit tests, for which you should add similar entries
 to https://github.com/mulesoft/citizen-platform-connectors-models-service/blob/master/citizen-platform-connectors-models-service/src/test/resources/connectors-configuration-test.yml[connectors-configuration-test.yml]:
 
++
 [source,yaml]
 ----
 KDEV:
@@ -146,6 +150,7 @@ KQA:
 # ...
 ----
 +
+
 . Run `mvn clean test` to validate that the build passes.
 . Create a pull request for your newly onboarded connector.
 . Merge the pull request.
