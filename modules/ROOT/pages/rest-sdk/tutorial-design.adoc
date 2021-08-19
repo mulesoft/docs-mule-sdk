@@ -134,10 +134,10 @@ generated Connection Schema Model with its Metadata. The customizations are show
 in the metadata of the endpoint's response. Alternatively, validate it against
 the CFM Connectivity Service.
 
-
++
 `curl --location --request GET 'https://devx.composer.mulesoft.com/citizen-xapi/api/v1/organizations/ORG_ID/connection-schemas/connectors/CONNECTOR_NAME' \
 --header 'Authorization: Bearer ANYPOINT_ACCESS_TOKEN'`
-
++
 
 . Part 3: Validate the Auto Generated Connection UI
 
@@ -320,10 +320,10 @@ The following examples show the entry and the final transformation:
   }
 }
 ----
++
 
 
-
-
++
 [source,json5]
 ----
 {
