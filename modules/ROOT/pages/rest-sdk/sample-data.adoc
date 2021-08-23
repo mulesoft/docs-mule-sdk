@@ -96,7 +96,7 @@ Similar to other resolvers, Sample Data Resolvers can be declared locally (inlin
 
 Inline definitions can be useful for shorter Connector Descriptors that don't need reusability.
 
-Inline definitions in operations have access to the `queryParameter`, `uriParameter`, and `header` variables, which are maps that contain the respective parameters declared in the operation. The `body` variable is also accessible  in order to access fields inside the body parameter.
+Inline definitions in operations have access to the `queryParameter`, `uriParameter`, and `header` variables, which are maps that contain the respective parameters declared in the operation. The `body` variable is also accessible in order to access fields inside the body parameter.
 
 Inline definitions in triggers have access to the `parameters` variable, which contain all the parameters declared in the trigger.
 
@@ -162,7 +162,8 @@ Since this Sample Data Resolver is declared globally, it doesn't have access to 
 
 A `conversationType` parameter is declared in the `parameters` section of the global declaration. A value is assigned to it in the `arguments` section of the Sample Data reference. It is then used in the HTTP Request binding using the `parameter` variable. All of the declared parameters are present in that map.
 
-When assigning values it is also possible to access fields from `body`. The following example shows how to access a field "channelId" to be assigned as parameter for the resolver:
+When assigning values, it is also possible to access fields from `body`. The following example shows how to access a field *channelId* that is assigned as a parameter for the resolver:
+
 [source, yaml]
 ----
 endpoints:
@@ -176,4 +177,4 @@ endpoints:
             channel:
               value: body.content.channelId
 ----
-The value used to access fields inside the `body` uses DataWeave's accessors and it should be valid for the input metadata type defined for `body` parameter.
+The value used to access fields inside the `body` uses DataWeave's accessors and is valid for the input metadata type defined for the `body` parameter.
