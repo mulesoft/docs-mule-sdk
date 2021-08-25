@@ -3,6 +3,8 @@ ifndef::env-site,env-github[]
 include::../_attributes.adoc[]
 endif::[]
 
+Configure and customize an existing API operation. 
+
 == Operation Identifiers
 
 REST SDK relies on an operation identifier to generate classes for resources.
