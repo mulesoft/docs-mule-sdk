@@ -5,7 +5,9 @@ endif::[]
 
 In the xref:rest-sdk/configure-operations.adoc[previous section], you could
 customize an operation built for an existing endpoint by changing nonfunctional
-properties. In this section, learn how to build a new REST SDK custom operation
+properties.
+
+In this section, learn how to build a new REST SDK custom operation
 from existing metadata to expose different functional properties. This functional
 connectivity is defined by the system level functionality described for the SaaS API.
 
@@ -18,7 +20,7 @@ In this example, we will use a
 fictional SaaS Offices API described by the following RAML API specification in
 api.yaml:
 
-+
+
 [source,yaml]
 ----
 #%RAML 1.0
@@ -61,14 +63,14 @@ types:
             responses:
                 204:
 ----
-+
 
-+
+
+
 The base connectivity for Offices API is declared in a REST SDK descriptor
 called offices-descriptor.yaml:
-+
 
-+
+
+
 [source,yaml]
 ----
 #% Rest Connector Descriptor 1.0
@@ -82,7 +84,7 @@ connectorGav:
 defaultInputMediaType: application/json
 defaultOutputMediaType: application/json
 ----
-+
+
 
 
 == 2. Define the Consumer Experience on Top of the Base Connectivity
@@ -200,12 +202,12 @@ in its description:
 
 |===
 
-+
+
 Implement this new domain in its own space for declarations in
 offices-citizen-descriptor.yaml:
-+
 
-+
+
+
 [source,yaml]
 ----
 #% Rest Connector Descriptor 1.0
@@ -215,12 +217,12 @@ connectorGav:
    artifactId: citizen-offices-api
    version: 1.0.0
 ----
-+
 
-+
+
+
 These declarations act as an overlay on top of system declarations. This
 constitutes for citizen connectivity.
-+
+
 
 == 3. Develop Custom Operations
 
@@ -232,7 +234,7 @@ description of an operation, add an operation declaration section to define
 your own operation. The following shows the definition for creating the
 custom operation, *Find Location*, used in this example:
 
-+
+
 [source,yaml]
 ----
 #% Rest Connector Descriptor 1.0
@@ -241,7 +243,7 @@ operations:
     #...
     findLocation:
 ----
-+
+
 
 == 4. Reuse Existing Connectivity Metadata
 
@@ -252,7 +254,7 @@ and then express only the customization that adds the experience needed:
 The following shows the definition for the *Find Location* operation
 in terms of a GET on /locations/{id} endpoint:
 
-+
+
 [source,yaml]
 ----
 #% Rest Connector Descriptor 1.0
@@ -262,13 +264,13 @@ operations:
     findLocation:
         base: get/locations/{id}
 ----
-+
+
 
 == 5. Enrich With a Display Name and Description
 
 Add a display name and description to the custom operation:
 
-+
+
 [source,yaml]
 ----
 #% Rest Connector Descriptor 1.0
@@ -280,7 +282,7 @@ operations:
         description: Find location by its part specification
         base: get/locations/{id}
 ----
-+
+
 
 == 6. Add Custom Parameters
 
@@ -288,7 +290,7 @@ The inputs we need from the user are not part of the base connectivity itself.
 Define specific inputs as auxiliary parameters by declaring them in a
 parameters section:
 
-+
+
 [source,yaml]
 ----
 #% Rest Connector Descriptor 1.0
@@ -309,13 +311,13 @@ operations:
                 type: string
                 required: true
 ----
-+
 
-+
+
+
 Note that only the new experience parameters need to be declared here.
 All the parameterization required by the base connectivity is automatically
 handled later by REST SDK.
-+
+
 
 == 7. Customize Existing Request Bindings
 
@@ -327,7 +329,7 @@ We also avoid exposing code and offset query parameters from base connectivity
 since we are working with a subdomain of data that restricts locations to
 specific data.
 
-+
+
 [source,yaml]
 ----
 #% Rest Connector Descriptor 1.0
@@ -357,7 +359,7 @@ operations:
                 offset:
                     value: offset-1
 ----
-+
+
 
 === Context
 
