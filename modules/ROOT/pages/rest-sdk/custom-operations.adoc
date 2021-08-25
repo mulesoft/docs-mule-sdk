@@ -533,7 +533,7 @@ Finally, it promotes any unbind parameter just like before:
 
 This is the effective interpreted operation that REST SDK uses to generate connectivity.
 
-== 8. Customize the Response.
+== 8. Customize the Response
 
 This experience hides the user from code and offset fields from the output.
 Declaring a way to customize the response is built from the
