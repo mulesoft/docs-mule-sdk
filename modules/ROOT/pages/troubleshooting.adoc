@@ -5,13 +5,12 @@ include::_attributes.adoc[]
 endif::[]
 :keywords: mule, sdk, troubleshooting, logging
 
-Troubleshoot SDK components to monitor and get more information about your
-application.
+Troubleshoot SDK components to monitor and get more information about your application.
 
 == Logging
 
-Use logging to troubleshoot SDK components. SDK supports logging for the
-following components:
+Use logging to troubleshoot SDK components.
+SDK supports logging for the following components:
 
 [%header,cols="2,3"]
 |===
@@ -23,16 +22,17 @@ For cluster environments, it provides source status information, indicating whet
 In case of rejection, it logs information about its cause.
 | <<polling-sources#_watermarking, Polling Source Watermarking>> | Logs information about watermarking handling on polling sources.
 This uses low level logic so its trace logging should be enabled only when debugging or troubleshooting related to this functionality is needed.
+| <<connections#_pooling-strategy, Pooling Connection Provider>> | Logs information about connection management on pooling connection providers.
+It provides connection pool status information as well as connection handling, indicating when connections are retrieved from the pool and returned back.
 |===
 
 == Verbose Logging
 
-Use verbose logging to troubleshoot SDK components to get information regarding their
-status or behavior. Because of the high impact to application performance, limit
-verbose logging to testing and troubleshooting operations.
+Use verbose logging to troubleshoot SDK components to get information regarding their status or behavior.
+Because of the high impact to application performance, limit verbose logging to testing and troubleshooting operations.
 
-Enable verbose logging in Anypoint Studio or Anypoint Runtime Manager if using
-CloudHub APIs. In both cases, information is logged to the application's log file.
+Enable verbose logging in Anypoint Studio or Anypoint Runtime Manager if using CloudHub APIs.
+In both cases, information is logged to the application's log file.
 
 === Enable Verbose Logging in Anypoint Studio
 
@@ -68,10 +68,11 @@ Use the following table as reference to specify the component's fully qualified 
 | Source|`org.mule.runtime.module.extension.internal.runtime.source.ExtensionMessageSource`| `DEBUG`
 | Polling Source|`org.mule.runtime.module.extension.internal.runtime.source.poll.PollingSourceWrapper`| `DEBUG`
 | Polling Source Watermarking|`org.mule.runtime.module.extension.internal.runtime.source.poll.PollingSourceWrapper`| `TRACE`
+| Pooling Connection Provider|`org.mule.runtime.core.internal.connection.PoolingConnectionHandler`
+`org.mule.runtime.core.internal.connection.PoolingConnectionManagementStrategy`| `DEBUG`
 |===
 
-For example, add the following to the `log4j2.xml` file to enable verbose
-logging for Source:
+For example, add the following to the `log4j2.xml` file to enable verbose logging for Source:
 
 [source,xml,linenums]
 ----
@@ -99,6 +100,6 @@ The following steps describe how to enable verbose logging using Anypoint Runtim
 image:enable-sdk-logging-runtime-manager.png[sdk-verbose-logging-runtime-manager]
 +
 
-. Add the component's fully qualified name and the logging level (DEBUG or TRACE). Refer
-to the previous section on how to specify the component's fully qualified name.
+. Add the component's fully qualified name and the logging level (DEBUG or TRACE).
+Refer to the previous section on how to specify the component's fully qualified name.
 . Click *Apply Changes*.
