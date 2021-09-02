@@ -9,21 +9,20 @@ Troubleshoot SDK components to monitor and get more information about your appli
 
 == Logging
 
-Use logging to troubleshoot SDK components.
-SDK supports logging for the following components:
+Use logging to troubleshoot SDK components. SDK supports logging for the following components:
 
 [%header,cols="2,3"]
 |===
 | Component Name | Logging Capabilities
 | <<sources#, Source>> | Logs information about the source lifecycle, such as when it starts and ends.
 In case of error and reconnection, it provides the full stack trace associated with the raised exception.
-For cluster environments, it provides source status information, indicating whether it is the primary source or not.
+For cluster environments, it provides source status information, which indicates whether it is the primary source or not.
 | <<polling-sources#, Polling Source>> | Logs information about accepted and rejected items by the source.
 In case of rejection, it logs information about its cause.
 | <<polling-sources#_watermarking, Polling Source Watermarking>> | Logs information about watermarking handling on polling sources.
 This uses low level logic so its trace logging should be enabled only when debugging or troubleshooting related to this functionality is needed.
-| <<connections#_pooling-strategy, Pooling Connection Provider>> | Logs information about connection management on pooling connection providers.
-It provides connection pool status information as well as connection handling, indicating when connections are retrieved from the pool and returned back.
+| <<connections#_pooling-strategy, Pooling Connection Provider>> | Logs information about connection management for pooling connection providers.
+It provides connection pool status information as well as connection handling, which indicates when the pool retrieves and returns connections.
 |===
 
 == Verbose Logging
