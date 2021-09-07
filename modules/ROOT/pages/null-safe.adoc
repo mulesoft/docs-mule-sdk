@@ -16,6 +16,8 @@ private List<Integer> numbers;
 While interacting with `numbers` in your code, you will need to check if `numbers == null` at some point to avoid a `NullPointerException`.
 
 The SDK supports the use of annotations like `@NullSafe`, which can provide an empty list instead of `null`. When you use it, the SDK can automatically create a value for you if the value was not configured.
+The following https://github.com/mulesoft/mule-http-connector/blob/master/src/main/java/org/mule/extension/http/internal/request/RequestSettings.java[sample code^]
+uses `@NullSafe` for `List` interfaces.
 
 There are many "flavors" of `@NullSafe` annotations. When used with `List` and `Map` interfaces, `@NullSafe` will provide a default implementation for those collections.
 
