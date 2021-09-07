@@ -1,0 +1,1355 @@
+= Customize the Connector's Custom Operations
+ifndef::env-site,env-github[]
+include::../_attributes.adoc[]
+endif::[]
+
+In the xref:rest-sdk/configure-operations.adoc[previous section], you could
+customize an operation built for an existing endpoint by changing nonfunctional
+properties.
+
+In this section, learn how to build a new REST SDK custom operation
+from existing metadata to expose different functional properties. This functional
+connectivity is defined by the system level functionality described for the SaaS API.
+
+This step-by-step process illustrates how to define a new custom operation
+using REST SDK.
+
+== 1. Start With a Given Base Connectivity
+
+In this example, we will use a
+fictional SaaS Offices API described by the following RAML API specification in
+api.yaml:
+
+
+[source,yaml]
+----
+#%RAML 1.0
+title: Offices API
+protocols: [HTTP, HTTPS]
+mediaType: application/json
+baseUri: http://localhost/office
+types:
+    Location:
+        type: object
+        properties:
+            location: string
+            zone: string
+            offset: string
+            code: string
+/locations:
+    post:
+        body:
+            application/json:
+                type: Location
+        responses:
+            200:
+                body:
+                    application/json:
+                        type: Location
+    /{id}:
+        description: Location of the office by Id.
+        get:
+            queryParameters:
+              offset?: string
+              code:
+                type: string
+                required: true
+            responses:
+                200:
+                    body:
+                        application/json:
+                            type: Location
+        delete:
+            responses:
+                204:
+----
+
+
+
+The base connectivity for Offices API is declared in a REST SDK descriptor
+called offices-descriptor.yaml:
+
+
+
+[source,yaml]
+----
+#% Rest Connector Descriptor 1.0
+apiSpec:
+    url: './api.raml'
+connectorName: Offices
+connectorGav:
+    groupId: com.mulesoft.connectors
+    artifactId: offices-api
+    version: 1.0.0
+defaultInputMediaType: application/json
+defaultOutputMediaType: application/json
+----
+
+
+
+== 2. Define the Consumer Experience on Top of the Base Connectivity
+
+The experience we define in our example will have the following requirements
+in its description:
+
+* A definition of the consumer experience domain for consumption
+* A functional mapping from the consumer experience domain to the base system domain
+
+*OPERATION*
+|===
+|Operation |Description |Implementation Notes
+
+|Find Location
+|Find location by its part specification
+|Corresponds to a GET on /locations/{id} in the system domain
+|===
+
+*INPUTS*
+|===
+|Field |Description |Required | Implementation Notes
+
+|Part A
+|First part of the identifier of an office location
+|true
+|auxiliar
+
+|Part B
+|Second part of the identifier of an office location
+|true
+|auxiliar
+
+|
+|
+|
+| Identifer {id} is built with the text “<Part A>-<Part B>”
+
+|
+|
+|
+| Code and offset are low level data not exposed in this experience since they are fixed to code=code-1 and offset=offset-1 in the subdomain we expose.
+
+|===
+
+*OUTPUTS*
+|===
+|Field |Description | Implementation Notes
+
+|Location
+|Location identifer
+|System domain location
+
+|Zone
+|Zone for this location
+|System domain zone
+
+|
+|
+| Code and offset from the retrieved location are not exposed to the user.
+
+|===
+
+
+*OPERATION*
+|===
+|Operation |Description |Implementation Notes
+
+|Create Location
+|Creates a Location
+|Corresponds to a POST on /locations
+|===
+
+*INPUTS*
+|===
+|Field |Description |Req | Implementation Notes
+
+|Location
+|Full identifier of an office location
+|true
+|auxiliar
+
+|Zone
+|Zone for office location
+|true
+|auxiliar
+
+|
+|
+|
+| Location identifier and zone mapped to corresponding fields.
+
+|
+|
+|
+| Code and offset are low level data sent as corresponding to domain code='code-1' and offset='offset-1'.
+
+|===
+
+*OUTPUTS*
+|===
+|Field |Description | Implementation Notes
+
+|Location
+|Location identifer
+|System domain location
+
+|Zone
+|Zone for this location
+|System domain zone
+
+|
+|
+| Code and offset from the created location are not exposed to the user.
+
+|===
+
+
+Implement this new domain in its own space for declarations in
+offices-citizen-descriptor.yaml:
+
+
+
+[source,yaml]
+----
+#% Rest Connector Descriptor 1.0
+connectorName: Offices Citizen Connector
+connectorGav:
+   groupId: com.mulesoft.connectors
+   artifactId: citizen-offices-api
+   version: 1.0.0
+----
+
+
+
+These declarations act as an overlay on top of system declarations. This
+constitutes for citizen connectivity.
+
+
+== 3. Develop Custom Operations
+
+The *Find Location* operation is defined
+in terms of a GET over /locations/{id} endpoint.
+
+Rather than using an endpoint declaration overriding the display name and
+description of an operation, add an operation declaration section to define
+your own operation. The following shows the definition for creating the
+custom operation, *Find Location*, used in this example:
+
+
+[source,yaml]
+----
+#% Rest Connector Descriptor 1.0
+#...
+operations:
+    #...
+    findLocation:
+----
+
+
+== 4. Reuse Existing Connectivity Metadata
+
+*Find Location* is defined as an experience on top of a base connectivity layer.
+We can refer to this base connectivity to collect the metadata defined for it,
+and then express only the customization that adds the experience needed:
+
+The following shows the definition for the *Find Location* operation
+in terms of a GET on /locations/{id} endpoint:
+
+
+[source,yaml]
+----
+#% Rest Connector Descriptor 1.0
+...
+operations:
+    ...
+    findLocation:
+        base: get/locations/{id}
+----
+
+
+== 5. Enrich With a Display Name and Description
+
+Add a display name and description to the custom operation:
+
+
+[source,yaml]
+----
+#% Rest Connector Descriptor 1.0
+...
+operations:
+    ...
+    findLocation:
+        displayName: Find Location
+        description: Find location by its part specification
+        base: get/locations/{id}
+----
+
+
+== 6. Add Custom Parameters
+
+The inputs we need from the user are not part of the base connectivity itself.
+Define specific inputs as auxiliary parameters by declaring them in a
+parameters section:
+
+
+[source,yaml]
+----
+#% Rest Connector Descriptor 1.0
+...
+operations:
+    ...
+    findLocation:
+        base: get/locations/{id}
+        displayName: Find Location
+        description: Find location by its part specification
+        parameters:
+            partA:
+                displayName: part A
+                type: string
+                required: true
+            partB:
+                displayName: part B
+                type: string
+                required: true
+----
+
+
+
+Note that only the new experience parameters need to be declared here.
+All the parameterization required by the base connectivity is automatically
+handled later by REST SDK.
+
+
+== 7. Customize Existing Request Bindings
+
+Customize the way these auxiliary inputs are part of the request
+bindings. In this specific experience, we want to hide the user from dealing
+with the ID of locations.
+
+We also avoid exposing code and offset query parameters from base connectivity
+since we are working with a subdomain of data that restricts locations to
+specific data.
+
+
+[source,yaml]
+----
+#% Rest Connector Descriptor 1.0
+...
+operations:
+    ...
+    findLocation:
+        base: get/locations/{id}
+        displayName: Find Location
+        description: Find location by its part specification
+        parameters:
+            partA:
+                displayName: part A
+                type: string
+                required: true
+            partB:
+                displayName: part B
+                type: string
+                required: true
+        request:
+            uriParameter:
+                id:
+                    value: "#[parameters.partA ++ '-' ++ parameters.partB]"
+            queryParameter:
+                code:
+                    value: code-1
+                offset:
+                    value: offset-1
+----
+
+
+=== Context
+
+Note how these new declarations affect the way REST SDK ends assembling
+connectivity.
+
+The mechanism relies on the same principle of metadata based on declarations
+and composition from the foundation of REST SDK, but with more expressiveness.
+
+Let’s illustrate this in the context of an example. Take the following API
+specification:
+
+[source,yaml]
+----
+endpoints:
+  ...
+  /locations/{id}:
+    operations:
+      get:
+        expects:
+          uriParameter:
+            id:
+          queryParameter:
+            offset:
+            code:
+----
+
+REST SDK builds an internal model of the entire associated metadata
+gathered from this declaration to model and then assemble connectivity for it.
+
+
+[source,yaml]
+----
+  getLocationsById:
+      request:
+          uriParameter:
+            id:
+          queryParameter:
+            offset:
+            code:
+----
+
+REST SDK promotes an operation's parameter from an unbind request parameter.
+
+[source,yaml]
+----
+  getLocationsById:
+      parameters:
+        id: # auto-bind
+          type: string
+        offset: # auto-bind
+          type: string
+        code: # auto-bind
+          type: string
+      request:
+          uriParameter:
+            id:
+              value: "#[parameters.id]"
+          queryParameter:
+            offset:
+              value: "#[parameters.offset]"
+            code:
+              value: "#[parameters.code]"
+----
+
+This internal model is what we call an effective connectivity. Let's take a
+look at the simplification of the interpreted and assembled connectivity in this
+example.
+
+This assembled abstract connectivity is eventually
+used by the generative layer of REST SDK to generate a specific
+materialization, such as a Mule connector. The case for these newly declared
+operations follows exactly the same approach and is expressed in terms of the
+same model.
+
+Let’s analyze how this *Find Location* custom operation ends generating
+connectivity using the previous model.
+
+The following shows the original declaration:
+
+[source,yaml]
+----
+operations:
+    ...
+    findLocation:
+        base: get/locations/{id}
+        parameters:
+            partA:
+                displayName: part A
+                type: string
+                required: true
+            partB:
+                displayName: part B
+                type: string
+                required: true
+        request:
+            uriParameter:
+                id:
+                    value: "#[parameters.partA ++ '-' ++ parameters.partB]"
+            queryParameter:
+                offset:
+                    value: offset-1
+----
+
+This user declaration is then interpreted as a new operation in the metadata domain:
+
+[source,yaml]
+----
+    findLocation:
+        base: get/locations/{id}
+        parameters:
+        request:
+----
+
+Since the declared metadata has a base prototype, the expansion of those
+declarations take place:
+
+[source,yaml]
+----
+    findLocation:
+        request:
+          uriParameter:
+            id:
+          queryParameter:
+            offset:
+            code:
+----
+
+Then, the user customizations are processed on top of this:
+
+[source,yaml]
+----
+    findLocation:
+        parameters:
+          partA:
+            type: string
+          partB:
+            type: string
+        request:
+            uriParameter:
+              id:
+                value: "#[parameters.partA ++ '-' ++ parameters.partB]"
+            queryParameter:
+              offset:
+                value: offset-1
+              code:
+----
+
+Finally, it promotes any unbind parameter just like before:
+
+[source,yaml]
+----
+    findLocation:
+        parameters:
+          code: # auto-bind
+            type: string
+          partA:
+            type: string
+          partB:
+            type: string
+        request:
+          uriParameter:
+            id:
+              value: "#[parameters.partA ++ '-' ++ parameters.partB]"
+          queryParameter:
+            offset:
+              value: offset-1
+            code:
+              value: "#[parameters.code]"
+----
+
+This is the effective interpreted operation that REST SDK uses to generate connectivity.
+
+== 8. Customize the Response
+
+This experience hides the user from code and offset fields from the output.
+Declaring a way to customize the response is built from the
+base response.
+
+Declare how you want to interpret the REST response from the
+response of the actual request made.
+
+[source,yaml]
+----
+#% Rest Connector Descriptor 1.0
+...
+operations:
+    ...
+    findLocation:
+        base: get/locations/{id}
+        displayName: Find Location
+        description: Find location by its part specification
+        parameters:
+            partA:
+                displayName: part A
+                type: string
+                required: true
+            partB:
+                displayName: part B
+                type: string
+                required: true
+        request:
+            uriParameter:
+                id:
+                    value: "#[parameters.partA ++ '-' ++ parameters.partB]"
+            queryParameter:
+                code:
+                    value: code-1
+                offset:
+                    value: offset-1
+        response:
+            body:
+                schemaType: result-schema.type
+                value: "#[payload -- ['code', 'offset']]"
+----
+
+With this, we have finished the first experience requested. For the second
+operation, follow the same approach, but now define an experience on top of a
+POST operation.
+
+== 9. Customize the Existing Request Body Binding
+
+Define a way to assemble the body in terms of input data you want provided
+by the user.
+
+[source,yaml]
+----
+#% Rest Connector Descriptor 1.0
+...
+operations:
+    ...
+    findLocation:
+      ...
+    createLocation:
+        base: post/locations
+        displayName: Create Location
+        description: Creates a location
+        parameters:
+            location:
+                displayName: Location
+                type: string
+                required: true
+            zone:
+                displayName: Zone
+                type: string
+                required: true
+        request:
+            body:
+                value: "#[
+                {
+                   'location': parameters.location,
+                   'zone': parameters.zone,
+                   'offset': 'offset-1',
+                   'code': 'code-1'
+                }]"
+        response:
+            body:
+                typeSchema: ./create-location-output-body-schema.json
+                mediaType: application/json
+                value: "#[payload -- ['code', 'offset']]"
+----
+
+
+You have complete control on the way data is offered by the user.
+Use auxiliary top level parameters for a richer structure:
+
+[source,yaml]
+----
+#% Rest Connector Descriptor 1.0
+...
+operations:
+    ...
+    findLocation:
+      ...
+    createLocation:
+        base: post/locations
+        displayName: Create Location
+        description: Creates a location
+        parameters:
+            content:
+                displayName: Body
+                typeSchema: ./create-location-input-body-schema.json
+                mediaType: application/json
+                required: true
+        request:
+            body:
+                value: "#[
+                {
+                   'location': parameters.content.location,
+                   'zone': parameters.content.zone,
+                   'offset': 'offset-1',
+                   'code': 'code-1'
+                }]"
+        response:
+            body:
+                typeSchema: ./create-location-output-body-schema.json
+                mediaType: application/json
+                value: "#[payload -- ['code', 'offset']]"
+----
+
+With these two operation customizations, you have
+defined a connectivity experience on top of an underlying system connectivity.
+
+== Use Cases
+
+There are some common patterns present when developing experience
+connectivity.
+
+* <<reusing-same-endpoint>>
+* <<hiding-top-level>>
+* <<changing-literal>>
+* <<remove-io>>
+* <<transform-io>>
+* <<use-sidecars>>
+
+
+[[reusing-same-endpoint]]
+=== Reuse Same Endpoint for Two Operations
+
+With custom operations, you can define as many operation variations of a
+top level endpoint operation as you want.
+
+In this example, we are building two operations, *createContact* and *updateContact*,
+on top of a base endpoint operation *updateOrCreateContacts*.
+
+The following shows the *createContact* operation:
+
+[source,yaml]
+----
+operations:
+    createContact:
+        base: updateOrCreateContacts
+        displayName: Create Contact
+        description: Create contact
+        parameters:
+            CreateContactContent:
+                displayName: Content
+                typeSchema: ./schemas/CreateContact-Request-Content-schema.json
+                mediaType: application/json
+                required: true
+        request:
+            queryParameter:
+                summarizeErrors:
+                    value: "#[true]"
+            body:
+                language: "dw"
+                expression: "#[
+                var contact = parameters.CreateContactContent.Contact
+                var address = contact.Address default null
+                var phone = contact.Phone default null
+                var contactPerson = contact.ContactPerson default null
+                ---
+                {
+                    \"Contacts\": [
+                        {
+                            (contact.&Name),
+                            (contact.&ContactNumber),
+                            (contact.&ContactStatus),
+                            (contact.&FirstName),
+                            (contact.&LastName),
+                            (contact.&EmailAddress),
+                            (contact.&SkypeUserName),
+                            (contact.&BankAccountDetails),
+                            (contact.&TaxNumber),
+                            (contact.&AccountsReceivableTaxType),
+                            (contact.&AccountsPayableTaxType),
+                            (if (address != null) {
+                            Addresses: [
+                            {
+                                (address.&AddressType),
+                                (address.&AddressLine1),
+                                (address.&AddressLine2),
+                                (address.&AddressLine3),
+                                (address.&AddressLine4),
+                                (address.&City),
+                                (address.&Region),
+                                (address.&PostalCode),
+                                (address.&Country),
+                                (address.&AttentionTo)
+                            }
+                            ]} else {}),
+                            (if (phone != null) {
+                            Phones:  [
+                            {
+                                (phone.&PhoneType),
+                                (phone.&PhoneNumber),
+                                (phone.&PhoneAreaCode),
+                                (phone.&PhoneCountryCode)
+                            }
+                            ]} else {}),
+                            (contact.&DefaultCurrency),
+                            (if (contactPerson != null) {
+                            ContactPersons:  [
+                                {
+                                    (contactPerson.&FirstName),
+                                    (contactPerson.&LastName),
+                                    (contactPerson.&EmailAddress),
+                                    (contactPerson.&IncludeInEmails)
+                                }
+                            ]} else {})
+                        }
+                    ]
+                }
+                ]"
+        response:
+            body:
+                typeSchema: ./schemas/CreateContact-Response-schema.json
+                mediaType: application/json
+                expression: "#[
+                var contact = payload.Contacts[0] default null
+                ---
+                {
+                    (if (contact != null) {
+                    Contact:
+                        {
+                            (contact.&Name),
+                            (contact.&ContactID),
+                            (contact.&ContactNumber),
+                            (contact.&ContactStatus)
+                        }
+                    } else {})
+                }
+                ]"
+----
+
+The following shows the *updateContact* operation:
+
+[source,yaml]
+----
+    updateContact:
+        base: updateOrCreateContacts
+        displayName: Update Contact
+        description: Update contact
+        parameters:
+            UpdateContactContent:
+                displayName: Content
+                typeSchema: ./schemas/UpdateContact-Request-Content-schema.json
+                mediaType: application/json
+                required: true
+        request:
+            queryParameter:
+                summarizeErrors:
+                    value: "#[true]"
+            body:
+                language: "dw"
+                expression: "#[
+                var contact = parameters.UpdateContactContent.Contact
+                var address = contact.Address default null
+                var phone = contact.Phone default null
+                var contactPerson = contact.ContactPerson default null
+                ---
+                {
+                    \"Contacts\": [
+                        {
+                            (contact.&Name),
+                            (contact.&ContactNumber),
+                            (contact.&ContactStatus),
+                            (contact.&FirstName),
+                            (contact.&LastName),
+                            (contact.&EmailAddress),
+                            (contact.&SkypeUserName),
+                            (contact.&BankAccountDetails),
+                            (contact.&TaxNumber),
+                            (contact.&AccountsReceivableTaxType),
+                            (contact.&AccountsPayableTaxType),
+                            (if (address != null) {
+                            Addresses: [
+                            {
+                                (address.&AddressType),
+                                (address.&AddressLine1),
+                                (address.&AddressLine2),
+                                (address.&AddressLine3),
+                                (address.&AddressLine4),
+                                (address.&City),
+                                (address.&Region),
+                                (address.&PostalCode),
+                                (address.&Country),
+                                (address.&AttentionTo)
+                            }
+                            ]} else {}),
+                            (if (phone != null) {
+                            Phones:  [
+                            {
+                                (phone.&PhoneType),
+                                (phone.&PhoneNumber),
+                                (phone.&PhoneAreaCode),
+                                (phone.&PhoneCountryCode)
+                            }
+                            ]} else {}),
+                            (contact.&DefaultCurrency),
+                            (if (contactPerson != null) {
+                            ContactPersons:  [
+                                {
+                                    (contactPerson.&FirstName),
+                                    (contactPerson.&LastName),
+                                    (contactPerson.&EmailAddress),
+                                    (contactPerson.&IncludeInEmails)
+                                }
+                            ]} else {})
+                        }
+                    ]
+                }
+                ]"
+        response:
+            body:
+                typeSchema: ./schemas/UpdateContact-Response-schema.json
+                mediaType: application/json
+                expression: "#[
+                var contact = payload.Contacts[0] default null
+                ---
+                {
+                    (if (contact != null) {
+                    Contact:
+                        {
+                            (contact.&Name),
+                            (contact.&ContactID),
+                            (contact.&ContactNumber),
+                            (contact.&ContactStatus)
+                        }
+                    } else {})
+                }
+                ]"
+----
+
+[[hiding-top-level]]
+=== Hide Top Level Parameters
+
+Hide low level parameters from the connectivity experience that should not
+surface the high level operation.
+
+[source,yaml]
+----
+    findLocation:
+        base: GET-/locations/{id}
+        displayName: Find Location
+        description: This is my own find location
+        parameters:
+            #...
+        request:
+            #...
+            queryParameter:
+                code:
+                    ignored: true
+                offset:
+                    ignored: true
+        #...
+----
+
+Note that doing this on the customized operation affects both the customized
+operation and the base operation, while doing this on the base operation affects
+only the base operation.
+
+[[changing-literal]]
+=== Change a Parameter to a Default Literal Value
+
+Hide a parameter from the connectivity experience but include it in requests
+with a literal value.
+
+[source,yaml]
+----
+    findLocation:
+        base: GET-/locations/{id}
+        displayName: Find Location
+        description: This is my own find location
+        parameters:
+            #...
+        request:
+            #...
+            queryParameter:
+                code:
+                    value: AA1231
+                offset:
+                    value: ZZZ399
+        #...
+----
+
+[[remove-io]]
+=== Remove Input or Output Fields
+
+Define which fields to expose to the user by defining a new reshaped
+version of the base connectivity request body.
+
+In this example, we are hiding the *ContactStatus* field since we are
+only creating `ACTIVE` users.
+
+[source,yaml]
+----
+    updateContact:
+        base: updateOrCreateContacts
+        displayName: Update Contact
+        description: Update contact
+        parameters:
+            UpdateContactContent:
+                displayName: Content
+                ## ...
+                typeSchema: ./schemas/UpdateContact-Request-Content-schema.json
+                mediaType: application/json
+                required: true
+        request:
+            body:
+                language: "dw"
+                expression: "#[
+                var contact = parameters.UpdateContactContent.Contact
+                ---
+                {
+                    (contact.&Name),
+                    (contact.&ContactNumber),
+                    (contact.&FirstName),
+                    (contact.&LastName),
+                    // ...
+                    ContactStatus: \"ACTIVE\",
+                }
+                ]"
+        response:
+            body:
+                ## ...
+----
+
+The same thing can apply also to output fields. The following
+customized operation hides code and offset from the response to the user:
+
+[source,yaml]
+----
+    createLocation:
+        base: POST-/locations
+        displayName: Create Location
+        description: This is my own create location with content
+        parameters:
+            content:
+                displayName: Body
+                typeSchema: ./location-schema.json
+                mediaType: application/json
+                required: true
+        request:
+            ## ...
+        response:
+            body:
+                ##
+                typeSchema: ./location-schema.json
+                mediaType: application/json
+                expression: "#[payload - 'code' - 'offset']"
+----
+
+[[transform-io]]
+=== Transform Input or Output Types
+
+Include complex transformations between input and output auxiliary
+parameters or request and response binding parameters.
+
+[source,yaml]
+----
+    searchContacts:
+        base: getContacts
+        displayName: Search Contacts
+        description: Search Contacts
+        parameters:
+            ContactName:
+                displayName: Contact Name
+                description: The name of contact
+                type: string
+                required: false
+            ContactEmailAddress:
+                displayName: Contact Email Address
+                description: The email address  of the contact
+                type: string
+                required: false
+            ContactAccountNumber:
+                displayName: Contact Account Number
+                description: The account number of the contact
+                type: string
+                required: false
+        request:
+            queryParameter:
+                where:
+                    value: "#[
+                        %dw 2.0
+                        output application/json
+                        var ContactName = parameters.ContactName default null
+                        var ContactEmailAddress = parameters.ContactEmailAddress default null
+                        var ContactAccountNumber = parameters.ContactAccountNumber default null
+                        ---
+                        {
+                            (if (ContactName != null) {Name: ContactName} else {} ),
+                            (if (ContactEmailAddress != null) {EmailAddress: ContactEmailAddress} else {} ),
+                            (if (ContactAccountNumber != null) {AccountNumber: ContactAccountNumber} else {} )
+                        }
+                        pluck ((value, key, index) -> key ++ \"=\\\"\" ++ value ++ \"\\\"\") joinBy \" AND \"
+                    ]"
+        response:
+            bodyParts:
+                main:
+                    typeSchema: ./schemas/SearchContacts-Response-schema.json
+                    mediaType: application/json
+                    value: "#[
+                        {
+                            Contacts: payload.Contacts map (contact, index) ->
+                                {
+                                    (contact.&ContactID),
+                                    (contact.&Name),
+                                    (contact.&ContactNumber),
+                                    (contact.&ContactStatus),
+                                    (contact.&FirstName),
+                                    (contact.&LastName),
+                                    (contact.&EmailAddress),
+                                    (contact.&SkypeUserName),
+                                    (contact.&BankAccountDetails),
+                                    (contact.&TaxNumber),
+                                    (contact.&AccountsReceivableTaxType),
+                                    (contact.&AccountsPayableTaxType),
+                                    (contact.&Addresses),
+                                    (contact.&Phones),
+                                    (contact.&DefaultCurrency),
+                                    (contact.&ContactPersons)
+                                }
+                        }
+                    ]"
+----
+
+[[use-sidecars]]
+=== Use Declarative Sidecars
+
+Generate customized operations using declarative
+sidecars on the generated connector when including base and experience
+connectivity in the same artifact.
+
+The sidecarOperations directive generates all customized operations as
+sidecars. Directive is scoped for the descriptor with a default value `false`.
+
+[source,yaml]
+----
+##
+sidecarOperations: true
+operations:
+    getContactByID:
+        base: getContact
+        displayName: Get Contact By ID
+        description: Get contact by ID
+        parameters:
+            ContactID:
+                displayName: ContactID
+                type: string
+                required: true
+        request:
+            uriParameter:
+                ContactID:
+                    value: "#[parameters.ContactID]"
+        response:
+            bodyParts:
+                main:
+                    typeSchema: ./schemas/GetContactByID-Response-schema.json
+                    mediaType: application/json
+                    value: "#[
+                    var contact = payload.Contacts[0] default null
+                    ---
+                    {
+                        (if (contact != null) {
+                        Contact:
+                            {
+                                (contact.&ContactID),
+                                (contact.&Name),
+                                (contact.&ContactNumber),
+                                (contact.&ContactStatus),
+                                (contact.&FirstName),
+                                (contact.&LastName),
+                                (contact.&EmailAddress),
+                                (contact.&SkypeUserName),
+                                (contact.&BankAccountDetails),
+                                (contact.&TaxNumber),
+                                (contact.&AccountsReceivableTaxType),
+                                (contact.&AccountsPayableTaxType),
+                                (contact.&Addresses),
+                                (contact.&Phones),
+                                (contact.&DefaultCurrency),
+                                (contact.&ContactPersons)
+                            }
+                        } else {})
+                    }
+                    ]"
+----
+
+== Reference
+
+The following is a full reference of the constructions available to
+define customized operations.
+
+*ConnectorDescriptor*
+|===
+|Field |Type |Description
+
+|...
+|
+|
+
+|operations
+|OperationCustomization[]
+|Section for adding new operations to the connectivity descriptor.
+|===
+
+*OperationCustomization*
+|===
+|Field |Type |Description
+
+|name
+|string
+|Name of the operation.
+
+|base
+|string
+|Prototype endpoint from where to capture the base metadata.
+
+|displayName
+|string
+|Display name for the operation.
+
+|description
+|string
+|Description for the operation.
+
+|parameters
+|OperationCustomizationParameter[]
+|List of the auxiliary parameters needed for the supported experience.
+
+|request
+|OperationCustomizationRequest
+|Customization of the request on underlying connectivity.
+
+|response
+|OperationCustomizationResponse
+|Customization of the response obtained from underlying connectivity.
+
+|pagination
+|string
+|Pagination used on an operation.
+
+|sampleData
+|SampleDataExpression
+|Sample data used on an operation.
+|===
+
+
+*OperationCustomizationParameter*
+|===
+|Field |Type |Description
+
+|name
+|string
+|Name of the auxiliary parameter.
+
+|displayName
+|string
+|Display name for the auxiliary parameter.
+
+|description
+|string
+|Description for the auxiliary parameter.
+
+|required
+|boolean
+|Optionality for the auxiliary parameter.
+
+|default
+|string
+|Default value for the auxiliary parameter.
+
+|type
+|String enum simple types
+|Primitive type for parameter. Exclusive with Schema Type.
+
+|schemaType
+|string
+|Schema specifying parameter value shape. Exclusive with Type.
+
+|mediaType
+|string
+|Media type used for value interpretation for schema defined parameters.
+
+|valueProvider
+|ValueProviderExpression
+|Provider of dynamic values for this parameter.
+|===
+
+*OperationCustomizationRequest*
+|===
+|Field |Type |Description
+
+|uriParameter
+|OperationCustomizationRequestParameter[]
+|Uri parameter customizations on the request.
+
+|queryParameter
+|OperationCustomizationRequestParameter[]
+|Query parameter customizations on the request.
+
+|header
+|OperationCustomizationRequestParameter[]
+|Header parameter customizations on the request.
+
+|multipartBody
+|OperationCustomizationRequestParameter[]
+|Multipart body parameter customizations on the request.
+
+|body
+|Expression
+|Body bind expression or literal value used on the request.
+
+|===
+
+*OperationCustomizationRequestParameter*
+|===
+|Field |Type |Description
+
+|name
+|string
+|Name for the request parameter.
+
+|displayName
+|string
+|Display name for the request parameter.
+
+|description
+|string
+|Description for the request parameter.
+
+|ignored
+|boolean
+|Inclusion on the request parameter.
+
+|required
+|boolean
+|Optionality for the request parameter.
+
+|type
+|String enum simple types
+|Primitive type for the parameter. Exclusive with Schema Type.
+
+|schemaType
+|string
+|Schema specifying parameter value shape. Exclusive with Type.
+
+|mediaType
+|string
+|Media type used for value interpretation for schema defined parameters.
+
+|valueProvider
+|ValueProviderExpression
+|Provider of dynamic values for this parameter.
+
+|value
+|Expression
+|Expression or literal value to bind on the request parameter.
+|===
+
+*OperationCustomizationResponse*
+|===
+|Field |Type |Description
+
+|header
+|OperationCustomizationResponseParameter[]
+|Header parameter customizations on the response.
+
+|multipartBody
+|OperationCustomizationResponseParameter[]
+|Multi part body customizations on the response.
+
+|body
+|Expression
+|Body bind expression or literal value used on the response.
+|===
+
+*OperationCustomizationResponseParameter*
+|===
+|Field |Type |Description
+
+|name
+|string
+|
+
+|type
+|String enum simple types
+|Primitive type for parameter. Exclusive with Schema Type.
+
+|schemaType
+|string
+|Schema specifying parameter value shape. Exclusive with Type.
+
+|mediaType
+|string
+|Media type used for value interpretation for schema defined parameters.
+
+|value
+|Expression
+|Expression or literal value to bind on the response parameter.
+|===

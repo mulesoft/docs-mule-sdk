@@ -10,6 +10,7 @@ adding descriptive content, additional operations, or parameters.
 
 * xref:rest-sdk/customize-connector-descriptor.adoc[Customize the Connector's Content]
 * xref:rest-sdk/configure-operations.adoc[Customize the Connector's Operations]
+* xref:rest-sdk/custom-operations.adoc[Customize the Connector's Custom Operations]
 * xref:rest-sdk/triggers.adoc[Customize the Connector's Triggers]
 * xref:rest-sdk/configure-parameters.adoc[Customize the Connector's Parameters]
 * xref:rest-sdk/configure-metadata.adoc[Customize the Connector's Metadata]

@@ -5,6 +5,7 @@
  ** xref:rest-sdk/customize-the-connector.adoc[Customize the Connector]
   *** xref:rest-sdk/customize-connector-descriptor.adoc[Content]
   *** xref:rest-sdk/configure-operations.adoc[Operations]
+  *** xref:rest-sdk/custom-operations.adoc[Custom Operations]
   *** xref:rest-sdk/triggers.adoc[Triggers]
   *** xref:rest-sdk/configure-parameters.adoc[Parameters]
   *** xref:rest-sdk/configure-metadata.adoc[Metadata]
