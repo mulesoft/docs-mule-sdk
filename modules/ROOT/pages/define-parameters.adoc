@@ -571,12 +571,12 @@ public class DbPoolingProfile implements DatabasePoolingProfile {
 }
 ----
 
-* Parameter Type Restrictions
+== Parameter Type Restrictions
 
 It is not allowed for developers to add parameters or POJOs with fields of types _org.mule.runtime.core.api.source.scheduler.Scheduler_
  or _org.mule.runtime.api.scheduler.SchedulingStrategy_ . The Mule Runtime and the SDK will add parameters of these types,
  for example, in Pooling Sources.
- 
+
 
 == See Also
 
