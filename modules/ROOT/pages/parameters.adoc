@@ -304,4 +304,4 @@ However, the `Options` POJO defined above concerns the object itself, not just t
 == Parameter Type Restrictions
 
 You cannot add parameters or POJOs with types `org.mule.runtime.core.api.source.scheduler.Scheduler` or
-_org.mule.runtime.api.scheduler.SchedulingStrategy_.
+`org.mule.runtime.api.scheduler.SchedulingStrategy`.
