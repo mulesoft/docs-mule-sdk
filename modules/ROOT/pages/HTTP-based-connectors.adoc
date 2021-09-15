@@ -143,6 +143,24 @@ When configuring for the Authorization Code grant type, use the following snippe
 </http:request-config>
 ----
 
+Note that there must be a `@Parameter` annotation in the connection provider with
+the proxyConfig type so the connection refers to the proxy, for example:
+
+[source,java,linenums]
+----
+@Parameter
+@Optional
+@Placement(tab = "Proxy", order = 1)
+private OMSProxyConfiguration proxyConfig;
+----
+
+Also, note that the proxy configuration must be set in the HTTP Client:
+
+[source,java,linenums]
+----
+.setProxyConfig(connectionParams.getProxyConfig())
+----
+
 For more information, refer to the https://github.com/mulesoft/mule-http-connector/blob/9914ce6aa6ceb3aa16a5b821289f15b9c6af6acc/src/main/java/org/mule/extension/http/api/request/proxy/DefaultProxyConfig.java[Java code]
 of how HTTP Connector handles the proxy.
 
