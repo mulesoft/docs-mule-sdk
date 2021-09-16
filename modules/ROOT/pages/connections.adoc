@@ -4,33 +4,32 @@ include::_attributes.adoc[]
 endif::[]
 :keywords: mule, sdk, connection, connectivity, management, pooling, cached, provider, connection-provider
 
-Connected modules (connectors) are probably the most common type of module.
-
-The connectivity framework starts with the concept of a `ConnectionProvider`.
-This is an interface responsible for creating, disconnecting, and describing the connection so that the runtime can handle it properly, while remaining abstracted from the concerns of managing those connections.
+Connected modules (connectors) are the most common type of module. They provide a connection between a Mule flow and an external resource.
+Configure these connections with the `ConnectionProvider` in a connectivity framework to create, disconnect, and describe the connection for Mule runtime engine to handle.
+For more information on how to use connections, refer to <<use-connections, this section>>.
 
 == Declaring a Connection Provider
 
 To declare a new `ConnectionProvider` you should create a new class that implements the `ConnectionProvider` interface. The `ConnectionProvider` interface is a typed interface that receives one type argument that indicates the class of the instances that the `ConnectionProvider` handles.
 
-This example declares a `FooConnectionProvider` class that implements the `ConnectionProvider` interface:
+This example declares a `myConnectionProvider` class that implements the `ConnectionProvider` interface:
 
 [source,java,linenums]
 ----
-public class FooConnectionProvider implements ConnectionProvider<FooConnection> {
+public class myConnectionProvider implements ConnectionProvider<myConnection> {
 
   @Parameter
   private String password;
 
-  public FooConnection connect() throws ConnectionException {
-    return new FooConnection(password);
+  public myConnection connect() throws ConnectionException {
+    return new myConnection(password);
   }
 
-  public void disconnect(FooConnection connection) {
+  public void disconnect(myConnection connection) {
     connection.invalidate();
   }
 
-  public ConnectionValidationResult validate(FooConnection connection) {
+  public ConnectionValidationResult validate(myConnection connection) {
     return connection.isValid() ?
       ConnectionValidationResult.success() :
       ConnectionValidationResult.failure("Connection is not valid", new InvalidConnectionException());
@@ -41,7 +40,7 @@ public class FooConnectionProvider implements ConnectionProvider<FooConnection> 
 [NOTE]
 Each defined `ConnectionProvider` must be instantiable, public, and have a default constructor.
 
-Other components (such as an operation or source) that require access to the connection will gain access to the connection through instances of the `FooConnection` class.
+Other components (such as an operation or source) that require access to the connection will gain access to the connection through instances of the `myConnection` class.
 
 The above example contains a `@Parameter` and these methods: `connect()`, `disconnect()`, and `validate()`. The next sections describe each of them.
 
@@ -91,10 +90,10 @@ Example of a `ConnectionProvider` declared at `@Extension` level:
 
 [source,java,linenums]
 ----
-@Extension(name="foo")
+@Extension(name="xyz")
 @Operations(Operations.class)
-@ConnectionProviders(FooConnectionProvider.class)
-public class FooModule {
+@ConnectionProviders(myConnectionProvider.class)
+public class myModule {
 
   @Parameter
   private String someParameter;
@@ -105,13 +104,13 @@ public class FooModule {
 }
 ----
 
-Example of the XML for this config with the example `FooConnectionProvider`:
+Example of the XML for this config with the example `myConnectionProvider`:
 
 [source,xml,linenums]
 ----
-<foo:config name="a-foo-config" someParameter="value">
-    <foo:connection password="aVeryDificultPassword"/>
-</foo:config>
+<xyz:config name="a-xyz-config" someParameter="value">
+    <xyz:connection password="aVeryDifficultPassword"/>
+</xyz:config>
 ----
 
 == Connection Management
@@ -143,6 +142,7 @@ connection-handling behavior. An operation that requires a connection calls the 
 
 Implementing the `ConnectionProvider` interface means no strategy.
 
+[[use-connections]]
 == Using Connections
 
 Using connections in Operations and Sources is quite different, see:
