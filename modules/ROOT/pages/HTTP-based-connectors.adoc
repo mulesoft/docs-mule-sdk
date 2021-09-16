@@ -111,15 +111,15 @@ Connectors using HTTP Client instances must provide the ability to configure a
 proxy, similar to HTTP Connector. Common reasons to use proxy configuration
 include security, maintenance, and proxy caching. Many organizations also require
 proxy configuration when working behind firewalls.
-
++
 The following code snippets show how to configure proxy, for example, for the
 OAuth endpoint in HTTP Request Connector:
-
++
 Use this global proxy configuration as a reference:
 ----
 <http:proxy name="proxyConfig" host="localhost" port="3128" username="yourProxyUsername" password="yourProxyPassword" />
 ----
-
++
 When configuring for the Client Credentials grant type, use the following snippet:
 ----
 <http:request-config name="HTTP_Request_Configuration" host="api.github.com" port="443" doc:name="HTTP Request Configuration">
@@ -129,7 +129,7 @@ When configuring for the Client Credentials grant type, use the following snippe
         </oauth2:client-credentials-grant-type>
 </http:request-config>
 ----
-
++
 When configuring for the Authorization Code grant type, use the following snippet:
 ----
 <http:request-config name="HTTP_Request_Configuration" host="api.github.com" protocol="HTTPS" port="443" usePersistentConnections="false" doc:name="HTTP Request Configuration">
@@ -142,10 +142,10 @@ When configuring for the Authorization Code grant type, use the following snippe
         </oauth2:authorization-code-grant-type>
 </http:request-config>
 ----
-
++
 Note that there must be a `@Parameter` annotation in the connection provider with
 the proxyConfig type so the connection refers to the proxy, for example:
-
++
 [source,java,linenums]
 ----
 @Parameter
@@ -153,14 +153,14 @@ the proxyConfig type so the connection refers to the proxy, for example:
 @Placement(tab = "Proxy", order = 1)
 private MyConnectorProxyConfiguration proxyConfig;
 ----
-
++
 Also, note that the proxy configuration must be set in the HTTP Client:
-
++
 [source,java,linenums]
 ----
 .setProxyConfig(connectionParams.getProxyConfig())
 ----
-
++
 For more information, refer to the https://github.com/mulesoft/mule-http-connector/blob/9914ce6aa6ceb3aa16a5b821289f15b9c6af6acc/src/main/java/org/mule/extension/http/api/request/proxy/DefaultProxyConfig.java[Java code]
 of how HTTP Connector handles the proxy.
 
