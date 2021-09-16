@@ -151,7 +151,7 @@ the proxyConfig type so the connection refers to the proxy, for example:
 @Parameter
 @Optional
 @Placement(tab = "Proxy", order = 1)
-private OMSProxyConfiguration proxyConfig;
+private MyConnectorProxyConfiguration proxyConfig;
 ----
 
 Also, note that the proxy configuration must be set in the HTTP Client:
