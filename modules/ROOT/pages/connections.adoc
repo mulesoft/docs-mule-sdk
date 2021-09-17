@@ -12,24 +12,24 @@ For more information on how to use connections, refer to <<use-connections, this
 
 To declare a new `ConnectionProvider` you should create a new class that implements the `ConnectionProvider` interface. The `ConnectionProvider` interface is a typed interface that receives one type argument that indicates the class of the instances that the `ConnectionProvider` handles.
 
-This example declares a `myConnectionProvider` class that implements the `ConnectionProvider` interface:
+This example declares a `MyConnectionProvider` class that implements the `ConnectionProvider` interface:
 
 [source,java,linenums]
 ----
-public class myConnectionProvider implements ConnectionProvider<myConnection> {
+public class MyConnectionProvider implements ConnectionProvider<MyConnection> {
 
   @Parameter
   private String password;
 
-  public myConnection connect() throws ConnectionException {
-    return new myConnection(password);
+  public MyConnection connect() throws ConnectionException {
+    return new MyConnection(password);
   }
 
-  public void disconnect(myConnection connection) {
+  public void disconnect(MyConnection connection) {
     connection.invalidate();
   }
 
-  public ConnectionValidationResult validate(myConnection connection) {
+  public ConnectionValidationResult validate(MyConnection connection) {
     return connection.isValid() ?
       ConnectionValidationResult.success() :
       ConnectionValidationResult.failure("Connection is not valid", new InvalidConnectionException());
@@ -92,8 +92,8 @@ Example of a `ConnectionProvider` declared at `@Extension` level:
 ----
 @Extension(name="xyz")
 @Operations(Operations.class)
-@ConnectionProviders(myConnectionProvider.class)
-public class myModule {
+@ConnectionProviders(MyConnectionProvider.class)
+public class MyModule {
 
   @Parameter
   private String someParameter;
