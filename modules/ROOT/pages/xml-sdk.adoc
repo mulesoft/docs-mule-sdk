@@ -633,7 +633,7 @@ For example, for an XML SDK module to use the HTTP connector and the OAuth modul
 </module>
 ----
 
-== Reusing Operations
+== Reuse Operations
 In some cases, operations have repeated message processors, on which we can rely if they are encapsulated in a new operation and called from other places.
 
 Each `<operation>` defined in a `<module>` can be reused in the _same_ `<module>` if the operation does not have cyclic dependencies.
@@ -767,6 +767,50 @@ Note that the value must map the target namespace of the current module.
 ----
 
 Note that the `config-ref` is not included because this is a reference to the _same_ module, which implies all global instances are shared among operations.
+
+= Reuse Operations Within Operations
+
+To reuse an operation within another operation with a `use=CONTENT` xref:content-parameters.adoc[content parameter],
+reference the `use=CONTENT` parameter in the inner tag name.
+
+Suppose there is a *shared-operation* operation that defines its *requiredParameter* parameter with `use=CONTENT`.
+Another operation, *sample-operation*, reuses *shared-operation* within its own definition, for example:
+
+[source,xml,linenums]
+----
+<operation name="shared-operation" doc:description="A shared operation">
+  <parameters>
+    <parameter name="requiredParameter" type="ExampleType" role="CONTENT" doc:description="A required parameter" />
+  </parameters>
+  <body>
+    <mule:set-payload value='#[output application/json --- {"parameterValue": vars.requiredParameter}]' doc:name="Set Payload" />
+  </body>
+</operation>
+
+<operation name="sample-operation" doc:description="A sample operation">
+    <parameters>
+      <parameter name="requiredParameter" type="ExampleType" role="CONTENT" doc:description="A required parameter" />
+    </parameters>
+    <body>
+      <tns:shared-operation>
+        <tns:required-parameter>
+          #[vars.required-Parameter]
+        </tns:required-parameter>
+      </tns:shared-operation>
+      <mule:logger level="INFO" message="#[output application/json --- {payload: payload}]" category="${app.name}"/>
+    </body>
+    <output type="ExampleType"/>
+  </operation>
+----
+
+The *requiredParameter* value must be referenced as an inner tag of *sample-operation*.
+Otherwise, the project throws a build error, for example, `Attribute 'required-parameter' is not allowed to appear in element 'tns:shared-operation'.`
+
+The XML definition of the connector generates parameters set with `use=CONTENT` as inner
+tags. Refer to xref:content-parameters.adoc#content-param[this example] for File
+Connector, in which the parameter named *content* is set with `use=CONTENT` as the
+inner tag `<file:content>`.
+
 
 == Providing a Test Connection
 
