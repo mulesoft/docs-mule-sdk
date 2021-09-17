@@ -377,7 +377,7 @@ The `<module>` element is the root of an XML SDK module. It contains all propert
 | `prefix`
 | optional
 | NA
-| The prefix of the module used when generating schemas. If empty, a hyphenated version of `name` is used. Refer to <<prefix-attribute>>.
+| The prefix of the module used when generating schemas. If empty, the module uses a hyphenated version of the `name` attribute. Refer to <<prefix-attribute>>.
 
 | `namespace`
 | optional
@@ -446,11 +446,11 @@ Generated schema location is `+http://www.mulesoft.org/schema/mule/hello-with-sp
 === Prefix Attribute
 
 The `prefix` attribute in the `<module>` element is the prefix of the module
-used when generating schemas. If it is empty, the module uses a hyphenated
-version of the XML SDK `name` attribute.
+used when generating schemas. If empty, the module uses a hyphenated version
+of the XML SDK `name` attribute.
 
 Similarly, the `namespace` attribute in the `<module>` element is the namespace
-of the module used when generating schemas. If it is empty, the module uses a
+of the module used when generating schemas. If empty, the module uses a
 hyphenated version of the XML SDK `prefix` attribute.
 
 Note that the value of the `prefix` attribute correlates with the name of the
