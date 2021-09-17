@@ -6,7 +6,7 @@ endif::[]
 
 Connected modules (connectors) are the most common type of module. They provide a connection between a Mule flow and an external resource.
 Configure these connections with the `ConnectionProvider` in a connectivity framework to create, disconnect, and describe the connection for Mule runtime engine to handle.
-For more information on how to use connections, refer to <<use-connections, this section>>.
+For more information about how to use connections, refer to <<use-connections>>.
 
 == Declaring a Connection Provider
 
