@@ -377,7 +377,7 @@ The `<module>` element is the root of an XML SDK module. It contains all propert
 | `prefix`
 | optional
 | NA
-| The prefix of the module to use when generating the schemas. If empty, a hyphenated version of the `name` is used.
+| The prefix of the module used when generating schemas. If empty, a hyphenated version of `name` is used. Refer to <<prefix-attribute>>.
 
 | `namespace`
 | optional
@@ -441,6 +441,22 @@ Generated schema location: `+http://www.mulesoft.org/schema/mule/hello-prefix/cu
 |===
 
 Generated schema location is `+http://www.mulesoft.org/schema/mule/hello-with-spaces/current/mule-hello-with-spaces.xsd+`
+
+[[prefix-attribute]]
+=== Prefix Attribute
+
+The `prefix` attribute in the `<module>` element is the prefix of the module
+used when generating schemas. If it is empty, the module uses a hyphenated
+version of the XML SDK `name` attribute.
+
+Similarly, the `namespace` attribute in the `<module>` element is the namespace
+of the module used when generating schemas. If it is empty, the module uses a
+hyphenated version of the XML SDK `prefix` attribute.
+
+Note that the value of the `prefix` attribute correlates with the name of the
+folder containing the resource files. Thus, setting or not setting this value
+affects the name of the resource folder. When setting a prefix with a custom
+name, you must rename the resource folder to match the custom prefix name.
 
 The following module only has a `name` attribute `name="hello with spaces"`. This means that its `prefix` is dynamically generated as `hello-with-spaces`, and its `namespace` is dynamically generated as `+http://www.mulesoft.org/schema/mule/hello-with-spaces/current/mule-hello-with-spaces.xsd+`. It also means that the Mule app must have a schema location (`schemaLocation`) that points to a reference that matches that value.
 
