@@ -177,7 +177,7 @@ private MyConnectorProxyConfiguration proxyConfig;
 +
 
 +
-Also, note that the proxy configuration must be set in the HTTP Client:
+You must also set the proxy configuration in the HTTP Client:
 +
 
 +
