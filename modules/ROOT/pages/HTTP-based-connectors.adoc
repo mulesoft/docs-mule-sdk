@@ -189,7 +189,7 @@ Also, note that the proxy configuration must be set in the HTTP Client:
 
 +
 For more information, refer to the https://github.com/mulesoft/mule-http-connector/blob/9914ce6aa6ceb3aa16a5b821289f15b9c6af6acc/src/main/java/org/mule/extension/http/api/request/proxy/DefaultProxyConfig.java[Java code]
-of how HTTP Connector handles the proxy.
+for how HTTP Connector handles the proxy.
 
 == Exposing HTTP Inbound Endpoints
 
