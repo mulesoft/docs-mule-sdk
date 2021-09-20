@@ -162,8 +162,8 @@ When configuring for the Authorization Code grant type, use the following snippe
 +
 
 +
-Note that there must be a `@Parameter` annotation in the connection provider with
-the proxyConfig type so the connection refers to the proxy, for example:
+When using the proxyConfig type, the connection provider must include a `@Parameter` annotation 
+so that the connection refers to the proxy, for example:
 +
 
 +
