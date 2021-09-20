@@ -105,11 +105,91 @@ The HttpService allows you to obtain the HttpClient associated with a separate <
 +
 All connectors in need of a HttpClient instance, *must* create and manage their own.
 +
-* Provide HTTP Proxy settings
+* Provide HTTP Proxy Configuration
 +
-Connectors using HttpClient instances *should* provide the ability to configure a proxy, in a manner that is consistent with the standard HttpConnector.
+Connectors using HTTP Client instances must provide the ability to configure a
+proxy, similar to HTTP Connector. Common reasons to use proxy configuration
+include security, maintenance, and proxy caching. Many organizations also require
+proxy configuration when working behind firewalls.
 +
-Examples of how to do that can be found in the Http Connector code.
+
++
+The following code snippets show how to configure proxy, for example, for the
+OAuth endpoint in HTTP Request Connector:
++
+
++
+Use this global proxy configuration as a reference:
++
+
++
+----
+<http:proxy name="proxyConfig" host="localhost" port="3128" username="yourProxyUsername" password="yourProxyPassword" />
+----
++
+
++
+When configuring for the Client Credentials grant type, use the following snippet:
++
+
++
+----
+<http:request-config name="HTTP_Request_Configuration" host="api.github.com" port="443" doc:name="HTTP Request Configuration">
+        <oauth2:client-credentials-grant-type clientId="111" clientSecret="222" >
+        <oauth2:token-request tokenUrl="https://github.com/login/oauth/authorize"" />
+                    <spring:property name="proxyConfig" ref="proxyConfig"/>
+        </oauth2:client-credentials-grant-type>
+</http:request-config>
+----
++
+
++
+When configuring for the Authorization Code grant type, use the following snippet:
++
+
++
+----
+<http:request-config name="HTTP_Request_Configuration" host="api.github.com" protocol="HTTPS" port="443" usePersistentConnections="false" doc:name="HTTP Request Configuration">
+        <oauth2:authorization-code-grant-type clientId="00a3d08a823faf378568" clientSecret="19c09306adbb84c2d4bc99c585df51d49fe858cf" redirectionUrl="http://localhost:8082/callback">;
+            <oauth2:authorization-request authorizationUrl="https://github.com/login/oauth/authorize"" localAuthorizationUrl="http://localhost:8082/login"/>;
+            <oauth2:token-request tokenUrl="https://github.com/login/oauth/access_token">;
+                <oauth2:token-response accessToken="#[payload.'access_token']" refreshToken="#[payload['access_token']]"/>
+            </oauth2:token-request>
+            <spring:property name="proxyConfig" ref="proxyConfig"/>
+        </oauth2:authorization-code-grant-type>
+</http:request-config>
+----
++
+
++
+When using the `proxyConfig` type, the connection provider must include a `@Parameter` annotation 
+so that the connection refers to the proxy, for example:
++
+
++
+[source,java,linenums]
+----
+@Parameter
+@Optional
+@Placement(tab = "Proxy", order = 1)
+private MyConnectorProxyConfiguration proxyConfig;
+----
++
+
++
+You must also set the proxy configuration in the HTTP Client:
++
+
++
+[source,java,linenums]
+----
+.setProxyConfig(connectionParams.getProxyConfig())
+----
++
+
++
+For more information, refer to the https://github.com/mulesoft/mule-http-connector/blob/9914ce6aa6ceb3aa16a5b821289f15b9c6af6acc/src/main/java/org/mule/extension/http/api/request/proxy/DefaultProxyConfig.java[Java code]
+for how HTTP Connector handles the proxy.
 
 == Exposing HTTP Inbound Endpoints
 
