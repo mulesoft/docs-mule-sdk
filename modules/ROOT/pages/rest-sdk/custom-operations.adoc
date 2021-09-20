@@ -262,7 +262,7 @@ in terms of a GET on /locations/{id} endpoint:
 operations:
     ...
     findLocation:
-        base: get/locations/{id}
+        base: get-/locations/{id}
 ----
 
 
@@ -280,7 +280,7 @@ operations:
     findLocation:
         displayName: Find Location
         description: Find location by its part specification
-        base: get/locations/{id}
+        base: get-/locations/{id}
 ----
 
 
@@ -298,7 +298,7 @@ parameters section:
 operations:
     ...
     findLocation:
-        base: get/locations/{id}
+        base: get-/locations/{id}
         displayName: Find Location
         description: Find location by its part specification
         parameters:
@@ -337,7 +337,7 @@ specific data.
 operations:
     ...
     findLocation:
-        base: get/locations/{id}
+        base: get-/locations/{id}
         displayName: Find Location
         description: Find location by its part specification
         parameters:
@@ -445,7 +445,7 @@ The following shows the original declaration:
 operations:
     ...
     findLocation:
-        base: get/locations/{id}
+        base: get-/locations/{id}
         parameters:
             partA:
                 displayName: part A
@@ -549,7 +549,7 @@ response of the actual request made.
 operations:
     ...
     findLocation:
-        base: get/locations/{id}
+        base: get-/locations/{id}
         displayName: Find Location
         description: Find location by its part specification
         parameters:
@@ -594,7 +594,7 @@ operations:
     findLocation:
       ...
     createLocation:
-        base: post/locations
+        base: post-/locations
         displayName: Create Location
         description: Creates a location
         parameters:
@@ -635,7 +635,7 @@ operations:
     findLocation:
       ...
     createLocation:
-        base: post/locations
+        base: post-/locations
         displayName: Create Location
         description: Creates a location
         parameters:
