@@ -453,7 +453,7 @@ Similarly, the `namespace` attribute in the `<module>` element is the namespace
 of the module used when generating schemas. If empty, the module uses a
 hyphenated version of the XML SDK `prefix` attribute.
 
-Note that the value of the `prefix` attribute correlates with the name of the
+The value of the `prefix` attribute correlates with the name of the
 folder containing the resource files. Thus, setting or not setting this value
 affects the name of the resource folder. When setting a prefix with a custom
 name, you must rename the resource folder to match the custom prefix name.
