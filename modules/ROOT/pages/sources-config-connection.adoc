@@ -44,7 +44,7 @@ public class HttpListener extends Source<InputStream, HttpRequestAttributes> {
     public void onStart(SourceCallback<InputStream, HttpRequestAttributes> sourceCallback) throws MuleException {
         httpServer = serverProvider.connect(); // <1>
 
-        server.listen(path).onRequest(request -> { // <2>
+        httpServer.listen(path).onRequest(request -> { // <2>
             processRequest(request, sourceCallback); // <3>
         });
     }
