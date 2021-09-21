@@ -804,12 +804,11 @@ Another operation, *sample-operation*, reuses *shared-operation* within its own 
 ----
 
 The *requiredParameter* value must be referenced as an inner tag of *sample-operation*.
-Otherwise, the project throws a build error, for example, `Attribute 'required-parameter' is not allowed to appear in element 'tns:shared-operation'.`
+Otherwise, the project throws a build error, such as, `Attribute 'required-parameter' is not allowed to appear in element 'tns:shared-operation'.`
 
 The XML definition of the connector generates parameters set with `use=CONTENT` as inner
-tags. Refer to xref:content-parameters.adoc#content-param[this example] for File
-Connector, in which the parameter named *content* is set with `use=CONTENT` as the
-inner tag `<file:content>`.
+tags. Refer to xref:content-parameters.adoc#content-param[File Connector], in which the parameter 
+named *content* is set with `use=CONTENT` as the inner tag `<file:content>`.
 
 
 == Providing a Test Connection
