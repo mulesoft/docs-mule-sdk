@@ -768,7 +768,7 @@ Note that the value must map the target namespace of the current module.
 
 Note that the `config-ref` is not included because this is a reference to the _same_ module, which implies all global instances are shared among operations.
 
-= Reuse Operations Within Operations
+== Reuse Operations Within Operations
 
 To reuse an operation within another operation with a `use=CONTENT` xref:content-parameters.adoc[content parameter],
 reference the `use=CONTENT` parameter in the inner tag name.
@@ -807,7 +807,7 @@ The `requiredParameter` value must be referenced as an inner tag of `sample-oper
 Otherwise, the project throws a build error, such as, `Attribute 'required-parameter' is not allowed to appear in element 'tns:shared-operation'.`
 
 The XML definition of the connector generates parameters set with `use=CONTENT` as inner
-tags. Refer to xref:content-parameters.adoc#content-param[File Connector], in which the parameter 
+tags. Refer to xref:content-parameters.adoc#content-param[File Connector], in which the parameter
 named `content` is set with `use=CONTENT` as the inner tag `<file:content>`.
 
 
