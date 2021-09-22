@@ -445,13 +445,8 @@ Generated schema location is `+http://www.mulesoft.org/schema/mule/hello-with-sp
 [[prefix-attribute]]
 === Prefix Attribute
 
-The `prefix` attribute in the `<module>` element is the prefix of the module
-used when generating schemas. If empty, the module uses a hyphenated version
-of the XML SDK `name` attribute.
-
-Similarly, the `namespace` attribute in the `<module>` element is the namespace
-of the module used when generating schemas. If empty, the module uses a
-hyphenated version of the XML SDK `prefix` attribute.
+The `prefix` attribute is the prefix of the module used when generating schemas.
+If empty, the module uses a hyphenated version of the XML SDK `name` attribute.
 
 The value of the `prefix` attribute correlates with the name of the
 folder containing the resource files. Thus, setting or not setting this value
