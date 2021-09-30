@@ -20,7 +20,7 @@ For cluster environments, it provides source status information, which indicates
 | <<polling-sources#, Polling Source>> | Logs information about accepted and rejected items by the source.
 In case of rejection, it logs information about its cause.
 | <<polling-sources#_watermarking, Polling Source Watermarking>> | Logs information about watermarking handling on polling sources.
-This uses low level logic so its trace logging should be enabled only when debugging or troubleshooting related to this functionality is needed.
+Because this uses low level logic, enable trace logging only when debugging or troubleshooting is necessary.
 | <<connections#_pooling-strategy, Pooling Connection Provider>> | Logs information about connection management for pooling connection providers.
 It provides connection pool status information as well as connection handling, which indicates when the pool retrieves and returns connections.
 |===
@@ -31,7 +31,7 @@ Use verbose logging to troubleshoot SDK components to get information regarding 
 Because of the high impact to application performance, limit verbose logging to testing and troubleshooting operations.
 
 Enable verbose logging in Anypoint Studio or Anypoint Runtime Manager if using CloudHub APIs.
-In both cases, information is logged to the application's log file.
+In both cases, the application's log file logs the information.
 
 === Enable Verbose Logging in Anypoint Studio
 
@@ -71,7 +71,7 @@ Use the following table as reference to specify the component's fully qualified 
 `org.mule.runtime.core.internal.connection.PoolingConnectionManagementStrategy`| `DEBUG`
 |===
 
-For example, add the following to the `log4j2.xml` file to enable verbose logging for Source:
+The following example shows how to add a fully qualified name to the `log4j2.xml` file to enable verbose logging for Source:
 
 [source,xml,linenums]
 ----
