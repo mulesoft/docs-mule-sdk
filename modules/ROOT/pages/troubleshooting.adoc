@@ -92,7 +92,7 @@ The following example shows how to add a fully qualified name to the `log4j2.xml
     </AsyncRoot>
 </Loggers>
 ----
-+
+
 
 === Enable Verbose Logging in Anypoint Runtime Manager
 
