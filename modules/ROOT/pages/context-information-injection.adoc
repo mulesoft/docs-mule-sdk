@@ -23,7 +23,6 @@ public class HttpListener extends Source<InputStream, HttpRequestAttributes> {
   @Connection
   private ConnectionProvider<HttpServer> serverProvider;
 
-  @Parameter
   private ComponentLocation location;
 
   @Parameter

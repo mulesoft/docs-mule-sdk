@@ -133,11 +133,10 @@ could make the reconnection mechanism fail to work properly.
 [[starting-source]]
 ==== Starting Source
 
-When starting a Source, the execution of the `onStart()` method, if a connection
-problem is found and is required to be raised, in the same way as operations, a
-`ConnectionException()` must be thrown.
-Throwing the connection exception, the Source will be stopped, and will try to
-reconnect and start the Source again.
+A source is in the starting source stage when the `onStart()` method executes. 
+Connection errors must be communicated through the `SourceCallback`
+using the `onConnectionException()` method. The source stops and attempts to
+reconnect.
 
 .Example
 [source,java,linenums]
@@ -148,7 +147,7 @@ Connection connection = connectionProvider.connect();
   try {
     connection.startStreaming();
   } catch(Exception e){
-    throw new ConnectionException(e, connection); //<1>
+    sourceCallback.onConnectionException(new ConnectionException(e, connection));
   }
 }
 ----

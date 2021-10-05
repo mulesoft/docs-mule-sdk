@@ -156,7 +156,14 @@ See xref:content-parameters.adoc[more info on roles].
 | `PUBLIC`
 | *Available since version 1.2*
 
-Marks an operation's visibility to either `PUBLIC` (anyone can see and use it) to `PRIVATE` (accessible only for the current module and cannot be seen externally).
+Marks an operation's visibility to either `PUBLIC` (anyone can see and use it) or `PRIVATE` (accessible only for the current module and cannot be seen externally), for example:
+
+[source,xml,linenums]
+----
+<operation name="example" visibility="PRIVATE">
+<parameters>
+<parameter name="errorTopic" type="string" />
+----
 
 | `doc:description`
 | optional
@@ -370,7 +377,7 @@ The `<module>` element is the root of an XML SDK module. It contains all propert
 | `prefix`
 | optional
 | NA
-| The prefix of the module to use when generating the schemas. If empty, a hyphenated version of the `name` is used.
+| The prefix of the module used when generating schemas. If empty, the module uses a hyphenated version of the `name` attribute. Refer to <<prefix-attribute>>.
 
 | `namespace`
 | optional
@@ -434,6 +441,17 @@ Generated schema location: `+http://www.mulesoft.org/schema/mule/hello-prefix/cu
 |===
 
 Generated schema location is `+http://www.mulesoft.org/schema/mule/hello-with-spaces/current/mule-hello-with-spaces.xsd+`
+
+[[prefix-attribute]]
+=== Prefix Attribute
+
+The `prefix` attribute is the prefix of the module used when generating schemas.
+If empty, the module uses a hyphenated version of the XML SDK `name` attribute.
+
+The value of the `prefix` attribute correlates with the name of the
+folder containing the resource files. Thus, setting or not setting this value
+affects the name of the resource folder. When setting a prefix with a custom
+name, you must rename the resource folder to match the custom prefix name.
 
 The following module only has a `name` attribute `name="hello with spaces"`. This means that its `prefix` is dynamically generated as `hello-with-spaces`, and its `namespace` is dynamically generated as `+http://www.mulesoft.org/schema/mule/hello-with-spaces/current/mule-hello-with-spaces.xsd+`. It also means that the Mule app must have a schema location (`schemaLocation`) that points to a reference that matches that value.
 
@@ -626,7 +644,7 @@ For example, for an XML SDK module to use the HTTP connector and the OAuth modul
 </module>
 ----
 
-== Reusing Operations
+== Reuse Operations
 In some cases, operations have repeated message processors, on which we can rely if they are encapsulated in a new operation and called from other places.
 
 Each `<operation>` defined in a `<module>` can be reused in the _same_ `<module>` if the operation does not have cyclic dependencies.
@@ -760,6 +778,49 @@ Note that the value must map the target namespace of the current module.
 ----
 
 Note that the `config-ref` is not included because this is a reference to the _same_ module, which implies all global instances are shared among operations.
+
+== Reuse Operations Within Operations
+
+To reuse an operation within another operation with a `use=CONTENT` xref:content-parameters.adoc[content parameter],
+reference the `use=CONTENT` parameter in the inner tag name.
+
+Suppose there is a `shared-operation` operation that defines its `requiredParameter` parameter with `use=CONTENT`.
+Another operation, `sample-operation`, reuses `shared-operation` within its own definition, for example:
+
+[source,xml,linenums]
+----
+<operation name="shared-operation" doc:description="A shared operation">
+  <parameters>
+    <parameter name="requiredParameter" type="ExampleType" role="CONTENT" doc:description="A required parameter" />
+  </parameters>
+  <body>
+    <mule:set-payload value='#[output application/json --- {"parameterValue": vars.requiredParameter}]' doc:name="Set Payload" />
+  </body>
+</operation>
+
+<operation name="sample-operation" doc:description="A sample operation">
+    <parameters>
+      <parameter name="requiredParameter" type="ExampleType" role="CONTENT" doc:description="A required parameter" />
+    </parameters>
+    <body>
+      <tns:shared-operation>
+        <tns:required-parameter>
+          #[vars.required-Parameter]
+        </tns:required-parameter>
+      </tns:shared-operation>
+      <mule:logger level="INFO" message="#[output application/json --- {payload: payload}]" category="${app.name}"/>
+    </body>
+    <output type="ExampleType"/>
+  </operation>
+----
+
+The `requiredParameter` value must be referenced as an inner tag of `sample-operation`.
+Otherwise, the project throws a build error, such as, `Attribute 'required-parameter' is not allowed to appear in element 'tns:shared-operation'.`
+
+The XML definition of the connector generates parameters set with `use=CONTENT` as inner
+tags. Refer to xref:content-parameters.adoc#content-param[File Connector], in which the parameter
+named `content` is set with `use=CONTENT` as the inner tag `<file:content>`.
+
 
 == Providing a Test Connection
 

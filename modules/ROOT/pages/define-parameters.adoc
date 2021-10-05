@@ -571,6 +571,11 @@ public class DbPoolingProfile implements DatabasePoolingProfile {
 }
 ----
 
+== Parameter Type Restrictions
+
+You cannot add parameters or POJOs with types `org.mule.runtime.core.api.source.scheduler.Scheduler` or `org.mule.runtime.api.scheduler.SchedulingStrategy`. Mule runtime engine and the SDK add parameters of these types, for example, in polling sources.
+
+
 == See Also
 
 * https://help.mulesoft.com[MuleSoft Help Center]

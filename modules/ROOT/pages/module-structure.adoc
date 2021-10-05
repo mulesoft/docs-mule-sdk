@@ -16,7 +16,7 @@ public class BasicModule {
 }
 ----
 
-When using the `@Extension` annotation, you need to provide a descriptive and concise name for your module. You should not use `extension`, `module`, or `connector` in the module name. If you do, the SDK will trim them. Optionally, you can specify the module `vendor` and the module `category` (See <<license#, Licensing>>).
+When using the `@Extension` annotation, you need to provide a descriptive and concise name for your module. You should not use `extension`, `module`, or `connector` in the module name. If you do, the SDK will trim them. Optionally, you can specify the attribute `vendor` and the attribute `category` (See <<license#, Licensing>>).
 
 Once you have created an empty module, you can start adding elements to it.
 

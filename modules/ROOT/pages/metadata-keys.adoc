@@ -59,17 +59,18 @@ The `id` element, like `Author_id` is used internally and must be unique for eac
 // _TODO Fix broken Image
 // image::<missing>metadata/keys_single_drop.png[MetadataKeys Single Level Dropdown]
 
-Once the resolver is defined, you can use it an operation or source, associating the resolver to a given `MetadataKeyId` parameter (see <<user_metadatakey, User-Defined MetadataKey>>).
+After the resolver is defined, you can use it as an operation or a source by adding the `@MetadataScope` annotation with its `keysResolver` value at the class definition level and annotating the parameter that is the key with `@MetadataKeyId`. All metadata resolvers must belong to the same category in an operation or a source.
 
 [source,java,linenums]
 ----
-  public class OperationWithMetadataKey {
+@MetadataScope(keysResolver = RecordKeysResolver.class)
+public class OperationWithMetadataKey {
 
-    public void create(@MetadataKeyId(RecordKeysResolver.class) String type,
+    public void create(@MetadataKeyId String type,
                        @Config MyConfig config){
         //...
     }
-  }
+}
 ----
 
 
@@ -86,6 +87,49 @@ public class DocsMetadataSource extends Source<Map<String, Object>, Void> {
   }
 ----
 
+[NOTE]
+The previous example is the only way to support metadata keys for sources. Do not set the resolver at the `@MetadataKeyId` annotation when defining sources.
+
+Setting the `@MetadataScope` annotation at the operation class definition level indicates that all of its operations provide metadata and that they must all have a parameter annotated with `@MetadataKeyId` because they inherit the resolver from the scope.
+
+You can also set a key resolver for a single operation:
+
+[source,java,linenums]
+----
+public class MyOperations {
+
+    public void operationWithMetadataKey(@MetadataKeyId(RecordKeysResolver.class) String type,
+                       @Config MyConfig config){
+        //...
+    }
+
+    public void plainOperation(@Config MyConfig config){
+        //...
+    }
+}
+----
+
+In addition, if there is a `@MetadataScope` annotation at the operation class definition level, you can set a value for the `@MetadataKeyId` annotation in a parameter to override the resolver defined at the scope level for a single operation:
+
+[source,java,linenums]
+----
+@MetadataScope(keysResolver = ClassLevelResolver.class)
+public class MyOperations {
+
+    public void operation(@MetadataKeyId String type, @Config MyConfig config){
+        // This operation will use the ClassLevelResolver
+    }
+
+    public void operationWithAnotherResolver(@MetadataKeyId(OverridingResolver.class) String type,
+                       @Config MyConfig config){
+        // This operation will use the OverridingResolver
+    }
+}
+----
+
+[IMPORTANT]
+The two previous examples (setting the resolver at the parameter level and overriding the inherited resolver from the scope) work only when defining operations. These features are not available for sources.
+
 //TODO multilevel metadata keys
 
 [user_metadatakey]
@@ -96,13 +140,16 @@ An user-defined `MetadataKey` is one that is provided freely by the end user and
 For example, this is a very common case in queries, where you use the whole query
 that the end user wants to execute as a `MetadataKey`.
 
-In order to declare it, you simply annotate a parameter with `@MetadataKeyId`, but you do not provide a `TypesKeyResolver`.
+To declare a user-defined `MetadataKey`, annotate a parameter with `@MetadataKeyId` without providing a `TypesKeyResolver` for the parameter annotation or for the `@MetadataScope` annotation if it is present at the class definition.
 
 [source,java,linenums]
 ----
+public class MyOperations {
+
   public void query(@MetadataKeyId String query){
       //...
   }
+}
 ----
 
 == Optional MetadataKey Parameters

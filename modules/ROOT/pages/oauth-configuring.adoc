@@ -1,4 +1,4 @@
-= Configuring an OAuth-Enabled Module
+= Configuring an OAuth-Enabled Connector or Module
 ifndef::env-site,env-github[]
 include::_attributes.adoc[]
 endif::[]
@@ -6,7 +6,7 @@ endif::[]
 
 //TODO: SEE resourceOwnerId
 
-An important aspect of OAuth-enabled modules is how to use them. As much as the SDK does to hide the complexities of the OAuth protocol, things like the OAuth dance are unavoidable. The SDK's approach to this problem is to standardize the experience of all OAuth modules to keep simplifying the user experience.
+An important aspect of OAuth-enabled connectors or modules is how to use them. As much as the SDK does to hide the complexities of the OAuth protocol, things like the OAuth dance are unavoidable. The SDK's approach to this problem is to standardize the experience of all OAuth modules to keep simplifying the user experience.
 
 This section discusses the steps a user must take to use the module.
 
@@ -211,4 +211,4 @@ The obtained access tokens are stored in an `ObjectStore`. By default, the SDK w
 
 == Next Step
 
-<<oauth-dance#, Performing the OAuth Dance with an OAuth-Enabled Module>>
+<<oauth-dance#, Performing the OAuth Dance with an OAuth-Enabled Connector or Module>>

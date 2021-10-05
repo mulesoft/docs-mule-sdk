@@ -299,3 +299,9 @@ There are some subtle differences between these two concepts. You should definit
 For example, `ConnectionProperties` (above) keeps two parameters together because they are always configured together. In this case, the parameters do not represent an entity in the module's domain. The `@ParameterGroup` is simply a handy way of keeping things that are related together and showing them together in the UI.
 
 However, the `Options` POJO defined above concerns the object itself, not just the parameters it contains. For instance, it would make sense to have a list of `Options` because each object is something on its own (in the OOP sense). On the other hand, if you are using a class simply for the sake of grouping things together, without any particular meaning for your module's domain, then it makes sense to have a parameter group.
+
+
+== Parameter Type Restrictions
+
+You cannot add parameters or POJOs with types `org.mule.runtime.core.api.source.scheduler.Scheduler` or
+`org.mule.runtime.api.scheduler.SchedulingStrategy`.
