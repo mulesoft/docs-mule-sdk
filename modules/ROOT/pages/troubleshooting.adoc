@@ -1,28 +1,28 @@
-= Troubleshoot SDK Components - Mule 4
+= Troubleshoot SDK Components and Operations - Mule 4
 
 ifndef::env-site,env-github[]
 include::_attributes.adoc[]
 endif::[]
 :keywords: mule, sdk, troubleshooting, logging
 
-Troubleshoot SDK components to monitor and get more information about your application.
+Use logging to troubleshoot SDK components; use verbose logging to test and troubleshoot operations.
 
 == Logging
 
-Use logging to troubleshoot SDK components. SDK supports logging for the following components:
+Use logging to troubleshoot the following SDK components:
 
 [%header,cols="2,3"]
 |===
 | Component Name | Logging Capabilities
-| <<sources#, Source>> | Logs information about the source lifecycle, such as when it starts and ends.
-In case of error and reconnection, it provides the full stack trace associated with the raised exception.
-For cluster environments, it provides source status information, which indicates whether it is the primary source or not.
-| <<polling-sources#, Polling Source>> | Logs information about accepted and rejected items by the source.
-In case of rejection, it logs information about its cause.
+| <<sources#, Source>> | Logs information about the source lifecycle, such as when the lifecycle starts and ends.
+In case of error and reconnection, the log provides the full stack trace associated with the raised exception.
+For cluster environments, the log provides source status information, which indicates whether it is the primary source or not.
+| <<polling-sources#, Polling Source>> | Logs information about items accepted and rejected by the source.
+In the case of rejection, the log contains information about the cause of the rejection.
 | <<polling-sources#_watermarking, Polling Source Watermarking>> | Logs information about watermarking handling on polling sources.
-Because this uses low level logic, enable trace logging only when debugging or troubleshooting is necessary.
+Because this process uses low-level logic, enable trace logging only when debugging or troubleshooting is necessary.
 | <<connections#_pooling-strategy, Pooling Connection Provider>> | Logs information about connection management for pooling connection providers.
-It provides connection pool status information as well as connection handling, which indicates when the pool retrieves and returns connections.
+This log provides connection pool status information as well as connection handling, which indicates when the pool retrieves and returns connections.
 |===
 
 == Verbose Logging
@@ -30,7 +30,7 @@ It provides connection pool status information as well as connection handling, w
 Use verbose logging to troubleshoot SDK components to get information regarding their status or behavior.
 Because of the high impact to application performance, limit verbose logging to testing and troubleshooting operations.
 
-Enable verbose logging in Anypoint Studio or Anypoint Runtime Manager if using CloudHub APIs.
+Enable verbose logging in Anypoint Studio, or Anypoint Runtime Manager if using CloudHub APIs.
 In both cases, the application's log file logs the information.
 
 === Enable Verbose Logging in Anypoint Studio
@@ -59,7 +59,7 @@ image:enable-sdk-logging-studio.png[enable-sdk-logging-studio]
 ----
 +
 
-Use the following table as reference to specify the component's fully qualified name:
+Use the following table as a reference for specifying the component's fully qualified name:
 
 [%header,cols="2,2,1"]
 |===
@@ -100,5 +100,5 @@ image:enable-sdk-logging-runtime-manager.png[sdk-verbose-logging-runtime-manager
 +
 
 . Add the component's fully qualified name and the logging level (DEBUG or TRACE).
-Refer to the previous section on how to specify the component's fully qualified name.
+Refer to the table that shows how to specify the component's fully qualified name.
 . Click *Apply Changes*.
