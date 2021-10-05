@@ -59,8 +59,11 @@ image:enable-sdk-logging-studio.png[enable-sdk-logging-studio]
 ----
 +
 
++
 Use the following table as a reference for specifying the component's fully qualified name:
++
 
++
 [%header,cols="2,2,1"]
 |===
 | Name | Fully Qualified Name | Log Level
@@ -70,9 +73,13 @@ Use the following table as a reference for specifying the component's fully qual
 | Pooling Connection Provider|`org.mule.runtime.core.internal.connection.PoolingConnectionHandler`
 `org.mule.runtime.core.internal.connection.PoolingConnectionManagementStrategy`| `DEBUG`
 |===
++
 
++
 The following example shows how to add a fully qualified name to the `log4j2.xml` file to enable verbose logging for Source:
++
 
++
 [source,xml,linenums]
 ----
 <Loggers>
@@ -85,6 +92,7 @@ The following example shows how to add a fully qualified name to the `log4j2.xml
     </AsyncRoot>
 </Loggers>
 ----
++
 
 === Enable Verbose Logging in Anypoint Runtime Manager
 
