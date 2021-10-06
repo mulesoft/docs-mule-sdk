@@ -79,6 +79,7 @@
   *** xref:testing-writing-your-first-test-case.adoc[Writing Your First Test Case]
  ** xref:about-connector-certification-program-guidelines.adoc[About MuleSoft Connector Certification Program Guidelines]
   *** xref:certification-guidelines-for-connectors.adoc[Technical Guidelines for Connector Certifications]
+ ** xref:troubleshooting.adoc[Troubleshooting]
  ** xref:license.adoc[Licensing]
  ** xref:validators.adoc[Validators with Mule SDK]
  ** xref:dmt.adoc[DevKit to SDK Migration Tool]
