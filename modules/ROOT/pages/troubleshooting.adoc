@@ -1,0 +1,112 @@
+= Troubleshoot SDK Components and Operations - Mule 4
+
+ifndef::env-site,env-github[]
+include::_attributes.adoc[]
+endif::[]
+:keywords: mule, sdk, troubleshooting, logging
+
+Use logging to troubleshoot SDK components; use verbose logging to test and troubleshoot operations.
+
+== Logging
+
+Use logging to troubleshoot the following SDK components:
+
+[%header,cols="2,3"]
+|===
+| Component Name | Logging Capabilities
+| <<sources#, Source>> | Logs information about the source lifecycle, such as when the lifecycle starts and ends.
+In case of error and reconnection, the log provides the full stack trace associated with the raised exception.
+For cluster environments, the log provides source status information, which indicates whether it is the primary source or not.
+| <<polling-sources#, Polling Source>> | Logs information about items accepted and rejected by the source.
+In the case of rejection, the log contains information about the cause of the rejection.
+| <<polling-sources#_watermarking, Polling Source Watermarking>> | Logs information about watermarking handling on polling sources.
+Because this process uses low-level logic, enable trace logging only when debugging or troubleshooting is necessary.
+| <<connections#_pooling-strategy, Pooling Connection Provider>> | Logs information about connection management for pooling connection providers.
+This log provides connection pool status information as well as connection handling, which indicates when the pool retrieves and returns connections.
+|===
+
+== Verbose Logging
+
+Use verbose logging to troubleshoot SDK components to get information regarding their status or behavior.
+Because of the high impact to application performance, limit verbose logging to testing and troubleshooting operations.
+
+Enable verbose logging in Anypoint Studio, or Anypoint Runtime Manager if using CloudHub APIs.
+In both cases, the application's log file logs the information.
+
+=== Enable Verbose Logging in Anypoint Studio
+
+The following steps describe how to enable verbose logging using Anypoint Studio:
+
+. Access Anypoint Studio and navigate to the *Package Explorer* view.
+. Open your application's project name.
+. Open the `src/main/resources` path folder.
+. Open the `log4j2.xml` file inside the folder.
+
++
+image:enable-sdk-logging-studio.png[enable-sdk-logging-studio]
++
+
+. Add an `<AsyncLogger>` tag inside the `<Loggers>` tag:
+
++
+[source,xml,linenums]
+----
+<Loggers>
+    ...
+    <AsyncLogger name="<component's fully qualified name>" level="<logging level>"/>
+    ...
+</Loggers>
+----
++
+
++
+Use the following table as a reference for specifying the component's fully qualified name:
++
+
++
+[%header,cols="2,2,1"]
+|===
+| Name | Fully Qualified Name | Log Level
+| Source|`org.mule.runtime.module.extension.internal.runtime.source.ExtensionMessageSource`| `DEBUG`
+| Polling Source|`org.mule.runtime.module.extension.internal.runtime.source.poll.PollingSourceWrapper`| `DEBUG`
+| Polling Source Watermarking|`org.mule.runtime.module.extension.internal.runtime.source.poll.PollingSourceWrapper`| `TRACE`
+| Pooling Connection Provider|`org.mule.runtime.core.internal.connection.PoolingConnectionHandler`
+`org.mule.runtime.core.internal.connection.PoolingConnectionManagementStrategy`| `DEBUG`
+|===
++
+
++
+The following example shows how to add a fully qualified name to the `log4j2.xml` file to enable verbose logging for Source:
++
+
++
+[source,xml,linenums]
+----
+<Loggers>
+   ...
+    <!-- Mule logger -->
+    <AsyncLogger name="org.mule.runtime.core.internal.processor.LoggerMessageProcessor" level="INFO"/>
+    <AsyncLogger name="org.mule.runtime.module.extension.internal.runtime.source.ExtensionMessageSource" level="DEBUG"/>
+    <AsyncRoot level="INFO">
+        <AppenderRef ref="file" />
+    </AsyncRoot>
+</Loggers>
+----
+
+
+=== Enable Verbose Logging in Anypoint Runtime Manager
+
+The following steps describe how to enable verbose logging using Anypoint Runtime Manager:
+
+. Access Anypoint Runtime Manager.
+. Select the desired application.
+. Go to *Settings* on the left pane.
+. Go to the *Logging* tab.
+
++
+image:enable-sdk-logging-runtime-manager.png[sdk-verbose-logging-runtime-manager]
++
+
+. Add the component's fully qualified name and the logging level (DEBUG or TRACE).
+Refer to the table that shows how to specify the component's fully qualified name.
+. Click *Apply Changes*.
