@@ -16,11 +16,6 @@ resource name, and executes only if `operationId` is null. The identifier cannot
 collide with resources, triggers, or other REST
 SDK components.
 
-REST SDK provides a default mechanism to generate an operation
-identifier if there is a valid `operationId` from an OAS context with a non
-null value. Customize the default mechanism by modifying the descriptor. Input your own
-custom DataWeave script to change how the operation identifiers are generated.
-
 Use these three bindings to modify the mechanism:
 
 [%header%autowidth.spread]
