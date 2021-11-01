@@ -1090,8 +1090,7 @@ sidecars. Directive is scoped for the descriptor with a default value `false`.
 
 [source,yaml]
 ----
-##
-sidecarOperations: true
+sidecar: true
 operations:
     getContactByID:
         base: getContact
