@@ -1085,7 +1085,7 @@ Generate customized operations using declarative
 sidecars on the generated connector when including base and experience
 connectivity in the same artifact.
 
-The sidecarOperations directive generates all customized operations as
+The sidecar directive generates all customized operations as
 sidecars. Directive is scoped for the descriptor with a default value `false`.
 
 [source,yaml]
