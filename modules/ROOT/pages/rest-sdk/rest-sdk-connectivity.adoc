@@ -36,11 +36,21 @@ Scaffold a connector descriptor from an API spec.
 
 Create a connector from a connector descriptor and an API specification.
 
+* // Create a Customization Layer
+
+Optionally, create an instance of your existing connector descriptor to add new layers of functionality.
+
 * //, Customize Your Connector
 
-Perform modifications to the connector descriptor to customize your generated connector.
+Modify the connector descriptor and/or customization layer to customize your generated connector.
 
+* //, Build and Publish Your Connector
 
+Build your connector using Maven, generate models, and publish your connector to Exchange.
+
+* //, Use Your Connector in Studio or Flow Designer
+
+Use your connector directly in either Studio or Flow Designer. 
 
 
 
