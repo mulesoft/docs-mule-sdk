@@ -3,8 +3,21 @@ ifndef::env-site,env-github[]
 include::../_attributes.adoc[]
 endif::[]
 
-You can create a connector from an API specification, or _API spec_ (OAS or RAML), by using REST
-SDK.
+REST SDK enables you to create a connector from an API specification (OAS or RAML)
+and accelerates connector development by using a metadata-driven approach. REST SDK
+provides a quick and relevant connectivity experience that is easy to use and requires
+little to no configuration.
+
+With REST SDK you can:
+
+* Enable instant connectivity via metadata
+* Reduce the speed needed to build a new connector from several months to days or minutes
+* Provide a unified connector designer that welcomes non-developer users
+* Eliminate the need to generate and maintain system specific code and static assets 
+
+
+enables you to create a connector from an API specification, or
+API spec, (OAS or RAML), to accelerate the development
 
 Creating a connector involves creating a connector descriptor that
 articulates how the connector should look. You can then combine the
