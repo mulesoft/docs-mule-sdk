@@ -4,7 +4,7 @@ include::../_attributes.adoc[]
 endif::[]
 
 REST SDK enables you to create a connector from an API specification (OAS or RAML)
-and accelerates connector development by using a metadata-driven approach. REST SDK
+and uses a metadata-driven approach to accelerate connector development. REST SDK
 provides a quick and relevant connectivity experience that is easy to use and requires
 little to no configuration.
 
@@ -15,19 +15,38 @@ With REST SDK you can:
 * Provide a unified connector designer that welcomes non-developer users
 * Eliminate the need to generate and maintain system specific code and static assets
 
-////
-Creating a connector involves creating a connector descriptor that
-articulates how the connector should look. You can then combine the
-connector descriptor with an API spec and generate a connector.
+== How to Use REST SDK
 
-You can use the following steps to create a connector:
+Use the following documentation as a step-by-step guide to build your own
+connector using REST SDK.
 
-[arabic]
-. Scaffold the connector descriptor from the API Spec.
-. Customize your connector descriptor to make the connector behave and
-look as specified.
-. Generate the connector using REST SDK.
-//// 
+* // features.adoc, Features in REST SDK
+
+Learn about which features you would like in your REST SDK connector.
+
+* //.adoc, Setup and Installation
+
+Ensure you meet the prerequisites and install the REST SDK plugin.
+
+* //, Scaffold a Connector Descriptor
+
+Scaffold a connector descriptor from an API spec.
+
+* //, Create a Connector
+
+Create a connector from a connector descriptor and an API specification.
+
+* //, Customize Your Connector
+
+Perform modifications to the connector descriptor to customize your generated connector.
+
+
+
+
+
+Once you've experienced the end-to-end journey with a connector you create, use
+the process to plan your own connectivity projects.
+
 
 == Features in REST SDK
 
@@ -35,21 +54,20 @@ The following features are available in REST SDK:
 
 * Instant connector generation from RAML 1.0, OAS 2.0, and OAS 3.0
 * Maven distribution framework
-* Support for paginated operations
+* Paginated operations
 * Triggers
 * Value providers
 * Sample data
-* Security Scheme support for:
-** Basic Authentication
-** Digest Authentication
-** Pass Through
-** OAuth 2.0 Client Credentials
-** OAuth 2.0 Authorization Code
-** Bearer Authentication
+* Security scheme support for:
+** Basic authentication
+** Bearer authentication
+** Digest authentication
+** Pass-through authentication
+** OAuth 2.0 client credentials grant type
+** OAuth 2.0 authorization code grant type
 * TLS support
-* Filter out specific API operations
-* Custom headers and query parameters at the global and
-operation levels
+* Specific API operation filtering
+* Custom headers and query parameters at the global and operation levels
 * Global and operation-specific timeouts
 * Support for reconnection
 * HTTP proxy support
@@ -58,13 +76,13 @@ operation levels
 * Ability to modify or extend the generated connector using Java SDK. You can:
 ** Add additional security schemes
 ** Customize operations
-** Add message sources, expression functions, etc
-** Add Dynamic DataSense
+** Add message sources or expression functions
+** Add dynamic DataSense
 ** Describe custom authentication
 
-On the non-functional side, these connectors are fully
+On the non-functional side, REST SDK connectors are fully
 https://docs.mulesoft.com/mule-sdk/1.1/non-blocking-operations[non-blocking]
-and also provide reduced and optimized _extension models_.
+and also provide reduced and optimized extension models.
 
 
 == Differences with Rest Connect
@@ -76,10 +94,5 @@ connector, REST SDK generates source code that you can version, modify,
 and extend manually.
 * REST SDK does not publish the generated connectors automatically. You
 can deploy the connector at your convenience.
-* The generated source code uses the Java SDK instead of the XML source
+* REST SDK generated source code uses Java SDK instead of XML source
 code.
-
-
-== What's Next?
-
-xref:rest-sdk/project-setup.adoc[Getting Started]
