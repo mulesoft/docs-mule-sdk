@@ -13,12 +13,9 @@ With REST SDK you can:
 * Enable instant connectivity via metadata
 * Reduce the speed needed to build a new connector from several months to days or minutes
 * Provide a unified connector designer that welcomes non-developer users
-* Eliminate the need to generate and maintain system specific code and static assets 
+* Eliminate the need to generate and maintain system specific code and static assets
 
-
-enables you to create a connector from an API specification, or
-API spec, (OAS or RAML), to accelerate the development
-
+////
 Creating a connector involves creating a connector descriptor that
 articulates how the connector should look. You can then combine the
 connector descriptor with an API spec and generate a connector.
@@ -30,6 +27,7 @@ You can use the following steps to create a connector:
 . Customize your connector descriptor to make the connector behave and
 look as specified.
 . Generate the connector using REST SDK.
+//// 
 
 == Features in REST SDK
 
