@@ -1,0 +1,63 @@
+= Overview
+ifndef::env-site,env-github[]
+include::../_attributes.adoc[]
+endif::[]
+
+REST SDK provides metadata-driven features that create a unified connectivity
+experience for all types of users:
+
+* As an API developer, use REST SDK to produce connectivity at scale.
+* As an integration specialist, use REST SDK to create connections when
+your desired connector is not available in Studio.
+* As an API product manager, use REST SDK to expand API outreach to developers
+and non-developer users.
+* As an API enthusiast, use REST SDK to develop and publish use-case based
+connections for a growing marketplace.
+
+== Features in REST SDK
+
+REST SDK currently supports the following features:
+
+* Instant connector generation from RAML 1.0, OAS 2.0, and OAS 3.0
+* Maven distribution framework
+* Paginated operations
+* Triggers
+* Value providers
+* Sample data
+* Security scheme support for:
+** Basic authentication
+** Bearer authentication
+** Digest authentication
+** Pass-through authentication
+** OAuth 2.0 client credentials grant type
+** OAuth 2.0 authorization code grant type
+* TLS support
+* Specific API operation filtering
+* Custom headers and query parameters at the global and operation levels
+* Global and operation-specific timeouts
+* Support for reconnection
+* HTTP proxy support
+* Automatic error handling
+* Support for multiple base URLs
+* Ability to modify or extend the generated connector using Java SDK. You can:
+** Add additional security schemes
+** Customize operations
+** Add message sources or expression functions
+** Add dynamic DataSense
+** Describe custom authentication
+
+On the non-functional side, REST SDK connectors are fully
+xref:mule-sdk::non-blocking-operations[non-blocking] and also provide reduced
+and optimized extension models.
+
+== Differences with Rest Connect
+
+The main differences between REST SDK and Rest Connect v1 are:
+
+* Unlike Rest Connect v1 which generates and deploys an unmodifiable
+connector, REST SDK generates source code that you can version, modify,
+and extend manually.
+* REST SDK does not publish the generated connectors automatically. You
+can deploy the connector at your convenience.
+* REST SDK generated source code uses Java SDK instead of XML source
+code.

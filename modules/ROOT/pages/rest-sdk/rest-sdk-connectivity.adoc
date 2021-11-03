@@ -20,9 +20,9 @@ With REST SDK you can:
 Use the following documentation as a step-by-step guide to build your own
 connector using REST SDK.
 
-* // features.adoc, Features in REST SDK
+* // features.adoc, Overview
 
-Learn about which features you would like in your REST SDK connector.
+Learn about different use cases and features that REST SDK offers.
 
 * //.adoc, Setup and Installation
 
@@ -50,59 +50,4 @@ Build your connector using Maven, generate models, and publish your connector to
 
 * //, Use Your Connector in Studio or Flow Designer
 
-Use your connector directly in either Studio or Flow Designer. 
-
-
-
-Once you've experienced the end-to-end journey with a connector you create, use
-the process to plan your own connectivity projects.
-
-
-== Features in REST SDK
-
-The following features are available in REST SDK:
-
-* Instant connector generation from RAML 1.0, OAS 2.0, and OAS 3.0
-* Maven distribution framework
-* Paginated operations
-* Triggers
-* Value providers
-* Sample data
-* Security scheme support for:
-** Basic authentication
-** Bearer authentication
-** Digest authentication
-** Pass-through authentication
-** OAuth 2.0 client credentials grant type
-** OAuth 2.0 authorization code grant type
-* TLS support
-* Specific API operation filtering
-* Custom headers and query parameters at the global and operation levels
-* Global and operation-specific timeouts
-* Support for reconnection
-* HTTP proxy support
-* Automatic error handling
-* Support for multiple base URLs
-* Ability to modify or extend the generated connector using Java SDK. You can:
-** Add additional security schemes
-** Customize operations
-** Add message sources or expression functions
-** Add dynamic DataSense
-** Describe custom authentication
-
-On the non-functional side, REST SDK connectors are fully
-https://docs.mulesoft.com/mule-sdk/1.1/non-blocking-operations[non-blocking]
-and also provide reduced and optimized extension models.
-
-
-== Differences with Rest Connect
-
-The main differences between the REST SDK and the Rest Connect v1 are:
-
-* Unlike Rest Connect v1 which generates and deploys an unmodifiable
-connector, REST SDK generates source code that you can version, modify,
-and extend manually.
-* REST SDK does not publish the generated connectors automatically. You
-can deploy the connector at your convenience.
-* REST SDK generated source code uses Java SDK instead of XML source
-code.
+Use your connector directly in either Studio or Flow Designer.
