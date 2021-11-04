@@ -59,4 +59,4 @@ Windows: `C:\Users\<UserName>\.m2\settings.xml`
 == What's Next
 
 Now that you've set up your project, proceed to
-xref:rest-sdk/scaffold-connector-descriptor[Scaffold a Connector Descriptor].
+xref:rest-sdk/scaffold-connector-descriptor.adoc[Scaffold a Connector Descriptor].
