@@ -30,7 +30,7 @@ Ensure you meet the prerequisites and install the REST SDK plugin.
 
 * //, Scaffold a Connector Descriptor
 
-Scaffold a connector descriptor from an API spec.
+Scaffold a connector descriptor from an API specification.
 
 * //, Create a Connector
 

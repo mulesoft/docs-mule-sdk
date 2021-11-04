@@ -47,7 +47,7 @@ REST SDK currently supports the following features:
 ** Describe custom authentication
 
 On the non-functional side, REST SDK connectors are fully
-xref:mule-sdk::non-blocking-operations[non-blocking] and also provide reduced
+xref:mule-sdk/non-blocking-operations[non-blocking] and also provide reduced
 and optimized extension models.
 
 == Differences with Rest Connect
@@ -65,5 +65,5 @@ code.
 == What's Next
 
 Now that you've gotten an understanding of how REST SDK works and its provided
-features, proceed to <<xref:project-setup.adoc, Getting Started>> to set up
+features, proceed to <<xref:rest-sdk/project-setup.adoc, Getting Started>> to set up
 REST SDK.

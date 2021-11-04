@@ -21,7 +21,7 @@ to the new version. API specifications must be as complete as possible and provi
 rich schemas for every input or output type, example, security information, and
 so on.
 
-=== Scaffold the Connector Descriptor
+== Scaffold the Connector Descriptor
 
 To scaffold the connector descriptor, run the `createDescriptor` mojo:
 
@@ -65,3 +65,8 @@ issues generating the connector descriptor.
 
 |`FALSE`
 |===
+
+== What's Next
+
+Now that you've scaffolded a connector descriptor from an API specification,
+proceed to <<xref:rest-sdk/create-connector.adoc, Create a Connector>>.
