@@ -14,52 +14,59 @@ To generate the connector, run the `createConnector` mojo:
 mvn com.mulesoft.connectivity:rest-sdk-mojo:<PLUGIN_VERSION>:createConnector -DapiSpec=<PATH_TO_SPEC>/api.raml -Ddescriptor=<PATH_TO_DESCRIPTOR>/descriptor.yaml
 ----
 
-* Where `<PATH_TO_SPEC>` is the location of your API spec.
-* Where `<PATH_TO_DESCRIPTOR>` is the location of your descriptor.
-* Where `<PLUGIN_VERSION>` is the version of the Rest SDK Plugin you want to use.
+* Where `<PATH_TO_SPEC>` is the location of your API specification.
+* Where `<PATH_TO_DESCRIPTOR>` is the location of your connector descriptor.
+* Where `<PLUGIN_VERSION>` is the version of the REST SDK plugin you want to use.
 If you omit this parameter, the latest version is used.
 
-The createConnector mojo uses the following parameters:
+The `createConnector` mojo uses the following parameters:
 
 [cols=",,,",options="header",]
 |===
 |*Parameter* |*Required* |*Description* |*Default Value*
 |apiSpec |Yes
-|The relative path to the API spec for which you want to
+|Relative path to the API specification for which to
 create a connector. |-
 
 |descriptor |Yes
-|The relative paths to the connector descriptors that will be used to customize the connector. The value for this parameter can be a single relative path to a connector descriptor or a list of those, split with commas.|-
+|Relative paths to the connector descriptors used to customize the connector. Can be a single relative path to a connector descriptor or a comma-separated list of relative paths to connector descriptors.|-
 
 |specFormat
 |No
-a|The format of the API spec.
-
-Allowed values are RAML, JsonOAS, YamlOAS, JsonOAS3, and YamlOAS3. For specFormats that are not supported, use https://www.apimatic.io/transformer/[API Transformer] by APIMatic to transform them into RAML or OAS to use the tooling provided by REST SDK.
-
-|If not specified, it will autodetect the format based on the file extension and content.
+a|Format of the API specification.
++
+Allowed values are `RAML`, `JsonOAS`, `YamlOAS`, `JsonOAS3`, and `YamlOAS3`.
++
+For API specification formats that are not supported, use https://www.apimatic.io/transformer/[API Transformer] by APIMatic to transform the format into `RAML` or `OAS` to use the tooling provided by REST SDK.
+|If not specified, REST SDK autodetects the format based on the file extension and content.
 
 |outputDir
 |No
-a|The path where the connector resides.
+a|Path in which the connector is located.
 
 The generated file is named `output.yaml` and is located in the specified
 folder.
 |Current directory
 
 
-|skipValidation
-|No
-|Allows you to skip the validation step for the API
-spec. Users should not skip the validations as the successful parsing of
-an invalid API spec is not guaranteed. Users who skip validation may
-experience issues generating the connector.
-|FALSE
+|skipValidation |No |Enables you to skip the validation step for an API
+specification. Selecting `TRUE` might result in an invalid API specification or
+issues generating the connector descriptor.
+
+|`FALSE`
 
 
 |dynamicMetadata
 |No
-|Creates backwards compatible Dynamic Metadata for Operations.
-|FALSE
+|Creates backward compatible dynamic metadata for operations.
+|`FALSE`
 
 |===
+
+== What's Next
+
+Now that you've created a connector from an API specification and connector descriptor,
+optionally proceed to <<xref:rest-sdk/customization-layer.adoc, Customization Layer>>
+to generate another layer of functionality. Otherwise, proceed to
+ <<xref:rest-sdk/customize-the-connector.adoc, Customize Your Connector>> to start
+ modifying your connector.

@@ -42,7 +42,7 @@ Optionally, create an instance of your existing connector descriptor to add new 
 
 * //, Customize Your Connector
 
-Modify the connector descriptor and/or customization layer to customize your generated connector.
+Modify the connector descriptor(s) to customize your generated connector.
 
 * //, Build and Publish Your Connector
 
