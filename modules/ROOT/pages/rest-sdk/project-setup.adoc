@@ -1,21 +1,10 @@
-= Getting Started
+= Setup and Installation
 ifndef::env-site,env-github[]
 include::../_attributes.adoc[]
 endif::[]
 
 To get started with REST SDK, ensure you meet the prerequisites and then follow the
 steps in this section to install the REST SDK plugin.
-
-////
-To create a connector using Rest SDK:
-
-* Use a _mojo_ (Maven plain Old Java Object) to scaffold a connector descriptor for an API Spec.
-* Use a mojo to create a Connector from an API Spec and a connector descriptor.
-* Perform some modifications to the connector descriptor for tailoring the generated connector.
-* Package the connector using Maven.
-* Publish the connector to Anypoint Exchange.
-////
-
 
 == Prerequisites
 
@@ -67,53 +56,7 @@ Windows: `C:\Users\<UserName>\.m2\settings.xml`
     </profiles>
 ----
 
-Now, you can proceed to using REST SDK.
-
 == What's Next
 
 Now that you've set up your project, proceed to
 <<xref:rest-sdk/scaffold-connector-descriptor, Scaffold a Connector Descriptor>>.
-
-
-
-== Customization Layer
-
-Composition is defined in a customization layer file, which is an
-instance of an existing connector descriptor. When you create a connector using
-this file, the connector is versioned and released separately from the base connector.
-
-This enables you to take an immutable version of a connector
-and generate net new assets that add new layers of functionality. These newly
-generated composite artifacts can have their own release lifecycle and be developed
-separately from the base connector.
-
-Using the customization layer enables you to develop new versions of the base connector without
-duplicating code. In addition, changes that are made in the new version will
-not affect the base version of the connector, nor will it break backwards compatibility.
-
-=== Create Customization Layer
-
-This composition feature is a part of the standard connector creation flow.
-The only difference is that multiple connector descriptors can be specified in
-the create connector command.
-
-The following example shows what the create connector command looks like:
-----
-mvn com.mulesoft.connectivity:rest-sdk-mojo:<PLUGIN_VERSION>:createConnector -DapiSpec=api.raml -Ddescriptor=connector-descriptor.yaml,customization-layer.yaml
-----
-
-The descriptors are used in the order they are specified. In this case,
-the `connector-descriptor.yaml` is applied first, and is then overwritten by
-the `customization-layer.yaml`.
-
-=== Composing Descriptors
-
-When composing standard connector descriptors, the properties declared in a
-descriptor override those declared in previous (base) descriptors.
-
-For example, if the connector name and description are set in the first (base) layer
-and then the connector _name_ is overwritten in a second descriptor layer, the final generated connector will have the name of the second layer and the description of the first layer.
-
-== What's Next?
-
-xref:rest-sdk/customize-connector-descriptor.adoc[Customize the Connector Descriptor]

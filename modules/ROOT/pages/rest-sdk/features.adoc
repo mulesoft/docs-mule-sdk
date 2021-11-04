@@ -65,5 +65,5 @@ code.
 == What's Next
 
 Now that you've gotten an understanding of how REST SDK works and its provided
-features, proceed to <<xref:rest-sdk/project-setup.adoc, Getting Started>> to set up
+features, proceed to <<xref:rest-sdk/project-setup.adoc, Setup and Installation>> to set up
 REST SDK.

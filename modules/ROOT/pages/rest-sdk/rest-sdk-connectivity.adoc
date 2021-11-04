@@ -20,34 +20,34 @@ With REST SDK you can:
 Use the following documentation as a step-by-step guide to build your own
 connector using REST SDK.
 
-* <<xref.features.adoc, Overview>>
+* <<xref:rest-sdk/features.adoc, Overview>>
 
 Learn about different use cases and features that REST SDK offers.
 
-* //.adoc, Setup and Installation
+* <<xref:rest-sdk/project-setup.adoc, Setup and Installation>>
 
 Ensure you meet the prerequisites and install the REST SDK plugin.
 
-* //, Scaffold a Connector Descriptor
+* <<xref:rest-sdk/scaffold-connector-descriptor.adoc, Scaffold a Connector Descriptor>>
 
 Scaffold a connector descriptor from an API specification.
 
-* //, Create a Connector
+* <<xref:rest-sdk/create-connector.adoc, Create a Connector>>
 
 Create a connector from a connector descriptor and an API specification.
 
-* // Create a Customization Layer
+* <<xref:rest-sdk/customization-layer.adoc, Create a Customization Layer>>
 
 Optionally, create an instance of your existing connector descriptor to add new layers of functionality.
 
-* //, Customize Your Connector
+* <<xref:rest-sdk/customize-the-connector.adoc, Customize Your Connector>>
 
 Modify the connector descriptor(s) to customize your generated connector.
 
-* //, Build and Publish Your Connector
+* Build and Publish Your Connector
 
 Build your connector using Maven, generate models, and publish your connector to Exchange.
 
-* //, Use Your Connector in Studio or Flow Designer
+* Use Your Connector in Studio or Flow Designer
 
 Use your connector directly in either Studio or Flow Designer.
