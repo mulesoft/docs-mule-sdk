@@ -61,3 +61,9 @@ and extend manually.
 can deploy the connector at your convenience.
 * REST SDK generated source code uses Java SDK instead of XML source
 code.
+
+== What's Next
+
+Now that you've gotten an understanding of how REST SDK works and its provided
+features, proceed to <<xref:project-setup.adoc, Getting Started>> to set up
+REST SDK.

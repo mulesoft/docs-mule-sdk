@@ -20,7 +20,7 @@ With REST SDK you can:
 Use the following documentation as a step-by-step guide to build your own
 connector using REST SDK.
 
-* // features.adoc, Overview
+* <<xref.features.adoc, Overview>>
 
 Learn about different use cases and features that REST SDK offers.
 
