@@ -66,7 +66,7 @@ issues generating the connector descriptor.
 == What's Next
 
 Now that you've created a connector from an API specification and connector descriptor,
-optionally proceed to <<xref:rest-sdk/customization-layer.adoc, Customization Layer>>
+optionally proceed to xref:rest-sdk/customization-layer.adoc[Customization Layer]
 to generate another layer of functionality. Otherwise, proceed to
-<<xref:rest-sdk/customize-the-connector.adoc, Customize Your Connector>> to start
+xref:rest-sdk/customize-the-connector.adoc[Customize Your Connector] to start
 modifying your connector.

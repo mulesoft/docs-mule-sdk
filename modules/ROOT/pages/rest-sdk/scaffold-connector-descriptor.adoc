@@ -69,4 +69,4 @@ issues generating the connector descriptor.
 == What's Next
 
 Now that you've scaffolded a connector descriptor from an API specification,
-proceed to <<xref:rest-sdk/create-connector.adoc, Create a Connector>>.
+proceed to xref:rest-sdk/create-connector.adoc[Create a Connector].
