@@ -41,9 +41,9 @@ REST SDK currently supports the following features:
 * Support for multiple base URLs
 * Ability to modify or extend the generated connector using Java SDK. You can:
 ** Add additional security schemes
-** Customize operations
-** Add message sources or expression functions
 ** Add dynamic DataSense
+** Add message sources or expression functions
+** Customize operations
 ** Describe custom authentication
 
 On the non-functional side, REST SDK connectors are fully
