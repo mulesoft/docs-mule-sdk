@@ -22,7 +22,7 @@ connector using REST SDK.
 
 * xref:rest-sdk/features.adoc[Overview]
 +
-Learn about different use cases and features that REST SDK offers.
+Learn about different use cases and features that REST SDK provides.
 
 * xref:rest-sdk/project-setup.adoc[Setup and Installation]
 +
