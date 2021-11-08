@@ -111,7 +111,7 @@ image:enable-sdk-logging-runtime-manager.png[sdk-verbose-logging-runtime-manager
 Refer to the table that shows how to specify the component's fully qualified name.
 . Click *Apply Changes*.
 
-== Error: cannot find org.mule.sdk.api classes
+== Error: Cannot Find org.mule.sdk.api Classes
 
 Java SDK throws errors such as `Cannot access XYZ class file: XYZ not found` or `Cannot find symbol: method someMethod() location: variable someVar of type XYZ`, in which XYZ is a class from the `org.mule.sdk.api` package, when using version 1.4.0 of the module's parent POM:
 
