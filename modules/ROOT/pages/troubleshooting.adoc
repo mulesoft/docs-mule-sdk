@@ -113,8 +113,7 @@ Refer to the table that shows how to specify the component's fully qualified nam
 
 == Error: cannot find org.mule.sdk.api classes
 
-Java SDK throws errors such as `Cannot access XYZ class file: XYZ not found` or `Cannot find symbol: method someMethod() location: variable someVar of type XYZ`, in which XYZ is a class from the `org.mule.sdk.api` package,
-when using version 1.4.0 of the module's parent POM:
+Java SDK throws errors such as `Cannot access XYZ class file: XYZ not found` or `Cannot find symbol: method someMethod() location: variable someVar of type XYZ`, in which XYZ is a class from the `org.mule.sdk.api` package, when using version 1.4.0 of the module's parent POM:
 
 [source,xml,linenums]
 ----
@@ -148,6 +147,4 @@ To fix this error, add the `mule-sdk-api` dependency to the pom.xml:
 ----
 
 [IMPORTANT]
-Use the annotations and classes from `org.mule.runtime.extension.api` unless
-you need new functionality from `org.mule.sdk.api`. If you need new annotations
-from `org.mule.sdk.api`, use only classes annotated with `@MinMuleVersion("4.4")`.
+Use the annotations and classes from `org.mule.runtime.extension.api` unless you need new functionality from `org.mule.sdk.api`. If you need new annotations from `org.mule.sdk.api`, use only classes annotated with `@MinMuleVersion("4.4")`.
