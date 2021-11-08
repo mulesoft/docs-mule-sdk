@@ -33,7 +33,7 @@ create a connector. |-
 
 |specFormat
 |No
-a|Format of the API specification.
+a|Format of the API specification. +
 
 
 Allowed values are `RAML`, `JsonOAS`, `YamlOAS`, `JsonOAS3`, and `YamlOAS3`.
