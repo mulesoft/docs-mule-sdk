@@ -42,23 +42,23 @@ The `createDescriptor` mojo uses the following parameters:
 create a connector descriptor. |-
 
 |specFormat |No a|
-Format of the API specification.
+Format of the API specification. +
 
 
-Allowed values are `RAML`, `JsonOAS`, `YamlOAS`, `JsonOAS3`, and `YamlOAS3`.
+Allowed values are `RAML`, `JsonOAS`, `YamlOAS`, `JsonOAS3`, and `YamlOAS3`. +
 
 
 For API specification formats that are not supported, use https://www.apimatic.io/transformer/[API Transformer] by APIMatic to transform the format into `RAML` or `OAS` to use the tooling provided by REST SDK.
 |If not specified, REST SDK autodetects the format based on the file extension and content.
 
 |outputDir |No a|
-Path in which the connector descriptor is placed.
+Path in which the connector descriptor is placed. +
 
 
 The generated file is named `output.yaml` and is located in the specified
 folder. |Current directory
 
-|descriptorMode |No |Mode in which to generate the connector descriptor.
+|descriptorMode |No |Mode in which to generate the connector descriptor. +
 
 
 
