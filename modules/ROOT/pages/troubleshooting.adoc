@@ -5,7 +5,7 @@ include::_attributes.adoc[]
 endif::[]
 :keywords: mule, sdk, troubleshooting, logging, known issue, bug, error, limitations
 
-To troubleshoot Java SDK, learn how to enable logging and verbose logging, as well as interpret common error messages.
+To troubleshoot Java SDK, learn how to enable logging (including verbose logging) and how to interpret common error messages.
 
 == Logging
 
