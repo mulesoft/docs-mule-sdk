@@ -35,10 +35,10 @@ create a connector. |-
 |No
 a|Format of the API specification.
 
-{sp} +
++
 Allowed values are `RAML`, `JsonOAS`, `YamlOAS`, `JsonOAS3`, and `YamlOAS3`.
 
-{sp} +
++
 For API specification formats that are not supported, use https://www.apimatic.io/transformer/[API Transformer] by APIMatic to transform the format into `RAML` or `OAS` to use the tooling provided by REST SDK.
 |If not specified, REST SDK autodetects the format based on the file extension and content.
 
@@ -46,7 +46,7 @@ For API specification formats that are not supported, use https://www.apimatic.i
 |No
 a|Path in which the connector is located.
 
-{sp} +
++
 The generated file is named `output.yaml` and is located in the specified
 folder.
 |Current directory
