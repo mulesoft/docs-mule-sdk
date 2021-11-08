@@ -39,4 +39,4 @@ To solve this issue you must add the mule-sdk-api dependency to the pom.xml:
     <version>0.4.0</version>
 </dependency>
 ----
-CAUTION: Unless you need new functionality from the new org.mule.sdk.api package, remember to keep using the annotations and classes from *org.mule.runtime.extension.api*. However if you do need any of the new annotations from the org.mule.sdk.api package, you must only use those classes that are annotated with `@MinMuleVersion("4.4")`.
+CAUTION: Unless you need new functionality from the new org.mule.sdk.api package, remember to keep using the annotations and classes from *org.mule.runtime.extension.api*. However, if you do need any of the new annotations from the org.mule.sdk.api package, you must only use those classes that are annotated with `@MinMuleVersion("4.4")`.
