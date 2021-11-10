@@ -1,0 +1,62 @@
+= Setup and Installation
+ifndef::env-site,env-github[]
+include::../_attributes.adoc[]
+endif::[]
+
+To get started with REST SDK, ensure you meet the prerequisites and then follow the
+steps in this section to install the REST SDK plugin.
+
+== Prerequisites
+
+Before you start using REST SDK, verify that you have the tools needed:
+
+* Java 8 SDK
+* Apache Maven (3.3.9 or newer recommended)
+
+== Install the REST SDK Plugin
+
+Install the https://repository-master.mulesoft.org/nexus/service/local/repositories/releases/content/com/mulesoft/connectors/rest-connect-cli/1.0.0-RC2/rest-connect-cli-1.0.0-RC2-jar-with-dependencies.jar[REST SDK plugin] to use REST SDK. The plugin is a distribution
+of one or more related mojos (Maven plain Old Java Objects). Each mojo is an
+executable goal in Maven.
+
+If you have access to the MuleSoft's repositories, Maven automatically downloads
+the plugin when you try to use it.
+
+=== Get Access to MuleSoft's Maven Repository
+
+MuleSoft repositories are public, however, you must to configure Maven to access
+the repositories.
+
+. Access the `settings.xml` Maven configuration file. +
+Linux: `Linux: ~/.m2/settings.xml` +
+Mac: `Mac: ~/.m2/settings.xml` +
+Windows: `C:\Users\<UserName>\.m2\settings.xml`
+
+. In `settings.xml`, add a new plugin repository to the `<profile>` section, for example:
+
++
+[source,xml]
+----
+    <profiles>
+        <profile>
+            <id>default-profile</id>
+            <activation>
+                <activeByDefault>true</activeByDefault>
+            </activation>
+
+            <pluginRepositories>
+                <pluginRepository>
+                    <id>mulesoft-releases</id>
+                    <name>Mule Releases Repository</name>
+                    <url>https://repository.mulesoft.org/nexus/content/repositories/releases/</url>
+                </pluginRepository>
+            </pluginRepositories>
+
+        </profile>
+    </profiles>
+----
+
+== What's Next
+
+Now that you've set up your project, proceed to
+xref:rest-sdk/scaffold-connector-descriptor.adoc[Scaffold a Connector Descriptor].

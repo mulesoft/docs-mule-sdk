@@ -1,0 +1,53 @@
+= REST SDK
+ifndef::env-site,env-github[]
+include::../_attributes.adoc[]
+endif::[]
+
+REST SDK enables you to create a connector from an API specification (OAS or RAML)
+and uses a metadata-driven approach to accelerate connector development. REST SDK
+provides a quick and relevant connectivity experience that is easy to use and requires
+little to no configuration.
+
+With REST SDK you can:
+
+* Enable instant connectivity via metadata
+* Reduce the speed needed to build a new connector from several months to days or minutes
+* Provide a unified connector designer that welcomes non-developer users
+* Eliminate the need to generate and maintain system specific code and static assets
+
+== How to Use REST SDK
+
+Use the following documentation as a step-by-step guide to build your own
+connector using REST SDK.
+
+* xref:rest-sdk/features.adoc[Overview]
++
+Learn about different use cases and features that REST SDK provides.
+
+* xref:rest-sdk/project-setup.adoc[Setup and Installation]
++
+Ensure you meet the prerequisites and install the REST SDK plugin.
+
+* xref:rest-sdk/scaffold-connector-descriptor.adoc[Scaffold a Connector Descriptor]
++
+Scaffold a connector descriptor from an API specification.
+
+* xref:rest-sdk/create-connector.adoc[Create a Connector]
++
+Create a connector from a connector descriptor and an API specification.
+
+* xref:rest-sdk/customization-layer.adoc[Create a Customization Layer]
++
+Optionally, create an instance of your existing connector descriptor to add new layers of functionality.
+
+* xref:rest-sdk/customize-the-connector.adoc[Customize Your Connector]
++
+Modify the connector descriptor(s) to customize your generated connector.
+
+* Build and Publish Your Connector
++
+Build your connector using Maven, generate models, and publish your connector to Exchange.
+
+* Use Your Connector in Studio or Flow Designer
++
+Use your connector directly in either Studio or Flow Designer.
