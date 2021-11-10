@@ -3,72 +3,51 @@ ifndef::env-site,env-github[]
 include::../_attributes.adoc[]
 endif::[]
 
-You can create a connector from an API specification, or _API spec_ (OAS or RAML), by using REST
-SDK.
+REST SDK enables you to create a connector from an API specification (OAS or RAML)
+and uses a metadata-driven approach to accelerate connector development. REST SDK
+provides a quick and relevant connectivity experience that is easy to use and requires
+little to no configuration.
 
-Creating a connector involves creating a connector descriptor that
-articulates how the connector should look. You can then combine the
-connector descriptor with an API spec and generate a connector.
+With REST SDK you can:
 
-You can use the following steps to create a connector:
+* Enable instant connectivity via metadata
+* Reduce the speed needed to build a new connector from several months to days or minutes
+* Provide a unified connector designer that welcomes non-developer users
+* Eliminate the need to generate and maintain system specific code and static assets
 
-[arabic]
-. Scaffold the connector descriptor from the API Spec.
-. Customize your connector descriptor to make the connector behave and
-look as specified.
-. Generate the connector using REST SDK.
+== How to Use REST SDK
 
-== Features in REST SDK
+Use the following documentation as a step-by-step guide to build your own
+connector using REST SDK.
 
-The following features are available in REST SDK:
+* xref:rest-sdk/features.adoc[Overview]
++
+Learn about different use cases and features that REST SDK provides.
 
-* Instant connector generation from RAML 1.0, OAS 2.0, and OAS 3.0
-* Maven distribution framework
-* Support for paginated operations
-* Triggers
-* Value providers
-* Sample data
-* Security Scheme support for:
-** Basic Authentication
-** Digest Authentication
-** Pass Through
-** OAuth 2.0 Client Credentials
-** OAuth 2.0 Authorization Code
-** Bearer Authentication
-* TLS support
-* Filter out specific API operations
-* Custom headers and query parameters at the global and
-operation levels
-* Global and operation-specific timeouts
-* Support for reconnection
-* HTTP proxy support
-* Automatic error handling
-* Support for multiple base URLs
-* Ability to modify or extend the generated connector using Java SDK. You can:
-** Add additional security schemes
-** Customize operations
-** Add message sources, expression functions, etc
-** Add Dynamic DataSense
-** Describe custom authentication
+* xref:rest-sdk/project-setup.adoc[Setup and Installation]
++
+Ensure you meet the prerequisites and install the REST SDK plugin.
 
-On the non-functional side, these connectors are fully
-https://docs.mulesoft.com/mule-sdk/1.1/non-blocking-operations[non-blocking]
-and also provide reduced and optimized _extension models_.
+* xref:rest-sdk/scaffold-connector-descriptor.adoc[Scaffold a Connector Descriptor]
++
+Scaffold a connector descriptor from an API specification.
 
+* xref:rest-sdk/create-connector.adoc[Create a Connector]
++
+Create a connector from a connector descriptor and an API specification.
 
-== Differences with Rest Connect
+* xref:rest-sdk/customization-layer.adoc[Create a Customization Layer]
++
+Optionally, create an instance of your existing connector descriptor to add new layers of functionality.
 
-The main differences between the REST SDK and the Rest Connect v1 are:
+* xref:rest-sdk/customize-the-connector.adoc[Customize Your Connector]
++
+Modify the connector descriptor(s) to customize your generated connector.
 
-* Unlike Rest Connect v1 which generates and deploys an unmodifiable
-connector, REST SDK generates source code that you can version, modify,
-and extend manually.
-* REST SDK does not publish the generated connectors automatically. You
-can deploy the connector at your convenience.
-* The generated source code uses the Java SDK instead of the XML source
-code.
+* Build and Publish Your Connector
++
+Build your connector using Maven, generate models, and publish your connector to Exchange.
 
-
-== What's Next?
-
-xref:rest-sdk/project-setup.adoc[Getting Started]
+* Use Your Connector in Studio or Flow Designer
++
+Use your connector directly in either Studio or Flow Designer.

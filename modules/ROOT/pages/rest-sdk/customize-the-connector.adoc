@@ -1,12 +1,10 @@
-= Customize the Connector
+= Customize Your Connector
 ifndef::env-site,env-github[]
 include::../_attributes.adoc[]
 endif::[]
 
-Use the following documentation to customize your connector. The connector
-descriptor you created during the xref:rest-sdk/project-setup.adoc[project setup]
-has the same functionality as your API spec. You can modify your connector, for example, by
-adding descriptive content, additional operations, or parameters.
+Use the following documentation to customize your connector. You can modify your
+connector, for example, by adding descriptive content, additional operations, or parameters.
 
 * xref:rest-sdk/customize-connector-descriptor.adoc[Customize the Connector's Content]
 * xref:rest-sdk/configure-operations.adoc[Customize the Connector's Operations]
