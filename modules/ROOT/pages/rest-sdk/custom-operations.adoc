@@ -23,45 +23,100 @@ api.yaml:
 
 [source,yaml]
 ----
-#%RAML 1.0
-title: Offices API
-protocols: [HTTP, HTTPS]
-mediaType: application/json
-baseUri: http://localhost/office
-types:
-    Location:
-        type: object
-        properties:
-            location: string
-            zone: string
-            offset: string
-            code: string
-/locations:
+openapi: 3.0.0
+info:
+  title: Offices API
+  version: "1.0"
+paths:
+  /locations:
     post:
-        body:
+      operationId: createLocations
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Location"
+      responses:
+        "200":
+          description: ""
+          content:
             application/json:
-                type: Location
-        responses:
-            200:
-                body:
-                    application/json:
-                        type: Location
-    /{id}:
-        description: Location of the office by Id.
-        get:
-            queryParameters:
-              offset?: string
-              code:
-                type: string
-                required: true
-            responses:
-                200:
-                    body:
-                        application/json:
-                            type: Location
-        delete:
-            responses:
-                204:
+              schema:
+                $ref: "#/components/schemas/Location"
+      servers:
+        -
+          url: http://localhost/office
+  /locations/{id}:
+    get:
+      operationId: findLocationById
+      description: Location of the office by Id.
+      parameters:
+        -
+          name: offset
+          in: query
+          schema:
+            type: string
+        -
+          name: code
+          required: true
+          in: query
+          schema:
+            type: string
+        -
+          name: id
+          required: true
+          in: path
+          schema:
+            type: string
+      requestBody:
+        content: {}
+      responses:
+        "200":
+          description: ""
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Location"
+      servers:
+        -
+          url: http://localhost/office
+    delete:
+      description: Location of the office by Id.
+      parameters:
+        -
+          name: id
+          required: true
+          in: path
+          schema:
+            type: string
+      requestBody:
+        content: {}
+      responses:
+        "204":
+          description: ""
+          content: {}
+      servers:
+        -
+          url: http://localhost/office
+components:
+  schemas:
+    Location:
+      type: object
+      additionalProperties: true
+      required:
+        - location
+        - zone
+        - offset
+        - code
+      properties:
+        location:
+          type: string
+        zone:
+          type: string
+        offset:
+          type: string
+        code:
+          type: string
 ----
 
 
@@ -251,9 +306,19 @@ operations:
 We can refer to this base connectivity to collect the metadata defined for it,
 and then express only the customization that adds the experience needed:
 
-The following shows the definition for the *Find Location* operation
-in terms of a GET on /locations/{id} endpoint:
+[source,yaml]
+----
+#% Rest Connector Descriptor 1.0
+...
+operations:
+    ...
+    findLocation:
+        base:
+            operationId: findLocationById
+----
 
+The following snippet brings another supported alternative to define the base connectivity for the *Find Location* operation
+in terms of a GET on /locations/{id} endpoint.
 
 [source,yaml]
 ----
@@ -262,8 +327,12 @@ in terms of a GET on /locations/{id} endpoint:
 operations:
     ...
     findLocation:
-        base: get-/locations/{id}
+        base:
+            method: GET
+            path: /locations/{id}
 ----
+
+Even though both options are supported, we strongly encourage the use of operationId when available, as it consists in a more sustainable choice throughout the evolution and changes the API spec may face.
 
 
 == 5. Enrich With a Display Name and Description
@@ -280,7 +349,8 @@ operations:
     findLocation:
         displayName: Find Location
         description: Find location by its part specification
-        base: get-/locations/{id}
+        base:
+            operationId: findLocationById
 ----
 
 
@@ -298,7 +368,8 @@ parameters section:
 operations:
     ...
     findLocation:
-        base: get-/locations/{id}
+        base:
+            operationId: findLocationById
         displayName: Find Location
         description: Find location by its part specification
         parameters:
@@ -337,7 +408,8 @@ specific data.
 operations:
     ...
     findLocation:
-        base: get-/locations/{id}
+        base:
+            operationId: findLocationById
         displayName: Find Location
         description: Find location by its part specification
         parameters:
@@ -445,7 +517,8 @@ The following shows the original declaration:
 operations:
     ...
     findLocation:
-        base: get-/locations/{id}
+        base:
+            operationId: findLocationById
         parameters:
             partA:
                 displayName: part A
@@ -469,7 +542,8 @@ This user declaration is then interpreted as a new operation in the metadata dom
 [source,yaml]
 ----
     findLocation:
-        base: get/locations/{id}
+        base:
+            operationId: findLocationById
         parameters:
         request:
 ----
@@ -549,7 +623,8 @@ response of the actual request made.
 operations:
     ...
     findLocation:
-        base: get-/locations/{id}
+        base:
+            operationId: findLocationById
         displayName: Find Location
         description: Find location by its part specification
         parameters:
@@ -572,7 +647,7 @@ operations:
                     value: offset-1
         response:
             body:
-                schemaType: result-schema.type
+                typeSchema: result-schema.type
                 value: "#[payload -- ['code', 'offset']]"
 ----
 
@@ -594,7 +669,8 @@ operations:
     findLocation:
       ...
     createLocation:
-        base: post-/locations
+        base:
+            operationId: createLocation
         displayName: Create Location
         description: Creates a location
         parameters:
@@ -635,7 +711,8 @@ operations:
     findLocation:
       ...
     createLocation:
-        base: post-/locations
+        base:
+            operationId: createLocation
         displayName: Create Location
         description: Creates a location
         parameters:
@@ -691,7 +768,8 @@ The following shows the *createContact* operation:
 ----
 operations:
     createContact:
-        base: updateOrCreateContacts
+        base:
+            operationId: updateOrCreateContacts
         displayName: Create Contact
         description: Create contact
         parameters:
@@ -790,7 +868,8 @@ The following shows the *updateContact* operation:
 [source,yaml]
 ----
     updateContact:
-        base: updateOrCreateContacts
+        base:
+            operationId: updateOrCreateContacts
         displayName: Update Contact
         description: Update contact
         parameters:
@@ -893,7 +972,8 @@ surface the high level operation.
 [source,yaml]
 ----
     findLocation:
-        base: GET-/locations/{id}
+        base:
+            operationId: findLocationById
         displayName: Find Location
         description: This is my own find location
         parameters:
@@ -921,7 +1001,8 @@ with a literal value.
 [source,yaml]
 ----
     findLocation:
-        base: GET-/locations/{id}
+        base:
+            operationId: findLocationById
         displayName: Find Location
         description: This is my own find location
         parameters:
@@ -948,7 +1029,8 @@ only creating `ACTIVE` users.
 [source,yaml]
 ----
     updateContact:
-        base: updateOrCreateContacts
+        base:
+            operationId: updateOrCreateContacts
         displayName: Update Contact
         description: Update contact
         parameters:
@@ -984,7 +1066,8 @@ customized operation hides code and offset from the response to the user:
 [source,yaml]
 ----
     createLocation:
-        base: POST-/locations
+        base:
+            operationId: createLocation
         displayName: Create Location
         description: This is my own create location with content
         parameters:
@@ -1012,7 +1095,8 @@ parameters or request and response binding parameters.
 [source,yaml]
 ----
     searchContacts:
-        base: getContacts
+        base:
+            operationId: searchContact
         displayName: Search Contacts
         description: Search Contacts
         parameters:
@@ -1093,7 +1177,8 @@ sidecars. Directive is scoped for the descriptor with a default value `false`.
 sidecar: true
 operations:
     getContactByID:
-        base: getContact
+        base:
+            operationId: findContactById
         displayName: Get Contact By ID
         description: Get contact by ID
         parameters:
@@ -1227,7 +1312,7 @@ define customized operations.
 |String enum simple types
 |Primitive type for parameter. Exclusive with Schema Type.
 
-|schemaType
+|typeSchema
 |string
 |Schema specifying parameter value shape. Exclusive with Type.
 
@@ -1294,7 +1379,7 @@ define customized operations.
 |String enum simple types
 |Primitive type for the parameter. Exclusive with Schema Type.
 
-|schemaType
+|typeSchema
 |string
 |Schema specifying parameter value shape. Exclusive with Type.
 
@@ -1340,7 +1425,7 @@ define customized operations.
 |String enum simple types
 |Primitive type for parameter. Exclusive with Schema Type.
 
-|schemaType
+|typeSchema
 |string
 |Schema specifying parameter value shape. Exclusive with Type.
 
