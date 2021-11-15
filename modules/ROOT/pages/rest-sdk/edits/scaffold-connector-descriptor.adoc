@@ -4,7 +4,7 @@ include::../_attributes.adoc[]
 endif::[]
 
 To create a connector using REST SDK, you must first scaffold a connector
-descriptor. Use a mojo to scaffold a connector descriptor from an API specification.
+descriptor. Use a MOJO to scaffold a connector descriptor from an API specification.
 
 == Connector Descriptor
 
@@ -23,7 +23,7 @@ so on.
 
 == Scaffold the Connector Descriptor
 
-To scaffold the connector descriptor, run the `createDescriptor` mojo:
+To scaffold the connector descriptor, run the `createDescriptor` MOJO:
 
 ----
 mvn com.mulesoft.connectivity:rest-sdk-mojo:<PLUGIN_VERSION>:createDescriptor -DapiSpec=<PATH_TO_SPEC>/api.raml
@@ -33,7 +33,7 @@ mvn com.mulesoft.connectivity:rest-sdk-mojo:<PLUGIN_VERSION>:createDescriptor -D
 * Where `<PLUGIN_VERSION>` is the version of the REST SDK plugin you want to
 use. If you omit this parameter, the latest version is used.
 
-The `createDescriptor` mojo uses the following parameters:
+The `createDescriptor` MOJO uses the following parameters:
 
 [cols=",,,",options="header",]
 |===
