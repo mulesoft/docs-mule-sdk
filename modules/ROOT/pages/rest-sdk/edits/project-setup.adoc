@@ -3,34 +3,35 @@ ifndef::env-site,env-github[]
 include::../_attributes.adoc[]
 endif::[]
 
-To get started with REST SDK, ensure you meet the prerequisites and then follow the
-steps in this section to install the REST SDK plugin.
+To get started with REST SDK, ensure that your environment meets the installation
+prerequisites and then follow the steps to install the REST SDK plugin.
 
 == Prerequisites
 
-Before you start using REST SDK, verify that you have the tools needed:
+Before you install and use REST SDK, verify that your environment includes the following required tools:
 
 * Java 8 SDK
-* Apache Maven (3.3.9 or newer recommended)
+* Apache Maven (3.3.9 or later)
 
 == Install the REST SDK Plugin
 
-Install the https://repository-master.mulesoft.org/nexus/service/local/repositories/releases/content/com/mulesoft/connectors/rest-connect-cli/1.0.0-RC2/rest-connect-cli-1.0.0-RC2-jar-with-dependencies.jar[REST SDK plugin] to use REST SDK. The plugin is a distribution
-of one or more related mojos (Maven plain Old Java Objects). Each mojo is an
-executable goal in Maven.
+Install the https://repository-master.mulesoft.org/nexus/service/local/repositories/releases/content/com/mulesoft/connectors/rest-connect-cli/1.0.0-RC2/rest-connect-cli-1.0.0-RC2-jar-with-dependencies.jar[REST SDK plugin] to use REST SDK.
 
-If you have access to the MuleSoft's repositories, Maven automatically downloads
+The plugin is a distribution of one or more related MOJOs (Maven plain Old Java Objects). Each
+MOJO is an executable goal in Maven.
+
+If you have access to the MuleSoft repositories, Maven automatically downloads
 the plugin when you try to use it.
 
-=== Get Access to MuleSoft's Maven Repository
+=== Get Access to the MuleSoft Maven Repository
 
-MuleSoft repositories are public, however, you must to configure Maven to access
-the repositories.
+Although MuleSoft repositories are public, you must configure Maven to access
+them.
 
-. Access the `settings.xml` Maven configuration file. +
-Linux: `Linux: ~/.m2/settings.xml` +
-Mac: `Mac: ~/.m2/settings.xml` +
-Windows: `C:\Users\<UserName>\.m2\settings.xml`
+. Access the appropriate `settings.xml` Maven configuration file: +
+* Linux: `Linux: ~/.m2/settings.xml` +
+* Mac: `Mac: ~/.m2/settings.xml` +
+* Windows: `C:\Users\<UserName>\.m2\settings.xml`
 
 . In `settings.xml`, add a new plugin repository to the `<profile>` section, for example:
 
@@ -58,5 +59,4 @@ Windows: `C:\Users\<UserName>\.m2\settings.xml`
 
 == What's Next
 
-Now that you've set up your project, proceed to
-xref:rest-sdk/scaffold-connector-descriptor.adoc[Scaffold a Connector Descriptor].
+After you've set up your project, you can xref:rest-sdk/scaffold-connector-descriptor.adoc[scaffold a connector descriptor].
