@@ -180,7 +180,7 @@ with `@ParameterDsl(allowInlineDefinition=false)`, you no longer have the child 
   This is useful for controlling how the Parameter will behave upon configuration if the type of the
   Parameter doesn't provide enough information to automatically configure the references support.
 +
-For example, in the JMS Connector, if you want want to avoid making users inject an object from
+For example, in the JMS Connector, if you want to avoid making users inject an object from
 the registry as a `ConsumerType` configuration, you declare it as not supporting references:
 +
 [source,java,linenums]
