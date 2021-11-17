@@ -14,7 +14,7 @@ Every test case for a module contains these basic items:
 the results.
 * Mule App XML: A Mule app that makes use of the Module to test.
 
-The following steps show how to create a test case based on the module project created with the Mule Extension Archetype in <<getting-started#generating-a-project-using-the-maven-archetype-directly,Creating Your First SDK Project>>.
+Note that this documentation is based on the module project generated with the Mule Extension Archetype (<<getting-started#generating-a-project-using-the-maven-archetype-directly,Creating Your First SDK Project>>).
 Learn how to test a module using this example and refer to that documentation for the parent dependency, which includes all the dependencies required to build the test case.  
 
 == 1. Creating the Test Case Class
