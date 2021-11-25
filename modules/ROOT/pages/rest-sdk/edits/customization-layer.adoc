@@ -21,13 +21,13 @@ and generate net new assets that add new layers of functionality. These newly
 generated composite artifacts can have their own release lifecycle and be developed
 separately from the base connector.
 
-== Create the Customization Layer
+== Add the Customization Layer
 
 The customization layer is a composition feature that is a part of the standard
 connector creation flow. The only difference is that multiple connector
 descriptors can be specified in this `createConnector` command.
 
-To create the customization layer, run the `createConnector` MOJO:
+To add the customization layer, run the `createConnector` MOJO:
 
 ----
 mvn com.mulesoft.connectivity:rest-sdk-mojo:<PLUGIN_VERSION>:createConnector -DapiSpec=api.raml -Ddescriptor=connector-descriptor.yaml,customization-layer.yaml
@@ -49,6 +49,6 @@ of the first layer.
 
 == What's Next
 
-Now that you've created the descriptors for your connector,
-proceed to xref:rest-sdk/customize-the-connector.adoc[Customize Your Connector]
+After you've created the descriptors for your connector (including the optional customization layer),
+you can xref:rest-sdk/customize-the-connector.adoc[customize your connector]
 to start modifying your connector.

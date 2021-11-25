@@ -76,7 +76,7 @@ issues generating the connector descriptor.
 
 == What's Next
 
-After you've created a connector from an API specification and a connector descriptor,
+After you've created your base connector from an API specification and a connector descriptor,
 you can optionally create an instance of your connector descriptor and
 xref:rest-sdk/customization-layer.adoc[add a customization layer], which develops
 another layer of functionality for your connector. Otherwise, you can
