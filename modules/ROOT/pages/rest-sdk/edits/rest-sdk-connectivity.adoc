@@ -10,7 +10,7 @@ requiring little to no configuration.
 Using REST SDK results in:
 
 * Instant connectivity via metadata
-* Short connector build times, sometimes from several months to days or minutes // creation?
+* A shorter time to create connectors, sometimes from several months to days or minutes 
 * A unified connector designer that welcomes nondeveloper users
 * Elimination of system-specific code and static assets
 
