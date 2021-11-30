@@ -3,23 +3,28 @@ ifndef::env-site,env-github[]
 include::../_attributes.adoc[]
 endif::[]
 
-After scaffolding and modifying the connector descriptor, use a mojo to create a connector
+After scaffolding and modifying the connector descriptor, use a MOJO to create a connector
 from an API specification and a connector descriptor.
 
 == Create the Connector
 
-To generate the connector, run the `createConnector` mojo:
+To create the connector, run the `createConnector` MOJO:
 
 ----
 mvn com.mulesoft.connectivity:rest-sdk-mojo:<PLUGIN_VERSION>:createConnector -DapiSpec=<PATH_TO_SPEC>/api.raml -Ddescriptor=<PATH_TO_DESCRIPTOR>/descriptor.yaml
 ----
 
-* Where `<PATH_TO_SPEC>` is the location of your API specification.
-* Where `<PATH_TO_DESCRIPTOR>` is the location of your connector descriptor.
-* Where `<PLUGIN_VERSION>` is the version of the REST SDK plugin you want to use.
-If you omit this parameter, the latest version is used.
+The variables in the syntax represent the following:
 
-The `createConnector` mojo uses the following parameters:
+* `<PLUGIN_VERSION>` is the version of the REST SDK plugin you want to
+use. If you omit this parameter, the latest version is used.
+* `<PATH_TO_SPEC>` is the path to the location of your API specification.
+* `<PATH_TO_DESCRIPTOR>` is the path to the location of your connector descriptor.
+
+You can also add additional parameters to the `createConnector` mojo using
+the `-D` prefix. In the example command above, the *apiSpec* parameter and the *descriptor* parameter are added using
+the `-D` prefix since they are required parameters. The `createConnector` mojo uses
+the following parameters:
 
 [cols=",,,",options="header",]
 |===
@@ -64,15 +69,16 @@ issues generating the connector descriptor.
 
 |dynamicMetadata
 |No
-|Creates backward compatible dynamic metadata for operations.
+|Creates backward-compatible dynamic metadata for operations.
 |`FALSE`
 
 |===
 
 == What's Next
 
-Now that you've created a connector from an API specification and connector descriptor,
-optionally proceed to xref:rest-sdk/customization-layer.adoc[Customization Layer]
-to generate another layer of functionality. Otherwise, proceed to
-xref:rest-sdk/customize-the-connector.adoc[Customize Your Connector] to start
+After you've created your base connector from an API specification and a connector descriptor,
+you can optionally create an instance of your connector descriptor and
+xref:rest-sdk/customization-layer.adoc[add a customization layer], which develops
+another layer of functionality for your connector. Otherwise, you can
+xref:rest-sdk/customize-the-connector.adoc[customize your connector] to start
 modifying your connector.
