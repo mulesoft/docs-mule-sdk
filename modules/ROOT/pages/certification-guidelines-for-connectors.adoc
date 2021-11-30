@@ -145,7 +145,7 @@ You can use your existing account for Connectivity Assets Manager. If you do not
 [[question_2]]
 *Where is a sample SDK connector project?*
 
-* The steps described in this guide let you create a structure of a connector project. Until Cookbook Connector is updated, you can use Slack Connector as an example. See https://github.com/mulesoft/slack-connector/tree/develop-4.x[mulesoft/slack-connector].
+* The steps described in this guide let you create a structure of a connector project. Until Cookbook Connector is updated, you can use Slack Connector as an example. See https://github.com/mulesoft/mule4-slack-connector[mulesoft/slack-connector].
 
 [[question_3]]
 *How can I import a project into Studio 7, and how can I test and add it to Studio?*
@@ -275,7 +275,7 @@ https://forums.mulesoft.com/spaces/14/anypoint-connectors.html[Connector/DevKit/
 
 xref:best-practices.adoc[Best Practices]
 
-https://github.com/mulesoft/slack-connector/tree/develop-4.x[Slack Connector]
+https://github.com/mulesoft/mule4-slack-connector[Slack Connector]
 
 https://github.com/mulesoft/mule-http-connector/tree/1.2.0[HTTP Connector]
 
