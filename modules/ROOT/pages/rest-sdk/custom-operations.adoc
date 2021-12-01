@@ -130,7 +130,7 @@ called offices-descriptor.yaml:
 ----
 #% Rest Connector Descriptor 1.0
 apiSpec:
-    url: './api.raml'
+    url: ../api/api.raml
 connectorName: Offices
 connectorGav:
     groupId: com.mulesoft.connectors
@@ -299,8 +299,24 @@ operations:
     findLocation:
 ----
 
+== 4. Enrich With a Display Name and Description
 
-== 4. Reuse Existing Connectivity Metadata
+Add a display name (mandatory) and description to the custom operation:
+
+
+[source,yaml]
+----
+#% Rest Connector Descriptor 1.0
+...
+operations:
+    ...
+    findLocation:
+        displayName: Find Location
+        description: Find location by its part specification
+
+----
+
+== 5. Reuse Existing Connectivity Metadata
 
 *Find Location* is defined as an experience on top of a base connectivity layer.
 We can refer to this base connectivity to collect the metadata defined for it,
@@ -313,8 +329,10 @@ and then express only the customization that adds the experience needed:
 operations:
     ...
     findLocation:
-        base:
-            operationId: findLocationById
+        displayName: Find location By ID
+        description: Find location by its part specification
+            base:
+                operationId: findLocationById
 ----
 
 The following snippet brings another supported alternative to define the base connectivity for the *Find Location* operation
@@ -327,31 +345,15 @@ in terms of a GET on /locations/{id} endpoint.
 operations:
     ...
     findLocation:
+        displayName: Find location By ID
+        description: Find location by its part specification
         base:
-            method: GET
+            method: get
             path: /locations/{id}
 ----
 
-Even though both options are supported, we strongly encourage the use of operationId when available, as it consists in a more sustainable choice throughout the evolution and changes the API spec may face.
+Even though both options are supported, we strongly encourage the use of operationId when available, as it represents a more sustainable choice throughout the evolution and changes the API spec may face.
 
-
-== 5. Enrich With a Display Name and Description
-
-Add a display name and description to the custom operation:
-
-
-[source,yaml]
-----
-#% Rest Connector Descriptor 1.0
-...
-operations:
-    ...
-    findLocation:
-        displayName: Find Location
-        description: Find location by its part specification
-        base:
-            operationId: findLocationById
-----
 
 
 == 6. Add Custom Parameters
@@ -368,10 +370,10 @@ parameters section:
 operations:
     ...
     findLocation:
-        base:
-            operationId: findLocationById
         displayName: Find Location
         description: Find location by its part specification
+        base:
+            operationId: findLocationById
         parameters:
             partA:
                 displayName: part A
@@ -408,10 +410,10 @@ specific data.
 operations:
     ...
     findLocation:
-        base:
-            operationId: findLocationById
         displayName: Find Location
         description: Find location by its part specification
+        base:
+            operationId: findLocationById
         parameters:
             partA:
                 displayName: part A
@@ -517,6 +519,8 @@ The following shows the original declaration:
 operations:
     ...
     findLocation:
+        displayName: Find Location
+        description: Find location by its part specification
         base:
             operationId: findLocationById
         parameters:
@@ -623,10 +627,10 @@ response of the actual request made.
 operations:
     ...
     findLocation:
-        base:
-            operationId: findLocationById
         displayName: Find Location
         description: Find location by its part specification
+        base:
+            operationId: findLocationById
         parameters:
             partA:
                 displayName: part A
@@ -669,10 +673,10 @@ operations:
     findLocation:
       ...
     createLocation:
-        base:
-            operationId: createLocation
         displayName: Create Location
         description: Creates a location
+        base:
+            operationId: createLocation
         parameters:
             location:
                 displayName: Location
@@ -684,7 +688,7 @@ operations:
                 required: true
         request:
             body:
-                value: "#[
+                expression: "#[
                 {
                    'location': parameters.location,
                    'zone': parameters.zone,
@@ -711,10 +715,10 @@ operations:
     findLocation:
       ...
     createLocation:
-        base:
-            operationId: createLocation
         displayName: Create Location
         description: Creates a location
+        base:
+            operationId: createLocation
         parameters:
             content:
                 displayName: Body
@@ -723,7 +727,7 @@ operations:
                 required: true
         request:
             body:
-                value: "#[
+                expression: "#[
                 {
                    'location': parameters.content.location,
                    'zone': parameters.content.zone,
@@ -768,10 +772,10 @@ The following shows the *createContact* operation:
 ----
 operations:
     createContact:
-        base:
-            operationId: updateOrCreateContacts
         displayName: Create Contact
         description: Create contact
+        base:
+            operationId: updateOrCreateContacts
         parameters:
             CreateContactContent:
                 displayName: Content
@@ -868,10 +872,10 @@ The following shows the *updateContact* operation:
 [source,yaml]
 ----
     updateContact:
-        base:
-            operationId: updateOrCreateContacts
         displayName: Update Contact
         description: Update contact
+        base:
+            operationId: updateOrCreateContacts
         parameters:
             UpdateContactContent:
                 displayName: Content
@@ -972,10 +976,10 @@ surface the high level operation.
 [source,yaml]
 ----
     findLocation:
-        base:
-            operationId: findLocationById
         displayName: Find Location
         description: This is my own find location
+        base:
+            operationId: findLocationById
         parameters:
             #...
         request:
@@ -1001,10 +1005,10 @@ with a literal value.
 [source,yaml]
 ----
     findLocation:
-        base:
-            operationId: findLocationById
         displayName: Find Location
         description: This is my own find location
+        base:
+            operationId: findLocationById
         parameters:
             #...
         request:
@@ -1029,10 +1033,10 @@ only creating `ACTIVE` users.
 [source,yaml]
 ----
     updateContact:
-        base:
-            operationId: updateOrCreateContacts
         displayName: Update Contact
         description: Update contact
+        base:
+            operationId: updateOrCreateContacts
         parameters:
             UpdateContactContent:
                 displayName: Content
@@ -1066,10 +1070,10 @@ customized operation hides code and offset from the response to the user:
 [source,yaml]
 ----
     createLocation:
-        base:
-            operationId: createLocation
         displayName: Create Location
         description: This is my own create location with content
+        base:
+            operationId: createLocation
         parameters:
             content:
                 displayName: Body
@@ -1083,7 +1087,7 @@ customized operation hides code and offset from the response to the user:
                 ##
                 typeSchema: ./location-schema.json
                 mediaType: application/json
-                expression: "#[payload - 'code' - 'offset']"
+                value: "#[payload - 'code' - 'offset']"
 ----
 
 [[transform-io]]
@@ -1095,10 +1099,10 @@ parameters or request and response binding parameters.
 [source,yaml]
 ----
     searchContacts:
-        base:
-            operationId: searchContact
         displayName: Search Contacts
         description: Search Contacts
+        base:
+            operationId: searchContact
         parameters:
             ContactName:
                 displayName: Contact Name
@@ -1133,9 +1137,8 @@ parameters or request and response binding parameters.
                         pluck ((value, key, index) -> key ++ \"=\\\"\" ++ value ++ \"\\\"\") joinBy \" AND \"
                     ]"
         response:
-            bodyParts:
-                main:
-                    typeSchema: ./schemas/SearchContacts-Response-schema.json
+            body:
+                typeSchema: ./schemas/SearchContacts-Response-schema.json
                     mediaType: application/json
                     value: "#[
                         {
@@ -1160,6 +1163,8 @@ parameters or request and response binding parameters.
                                 }
                         }
                     ]"
+
+
 ----
 
 [[use-sidecars]]
@@ -1177,10 +1182,10 @@ sidecars. Directive is scoped for the descriptor with a default value `false`.
 sidecar: true
 operations:
     getContactByID:
-        base:
-            operationId: findContactById
         displayName: Get Contact By ID
         description: Get contact by ID
+        base:
+            operationId: findContactById
         parameters:
             ContactID:
                 displayName: ContactID
@@ -1191,9 +1196,8 @@ operations:
                 ContactID:
                     value: "#[parameters.ContactID]"
         response:
-            bodyParts:
-                main:
-                    typeSchema: ./schemas/GetContactByID-Response-schema.json
+            body:
+                typeSchema: ./schemas/GetContactByID-Response-schema.json
                     mediaType: application/json
                     value: "#[
                     var contact = payload.Contacts[0] default null
@@ -1222,6 +1226,7 @@ operations:
                         } else {})
                     }
                     ]"
+
 ----
 
 == Reference
