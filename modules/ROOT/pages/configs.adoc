@@ -11,6 +11,9 @@ Different configurations might not only provide a different set of parameters
 but also specify their own set of operations, sources, and connection providers that
 are only available when using that configuration.
 
+[NOTE]
+The following examples contain classes mostly from the https://github.com/mulesoft/mule-extensions-api[Mule Extensions API^]. Some classes, such as the `MessageSources.class`, are made up for the following examples. 
+
 == Defining Single Configuration Modules
 
 The simplest of cases is that of a Module that has only one configuration.
