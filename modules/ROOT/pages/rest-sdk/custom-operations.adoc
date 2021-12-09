@@ -112,36 +112,6 @@ components:
           type: string
 ----
 
-The JSON Schema for Location referenced by the spec above should look like this:
-
-[source, json]
-----
-{
-  "$schema": "http://json-schema.org/draft-04/schema#",
-  "type": "object",
-  "properties": {
-    "location": {
-      "type": "string"
-    },
-    "zone": {
-      "type": "string"
-    },
-    "offset": {
-      "type": "string"
-    },
-    "code": {
-      "type": "string"
-    }
-  },
-  "required": [
-    "location",
-    "zone",
-    "offset",
-    "code"
-  ]
-}
-----
-
 
 The base connectivity for Offices API is declared in a REST SDK descriptor
 called offices-descriptor.yaml:
