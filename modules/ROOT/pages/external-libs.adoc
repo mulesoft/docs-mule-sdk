@@ -52,7 +52,7 @@ of the library's file and validate that the library specified by your user is th
 
 [NOTE]
 =======
-For custom connectors, all Maven dependencies must be accessible from Anypoint Exchange. If any of the Maven dependencies are unaccessible, you will receive an error. Maven dependencies from Anypoint Exchange, Maven Central, or MuleSoft repositories are accessible from Exchange, while Maven dependencies from other private or public repositories are unaccessible from Anypoint Exchange.
+For custom connectors, all Maven dependencies must be accessible from Anypoint Exchange. Maven dependencies from Anypoint Exchange, Maven Central, or MuleSoft repositories are accessible from Exchange, while Maven dependencies from other private or public repositories are unaccessible from Anypoint Exchange.
 
 You can publish Maven dependencies before publishing your custom connector through one of the following options:
 
