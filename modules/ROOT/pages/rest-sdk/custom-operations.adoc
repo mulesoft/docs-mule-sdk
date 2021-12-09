@@ -44,26 +44,22 @@ paths:
               schema:
                 $ref: "#/components/schemas/Location"
       servers:
-        -
-          url: http://localhost/office
+        -url: http://localhost/office
   /locations/{id}:
     get:
       operationId: findLocationById
       description: Location of the office by Id.
       parameters:
-        -
-          name: offset
+        - name: offset
           in: query
           schema:
             type: string
-        -
-          name: code
+        - name: code
           required: true
           in: query
           schema:
             type: string
-        -
-          name: id
+        - name: id
           required: true
           in: path
           schema:
@@ -78,13 +74,11 @@ paths:
               schema:
                 $ref: "#/components/schemas/Location"
       servers:
-        -
-          url: http://localhost/office
+        - url: http://localhost/office
     delete:
       description: Location of the office by Id.
       parameters:
-        -
-          name: id
+        - name: id
           required: true
           in: path
           schema:
@@ -96,8 +90,7 @@ paths:
           description: ""
           content: {}
       servers:
-        -
-          url: http://localhost/office
+        - url: http://localhost/office
 components:
   schemas:
     Location:
