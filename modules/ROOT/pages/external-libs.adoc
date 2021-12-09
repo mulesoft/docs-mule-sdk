@@ -52,14 +52,14 @@ of the library's file and validate that the library specified by your user is th
 
 [NOTE]
 =======
-For custom connectors, all Maven dependencies must be accessible from Anypoint Exchange. Maven dependencies published to private or public repositories are unaccessible from Anypoint Exchange.
+For custom connectors, all Maven dependencies must be accessible from Anypoint Exchange. Maven dependencies published to private or public repositories are not accessible from Anypoint Exchange.
 
-You can publish Maven dependencies before publishing your custom connector through one of the following options:
+You can publish Maven dependencies before publishing your custom connector by using one of the following options:
 
-* Publish the Maven dependencies on Anypoint Exchange to make them available for your Anypoint Platform organization.
+* Publish the Maven dependencies on Anypoint Exchange to make them available to your Anypoint Platform organization.
 * Publish the Maven dependencies on the https://maven.apache.org/repository/guide-central-repository-upload.html[Maven Central repository] to make them publicly available.
 
-MuleSoft repositories are not open for publishing.
+You cannot use MuleSoft repositories for publishing.
 =======
 | `coordinates` | false | String | Maven coordinates suggestion that indicates where the required library can be found. They should follow Maven's convention `groupId:artifactId:packaging:classifier:version`.
 | `optional` | false | Boolean | Indicates whether the library is not required for the Connector or Module to work.
