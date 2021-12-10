@@ -1665,4 +1665,4 @@ The SDK currently has the following limitations:
 * XML SDK only provides outbound operations, not sources (such as a `<scheduler>`) or routers.
 * Operations do not support recursive calls.
 * Operations cannot have parameters called `name` or `config-ref` as those are reserved keywords.
-* Use the kebab case naming convention to name parameters and operations in any XML SDK project to prevent errors while generating XML tags, as the name values are converted to have hyphens between words.
+* Use the kebab case naming convention to name parameters and operations in any XML SDK project to prevent errors while generating XML tags, as the name values are converted to contain hyphens between words.
