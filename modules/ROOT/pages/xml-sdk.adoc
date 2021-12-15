@@ -814,6 +814,9 @@ Another operation, `sample-operation`, reuses `shared-operation` within its own 
   </operation>
 ----
 
+[NOTE]
+Notice that the parameter, *requiredParameter*, uses the camel case naming convention, but the reference, *vars.required-Parameter*, uses the kebab case naming convention. When you name a parameter or an operation, use the kebab case naming convention to ensure consistency within your project. Refer to <<xml-sdk-limitations>>.
+
 The `requiredParameter` value must be referenced as an inner tag of `sample-operation`.
 Otherwise, the project throws a build error, such as, `Attribute 'required-parameter' is not allowed to appear in element 'tns:shared-operation'.`
 
@@ -1654,6 +1657,7 @@ GitHub Location: https://github.com/mulesoft-labs/smart-connectors-integration-t
  </module>
 ----
 
+[[xml-sdk-limitations]]
 == XML SDK Limitations
 
 The SDK currently has the following limitations:
@@ -1661,3 +1665,4 @@ The SDK currently has the following limitations:
 * XML SDK only provides outbound operations, not sources (such as a `<scheduler>`) or routers.
 * Operations do not support recursive calls.
 * Operations cannot have parameters called `name` or `config-ref` as those are reserved keywords.
+* Use the kebab case naming convention to name parameters and operations in any XML SDK project to prevent errors while generating XML tags, as the name values are converted to contain hyphens between words.
