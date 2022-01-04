@@ -15,8 +15,6 @@ Before you install and use REST SDK, verify that your environment includes the f
 
 == Install the REST SDK Plugin
 
-Install the https://repository-master.mulesoft.org/nexus/service/local/repositories/releases/content/com/mulesoft/connectors/rest-connect-cli/1.0.0-RC2/rest-connect-cli-1.0.0-RC2-jar-with-dependencies.jar[REST SDK plugin] to use REST SDK.
-
 The plugin is a distribution of one or more related MOJOs (Maven plain Old Java Objects). Each
 MOJO is an executable goal in Maven.
 
