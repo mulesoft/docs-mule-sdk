@@ -21,10 +21,15 @@ use. If you omit this parameter, the latest version is used.
 * `<PATH_TO_SPEC>` is the path to the location of your API specification.
 * `<PATH_TO_DESCRIPTOR>` is the path to the location of your connector descriptor.
 
-You can also add additional parameters to the `createConnector` mojo using
-the `-D` prefix. In the example command above, the *apiSpec* parameter and the *descriptor* parameter are added using
-the `-D` prefix since they are required parameters. The `createConnector` mojo uses
-the following parameters:
+In the example MOJO command above, the *apiSpec* parameter and the *descriptor* parameter are added using
+the `-D` prefix since they are required parameters. You can also add additional parameters to the `createConnector` MOJO using
+the `-D` prefix:
+
+----
+mvn com.mulesoft.connectivity:rest-sdk-mojo:<PLUGIN_VERSION>:createConnector -DapiSpec=<PATH_TO_SPEC>/api.raml -Ddescriptor=<PATH_TO_DESCRIPTOR>/descriptor.yaml -DspecFormat=RAML -DoutputDir=./output/dir/ -DskipValidation=FALSE -DdynamicMetadata=FALSE
+----
+
+The `createConnector` MOJO uses the following parameters:
 
 [cols=",,,",options="header",]
 |===

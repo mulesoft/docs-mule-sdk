@@ -35,10 +35,15 @@ The variables in the syntax represent the following:
 use. If you omit this parameter, the latest version is used.
 * `<PATH_TO_SPEC>` is the path to the location of your API specification.
 
-You can also add additional parameters to the `createDescriptor` mojo using
-the `-D` prefix. In the example command above, the *apiSpec* parameter is added using
-the `-D` prefix since it is a required parameter. The `createDescriptor` mojo uses
-the following parameters:
+In the example MOJO command above, the *apiSpec* parameter is added using
+the `-D` prefix since it is a required parameter. You can also add additional
+parameters to the `createDescriptor` MOJO using the `-D` prefix:
+
+----
+mvn com.mulesoft.connectivity:rest-sdk-mojo:<PLUGIN_VERSION>:createDescriptor -DapiSpec=<PATH_TO_SPEC>/api.raml -DspecFormat=RAML -DoutputDir=./output/dir/ -DdescriptorMode=MINIMAL -DskipValidation=FALSE
+----
+
+The `createDescriptor` MOJO uses the following parameters:
 
 [cols=",,,",options="header",]
 |===
