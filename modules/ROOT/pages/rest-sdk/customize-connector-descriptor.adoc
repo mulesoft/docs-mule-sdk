@@ -7,7 +7,7 @@ Customize the initial content of the connector descriptor of the connector.
 
 == Set a Display Name for the Connector
 
-To set a name for the connector, you must set the `connectorName`
+To set a name for the connector, you must use  the `connectorName`
 property, which is located at the root of the connector descriptor.
 
 [source,yaml]
@@ -35,7 +35,7 @@ image::shop-studio-list.png[]
 
 == Set a Description for the Connector
 
-To set a description for the connector, you must set the
+To set a description for the connector, you must use  the
 `connectorDescription` property, which is located at the root of the
 connector descriptor.
 
@@ -64,7 +64,7 @@ property of the connector POM file.
 
 == Define a Maven GAV for the Connector
 
-To define a Maven GAV for the connector, you must set the `connectorGav`
+To define a Maven GAV for the connector, you must use  the `connectorGav`
 property, which is located at the root of the connector descriptor.
 
 You must select a `groupId`, `artifactId`, and `version`, which appears in the
