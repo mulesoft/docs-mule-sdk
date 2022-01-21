@@ -15,11 +15,12 @@ additional metadata that is specific to Anypoint Platform Connectors.
 
 When scaffolding a connector descriptor, do not edit the API
 specification. The connector descriptor you scaffold has the same functionality
-as your API specification. If you must modify your API specification and a new
-version of an API specification is released, move all the changes from the old version
-to the new version. API specifications must be as complete as possible and provide
-rich schemas for every input or output type, example, security information, and
-so on.
+as your API specification.
+
+If you must modify your API specification and a new version of an API specification
+is released, move all the changes from the old version to the new version. API
+specifications must be as complete as possible and provide rich schemas for every
+input or output type, example, security information, and so on.
 
 == Scaffold the Connector Descriptor
 
