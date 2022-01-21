@@ -5,6 +5,30 @@ endif::[]
 
 Configure and customize an existing API operation of the connector descriptor of the connector.
 
+== Set an Operation Identifier for an Operation
+
+To set an operation identifier for an operation, you must use the REST SDK
+default provided mechanism.
+
+REST SDK relies on an operation identifier to generate classes for resources.
+Use the REST SDK mechanism to generate an operation identifier when:
+
+* using a valid `operationId` with a non null value from an OAS context
+* using an HTTP `method` and HTTP full `path` with an `operationId` with a null value to execute a fallback
+
+The operation identifier cannot collide with resources, triggers, or other
+REST SDK components.
+
+Use these three bindings to modify the mechanism:
+
+[%header%autowidth.spread]
+|===
+|Binding name|Type|Description
+|`operationId` | `String` \| `null` | Identifier of the operation. Can be null.
+|`method` | `String` | HTTP method. Not nullable.
+|`path` | `String` | HTTP full path. Not nullable.
+|===
+
 == Set a Display Name for an Operation
 
 To set a display name for an operation, you must set the `displayName` property,
@@ -40,7 +64,26 @@ DataWeave script.
 REST SDK provides a default DataWeave script to delegate to, which is useful when
 there is a common pattern that needs to be changed in all operation display names by
 comprehension rather than extension. The default DataWeave script relies on an
-`operationId` (if it is not null) or a `method` and a `path` together.
+`operationId` with a non null value or a `method` and a `path` together.
+
+The following example shows a default DataWeave script that relies on an
+`operationId` with a non null value:
+
+[source,yaml]
+----
+#% Rest Connector Descriptor 1.0
+...
+operationIdentifier:
+  expression: |
+    #[%dw 2.0
+    output text/plain
+    ---
+    operationId default (method ++ path)
+    ]
+----
+
+The following example shows a default DataWeave script that relies on a
+`method` and a `path` together:
 
 [source,yaml]
 ----
@@ -63,7 +106,7 @@ https://github.com/mulesoft/rest-sdk-all/blob/master/rest-sdk-connector-model/sr
 You can also customize the default DataWeave script by modifying the descriptor. Input your own
 custom DataWeave script to change how the display names get generated.
 
-Use these four bindings to modify the mechanism:
+Use these four bindings to modify the script:
 
 [%header%autowidth.spread]
 |===
@@ -74,6 +117,37 @@ Use these four bindings to modify the mechanism:
 |`summary` | `String` \| `null` | Summary of the operation that matches the summary in OAS. Can be null.
 |===
 
+If you are using an `operationId` in your custom DataWeave script, you must change
+the DataWeave script for `operationIdentifier` as well.
+
+For example, suppose there is an API that contains dates and extensions in the
+resources, which is not useful to the user of the connector. For example, in
+`/2010-04-01/Accounts/{id}/Messages/SMS/Media.json`, both `/2010-04-01/` and
+`.json` are not useful to the user.
+
+The following example shows a DataWeave script using `operationIdentifier` that
+eliminates these parts:
+
+[source,yaml]
+----
+#% Rest Connector Descriptor 1.0
+....
+operationIdentifier:
+  expression: |
+    #[%dw 2.0
+    output text/plain
+    fun removeUnwantedStuff(aPath: String)=
+        aPath replace ".json" with ""
+          replace "/2010-04-01" with ""
+    ---
+    method ++ removeUnwantedStuff(path)
+    ]
+----
+
+The operation identifier for the operation that maps to the resource `/2010-04-01/Accounts/{id}/Messages/SMS/Media.json` is now
+`/Accounts/{id}/Messages/SMS/Media`, which significantly improves the naming
+around the resource for the XML DSL as well as the UI experience.
+
 For example, suppose there is an API that contains dates and extensions in the
 resources, which is not useful to the user of the connector, and does not contain an
 `operationId` because it is either empty in the OAS specification or because it is an RAML
@@ -81,7 +155,7 @@ specification. For example, in the resource `/2010-04-01/Accounts/Messages/SMS/M
 both `/2010-04-01/` and `.json` are not useful to the user and those parts do not need to be
 generated for the operation display names.
 
-The following example shows a DataWeave script that eliminates these parts from
+The following example shows a DataWeave script using `method` and `path` that eliminates these parts from
 the operation display names:
 
 [source,yaml]
@@ -110,7 +184,7 @@ The DataWeave script library contains other helper functions as well. For more
 information about helper functions to use in the custom DataWeave script, refer
 to https://github.com/mulesoft/rest-sdk-all/blob/master/rest-sdk-connector-model/src/main/resources/connectivity/RestSdk.dwl[RestSdk.dwl].
 
-The following example shows another DataWeave script that eliminate specific parts from the
+The following example shows another DataWeave script using `method` and `path` that eliminate specific parts from the
 operation display names:
 
 [source,yaml]
@@ -133,75 +207,7 @@ operationDisplayName:
 For the `/2010-04-01/Accounts/Messages/SMS/Media.json` endpoint, the generated
 display name is now `Create Accounts Messages SMS Media`, assuming the `method` is POST.
 
-== Set an Operation Identifier for an Operation
 
-REST SDK relies on an operation identifier to generate classes for resources.
-
-REST SDK provides a default mechanism to generate an operation
-identifier if there is a valid `operationId` from an OAS context with a non
-null value. It also executes a fallback if there is an HTTP method and unique
-resource name, and executes only if `operationId` is null. The identifier cannot
-collide with resources, triggers, or other REST
-SDK components.
-
-Use these three bindings to modify the mechanism:
-
-[%header%autowidth.spread]
-|===
-|Binding name|Type|Description
-|`operationId` | `String` \| `null` | Identifier of the operation. Can be null.
-|`method` | `String` | HTTP method. Not nullable.
-|`path` | `String` | HTTP full path. Not nullable.
-|===
-
-Add a root `operationIdentifier` key to the descriptor file with the
-DataWeave script. The following example shows a default DataWeave
-script that REST SDK is currently using:
-
-[source,yaml]
-----
-#% Rest Connector Descriptor 1.0
-...
-operationIdentifier:
-  expression: |
-    #[%dw 2.0
-    output text/plain
-    ---
-    operationId default (method ++ path)
-    ]
-----
-
-This identifier is important not only in the Java class generation but also
-in the DSL and display name of a given operation, which means there are cases
-where you must change the default DataWeave script for `operationIdentifier`
-as well.
-
-Imagine there is an API that contains dates and extensions in the resources, which is
-not useful to the user of the connector, and does not contain an
-`operationId` because it is either empty in the OAS spec or because it is an RAML
-spec. For example, in `/2010-04-01/Accounts/{id}/Messages/SMS/Media.json`,
-both `/2010-04-01/` and `.json` are not useful to the user. The following example
-shows a DataWeave script that eliminates these parts:
-
-[source,yaml]
-----
-#% Rest Connector Descriptor 1.0
-....
-operationIdentifier:
-  expression: |
-    #[%dw 2.0
-    output text/plain
-    fun removeUnwantedStuff(aPath: String)=
-        aPath replace ".json" with ""
-          replace "/2010-04-01" with ""
-    ---
-    method ++ removeUnwantedStuff(path)
-    ]
-----
-
-The operation identifier for the operation that maps to the resource `/2010-04-01/Accounts/{id}/Messages/SMS/Media.json` is now
-`/Accounts/{id}/Messages/SMS/Media`, which significantly improves the naming
-around the resource for the XML DSL as well as the UI experience.
 
 == Set a Description for an Operation
 
