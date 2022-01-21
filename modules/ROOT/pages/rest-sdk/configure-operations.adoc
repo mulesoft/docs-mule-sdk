@@ -3,7 +3,7 @@ ifndef::env-site,env-github[]
 include::../_attributes.adoc[]
 endif::[]
 
-Configure and customize an existing API operation of the connector descriptor of the connector.
+Customize an existing operation of the connector descriptor of the connector.
 
 == Set an Operation Identifier for an Operation
 
@@ -14,7 +14,7 @@ REST SDK relies on an operation identifier to generate classes for resources.
 Use the REST SDK mechanism to generate an operation identifier when:
 
 * using a valid `operationId` with a non null value from an OAS context
-* using an HTTP `method` and HTTP full `path` with an `operationId` with a null value to execute a fallback
+* using an HTTP `method` and an HTTP full `path` with an `operationId` with a null value to execute a fallback
 
 The operation identifier cannot collide with resources, triggers, or other
 REST SDK components.
@@ -58,13 +58,30 @@ image::operation-display-name.png[]
 
 == Change a Generated Display Name for an Operation
 
-To change a generated display name for an operation, you must use a
-DataWeave script.
+To change a generated display name for an operation, you must use either the
+REST SDK default DataWeave script or a custom DataWeave script.
+
+* <<default>>
+** <<default-op-id>>
+** <<default-method-and-path>>
+
+* <<custom>>
+** <<custom-op-id>>
+** <<custom-method-and-path>>
+
+
+[[default]]
+=== Change a Generated Display Name for an Operation Using the REST SDK Default DataWeave Script
 
 REST SDK provides a default DataWeave script to delegate to, which is useful when
 there is a common pattern that needs to be changed in all operation display names by
-comprehension rather than extension. The default DataWeave script relies on an
-`operationId` with a non null value or a `method` and a `path` together.
+comprehension rather than extension.
+
+The default DataWeave script relies on either an `operationId` with a non null value
+or both an HTTP `method` and an HTTP full `path` with an `operationId` with a null value.
+
+[[default-op-id]]
+==== Change a Generated Display Name for an Operation Using the REST SDK Default DataWeave Script with an Operation ID
 
 The following example shows a default DataWeave script that relies on an
 `operationId` with a non null value:
@@ -82,8 +99,14 @@ operationIdentifier:
     ]
 ----
 
-The following example shows a default DataWeave script that relies on a
-`method` and a `path` together:
+For more information about the functions in the default DataWeave script, refer to
+https://github.com/mulesoft/rest-sdk-all/blob/master/rest-sdk-connector-model/src/main/resources/connectivity/RestSdk.dwl[RestSdk.dwl].
+
+[[default-method-and-path]]
+==== Change a Generated Display Name for an Operation Using the REST SDK Default DataWeave Script with an HTTP Method and an HTTP Full Path
+
+The following example shows a default DataWeave script that relies on both an HTTP
+`method` and an HTTP full `path` with an `operationId` with a null value:
 
 [source,yaml]
 ----
@@ -100,8 +123,11 @@ operationDisplayName:
         ]
 ----
 
-For more information about the two functions in the default DataWeave script, refer to
+For more information about the functions in the default DataWeave script, refer to
 https://github.com/mulesoft/rest-sdk-all/blob/master/rest-sdk-connector-model/src/main/resources/connectivity/RestSdk.dwl[RestSdk.dwl].
+
+[[custom]]
+=== Change a Generated Display Name for an Operation Using a Custom DataWeave Script
 
 You can also customize the default DataWeave script by modifying the descriptor. Input your own
 custom DataWeave script to change how the display names get generated.
@@ -117,16 +143,23 @@ Use these four bindings to modify the script:
 |`summary` | `String` \| `null` | Summary of the operation that matches the summary in OAS. Can be null.
 |===
 
+The custom DataWeave script relies on either an `operationId` with a non null value
+or both an HTTP `method` and an HTTP full `path` with an `operationId` with a null value.
+
+[[custom-op-id]]
+==== Change a Generated Display Name for an Operation Using a Custom DataWeave Script Using an Operation ID
+
 If you are using an `operationId` in your custom DataWeave script, you must change
 the DataWeave script for `operationIdentifier` as well.
 
 For example, suppose there is an API that contains dates and extensions in the
-resources, which is not useful to the user of the connector. For example, in
-`/2010-04-01/Accounts/{id}/Messages/SMS/Media.json`, both `/2010-04-01/` and
-`.json` are not useful to the user.
+resources, which is not useful to the user of the connector. For example, in the
+resource `/2010-04-01/Accounts/{id}/Messages/SMS/Media.json`, both `/2010-04-01/` and
+`.json` are not useful to the user and those parts do not need to be
+generated for the operation display names.
 
-The following example shows a DataWeave script using `operationIdentifier` that
-eliminates these parts:
+The following example shows a custom DataWeave script that relies on an `operationIdentifier`
+that eliminates these parts from the operation display names:
 
 [source,yaml]
 ----
@@ -148,6 +181,9 @@ The operation identifier for the operation that maps to the resource `/2010-04-0
 `/Accounts/{id}/Messages/SMS/Media`, which significantly improves the naming
 around the resource for the XML DSL as well as the UI experience.
 
+[[custom-method-and-path]]
+==== Change a Generated Display Name for an Operation Using a Custom DataWeave Script Using an HTTP Method and an HTTP Full Path
+
 For example, suppose there is an API that contains dates and extensions in the
 resources, which is not useful to the user of the connector, and does not contain an
 `operationId` because it is either empty in the OAS specification or because it is an RAML
@@ -155,7 +191,8 @@ specification. For example, in the resource `/2010-04-01/Accounts/Messages/SMS/M
 both `/2010-04-01/` and `.json` are not useful to the user and those parts do not need to be
 generated for the operation display names.
 
-The following example shows a DataWeave script using `method` and `path` that eliminates these parts from
+The following example shows a custom DataWeave script that relies on an HTTP `method` and an HTTP
+full `path` with an `operationId` with a null value that eliminates these parts from
 the operation display names:
 
 [source,yaml]
@@ -176,7 +213,7 @@ operationDisplayName:
     ]
 ----
 
-It is not necessary to use `operationId` since it is null for this scenario.
+It is not necessary to use an `operationId` since it is null for this scenario.
 For the `/2010-04-01/Accounts/Messages/SMS/Media.json` endpoint, the generated
 display name is now `Post Accounts Messages SMS Media`, assuming the `method` is POST.
 
@@ -184,7 +221,8 @@ The DataWeave script library contains other helper functions as well. For more
 information about helper functions to use in the custom DataWeave script, refer
 to https://github.com/mulesoft/rest-sdk-all/blob/master/rest-sdk-connector-model/src/main/resources/connectivity/RestSdk.dwl[RestSdk.dwl].
 
-The following example shows another DataWeave script using `method` and `path` that eliminate specific parts from the
+The following example shows another custom DataWeave script that relies on an HTTP `method` and an HTTP
+full `path` with an `operationId` with a null value that eliminates specific parts from the
 operation display names:
 
 [source,yaml]
@@ -206,8 +244,6 @@ operationDisplayName:
 
 For the `/2010-04-01/Accounts/Messages/SMS/Media.json` endpoint, the generated
 display name is now `Create Accounts Messages SMS Media`, assuming the `method` is POST.
-
-
 
 == Set a Description for an Operation
 
