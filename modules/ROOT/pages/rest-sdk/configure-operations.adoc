@@ -69,7 +69,6 @@ REST SDK default DataWeave script or a custom DataWeave script.
 ** <<custom-op-id>>
 ** <<custom-method-and-path>>
 
-
 [[default]]
 === Change a Generated Display Name for an Operation Using the REST SDK Default DataWeave Script
 
@@ -247,8 +246,8 @@ display name is now `Create Accounts Messages SMS Media`, assuming the `method` 
 
 == Set a Description for an Operation
 
-You can define the description of an operation by using the
-`description` property in the operation node.
+To set a description for an operation, you must set the `description` property,
+which is located in the operation node.
 
 [source,yaml]
 ----
@@ -267,31 +266,24 @@ endpoints:
                      description: The maximum number of instances per request.
 ----
 
-The `description` property can be used to give the final user of the
-connector some context or explanation of what the operation does. It
-appears in Anypoint Studio as a tooltip.
+Set the `description` property to give the user some context or an explanation
+of what the operation does. The description you set for the operation appears
+in Anypoint Studio as a tooltip.
 
 image::operation-description-tooltip.png[]
 
 [[select-default-media-type-for-an-operation]]
 == Select a Default Media Type for an Operation
 
-Both RAML and OAS API specs allow you to define multiple media types for
-the operations.
+To select a default media type for an operation, you must use the `inputMediaType`
+and `outputMediaType` properties, which are located in the operation node.
 
-REST SDK uses only one media type to generate the operation.
+Both RAML and OAS API specifications enable you to define multiple media types for
+operations. REST SDK uses only one media type to generate an operation.
 
-If it is not defined using a custom property, the default one is
-selected following this priority:
-
-* _application/json_ if it is defined
-* _application/xml_ if it is defined
-* The first media type defined in the API spec for that body
-
-If you want to select the operation media type manually, you can use the
-`inputMediaType` and `outputMediaType` properties. These properties
-allow you to define the request body media type and the response media
-type respectively.
+To select a default media type for an operation manually, use the `inputMediaType`
+and `outputMediaType` properties to define the request body media type and the
+response media type respectively.
 
 [source,yaml]
 ----
@@ -311,13 +303,19 @@ endpoints:
                      description: The maximum number of instances per request.
 ----
 
+If a default media type for an operation is not defined using a custom property,
+the default media type is selected following this priority:
+
+* _application/json_ if it is defined
+* _application/xml_ if it is defined
+* The first media type defined in the API specification for that body
+
 == Select a Default Media Type for All Operations
 
-If you want to select a default media type for your operations like
-defined in xref:rest-sdk/configure-operations.adoc#select-default-media-type-for-an-operation[Select a Default Media Type for an Operation] but you want
-to do it globally, you can use the `defaultInputMediaType` and
-`defaultOutputMediaType` properties at the root level of the Connector
-Descriptor.
+To select a default media type for all operations, similar to how a default media type is
+defined in xref:rest-sdk/configure-operations.adoc#select-default-media-type-for-an-operation[Select a Default Media Type for an Operation], but you want
+to do it globally, you must use the `defaultInputMediaType` and `defaultOutputMediaType`
+properties, which are located at the root of the connector descriptor.
 
 [source,yaml]
 ----
@@ -338,7 +336,16 @@ endpoints:
                      description: The maximum number of instances per request.
 ----
 
-== Ignore an Operation
+== Ignore an Operation or an Endpoint
+
+To ignore an operation or an endpoint, you must use the `ignored` property,
+which can be defined at either the operation level or the endpoint level.
+
+Use the `ignored` property when you do not want to generate an operation in the
+connector for a resource that is present in the API specification.
+
+If you define the `ignored` property at the operation level, only that operation
+is not generated while the rest of the operations for that endpoint are generated.
 
 [source,yaml]
 ----
@@ -352,6 +359,9 @@ endpoints:
 In this case, only the DELETE verb is ignored. Operations are still
 generated for the other verbs in the resource.
 
+If you define the `ignored` property at the endpoint level, none of the operations
+defined under the endpoint are generated.
+
 [source,yaml]
 ----
 endpoints:
@@ -359,21 +369,8 @@ endpoints:
       ignored: true
 ----
 
-In this case, all of the endpoint verbs will be ignored. No operations
-will be generated for this resource.
-
-== Ignore an Operation or Endpoint
-
-If you don’t want to generate an operation in the connector for a
-resource that is present in the API spec, you must use the `ignored`
-property. You can define the ignored property at endpoint or operation
-level.
-
-If you ignore an endpoint, none of the operations defined under the
-endpoint are generated.
-
-If you ignore an operation, only that operation is not generated; the
-rest of the operations for that endpoint are generated.
+In this case, all of the endpoint verbs are ignored. No operations
+are generated for this resource.
 
 == Ignore Operations and Triggers by Default
 
