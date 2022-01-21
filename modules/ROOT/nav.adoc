@@ -7,7 +7,7 @@
  ** xref:rest-sdk/create-connector.adoc[Create a Connector]
  ** xref:rest-sdk/customization-layer.adoc[Create a Customization Layer]
  ** xref:rest-sdk/customize-the-connector.adoc[Customize Your Connector]
-  *** xref:rest-sdk/customize-connector-descriptor.adoc[Content]
+  *** xref:rest-sdk/customize-connector-descriptor.adoc[Initial Content]
   *** xref:rest-sdk/configure-operations.adoc[Operations]
   *** xref:rest-sdk/custom-operations.adoc[Custom Operations]
   *** xref:rest-sdk/triggers.adoc[Triggers]

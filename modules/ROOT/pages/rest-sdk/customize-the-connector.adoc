@@ -6,7 +6,7 @@ endif::[]
 Use the following documentation to customize your connector. You can modify your
 connector, for example, by adding descriptive content, additional operations, or parameters.
 
-* xref:rest-sdk/customize-connector-descriptor.adoc[Customize the Connector's Content]
+* xref:rest-sdk/customize-connector-descriptor.adoc[Customize the Connector's Initial Content]
 * xref:rest-sdk/configure-operations.adoc[Customize the Connector's Operations]
 * xref:rest-sdk/custom-operations.adoc[Customize the Connector's Custom Operations]
 * xref:rest-sdk/triggers.adoc[Customize the Connector's Triggers]
