@@ -3,7 +3,7 @@ ifndef::env-site,env-github[]
 include::../_attributes.adoc[]
 endif::[]
 
-In the xref:rest-sdk/configure-operations.adoc[previous section], you could
+In the xref:rest-sdk/configure-operations.adoc[previous section], you could configure and
 customize an operation built for an existing endpoint by changing nonfunctional
 properties.
 

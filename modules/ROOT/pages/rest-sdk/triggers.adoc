@@ -5,6 +5,11 @@ endif::[]
 
 Configure and customize a trigger of the connector descriptor of the connector.
 
+[IMPORTANT]
+Because triggers work with a xref:polling-sources[polling source] on the backend,
+the items must be in ascending order (from older to newer) so that the extraction
+of the watermark contains the correct date.
+
 == Declare a Trigger
 
 The following example shows the declaration of a trigger, or a polling source, for
@@ -246,7 +251,7 @@ Extract the identity using the `#[item.id]` expression.
 == Ignore a Trigger
 
 To ignore a trigger that was declared on a previous layer,
-you can use the `ignored` property:
+you must use the `ignored` property:
 
 [source,yaml]
 ----
@@ -255,21 +260,22 @@ triggers:
      ignored: true
 ----
 
-In this example, 'myTrigger' is ignored and will not be generated.
+The trigger, *myTrigger*, is ignored and is not generated.
 
 == Ignore Operations and Triggers by Default
 
-All operations and triggers can be ignored using the `ignoreOperations` property at the root of the descriptor.
+To ignore operations and triggers by default, you must use the `ignoreOperations`
+property, which is located at the root of the connector descriptor.
 
-Set `ignoreOperations` to `true` to ignore previously declared operations and triggers. You can use this property to select only a small subset of operations and triggers for the connector to generate.
+Set the `ignoreOperations` property to `true` to ignore previously declared
+operations and triggers. You can use this property to select only a small subset
+of operations and triggers for the connector to generate.
 
-If an operation or trigger is ignored in a previous layer but `ignoreOperations` is set to `false`,
-the operation or trigger will be generated in the connector.
+If an operation or trigger is ignored in a previous layer but `ignoreOperations`
+is set to `false`, the operation or trigger will be generated in the connector.
 
-If an operation or trigger is not ignored in a previous layer but `ignoreOperations` is set to `true`,
-the operation or trigger will not be generated in the connector.
-
-Using this property is similar to adding an `ignored` property to all of the operations and triggers.
+If an operation or trigger is not ignored in a previous layer but `ignoreOperations`
+is set to `true`, the operation or trigger will not be generated in the connector.
 
 [source,yaml]
 ----
@@ -282,15 +288,21 @@ endpoints:
       ignored: false
 ----
 
-In this example, only the operations under the `/flights/{ID}` path will be generated. All of the other operations and triggers will be ignored.
+In this example, only the operations and triggers under the `/flights/{ID}` path are generated.
+All of the other operations and triggers are ignored.
+
+Using the `ignoreOperations` property is similar to adding an `ignored` property
+to all of the operations and triggers.
 
 == Trigger Expressions
 
-Wherever an expression is supported, you can provide the described expression object or a simple string value.
+Wherever an expression is supported, you can provide the described expression
+object or a simple string value.
 
-When a string value is provided, REST SDK checks if it is an expression or a fixed value and behave accordingly.
+When a string value is provided, REST SDK checks if it is an expression or a
+fixed value and behaves accordingly.
 
-Depending on the context, the expressions have access to the following variables.
+Depending on the context, the expressions have access to the following variables:
 
 [cols="h,l"]
 |===
@@ -306,15 +318,14 @@ Depending on the context, the expressions have access to the following variables
 |The full response returned from the server.
 
 |attributes
-|The response attributes returned from the server. This looks just as the attributes from a request done using HTTP connector look.
+|The response attributes returned from the server. These attributes look like attributes from a request done using HTTP Connector.
 
 |item
-|When the response from the server is extracted and split, this variable contains each of those split values.
+|When the response from the server is extracted and split, the `item` variable contains each of those split values.
 
 |===
 
 The availability of these variables depending on the expressions is as follows:
-
 
 [cols="h,l,l,l,l,l"]
 |===
@@ -356,8 +367,3 @@ The availability of these variables depending on the expressions is as follows:
 | Yes
 
 |===
-
-
-== Trigger Limitations
-
-Because triggers work with a xref:polling-sources[polling source] on the backend, the items must be in ascending order (from older to newer) so that the extraction of the watermark has the correct date.

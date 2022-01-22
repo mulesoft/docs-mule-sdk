@@ -3,7 +3,7 @@ ifndef::env-site,env-github[]
 include::../_attributes.adoc[]
 endif::[]
 
-Customize an existing operation of the connector descriptor of the connector.
+Configure and customize an existing operation of the connector descriptor of the connector.
 
 == Set an Operation Identifier for an Operation
 

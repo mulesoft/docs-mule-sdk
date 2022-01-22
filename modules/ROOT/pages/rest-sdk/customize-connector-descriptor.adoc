@@ -3,11 +3,11 @@ ifndef::env-site,env-github[]
 include::../_attributes.adoc[]
 endif::[]
 
-Customize the initial content of the connector descriptor of the connector.
+Configure and customize the initial content of the connector descriptor of the connector.
 
 == Set a Display Name for the Connector
 
-To set a name for the connector, you must use  the `connectorName`
+To set a name for the connector, you must use the `connectorName`
 property, which is located at the root of the connector descriptor.
 
 [source,yaml]
