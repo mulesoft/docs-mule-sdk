@@ -3,19 +3,47 @@ ifndef::env-site,env-github[]
 include::../_attributes.adoc[]
 endif::[]
 
-Use metadata customization to change the display name, description, or field
-order of an object metadata definition.
+Configure and customize the metadata of the connector descriptor of the connector.
 
-With REST SDK, metadata can be provided directly on JSON schemas used
-to define that metadata. If the metadata definition is inlined in the API
-specification, these customizations can also be applied there directly.
+With REST SDK, you can apply metadata customizations on the JSON schemas that
+contain the metadata definition. If the metadata definition is inlined in the
+API specification, you can apply metadata customizations directly in the API
+specification as well.
 
-== Set a Display Name and Description for Metadata
+== Set a Display Name for the Metadata
 
-Customize a field name and description by following the
-JSON schema standard. The `title` and `description` properties are available by
-default in JSON schemas. REST SDK understands these
-properties and can map them to the `name` and `description` values respectively.
+To set a display name for the metadata, you must use the `title` property, which
+can be used in the JSON schema or in the API specification.
+
+The `title` property is available by default in the JSON schema. REST SDK understands
+the `title` property and maps the property to the `name` value.
+
+[source, json]
+----
+{
+  "type": "object",
+  "title": "An Object",
+  "description": "Description for Object",
+    "properties": {
+      "number": {
+        "type": "number",
+        "title": "A Number",      },
+      "street_name": { "type": "string" },
+      "street_type": { "type": "string" }
+    },
+  "additionalProperties": false
+}
+----
+
+The `title` field is used to provide this additional metadata.
+
+== Set a Description for the Metadata
+
+To set a description for the metadata, you must use the `description` property, which
+can be used in the JSON schema or in the API specification.
+
+The `description` property is available by default in the JSON schema. REST SDK understands
+the `description` property and maps the property to the `description` value.
 
 [source, json]
 ----
@@ -36,15 +64,18 @@ properties and can map them to the `name` and `description` values respectively.
 }
 ----
 
-In this example, the `title` and `description` fields are used to provide
-this additional metadata.
+The `description` field is used to provide this additional metadata.
 
 == Reorder the Fields of a Metadata Type
 
+To reorder the fields of a metadata type, you must use the `propertyOrder` property
+in a JSON schema or the `x-propertyOrder` property in a YAML OAS file.
+
 The JSON schema standard does not support field ordering. Instead, use a custom property
-that REST SDK can understand. This new property is called `propertyOrder`
-and references as `x-propertyOrder`. Use `propertyOrder` in a JSON schema or
-`x-propertyOrder` in a YAML OAS file.
+that REST SDK can understand. Use `propertyOrder` (which references as `x-propertyOrder`)
+in a JSON schema, or `x-propertyOrder` in a YAML OAS file.
+
+The following example shows the use of `propertyOrder` in a JSON schema:
 
 [source, json]
 ----
@@ -62,8 +93,7 @@ and references as `x-propertyOrder`. Use `propertyOrder` in a JSON schema or
 }
 ----
 
-This example shows how to include this additional metadata in a JSON schema
-using the custom `propertyOrder` property.
+The following example shows the use of `x-propertyOrder` in a YAML OAS file:
 
 [source, yaml]
 ----
@@ -83,5 +113,4 @@ components:
           type: string
 ----
 
-This example shows how to include this additional metadata in a type definition
-in a YAML OAS file using the `x-propertyOrder` property.
+Both examples show how to include this additional metadata in a type definition.
