@@ -3,104 +3,127 @@ ifndef::env-site,env-github[]
 include::../_attributes.adoc[]
 endif::[]
 
-Neither OAS nor RAML provides a way to declare that an operation is
-paginated.
+Configure and customize the pagination strategy of the connector descriptor of
+the connector.
 
-You can use the connector descriptor to augment these specs and allow
-pagination in the API operations.
+OAS specifications and RAML specifications do not provide a way to declare
+that an operation is paginated. You can use the connector descriptor to augment
+these specifications and enable pagination in the API operations.
+
+== Pagination Strategies
 
 REST SDK supports the following pagination strategies:
 
-Offset based paging:: For APIs that do paging based on an offset query
-parameter which requests results starting from result number N.
+Offset based paging:: For APIs that paginate based on an offset query
+parameter that requests results starting from result number N.
 
-Marker-based paging:: For APIs that do paging based on a marker
-query parameter which points to a position in the dataset to be
-returned.
+Marker-based paging:: For APIs that paginate based on a marker
+query parameter that points to a position in the dataset to
+return.
 
-Page number:: For APIs that do paging based on a query param which
+Page number:: For APIs that paginate based on a query parameter that
 represents the page number to get.
 
-Hypermedia paging:: For APIs that do paging retrieving the URL of
-the next page in the response body or in the Link header.
+Hypermedia paging:: For APIs that paginate based on retrieving the URL of
+the next page in the response body or in the link header.
 
 
 == Pagination Configuration Parameters
 
-For all paginations strategies, you must define name, type, and
-parameters.
+For all paginations strategies, you must define name, type, and other
+parameters. Use the following parameters to configure your pagination:
 
-=== Name
 
-The pagination name can be any string that you want to use to identify
-the pagination through the connector descriptor. You must use the
-pagination name when an operation is paged using this strategy.
+Offset based paging::
 
-=== Type
+* name +
+String that identifies the pagination through the connector descriptor. You must
+use the pagination name when an operation is paged using this strategy.
 
-The type defines the behavior of the pagination strategy.
+* type +
+Defines the behavior of the pagination strategy. You must use `_offset_` when
+using this strategy.
 
-As indicated previously, there are 4 possible strategies: _offset_,
-_marker_, _pageNumber_ and _hypermedia_.
+* offsetParamName +
+Indicates the name of the query parameter that must be passed to the API to
+indicate the initial position of the next page.
 
-=== Parameters
+* initialOffset +
+Initial value the connector passes to the previously indicated query parameter.
 
-Each pagination endpoint has parameters that take a role in the
-paginated operation. These vary depending on the pagination strategy.
+* pagingResponse +
+Provides the expression used to extract the item data from the response.
 
-==== Offset Pagination
 
-For _offset_ pagination, the available parameters are:
+Marker-based paging::
 
-offsetParamName:: Indicates the name of the query parameter that must
-be passed to the API to indicate the initial position of the next page.
+* name +
+String that identifies the pagination through the connector descriptor. You must
+use the pagination name when an operation is paged using this strategy.
 
-initialOffset:: The initial value the connector passes to the
-previously indicated query parameter.
+* type +
+Defines the behavior of the pagination strategy. You must use `_marker_` when
+using this strategy.
 
-==== Marker Pagination
+* nextTokenParamName +
+Indicates the name of the query parameter that must be passed to the API to
+indicate where the next page starts.
 
-For _marker_ pagination, the available parameters are:
+* nextToken +
+DataWeave expression used to extract the next page token
+from the API response. This token is then used to request the page that follows.
 
-nextTokenParamName:: Indicates the name of the query parameter that
-must be passed to the API to indicate where the next page starts.
+* pagingResponse +
+Provides the expression used to extract the item data from the response.
 
-nextToken:: This is a dataweave expression that the connector
-uses to extract the next page token from the API response. This token is
-then used to request the page that follows.
 
-==== Page Number Pagination
+Page number::
 
-For _pageNumber_ pagination, the available parameters are:
+* name +
+String that identifies the pagination through the connector descriptor. You must
+use the pagination name when an operation is paged using this strategy.
 
-pageNumberParamName:: Indicates the name of the query parameter that
-must be passed to the API to indicate the page number we want to get
-from the server.
+* type +
+Defines the behavior of the pagination strategy. You must use `_pageNumber_` when
+using this strategy.
 
-initialPageNumber:: The initial value the connector passes to the
-previously indicated query parameter.
+* pageNumberParamName +
+Indicates the name of the query parameter that must be passed to the API to
+indicate the page number you want to get from the server.
 
-pageCount:: A dataweave expression used to extract the total page count.
+* initialPageNumber +
+Initial value the connector passes to the previously indicated query parameter.
+
+* pageCount +
+DataWeave expression used to extract the total page count.
 The connector stops the pagination once that page is retrieved.
 This is an optional parameter.
 
-==== Hypermedia Pagination
+* pagingResponse +
+Provides the expression used to extract the item data from the response.
 
-For _hypermedia_ pagination, the available parameters are:
 
-nextUrl:: A dataweave expression that the connector
-uses to extract the next URL from the API response.
+Hypermedia paging::
 
-==== Paging Response
+* name +
+String that identifies the pagination through the connector descriptor. You must
+use the pagination name when an operation is paged using this strategy.
 
-The _pagingResponse_ is common to all the pagination
-strategies; it provides the expression used to extract the item data
-from the response.
+* type +
+Defines the behavior of the pagination strategy. You must use `_hypermedia_` when
+using this strategy.
+
+* nextUrl +
+DataWeave expression used to extract the next URL from the API response.
+
+* pagingResponse +
+Provides the expression used to extract the item data from the response.
+
 
 == Payload DataWeave Expression
 
 Some APIs return the pages directly in the response body, either through
-a JSON array or as an XML document. For example:
+a JSON array or as an XML document, for example:
 
 [source,json]
 ----
@@ -123,7 +146,7 @@ a JSON array or as an XML document. For example:
 ]
 ----
 
-Others return a complex object with metadata in which the page is
+Other APIs return a complex object with metadata in which the page is
 another field:
 
 [source,json]
@@ -150,21 +173,22 @@ another field:
 }
 ----
 
-As such, connector descriptors must provide a
-DataWeave expression to be evaluated over the response to obtain the
-page data. Notice that the expression should return the page. The
-expression doesn’t need to be able to split the elements; REST SDK does
-that automatically.
+If so, the connector descriptor must provide a DataWeave expression that is evaluated
+over the response to obtain the page data.
 
-For the first example, the expression is `#[payload]` and the second one
-is `#[payload.data]`.
+The DataWeave expression must return the page. The DataWeave expression does not
+need to be able to split the elements, as REST SDK does that automatically.
 
-== Example: Shop Connector
+For the first example, the DataWeave expression is `#[payload]`. For the second example,
+the DataWeave expression is `#[payload.data]`.
 
-The example Shop connector has a paged content search, so you can define
-a pagination strategy in the connector descriptor by creating a
-pagination node inside the `paginations` property, which is located at
-the root of the document.
+== Define a Pagination Strategy
+
+To define a pagination strategy, you must create a pagination node inside the
+`paginations` property, which is located at the root of the connector descriptor.
+
+Suppose the connector has a paged content search. The following example shows
+a possible way to define paging:
 
 [source,yaml]
 ----
@@ -185,7 +209,7 @@ baseUri:
  type: parameter
 
 paginations:
- content-search-pagination: #Declares a pagination strategy to be used within this API
+ content-search-pagination: # Declares a pagination strategy to be used within this API
    type: offset
    parameters:
      offsetParamName: "start"
@@ -201,18 +225,21 @@ endpoints:
        pagination: content-search-pagination
 ----
 
-The example defines an offset based pagination. It declares that the
-offset parameter in the API spec is named `start`, and an expression that
-allows the connector to extract the results from the response.
+This example defines offset based paging. The declaration contains an
+offset parameter in the API specification named `start`, and a DataWeave expression that
+enables the connector to extract the results from the response.
 
-You must also define that the content search operation uses that
+You must also define that the content search operation uses that defined
 pagination strategy.
 
-== Example: Hypermedia Pagination
+== Example: Hypermedia Paging
 
-=== Next URL in response body
+Use hypermedia paging for APIs that paginate by either retrieving the next URL
+in the response body or by retrieving the next URL in the link header.
 
-In case the next URL is defined in the response body:
+=== Retrieve the Next URL in the Response Body
+
+Suppose the next URL is defined in the response body:
 
 [source,json]
 ----
@@ -238,7 +265,7 @@ In case the next URL is defined in the response body:
 }
 ----
 
-The pagination should be defined:
+The following example shows how the pagination must be defined:
 
 [source,yaml]
 ----
@@ -254,15 +281,15 @@ paginations:
         expression: "#[payload.data]"
 ----
 
-=== Next URL in Link header
+=== Retrieve the Next URL in the Link Header
 
-In case the next URL is defined in Link header:
+Suppose the next URL is defined in the link header:
 
 ----
 link: <https://myhost.com/api?page=2>;rel="next", <https://myhost.com/api?page=10>; rel="last"
 ----
 
-The pagination should be defined:
+The following example shows how the pagination must be defined:
 
 ----
 paginations:
