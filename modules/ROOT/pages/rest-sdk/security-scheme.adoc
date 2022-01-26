@@ -114,9 +114,9 @@ access token refresh, for example:
 www-authenticate: Bearer realm="Service", error="invalid_token", error_description="The access token provided is invalid."
 ----
 
-Use customization since not all 401 errors indicate access token expirations.
+Use a custom refresh token condition since not all 401 errors indicate access token expirations.
 
-The following example shows a customized refresh token condition for
+The following example shows a custom refresh token condition for
 this scenario:
 
 [source,yaml]
