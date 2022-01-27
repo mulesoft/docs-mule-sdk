@@ -50,5 +50,5 @@ of the first layer.
 == What's Next
 
 After you've created the descriptors for your connector (including the optional customization layer),
-you can xref:rest-sdk/customize-the-connector.adoc[customize your connector]
+you can xref:rest-sdk/customize-your-connector.adoc[customize your connector]
 to start modifying your connector.

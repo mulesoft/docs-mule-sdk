@@ -10,34 +10,34 @@ requiring little to no configuration.
 Using REST SDK results in:
 
 * Instant connectivity via metadata
-* A shorter time to create connectors, sometimes from several months to days or minutes 
+* A shorter time to create connectors, sometimes from several months to days or minutes
 * A unified connector designer that welcomes nondeveloper users
 * Elimination of system-specific code and static assets
 
 
 Follow this path to build your own connector using REST SDK:
 
-. xref:rest-sdk/features.adoc[Features in REST SDK]
+. xref:rest-sdk/overview.adoc[Features in REST SDK]
 +
 Learn about REST SDK features and use cases.
 
-. xref:rest-sdk/project-setup.adoc[Set Up and Install REST SDK]
+. xref:rest-sdk/setup-and-installation.adoc[Set Up and Install REST SDK]
 +
 Complete prerequisites and install the REST SDK plugin.
 
-. xref:rest-sdk/scaffold-connector-descriptor.adoc[Scaffold a Connector Descriptor]
+. xref:rest-sdk/scaffold-a-connector-descriptor.adoc[Scaffold a Connector Descriptor]
 +
 Scaffold a connector descriptor from an API specification.
 
-. xref:rest-sdk/create-connector.adoc[Create a Connector]
+. xref:rest-sdk/create-a-connector.adoc[Create a Connector]
 +
 Create a connector from your connector descriptor and an API specification.
 
-. xref:rest-sdk/customization-layer.adoc[Create a Customization Layer]
+. xref:rest-sdk/create-a-customization-layer.adoc[Create a Customization Layer]
 +
 To add new layers of functionality, optionally create an instance of your existing connector descriptor.
 
-. xref:rest-sdk/customize-the-connector.adoc[Customize Your Connector]
+. xref:rest-sdk/customize-your-connector.adoc[Customize Your Connector]
 +
 Modify the connector descriptor and customization layer to customize your generated connector.
 

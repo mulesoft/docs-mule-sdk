@@ -1,0 +1,651 @@
+= Customize the Connector's Operations
+ifndef::env-site,env-github[]
+include::../_attributes.adoc[]
+endif::[]
+
+Configure and customize an existing operation of the connector descriptor of the connector.
+
+== Set an Operation Identifier for an Operation
+
+To set an operation identifier for an operation, you must use the REST SDK
+default provided mechanism.
+
+REST SDK relies on an operation identifier to generate classes for resources.
+Use the REST SDK mechanism to generate an operation identifier when:
+
+* using a valid `operationId` with a non null value from an OAS context
+* using an HTTP `method` and an HTTP full `path` with an `operationId` with a null value to execute a fallback
+
+The operation identifier cannot collide with resources, triggers, or other
+REST SDK components.
+
+Use these three bindings to modify the mechanism:
+
+[%header%autowidth.spread]
+|===
+|Binding name|Type|Description
+|`operationId` | `String` \| `null` | Identifier of the operation. Can be null.
+|`method` | `String` | HTTP method. Not nullable.
+|`path` | `String` | HTTP full path. Not nullable.
+|===
+
+== Set a Display Name for an Operation
+
+To set a display name for an operation, you must use the `displayName` property,
+which is located in the operation node.
+
+[source,yaml]
+----
+endpoints:
+   /content_search:
+      operations:
+         get:
+            pagination: content-search-pagination
+            displayName: Get Content Search
+            description: Provides keyword and refinement search functionality for content assets.
+            outputMediaType: application/json
+            expects:
+               queryParameter:
+                  count:
+                     displayName: count
+                     description: The maximum number of instances per request.
+----
+
+The name you set for the operation is available to the user with the display
+name in the UI.
+
+image::operation-display-name.png[]
+
+== Change a Generated Display Name for an Operation
+
+To change a generated display name for an operation, you must use either the
+REST SDK default DataWeave script or a custom DataWeave script.
+
+* <<default>>
+** <<default-op-id>>
+** <<default-method-and-path>>
+
+* <<custom>>
+** <<custom-op-id>>
+** <<custom-method-and-path>>
+
+[[default]]
+=== Change a Generated Display Name for an Operation Using the REST SDK Default DataWeave Script
+
+REST SDK provides a default DataWeave script to delegate to, which is useful when
+there is a common pattern that needs to be changed in all operation display names by
+comprehension rather than extension.
+
+The default DataWeave script relies on either an `operationId` with a non null value
+or both an HTTP `method` and an HTTP full `path` with an `operationId` with a null value.
+
+[[default-op-id]]
+==== Change a Generated Display Name for an Operation Using the REST SDK Default DataWeave Script with an Operation ID
+
+The following example shows a default DataWeave script that relies on an
+`operationId` with a non null value:
+
+[source,yaml]
+----
+#% Rest Connector Descriptor 1.0
+...
+operationIdentifier:
+  expression: |
+    #[%dw 2.0
+    output text/plain
+    ---
+    operationId default (method ++ path)
+    ]
+----
+
+For more information about the functions in the default DataWeave script, refer to
+https://github.com/mulesoft/rest-sdk-all/blob/master/rest-sdk-connector-model/src/main/resources/connectivity/RestSdk.dwl[RestSdk.dwl].
+
+[[default-method-and-path]]
+==== Change a Generated Display Name for an Operation Using the REST SDK Default DataWeave Script with an HTTP Method and an HTTP Full Path
+
+The following example shows a default DataWeave script that relies on both an HTTP
+`method` and an HTTP full `path` with an `operationId` with a null value:
+
+[source,yaml]
+----
+#% Rest Connector Descriptor 1.0
+....
+operationDisplayName:
+  expression: |
+        #[%dw 2.0
+          output text/plain
+          import * from connectivity::RestSdk
+          ---
+          displayNameFromOperationId(operationId)
+            default displayNameFromMethodAndPath(method, path)
+        ]
+----
+
+For more information about the functions in the default DataWeave script, refer to
+https://github.com/mulesoft/rest-sdk-all/blob/master/rest-sdk-connector-model/src/main/resources/connectivity/RestSdk.dwl[RestSdk.dwl].
+
+[[custom]]
+=== Change a Generated Display Name for an Operation Using a Custom DataWeave Script
+
+You can also customize the default DataWeave script by modifying the descriptor. Input your own
+custom DataWeave script to change how the display names get generated.
+
+Use these four bindings to modify the script:
+
+[%header%autowidth.spread]
+|===
+|Binding name|Type|Description
+|`operationId` | `String` \| `null` | Identifier of the operation. Can be null.
+|`method` | `String` | HTTP method. Not nullable.
+|`path` | `String` | HTTP full path. Not nullable.
+|`summary` | `String` \| `null` | Summary of the operation that matches the summary in OAS. Can be null.
+|===
+
+The custom DataWeave script relies on either an `operationId` with a non null value
+or both an HTTP `method` and an HTTP full `path` with an `operationId` with a null value.
+
+[[custom-op-id]]
+==== Change a Generated Display Name for an Operation Using a Custom DataWeave Script Using an Operation ID
+
+If you are using an `operationId` in your custom DataWeave script, you must change
+the DataWeave script for `operationIdentifier` as well.
+
+For example, suppose there is an API that contains dates and extensions in the
+resources, which is not useful to the user of the connector. For example, in the
+resource `/2010-04-01/Accounts/{id}/Messages/SMS/Media.json`, both `/2010-04-01/` and
+`.json` are not useful to the user and those parts do not need to be
+generated for the operation display names.
+
+The following example shows a custom DataWeave script that relies on an `operationIdentifier`
+that eliminates these parts from the operation display names:
+
+[source,yaml]
+----
+#% Rest Connector Descriptor 1.0
+....
+operationIdentifier:
+  expression: |
+    #[%dw 2.0
+    output text/plain
+    fun removeUnwantedStuff(aPath: String)=
+        aPath replace ".json" with ""
+          replace "/2010-04-01" with ""
+    ---
+    method ++ removeUnwantedStuff(path)
+    ]
+----
+
+The operation identifier for the operation that maps to the resource `/2010-04-01/Accounts/{id}/Messages/SMS/Media.json` is now
+`/Accounts/{id}/Messages/SMS/Media`, which significantly improves the naming
+around the resource for the XML DSL as well as the UI experience.
+
+[[custom-method-and-path]]
+==== Change a Generated Display Name for an Operation Using a Custom DataWeave Script Using an HTTP Method and an HTTP Full Path
+
+For example, suppose there is an API that contains dates and extensions in the
+resources, which is not useful to the user of the connector, and does not contain an
+`operationId` because it is either empty in the OAS specification or because it is an RAML
+specification. For example, in the resource `/2010-04-01/Accounts/Messages/SMS/Media.json`,
+both `/2010-04-01/` and `.json` are not useful to the user and those parts do not need to be
+generated for the operation display names.
+
+The following example shows a custom DataWeave script that relies on an HTTP `method` and an HTTP
+full `path` with an `operationId` with a null value that eliminates these parts from
+the operation display names:
+
+[source,yaml]
+----
+#% Rest Connector Descriptor 1.0
+...
+operationDisplayName:
+  expression: |
+    #[%dw 2.0
+    output text/plain
+    import * from dw::core::Strings
+    fun removeUnwantedStuff(aPath: String)=
+      aPath replace ".json" with ""
+        replace "/2010-04-01" with ""
+          replace "/" with " "
+    ---
+    capitalize(method) ++ removeUnwantedStuff(path)
+    ]
+----
+
+It is not necessary to use an `operationId` since it is null for this scenario.
+For the `/2010-04-01/Accounts/Messages/SMS/Media.json` endpoint, the generated
+display name is now `Post Accounts Messages SMS Media`, assuming the `method` is POST.
+
+The DataWeave script library contains other helper functions as well. For more
+information about helper functions to use in the custom DataWeave script, refer
+to https://github.com/mulesoft/rest-sdk-all/blob/master/rest-sdk-connector-model/src/main/resources/connectivity/RestSdk.dwl[RestSdk.dwl].
+
+The following example shows another custom DataWeave script that relies on an HTTP `method` and an HTTP
+full `path` with an `operationId` with a null value that eliminates specific parts from the
+operation display names:
+
+[source,yaml]
+----
+#% Rest Connector Descriptor 1.0
+...
+operationDisplayName:
+  expression: |
+    #[%dw 2.0
+    output text/plain
+    import * from connectivity::RestSdk
+    fun removeUnwantedStuff(aPath: String)=
+      aPath replace ".json" with ""
+        replace "/2010-04-01" with ""
+    ---
+    displayNameFromMethodAndPath(method, removeTwilioStuff(path))
+    ]
+----
+
+For the `/2010-04-01/Accounts/Messages/SMS/Media.json` endpoint, the generated
+display name is now `Create Accounts Messages SMS Media`, assuming the `method` is POST.
+
+== Set a Description for an Operation
+
+To set a description for an operation, you must use the `description` property,
+which is located in the operation node.
+
+[source,yaml]
+----
+endpoints:
+   /content_search:
+      operations:
+         get:
+            pagination: content-search-pagination
+            displayName: Get Content Search
+            description: Provides keyword and refinement search functionality for content assets.
+            outputMediaType: application/json
+            expects:
+               queryParameter:
+                  count:
+                     displayName: count
+                     description: The maximum number of instances per request.
+----
+
+Set the `description` property to give the user some context or an explanation
+of what the operation does. The description you set for the operation appears
+in Anypoint Studio as a tooltip.
+
+image::operation-description-tooltip.png[]
+
+[[select-default-media-type-for-an-operation]]
+== Select a Default Media Type for an Operation
+
+To select a default media type for an operation, you must use the `inputMediaType`
+and `outputMediaType` properties, which are located in the operation node.
+
+Both RAML and OAS API specifications enable you to define multiple media types for
+operations. REST SDK uses only one media type to generate an operation.
+
+To select a default media type for an operation manually, use the `inputMediaType`
+and `outputMediaType` properties to define the request body media type and the
+response media type respectively.
+
+[source,yaml]
+----
+endpoints:
+   /content_search:
+      operations:
+         get:
+            pagination: content-search-pagination
+            displayName: Get Content Search
+            description: Provides keyword and refinement search functionality for content assets.
+            inputMediaType: application/json
+            outputMediaType: application/json
+            expects:
+               queryParameter:
+                  count:
+                     displayName: count
+                     description: The maximum number of instances per request.
+----
+
+If a default media type for an operation is not defined using a custom property,
+the default media type is selected following this priority:
+
+* _application/json_ if it is defined
+* _application/xml_ if it is defined
+* The first media type defined in the API specification for that body
+
+== Select a Default Media Type for All Operations
+
+To select a default media type for all operations, similar to how a default media type is
+defined in xref:rest-sdk/operations.adoc#select-default-media-type-for-an-operation[Select a Default Media Type for an Operation], but you want
+to do it globally, you must use the `defaultInputMediaType` and `defaultOutputMediaType`
+properties, which are located at the root of the connector descriptor.
+
+[source,yaml]
+----
+defaultInputMediaType: application/json
+defaultOutputMediaType: application/json
+
+endpoints:
+   /content_search:
+      operations:
+         get:
+            pagination: content-search-pagination
+            displayName: Get Content Search
+            description: Provides keyword and refinement search functionality for content assets.
+            expects:
+               queryParameter:
+                  count:
+                     displayName: count
+                     description: The maximum number of instances per request.
+----
+
+== Ignore an Operation or an Endpoint
+
+To ignore an operation or an endpoint, you must use the `ignored` property,
+which can be defined at either the operation level or the endpoint level.
+
+Use the `ignored` property when you do not want to generate an operation in the
+connector for a resource that is present in the API specification.
+
+If you define the `ignored` property at the operation level, only that operation
+is not generated while the rest of the operations for that endpoint are generated.
+
+[source,yaml]
+----
+endpoints:
+   /flights/{ID}:
+      operations:
+         delete:
+            ignored: true
+----
+
+In this case, only the DELETE verb is ignored. Operations are still
+generated for the other verbs in the resource.
+
+If you define the `ignored` property at the endpoint level, none of the operations
+defined under the endpoint are generated.
+
+[source,yaml]
+----
+endpoints:
+   /flights/{ID}:
+      ignored: true
+----
+
+In this case, all of the endpoint verbs are ignored. No operations
+are generated for this resource.
+
+== Ignore Operations and Triggers by Default
+
+To ignore operations and triggers by default, you must use the `ignoreOperations`
+property, which is located at the root of the connector descriptor.
+
+Set the `ignoreOperations` property to `true` to ignore previously declared
+operations and triggers. You can use this property to select only a small subset
+of operations and triggers for the connector to generate.
+
+If an operation or trigger is ignored in a previous layer but `ignoreOperations`
+is set to `false`, the operation or trigger will be generated in the connector.
+
+If an operation or trigger is not ignored in a previous layer but `ignoreOperations`
+is set to `true`, the operation or trigger will not be generated in the connector.
+
+[source,yaml]
+----
+#% Rest Connector Descriptor 1.0
+
+ignoreOperations: true
+
+endpoints:
+   /flights/{ID}:
+      ignored: false
+----
+
+In this example, only the operations and triggers under the `/flights/{ID}` path are generated.
+All of the other operations and triggers are ignored.
+
+Using the `ignoreOperations` property is similar to adding an `ignored` property
+to all of the operations and triggers.
+
+== Hide an Operation
+
+To hide an operation, you must use the `ignore` property.
+
+Operations declared in the connector's first (base) layer can be hidden by
+ignoring them in a subsequent descriptor layer to generate a connector with a
+subset of operations.
+
+The following example shows the connector descriptor's base layer:
+
+[source,yaml]
+----
+#% Rest Connector Descriptor 1.0
+
+apiSpec:
+ url: http://myhost.com/resources/slack-api.yaml
+
+connectorName: Slack Connector
+
+connectorGav:
+ groupId: com.mulesoft.connectors
+ artifactId: slack-connector
+ version: 1.0.0
+----
+
+This base layer generates all the operations of the connector
+that are declared in the source API specification.
+
+To generate a connector with only a subset of the operations from the API
+specification while also maintaining all the customizations declared in the connector
+descriptor's base layer, you can use a new descriptor layer to hide some operations:
+
+[source,yaml]
+----
+#% Rest Connector Descriptor 1.0
+
+connectorGav:
+ groupId: com.mulesoft.connectors
+ artifactId: composed-slack-connector
+ version: 1.0.0
+
+endpoints:
+    /users:
+        ignored: true
+----
+
+All of the operations under the `/users` endpoint are ignored and are not present
+in the generated connector, which enables you to select which operation is and
+is not available to the user.
+
+== Rename an Operation
+
+To rename an operation, you must use the `displayName` property.
+
+Use the `displayName` property to customize operation names.
+
+The following example shows the connector descriptor's base layer:
+
+[source,yaml]
+----
+#% Rest Connector Descriptor 1.0
+
+apiSpec:
+ url: http://myhost.com/resources/slack-api.yaml
+
+connectorName: Slack Connector
+
+connectorGav:
+ groupId: com.mulesoft.connectors
+ artifactId: slack-connector
+ version: 1.0.0
+
+endpoints:
+    /users:
+        operations:
+            get:
+                displayName: Get users by email
+----
+
+The operation is currently named `Get users by email`.
+
+You can rename an operation in the `/users` section of the connector descriptor:
+
+[source,yaml]
+----
+#% Rest Connector Descriptor 1.0
+
+connectorGav:
+ groupId: com.mulesoft.connectors
+ artifactId: composed-slack-connector
+ version: 1.0.0
+
+endpoints:
+    /users:
+        operations:
+            get:
+                displayName: Get all users by email
+----
+
+The operation is now renamed to `Get all users by email`, which
+changes the operation name in the generated connector for the user.
+
+== Redefine an Input Type or an Output Type for an Operation
+
+To redefine an input type or an output type for an operation, you must
+use the `inputType` and `outputType` properties, which are located at the operation node.
+
+The API specification may not define an input type or an output type, but if you
+need to define them, you can set the `inputType` and `outputType` properties at
+the operation level in the connector descriptor.
+
+For example, let’s say we have the following OAS spec:
+
+[source,json5]
+----
+{
+"paths": {
+ "/payment_instrument/{payment_instrument_id}": {
+   "post": {
+     "responses": {
+       "default": {
+         "description": ""
+       }
+     }
+   }
+//[..]
+}
+----
+
+In this case, the operation does not define an input type or an output type, but
+you can still add an input type and an output type in the connector descriptor.
+
+[source,yaml]
+----
+defaultInputMediaType: application/json
+defaultOutputMediaType: application/json
+
+endpoints:
+ /payment_instrument/{payment_instrument_id}:
+   operations:
+     post:
+       inputType: './payment-instrument.json'
+       outputType: './payment-instrument.json'
+----
+
+The operation uses the type definition from the JSON schema as an input type and an
+output type. The values of the `inputType` and `outputType` properties must be
+the path to a JSON schema relative to the location of the connector descriptor file.
+
+In this case, the JSON schema appears as follows:
+
+[source,json]
+----
+{
+ "$schema": "http://json-schema.org/draft-04/schema#",
+ "$ref": "#/definitions/PaymentInstrument",
+ "definitions": {
+   "PaymentInstrument": {
+   "type": "object",
+   "properties": {
+     "name": {"type": "string"}
+   },
+   "required": [
+     "name"
+   ]
+ }}
+}
+----
+
+== Override an Input Type or an Output Type for an Operation
+
+To override an input type or an output type for an operation, you must use the
+`inputType` and the `outputType` properties, which are located at the operation node.
+
+Use the `inputType` and the `outputType` properties to override the input type and
+the output type defined in the API specification. If an input type or an output
+type are defined in the connector descriptor, the input type or the output type
+in the API specification is ignored.
+
+== Skip Output Type Validations for an Operation
+
+To skip output type validations for an operation, you must use the `skipOutputTypeValidation`
+property, which can be used globally at the root of the connector descriptor or
+in the operation node.
+
+`GET`, `POST`, `PATCH`, and `OPTIONS` operations defined in the API specification must
+declare a response body and a type for that body. If those operations do not declare
+a response body and a type for that body, the connector descriptor must either
+skip this check, define a response body for the operation, or declare the operation as void.
+
+Though it is not the recommended approach, you can skip this check by using the
+`skipOutputTypeValidation` property in the connector descriptor.
+
+[source,yaml]
+----
+#% Rest Connector Descriptor 1.0
+apiSpec:
+  url: './api.raml'
+connectorName: Version Manager
+skipOutputTypeValidation: true           #<-- Global
+
+endpoints:
+  /endpoints/users:
+    operations:
+      get:
+        skipOutputTypeValidation: true   #<-- Operation Level
+----
+
+If the validation is skipped, the generated connector still generates an
+`InputStream` output for the operation and contains the actual server response,
+but does not inform the user that this operation has an output. This is not
+recommended and should be avoided as much as possible.
+
+If the operation does not have an output, the `voidOperation` property should
+be used instead of the `skipOutputTypeValidation` property.
+
+== Declare Void for an Operation
+
+To declare void for an operation, you must use the `voidOperation` property, which is located
+in the operation node.
+
+`GET`, `POST`, `PATCH`, and `OPTIONS` operations defined in the API specification must
+declare a response body and a type for that body. If those operations do not declare
+a response body and a type for that body, the connector descriptor must either
+skip this check, define a response body for the operation, or declare the operation as void.
+
+You can declare the operation as void by using the `voidOperation` property in the
+operation node of the connector descriptor.
+
+[source,yaml]
+----
+#% Rest Connector Descriptor 1.0
+apiSpec:
+ url: './api.raml'
+connectorName: Version Manager
+endpoints:
+ /endpoints/void:
+   operations:
+     get:
+       voidOperation: true   #<-- Operation Level
+----
+
+Using the `voidOperation` property causes the operation to not have an `InputStream` as an output.
+Instead, the operation always returns an empty string output. Using the `voidOperation` property also discards
+the actual server response. The HTTP response properties are still returned as attributes.

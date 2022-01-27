@@ -83,7 +83,7 @@ issues generating the connector descriptor.
 
 After you've created your base connector from an API specification and a connector descriptor,
 you can optionally create an instance of your connector descriptor and
-xref:rest-sdk/customization-layer.adoc[add a customization layer], which develops
+xref:rest-sdk/create-a-customization-layer.adoc[add a customization layer], which develops
 another layer of functionality for your connector. Otherwise, you can
-xref:rest-sdk/customize-the-connector.adoc[customize your connector] to start
+xref:rest-sdk/customize-your-connector.adoc[customize your connector] to start
 modifying your connector.

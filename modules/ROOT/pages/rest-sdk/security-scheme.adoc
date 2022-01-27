@@ -3,12 +3,13 @@ ifndef::env-site,env-github[]
 include::../_attributes.adoc[]
 endif::[]
 
+Configure and customize the security scheme of the connector descriptor of
+the connector.
+
 == Set a Display Name for a Security Scheme Parameter
 
-You can set friendly names for security scheme parameters using the
-`displayName` annotation in the security scheme node of the Connector
-Descriptor. You can use the `ignored` property in the `security` node of
-your connector descriptor.
+To set a display name for a security scheme parameter, you must use the
+`displayName` property, which is located in the security node.
 
 [source,yaml]
 ----
@@ -19,15 +20,17 @@ security:
         displayName: 'Auth Header'
 ----
 
-In this case, the API spec defines the security scheme name `passThrough`
-which has a parameter named `passThroughHeader` defined. The `displayName`
+In this example, the API specification defines the security scheme named `passThrough`,
+which defines a parameter named `passThroughHeader`. The `displayName`
 property is assigned the value `Auth Header`.
 
 == Ignore a Security Scheme
 
-If your API spec defines a security scheme that you don’t want to be
-present in the generated connector, you can use the `ignored` property
-in the `security` node of your connector descriptor.
+To ignore a security scheme, you must use the `ignored` property, which is located
+in the security node.
+
+You can ignore a security scheme if your API specification defines a security
+scheme that you do not want in the generated connector.
 
 [source,yaml]
 ----
@@ -36,14 +39,17 @@ security:
     ignored: true
 ----
 
-In this case, the API spec declares a security scheme named `passThrough`.
-The example uses the ignored annotation, so it does not get generated in
+In this example, the API specification declares a security scheme named `passThrough`.
+The example uses the `ignored` property, so the security scheme is not generated in
 the connector descriptor.
 
-== Add Parameters for OAuth Authorization
+== Add Parameters for OAuth 2.0 Authorization
 
-You can define new parameters to be added in the `Authorize` endpoint for
-OAuth 2.0 authorization in the descriptor.
+To add parameters for OAuth 2.0 authorization, you must define the parameters in
+the security node.
+
+You can define new parameters to add in the `Authorize` endpoint for
+OAuth 2.0 authorization in the connector descriptor.
 
 [source,yaml]
 ----
@@ -58,20 +64,22 @@ security:
         default: 'consent'
 ----
 
-In this case, the query parameter `prompt` will be added on the Authorization endpoint.
+In this example, the query parameter `prompt` is added in the `Authorize` endpoint.
 
-== Customize OAuth Refresh Token Condition
+== Customize the OAuth Refresh Token Condition
+
+To customize the OAuth refresh token condition, you must use the `refreshTokenCondition`
+expression, which extends an OAuth security scheme. This feature is supported by
+Mule 4.4 and later.
 
 Refreshing OAuth access tokens with 401 HTTP status errors using the standard
-behavior does not work in all scenarios.
+behavior does not work in all scenarios. You can customize this behavior with a
+`refreshTokenCondition` expression.
 
-Customize this behavior with a refreshTokenCondition expression that
-extends an OAuth security scheme. This feature is supported by Mule 4.4.0 or later.
+The available expression bindings in the `refreshTokenCondition` expression are
+response payload and response attributes.
 
-The available expression bindings in refreshTokenCondition are response payload
-and response attributes.
-
-The following example illustrates a customized refreshTokenCondition:
+The following example shows a customized refresh token condition:
 
 [source,yaml]
 ----
@@ -89,26 +97,26 @@ security:
       expression: "#[attributes.statusCode == 403]"
 ----
 
-If there are response errors, the refreshTokenCondition expression will be a
+If there are response errors, the `refreshTokenCondition` expression acts as a
 detection condition used to verify if a refresh access token is needed.
 
-Note that this detection support is applied on detected error responses.
-It is applied on the presence of 4xx HTTP client errors or 5xx
-server errors, but not on 2xx responses.
+This detection support is applied on detected error responses. This detection support
+is applied on the presence of 4xx HTTP client errors or 5xx server errors, but it
+is not applied on 2xx responses.
 
 === Example
 
-Imagine there is a SaaS Box API that uses a combination of 401 status code and
+Suppose there is a SaaS Box API that uses a combination of 401 status code and
 www-authenticate standard header to represent a response scenario needing
-access token refresh, such as:
+access token refresh, for example:
 
 ----
 www-authenticate: Bearer realm="Service", error="invalid_token", error_description="The access token provided is invalid."
 ----
 
-Use customization since not all 401 errors indicate access token expirations.
+Use a custom refresh token condition since not all 401 errors indicate access token expirations.
 
-The following example illustrates a customized refreshTokenCondition for
+The following example shows a custom refresh token condition for
 this scenario:
 
 [source,yaml]
