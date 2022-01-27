@@ -1,4 +1,4 @@
-= Customize the Connector's Value Provider
+= Customize the Connector's Value Providers
 ifndef::env-site,env-github[]
 include::../_attributes.adoc[]
 endif::[]

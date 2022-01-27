@@ -57,4 +57,4 @@ them.
 
 == What's Next
 
-After you've set up your project, you can xref:rest-sdk/scaffold-connector-descriptor.adoc[scaffold a connector descriptor].
+After you've set up your project, you can xref:rest-sdk/scaffold-a-connector-descriptor.adoc[scaffold a connector descriptor].

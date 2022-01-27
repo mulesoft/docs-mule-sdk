@@ -313,7 +313,7 @@ the default media type is selected following this priority:
 == Select a Default Media Type for All Operations
 
 To select a default media type for all operations, similar to how a default media type is
-defined in xref:rest-sdk/configure-operations.adoc#select-default-media-type-for-an-operation[Select a Default Media Type for an Operation], but you want
+defined in xref:rest-sdk/operations.adoc#select-default-media-type-for-an-operation[Select a Default Media Type for an Operation], but you want
 to do it globally, you must use the `defaultInputMediaType` and `defaultOutputMediaType`
 properties, which are located at the root of the connector descriptor.
 
