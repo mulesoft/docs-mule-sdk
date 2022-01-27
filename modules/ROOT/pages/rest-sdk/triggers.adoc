@@ -195,7 +195,7 @@ values previously. You can then send it.
 Defines how to extract the actual values from the server response.
 
 In this case, the response looks like this:
-+
+
 [source,json5]
 ----
 {
@@ -207,7 +207,7 @@ In this case, the response looks like this:
 "latestDateCovered" : "2013-05-08T21:20:00.000+0000"
 }
 ----
-+
+
 The trigger automatically splits the array, and each of the items is sent to the
 flow as a different element. For example, `{"id": "a00D0000008pQR5IAM", [...]}` is
 one of the propagated items.

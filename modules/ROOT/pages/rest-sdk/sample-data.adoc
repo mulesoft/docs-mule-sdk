@@ -12,7 +12,7 @@ and triggers.
 
 The following example shows how sample data is displayed:
 
-image::sample-data-output.png[alt=Sample Data Output,width=165,height=500]
+image::sample-data-output.png[alt=Sample Data Output,width=175,height=500]
 
 == Definition of a Sample Data Resolver
 
@@ -70,7 +70,7 @@ list of flights, and then uses the `"#[payload.flights[0]]"` expression to
 extract the first item from the results. It replicates a result from the trigger,
 as triggers propagate the response items one by one.
 
-== Same Operation Sample Data Resolver 
+== Same Operation Sample Data Resolver
 
 Same operation definitions are the easiest way to replicate the operation or trigger
 behavior to get sample data. Using the same operation definition requires declaration only since
