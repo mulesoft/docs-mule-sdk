@@ -291,6 +291,7 @@ link: <https://myhost.com/api?page=2>;rel="next", <https://myhost.com/api?page=1
 
 The following example shows how the pagination must be defined:
 
+[source,yaml]
 ----
 paginations:
   hypermedia-body-pagination:
