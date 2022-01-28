@@ -249,6 +249,7 @@ image::shop-studio-config.png[]
 
 The user sees the default value preloaded, but the user can also edit the value.
 
+[[fixed]]
 === Fixed Base URI
 
 The fixed base URI is similar to the parameter base URI, however the user cannot
@@ -279,6 +280,7 @@ baseUri:
 In this case, the `baseUri` field does not appear in the connector
 configuration and the user cannot change it.
 
+[[multiple]]
 === Multiple Base URI
 
 The multiple base URI works as a set of predefined fixed base URIs.
@@ -317,9 +319,9 @@ endpoints:
 ----
 
 In this case, all operations defined under `/api/users` access the
-https://users.com/api/users[+https://users.com/api/users+] endpoint, and
+\https://users.com/api/users endpoint, and
 all operations defined under `/api/upload` access the
-https://users.com/api/upload[+https://upload.users.com/api/upload+] endpoint.
+\https://users.com/api/upload endpoint.
 
 == Define TLS Support for the Connector
 

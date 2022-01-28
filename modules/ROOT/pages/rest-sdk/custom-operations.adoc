@@ -12,475 +12,6 @@ from existing metadata to expose different functional properties and how to use
 custom operations to accomplish certain use cases. This functional
 connectivity is defined by the system level functionality described for the SaaS API.
 
-== Reuse the Same Endpoint for Two Operations
-
-With custom operations, you can define as many operation variations of a
-top level endpoint operation as you want.
-
-Suppose there is a top level endpoint operation called *updateOrCreateContacts*. You
-can create two operations, *createContact* and *updateContact*, on top of the base
-endpoint operation *updateOrCreateContacts*.
-
-The following example shows the *createContact* operation:
-
-[source,yaml]
-----
-operations:
-    createContact:
-        displayName: Create Contact
-        description: Create contact
-        base:
-            operationId: updateOrCreateContacts
-        parameters:
-            CreateContactContent:
-                displayName: Content
-                typeSchema: ./schemas/CreateContact-Request-Content-schema.json
-                mediaType: application/json
-                required: true
-        request:
-            queryParameter:
-                summarizeErrors:
-                    value: "#[true]"
-            body:
-                language: "dw"
-                expression: "#[
-                var contact = parameters.CreateContactContent.Contact
-                var address = contact.Address default null
-                var phone = contact.Phone default null
-                var contactPerson = contact.ContactPerson default null
-                ---
-                {
-                    \"Contacts\": [
-                        {
-                            (contact.&Name),
-                            (contact.&ContactNumber),
-                            (contact.&ContactStatus),
-                            (contact.&FirstName),
-                            (contact.&LastName),
-                            (contact.&EmailAddress),
-                            (contact.&SkypeUserName),
-                            (contact.&BankAccountDetails),
-                            (contact.&TaxNumber),
-                            (contact.&AccountsReceivableTaxType),
-                            (contact.&AccountsPayableTaxType),
-                            (if (address != null) {
-                            Addresses: [
-                            {
-                                (address.&AddressType),
-                                (address.&AddressLine1),
-                                (address.&AddressLine2),
-                                (address.&AddressLine3),
-                                (address.&AddressLine4),
-                                (address.&City),
-                                (address.&Region),
-                                (address.&PostalCode),
-                                (address.&Country),
-                                (address.&AttentionTo)
-                            }
-                            ]} else {}),
-                            (if (phone != null) {
-                            Phones:  [
-                            {
-                                (phone.&PhoneType),
-                                (phone.&PhoneNumber),
-                                (phone.&PhoneAreaCode),
-                                (phone.&PhoneCountryCode)
-                            }
-                            ]} else {}),
-                            (contact.&DefaultCurrency),
-                            (if (contactPerson != null) {
-                            ContactPersons:  [
-                                {
-                                    (contactPerson.&FirstName),
-                                    (contactPerson.&LastName),
-                                    (contactPerson.&EmailAddress),
-                                    (contactPerson.&IncludeInEmails)
-                                }
-                            ]} else {})
-                        }
-                    ]
-                }
-                ]"
-        response:
-            body:
-                typeSchema: ./schemas/CreateContact-Response-schema.json
-                mediaType: application/json
-                expression: "#[
-                var contact = payload.Contacts[0] default null
-                ---
-                {
-                    (if (contact != null) {
-                    Contact:
-                        {
-                            (contact.&Name),
-                            (contact.&ContactID),
-                            (contact.&ContactNumber),
-                            (contact.&ContactStatus)
-                        }
-                    } else {})
-                }
-                ]"
-----
-
-The following example shows the *updateContact* operation:
-
-[source,yaml]
-----
-    updateContact:
-        displayName: Update Contact
-        description: Update contact
-        base:
-            operationId: updateOrCreateContacts
-        parameters:
-            UpdateContactContent:
-                displayName: Content
-                typeSchema: ./schemas/UpdateContact-Request-Content-schema.json
-                mediaType: application/json
-                required: true
-        request:
-            queryParameter:
-                summarizeErrors:
-                    value: "#[true]"
-            body:
-                language: "dw"
-                expression: "#[
-                var contact = parameters.UpdateContactContent.Contact
-                var address = contact.Address default null
-                var phone = contact.Phone default null
-                var contactPerson = contact.ContactPerson default null
-                ---
-                {
-                    \"Contacts\": [
-                        {
-                            (contact.&Name),
-                            (contact.&ContactNumber),
-                            (contact.&ContactStatus),
-                            (contact.&FirstName),
-                            (contact.&LastName),
-                            (contact.&EmailAddress),
-                            (contact.&SkypeUserName),
-                            (contact.&BankAccountDetails),
-                            (contact.&TaxNumber),
-                            (contact.&AccountsReceivableTaxType),
-                            (contact.&AccountsPayableTaxType),
-                            (if (address != null) {
-                            Addresses: [
-                            {
-                                (address.&AddressType),
-                                (address.&AddressLine1),
-                                (address.&AddressLine2),
-                                (address.&AddressLine3),
-                                (address.&AddressLine4),
-                                (address.&City),
-                                (address.&Region),
-                                (address.&PostalCode),
-                                (address.&Country),
-                                (address.&AttentionTo)
-                            }
-                            ]} else {}),
-                            (if (phone != null) {
-                            Phones:  [
-                            {
-                                (phone.&PhoneType),
-                                (phone.&PhoneNumber),
-                                (phone.&PhoneAreaCode),
-                                (phone.&PhoneCountryCode)
-                            }
-                            ]} else {}),
-                            (contact.&DefaultCurrency),
-                            (if (contactPerson != null) {
-                            ContactPersons:  [
-                                {
-                                    (contactPerson.&FirstName),
-                                    (contactPerson.&LastName),
-                                    (contactPerson.&EmailAddress),
-                                    (contactPerson.&IncludeInEmails)
-                                }
-                            ]} else {})
-                        }
-                    ]
-                }
-                ]"
-        response:
-            body:
-                typeSchema: ./schemas/UpdateContact-Response-schema.json
-                mediaType: application/json
-                expression: "#[
-                var contact = payload.Contacts[0] default null
-                ---
-                {
-                    (if (contact != null) {
-                    Contact:
-                        {
-                            (contact.&Name),
-                            (contact.&ContactID),
-                            (contact.&ContactNumber),
-                            (contact.&ContactStatus)
-                        }
-                    } else {})
-                }
-                ]"
-----
-
-== Hide a Top Level Parameter for an Operation
-
-Hide a top level parameter from the connectivity experience that should not
-surface the high level operation.
-
-[source,yaml]
-----
-    findLocation:
-        displayName: Find Location
-        description: This is my own find location
-        base:
-            operationId: findLocationById
-        parameters:
-            #...
-        request:
-            #...
-            queryParameter:
-                code:
-                    ignored: true
-                offset:
-                    ignored: true
-        #...
-----
-
-Hiding a top level parameter on the custom operation affects both the custom
-operation and the base operation, while hiding a top level parameter on the
-base operation affects only the base operation.
-
-== Hide a Top Level Parameter and Change a Top Level Parameter to a Default Literal Value for an Operation
-
-You can hide a top level parameter from the connectivity experience but also include it in requests
-with a literal value.
-
-[source,yaml]
-----
-    findLocation:
-        displayName: Find Location
-        description: This is my own find location
-        base:
-            operationId: findLocationById
-        parameters:
-            #...
-        request:
-            #...
-            queryParameter:
-                code:
-                    value: AA1231
-                offset:
-                    value: ZZZ399
-        #...
-----
-
-== Remove an Input or Output Field for an Operation
-
-Define which fields to expose to the user by defining a new reshaped
-version of the base connectivity request body.
-
-For example, suppose you want to hide the *ContactStatus* input field since you
-are creating only `ACTIVE` users. The following example hides the
-input field:
-
-[source,yaml]
-----
-    updateContact:
-        displayName: Update Contact
-        description: Update contact
-        base:
-            operationId: updateOrCreateContacts
-        parameters:
-            UpdateContactContent:
-                displayName: Content
-                ## ...
-                typeSchema: ./schemas/UpdateContact-Request-Content-schema.json
-                mediaType: application/json
-                required: true
-        request:
-            body:
-                language: "dw"
-                expression: "#[
-                var contact = parameters.UpdateContactContent.Contact
-                ---
-                {
-                    (contact.&Name),
-                    (contact.&ContactNumber),
-                    (contact.&FirstName),
-                    (contact.&LastName),
-                    // ...
-                    ContactStatus: \"ACTIVE\",
-                }
-                ]"
-        response:
-            body:
-                ## ...
-----
-
-Additionally, you can also remove an output field. The following
-example hides code and offset from the response to the user:
-
-[source,yaml]
-----
-    createLocation:
-        displayName: Create Location
-        description: This is my own create location with content
-        base:
-            operationId: createLocation
-        parameters:
-            content:
-                displayName: Body
-                typeSchema: ./location-schema.json
-                mediaType: application/json
-                required: true
-        request:
-            ## ...
-        response:
-            body:
-                ##
-                typeSchema: ./location-schema.json
-                mediaType: application/json
-                value: "#[payload - 'code' - 'offset']"
-----
-
-== Transform an Input or Output Type for an Operation
-
-Include complex transformations between input and output auxiliary
-parameters or request and response binding parameters. The following example
-shows a transformation between request and response binding parameters:
-
-[source,yaml]
-----
-    searchContacts:
-        displayName: Search Contacts
-        description: Search Contacts
-        base:
-            operationId: searchContact
-        parameters:
-            ContactName:
-                displayName: Contact Name
-                description: The name of contact
-                type: string
-                required: false
-            ContactEmailAddress:
-                displayName: Contact Email Address
-                description: The email address  of the contact
-                type: string
-                required: false
-            ContactAccountNumber:
-                displayName: Contact Account Number
-                description: The account number of the contact
-                type: string
-                required: false
-        request:
-            queryParameter:
-                where:
-                    value: "#[
-                        %dw 2.0
-                        output application/json
-                        var ContactName = parameters.ContactName default null
-                        var ContactEmailAddress = parameters.ContactEmailAddress default null
-                        var ContactAccountNumber = parameters.ContactAccountNumber default null
-                        ---
-                        {
-                            (if (ContactName != null) {Name: ContactName} else {} ),
-                            (if (ContactEmailAddress != null) {EmailAddress: ContactEmailAddress} else {} ),
-                            (if (ContactAccountNumber != null) {AccountNumber: ContactAccountNumber} else {} )
-                        }
-                        pluck ((value, key, index) -> key ++ \"=\\\"\" ++ value ++ \"\\\"\") joinBy \" AND \"
-                    ]"
-        response:
-            body:
-                typeSchema: ./schemas/SearchContacts-Response-schema.json
-                    mediaType: application/json
-                    value: "#[
-                        {
-                            Contacts: payload.Contacts map (contact, index) ->
-                                {
-                                    (contact.&ContactID),
-                                    (contact.&Name),
-                                    (contact.&ContactNumber),
-                                    (contact.&ContactStatus),
-                                    (contact.&FirstName),
-                                    (contact.&LastName),
-                                    (contact.&EmailAddress),
-                                    (contact.&SkypeUserName),
-                                    (contact.&BankAccountDetails),
-                                    (contact.&TaxNumber),
-                                    (contact.&AccountsReceivableTaxType),
-                                    (contact.&AccountsPayableTaxType),
-                                    (contact.&Addresses),
-                                    (contact.&Phones),
-                                    (contact.&DefaultCurrency),
-                                    (contact.&ContactPersons)
-                                }
-                        }
-                    ]"
-
-
-----
-
-== Use Declarative Sidecars for an Operation
-
-Create custom operations using declarative sidecars on the generated connector
-when including base and experience connectivity in the same artifact.
-
-The sidecar directive generates all custom operations as sidecars. The sidecar directive
-is scoped for the connector descriptor with a default value of `false`.
-
-[source,yaml]
-----
-sidecar: true
-operations:
-    getContactByID:
-        displayName: Get Contact By ID
-        description: Get contact by ID
-        base:
-            operationId: findContactById
-        parameters:
-            ContactID:
-                displayName: ContactID
-                type: string
-                required: true
-        request:
-            uriParameter:
-                ContactID:
-                    value: "#[parameters.ContactID]"
-        response:
-            body:
-                typeSchema: ./schemas/GetContactByID-Response-schema.json
-                    mediaType: application/json
-                    value: "#[
-                    var contact = payload.Contacts[0] default null
-                    ---
-                    {
-                        (if (contact != null) {
-                        Contact:
-                            {
-                                (contact.&ContactID),
-                                (contact.&Name),
-                                (contact.&ContactNumber),
-                                (contact.&ContactStatus),
-                                (contact.&FirstName),
-                                (contact.&LastName),
-                                (contact.&EmailAddress),
-                                (contact.&SkypeUserName),
-                                (contact.&BankAccountDetails),
-                                (contact.&TaxNumber),
-                                (contact.&AccountsReceivableTaxType),
-                                (contact.&AccountsPayableTaxType),
-                                (contact.&Addresses),
-                                (contact.&Phones),
-                                (contact.&DefaultCurrency),
-                                (contact.&ContactPersons)
-                            }
-                        } else {})
-                    }
-                    ]"
-
-----
-
-
 == Example: Defining a Custom Operation
 
 This step-by-step process describes how to define a new custom operation
@@ -1415,3 +946,471 @@ define customized operations:
 |Expression
 |Expression or literal value to bind on the response parameter.
 |===
+
+== Reuse the Same Endpoint for Two Operations
+
+With custom operations, you can define as many operation variations of a
+top level endpoint operation as you want.
+
+Suppose there is a top level endpoint operation called *updateOrCreateContacts*. You
+can create two operations, *createContact* and *updateContact*, on top of the base
+endpoint operation *updateOrCreateContacts*.
+
+The following example shows the *createContact* operation:
+
+[source,yaml]
+----
+operations:
+    createContact:
+        displayName: Create Contact
+        description: Create contact
+        base:
+            operationId: updateOrCreateContacts
+        parameters:
+            CreateContactContent:
+                displayName: Content
+                typeSchema: ./schemas/CreateContact-Request-Content-schema.json
+                mediaType: application/json
+                required: true
+        request:
+            queryParameter:
+                summarizeErrors:
+                    value: "#[true]"
+            body:
+                language: "dw"
+                expression: "#[
+                var contact = parameters.CreateContactContent.Contact
+                var address = contact.Address default null
+                var phone = contact.Phone default null
+                var contactPerson = contact.ContactPerson default null
+                ---
+                {
+                    \"Contacts\": [
+                        {
+                            (contact.&Name),
+                            (contact.&ContactNumber),
+                            (contact.&ContactStatus),
+                            (contact.&FirstName),
+                            (contact.&LastName),
+                            (contact.&EmailAddress),
+                            (contact.&SkypeUserName),
+                            (contact.&BankAccountDetails),
+                            (contact.&TaxNumber),
+                            (contact.&AccountsReceivableTaxType),
+                            (contact.&AccountsPayableTaxType),
+                            (if (address != null) {
+                            Addresses: [
+                            {
+                                (address.&AddressType),
+                                (address.&AddressLine1),
+                                (address.&AddressLine2),
+                                (address.&AddressLine3),
+                                (address.&AddressLine4),
+                                (address.&City),
+                                (address.&Region),
+                                (address.&PostalCode),
+                                (address.&Country),
+                                (address.&AttentionTo)
+                            }
+                            ]} else {}),
+                            (if (phone != null) {
+                            Phones:  [
+                            {
+                                (phone.&PhoneType),
+                                (phone.&PhoneNumber),
+                                (phone.&PhoneAreaCode),
+                                (phone.&PhoneCountryCode)
+                            }
+                            ]} else {}),
+                            (contact.&DefaultCurrency),
+                            (if (contactPerson != null) {
+                            ContactPersons:  [
+                                {
+                                    (contactPerson.&FirstName),
+                                    (contactPerson.&LastName),
+                                    (contactPerson.&EmailAddress),
+                                    (contactPerson.&IncludeInEmails)
+                                }
+                            ]} else {})
+                        }
+                    ]
+                }
+                ]"
+        response:
+            body:
+                typeSchema: ./schemas/CreateContact-Response-schema.json
+                mediaType: application/json
+                expression: "#[
+                var contact = payload.Contacts[0] default null
+                ---
+                {
+                    (if (contact != null) {
+                    Contact:
+                        {
+                            (contact.&Name),
+                            (contact.&ContactID),
+                            (contact.&ContactNumber),
+                            (contact.&ContactStatus)
+                        }
+                    } else {})
+                }
+                ]"
+----
+
+The following example shows the *updateContact* operation:
+
+[source,yaml]
+----
+    updateContact:
+        displayName: Update Contact
+        description: Update contact
+        base:
+            operationId: updateOrCreateContacts
+        parameters:
+            UpdateContactContent:
+                displayName: Content
+                typeSchema: ./schemas/UpdateContact-Request-Content-schema.json
+                mediaType: application/json
+                required: true
+        request:
+            queryParameter:
+                summarizeErrors:
+                    value: "#[true]"
+            body:
+                language: "dw"
+                expression: "#[
+                var contact = parameters.UpdateContactContent.Contact
+                var address = contact.Address default null
+                var phone = contact.Phone default null
+                var contactPerson = contact.ContactPerson default null
+                ---
+                {
+                    \"Contacts\": [
+                        {
+                            (contact.&Name),
+                            (contact.&ContactNumber),
+                            (contact.&ContactStatus),
+                            (contact.&FirstName),
+                            (contact.&LastName),
+                            (contact.&EmailAddress),
+                            (contact.&SkypeUserName),
+                            (contact.&BankAccountDetails),
+                            (contact.&TaxNumber),
+                            (contact.&AccountsReceivableTaxType),
+                            (contact.&AccountsPayableTaxType),
+                            (if (address != null) {
+                            Addresses: [
+                            {
+                                (address.&AddressType),
+                                (address.&AddressLine1),
+                                (address.&AddressLine2),
+                                (address.&AddressLine3),
+                                (address.&AddressLine4),
+                                (address.&City),
+                                (address.&Region),
+                                (address.&PostalCode),
+                                (address.&Country),
+                                (address.&AttentionTo)
+                            }
+                            ]} else {}),
+                            (if (phone != null) {
+                            Phones:  [
+                            {
+                                (phone.&PhoneType),
+                                (phone.&PhoneNumber),
+                                (phone.&PhoneAreaCode),
+                                (phone.&PhoneCountryCode)
+                            }
+                            ]} else {}),
+                            (contact.&DefaultCurrency),
+                            (if (contactPerson != null) {
+                            ContactPersons:  [
+                                {
+                                    (contactPerson.&FirstName),
+                                    (contactPerson.&LastName),
+                                    (contactPerson.&EmailAddress),
+                                    (contactPerson.&IncludeInEmails)
+                                }
+                            ]} else {})
+                        }
+                    ]
+                }
+                ]"
+        response:
+            body:
+                typeSchema: ./schemas/UpdateContact-Response-schema.json
+                mediaType: application/json
+                expression: "#[
+                var contact = payload.Contacts[0] default null
+                ---
+                {
+                    (if (contact != null) {
+                    Contact:
+                        {
+                            (contact.&Name),
+                            (contact.&ContactID),
+                            (contact.&ContactNumber),
+                            (contact.&ContactStatus)
+                        }
+                    } else {})
+                }
+                ]"
+----
+
+== Hide a Top Level Parameter for an Operation
+
+Hide a top level parameter from the connectivity experience that should not
+surface the high level operation.
+
+[source,yaml]
+----
+    findLocation:
+        displayName: Find Location
+        description: This is my own find location
+        base:
+            operationId: findLocationById
+        parameters:
+            #...
+        request:
+            #...
+            queryParameter:
+                code:
+                    ignored: true
+                offset:
+                    ignored: true
+        #...
+----
+
+Hiding a top level parameter on the custom operation affects both the custom
+operation and the base operation, while hiding a top level parameter on the
+base operation affects only the base operation.
+
+== Hide a Top Level Parameter and Change a Top Level Parameter to a Default Literal Value for an Operation
+
+You can hide a top level parameter from the connectivity experience but also include it in requests
+with a literal value.
+
+[source,yaml]
+----
+    findLocation:
+        displayName: Find Location
+        description: This is my own find location
+        base:
+            operationId: findLocationById
+        parameters:
+            #...
+        request:
+            #...
+            queryParameter:
+                code:
+                    value: AA1231
+                offset:
+                    value: ZZZ399
+        #...
+----
+
+== Remove an Input or Output Field for an Operation
+
+Define which fields to expose to the user by defining a new reshaped
+version of the base connectivity request body.
+
+For example, suppose you want to hide the *ContactStatus* input field since you
+are creating only `ACTIVE` users. The following example hides the
+input field:
+
+[source,yaml]
+----
+    updateContact:
+        displayName: Update Contact
+        description: Update contact
+        base:
+            operationId: updateOrCreateContacts
+        parameters:
+            UpdateContactContent:
+                displayName: Content
+                ## ...
+                typeSchema: ./schemas/UpdateContact-Request-Content-schema.json
+                mediaType: application/json
+                required: true
+        request:
+            body:
+                language: "dw"
+                expression: "#[
+                var contact = parameters.UpdateContactContent.Contact
+                ---
+                {
+                    (contact.&Name),
+                    (contact.&ContactNumber),
+                    (contact.&FirstName),
+                    (contact.&LastName),
+                    // ...
+                    ContactStatus: \"ACTIVE\",
+                }
+                ]"
+        response:
+            body:
+                ## ...
+----
+
+Additionally, you can also remove an output field. The following
+example hides code and offset from the response to the user:
+
+[source,yaml]
+----
+    createLocation:
+        displayName: Create Location
+        description: This is my own create location with content
+        base:
+            operationId: createLocation
+        parameters:
+            content:
+                displayName: Body
+                typeSchema: ./location-schema.json
+                mediaType: application/json
+                required: true
+        request:
+            ## ...
+        response:
+            body:
+                ##
+                typeSchema: ./location-schema.json
+                mediaType: application/json
+                value: "#[payload - 'code' - 'offset']"
+----
+
+== Transform an Input or Output Type for an Operation
+
+Include complex transformations between input and output auxiliary
+parameters or request and response binding parameters. The following example
+shows a transformation between request and response binding parameters:
+
+[source,yaml]
+----
+    searchContacts:
+        displayName: Search Contacts
+        description: Search Contacts
+        base:
+            operationId: searchContact
+        parameters:
+            ContactName:
+                displayName: Contact Name
+                description: The name of contact
+                type: string
+                required: false
+            ContactEmailAddress:
+                displayName: Contact Email Address
+                description: The email address  of the contact
+                type: string
+                required: false
+            ContactAccountNumber:
+                displayName: Contact Account Number
+                description: The account number of the contact
+                type: string
+                required: false
+        request:
+            queryParameter:
+                where:
+                    value: "#[
+                        %dw 2.0
+                        output application/json
+                        var ContactName = parameters.ContactName default null
+                        var ContactEmailAddress = parameters.ContactEmailAddress default null
+                        var ContactAccountNumber = parameters.ContactAccountNumber default null
+                        ---
+                        {
+                            (if (ContactName != null) {Name: ContactName} else {} ),
+                            (if (ContactEmailAddress != null) {EmailAddress: ContactEmailAddress} else {} ),
+                            (if (ContactAccountNumber != null) {AccountNumber: ContactAccountNumber} else {} )
+                        }
+                        pluck ((value, key, index) -> key ++ \"=\\\"\" ++ value ++ \"\\\"\") joinBy \" AND \"
+                    ]"
+        response:
+            body:
+                typeSchema: ./schemas/SearchContacts-Response-schema.json
+                    mediaType: application/json
+                    value: "#[
+                        {
+                            Contacts: payload.Contacts map (contact, index) ->
+                                {
+                                    (contact.&ContactID),
+                                    (contact.&Name),
+                                    (contact.&ContactNumber),
+                                    (contact.&ContactStatus),
+                                    (contact.&FirstName),
+                                    (contact.&LastName),
+                                    (contact.&EmailAddress),
+                                    (contact.&SkypeUserName),
+                                    (contact.&BankAccountDetails),
+                                    (contact.&TaxNumber),
+                                    (contact.&AccountsReceivableTaxType),
+                                    (contact.&AccountsPayableTaxType),
+                                    (contact.&Addresses),
+                                    (contact.&Phones),
+                                    (contact.&DefaultCurrency),
+                                    (contact.&ContactPersons)
+                                }
+                        }
+                    ]"
+
+
+----
+
+== Use Declarative Sidecars for an Operation
+
+Create custom operations using declarative sidecars on the generated connector
+when including base and experience connectivity in the same artifact.
+
+The sidecar directive generates all custom operations as sidecars. The sidecar directive
+is scoped for the connector descriptor with a default value of `false`.
+
+[source,yaml]
+----
+sidecar: true
+operations:
+    getContactByID:
+        displayName: Get Contact By ID
+        description: Get contact by ID
+        base:
+            operationId: findContactById
+        parameters:
+            ContactID:
+                displayName: ContactID
+                type: string
+                required: true
+        request:
+            uriParameter:
+                ContactID:
+                    value: "#[parameters.ContactID]"
+        response:
+            body:
+                typeSchema: ./schemas/GetContactByID-Response-schema.json
+                    mediaType: application/json
+                    value: "#[
+                    var contact = payload.Contacts[0] default null
+                    ---
+                    {
+                        (if (contact != null) {
+                        Contact:
+                            {
+                                (contact.&ContactID),
+                                (contact.&Name),
+                                (contact.&ContactNumber),
+                                (contact.&ContactStatus),
+                                (contact.&FirstName),
+                                (contact.&LastName),
+                                (contact.&EmailAddress),
+                                (contact.&SkypeUserName),
+                                (contact.&BankAccountDetails),
+                                (contact.&TaxNumber),
+                                (contact.&AccountsReceivableTaxType),
+                                (contact.&AccountsPayableTaxType),
+                                (contact.&Addresses),
+                                (contact.&Phones),
+                                (contact.&DefaultCurrency),
+                                (contact.&ContactPersons)
+                            }
+                        } else {})
+                    }
+                    ]"
+
+----

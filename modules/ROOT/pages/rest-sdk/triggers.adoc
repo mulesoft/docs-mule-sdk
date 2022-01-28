@@ -6,7 +6,7 @@ endif::[]
 Configure and customize a trigger of the connector descriptor of the connector.
 
 [IMPORTANT]
-Because triggers work with a xref:polling-sources[polling source] on the backend,
+Because triggers work with a xref:polling-sources.adoc[polling source] on the backend,
 the items must be in ascending order (from older to newer) so that the extraction
 of the watermark contains the correct date.
 
@@ -193,9 +193,9 @@ values previously. You can then send it.
 
 `items`::
 Defines how to extract the actual values from the server response.
-
++
 In this case, the response looks like this:
-
++
 [source,json5]
 ----
 {
@@ -207,7 +207,7 @@ In this case, the response looks like this:
 "latestDateCovered" : "2013-05-08T21:20:00.000+0000"
 }
 ----
-
++
 The trigger automatically splits the array, and each of the items is sent to the
 flow as a different element. For example, `{"id": "a00D0000008pQR5IAM", [...]}` is
 one of the propagated items.
@@ -222,7 +222,7 @@ Extract the array using the `"#[payload.items]` expression.
 Defines how to extract the watermark from the response and how to check if the
 extracted watermark is higher than the actual one. If it is higher, it is
 set as the new watermark.
-
++
 In this case, the response provides the last covered date in a separate field,
 so you can simply get the date from there.
 
