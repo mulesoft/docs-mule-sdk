@@ -7,14 +7,14 @@ endif::[]
 
 *August 19, 2021*
 
-include::partial$release-notes/rn-headings.adoc[tag=whatsNew,leveloffset=+2]
+=== What's New
 
 * Added support to declare sample data and value providers in custom operations. (RSDK-511, RSDK-512)
 * RestRequestBuilder now handles parameter formatting and URI templating automatically. (RSDK-4)
 * Added a new validation rule to avoid collisions with internal parameter names. (RSDK-524)
 * Added support to bind body fields as parameters for sample data. (RSDK-534)
 
-include::partial$release-notes/rn-headings.adoc[tag=fixedIssues,leveloffset=+2]
+=== Fixed Issues
 
 [%header%autowidth.spread]
 |===
@@ -28,12 +28,12 @@ include::partial$release-notes/rn-headings.adoc[tag=fixedIssues,leveloffset=+2]
 
 *August 2, 2021*
 
-include::partial$release-notes/rn-headings.adoc[tag=whatsNew,leveloffset=+2]
+=== What's New
 
 * Added support for custom metadata in IO metadata types. (RSDK-495, RSDK-242)
 * The minimum Mule version is now 4.3.0 for all generated connectors. (RSDK-521)
 
-include::partial$release-notes/rn-headings.adoc[tag=fixedIssues,leveloffset=+2]
+=== Fixed Issues
 
 [%header%autowidth.spread]
 |===
@@ -47,12 +47,12 @@ include::partial$release-notes/rn-headings.adoc[tag=fixedIssues,leveloffset=+2]
 
 *July 19, 2021*
 
-include::partial$release-notes/rn-headings.adoc[tag=whatsNew,leveloffset=+2]
+=== What's New
 
 * Added code regeneration capabilities for REST SDK projects. (RSDK-484)
 * It is now possible to generate custom operations as sidecars. (RSDK-482)
 
-include::partial$release-notes/rn-headings.adoc[tag=fixedIssues,leveloffset=+2]
+=== Fixed Issues
 
 [%header%autowidth.spread]
 |===
@@ -66,7 +66,7 @@ include::partial$release-notes/rn-headings.adoc[tag=fixedIssues,leveloffset=+2]
 
 *June 30, 2021*
 
-include::partial$release-notes/rn-headings.adoc[tag=fixedIssues,leveloffset=+2]
+=== Fixed Issues
 
 [%header%autowidth.spread]
 |===
@@ -79,12 +79,12 @@ include::partial$release-notes/rn-headings.adoc[tag=fixedIssues,leveloffset=+2]
 
 *June 23, 2021*
 
-include::partial$release-notes/rn-headings.adoc[tag=whatsNew,leveloffset=+2]
+=== What's New
 
 * Added support for operation adapters. (RSDK-331, RSDK-434)
 * Added support for value providers at the body level. (RSDK-71, RSDK-419)
 
-include::partial$release-notes/rn-headings.adoc[tag=fixedIssues,leveloffset=+2]
+=== Fixed Issues
 
 [%header%autowidth.spread]
 |===
@@ -97,11 +97,11 @@ include::partial$release-notes/rn-headings.adoc[tag=fixedIssues,leveloffset=+2]
 
 *June 3, 2021*
 
-include::partial$release-notes/rn-headings.adoc[tag=whatsNew,leveloffset=+2]
+=== What's New
 
 * Added the ability to ignore all previously declared operations and select only a subset to generate. (RSDK-402)
 
-include::partial$release-notes/rn-headings.adoc[tag=fixedIssues,leveloffset=+2]
+=== Fixed Issues
 
 [%header%autowidth.spread]
 |===
@@ -115,7 +115,7 @@ include::partial$release-notes/rn-headings.adoc[tag=fixedIssues,leveloffset=+2]
 
 *May 21, 2021*
 
-include::partial$release-notes/rn-headings.adoc[tag=whatsNew,leveloffset=+2]
+=== What's New
 
 * The minimum Mule version is now 4.3.0 by default for generated connectors. (RSDK-393)
 * Added a new validation framework. (RSDK-401)
@@ -123,7 +123,7 @@ include::partial$release-notes/rn-headings.adoc[tag=whatsNew,leveloffset=+2]
 * Added support for premium and certified connector categories. (RSDK-90)
 * Added LICENSE.md file generation for corresponding categories. (RSDK-216)
 
-include::partial$release-notes/rn-headings.adoc[tag=fixedIssues,leveloffset=+2]
+=== Fixed Issues
 
 [%header%autowidth.spread]
 |===
@@ -137,7 +137,7 @@ include::partial$release-notes/rn-headings.adoc[tag=fixedIssues,leveloffset=+2]
 
 *April 28, 2021*
 
-include::partial$release-notes/rn-headings.adoc[tag=whatsNew,leveloffset=+2]
+=== What's New
 
 * Added support to hide operations. (RSDK-344)
 * Added support to change operation names. (RSDK-348)
@@ -148,7 +148,7 @@ include::partial$release-notes/rn-headings.adoc[tag=whatsNew,leveloffset=+2]
 * Added support to auto-detect API specification formats. (RSDK-54)
 * Added improvements to the naming algorithm. (RSDK-254)
 
-include::partial$release-notes/rn-headings.adoc[tag=fixedIssues,leveloffset=+2]
+=== Fixed Issues
 
 [%header%autowidth.spread]
 |===
@@ -163,14 +163,14 @@ include::partial$release-notes/rn-headings.adoc[tag=fixedIssues,leveloffset=+2]
 
 *March 15, 2021*
 
-include::partial$release-notes/rn-headings.adoc[tag=whatsNew,leveloffset=+2]
+=== What's New
 
 * Added support for OAS 3. (RSDK-41)
 * Added support to use the Maven distribution framework. (RSDK-152)
 * Added validation error improvements. (RSDK-16)
 * Added a testing framework to test generated connectors. (RSDK-123)
 
-include::partial$release-notes/rn-headings.adoc[tag=fixedIssues,leveloffset=+2]
+=== Fixed Issues
 
 [%header%autowidth.spread]
 |===
@@ -184,12 +184,12 @@ include::partial$release-notes/rn-headings.adoc[tag=fixedIssues,leveloffset=+2]
 
 *February 11, 2021*
 
-include::partial$release-notes/rn-headings.adoc[tag=whatsNew,leveloffset=+2]
+=== What's New
 
 * Added support for a new resolver framework and re-implementation of value providers. (RSDK-154, RSDK-156, RSDK-160, RSDK-243, RSDK-247)
 * Provided more feedback about the output directory to the user. (RSDK-265)
 
-include::partial$release-notes/rn-headings.adoc[tag=fixedIssues,leveloffset=+2]
+=== Fixed Issues
 
 [%header%autowidth.spread]
 |===
@@ -203,12 +203,12 @@ include::partial$release-notes/rn-headings.adoc[tag=fixedIssues,leveloffset=+2]
 
 *January 28, 2021*
 
-include::partial$release-notes/rn-headings.adoc[tag=whatsNew,leveloffset=+2]
+=== What's New
 
 * Added test cases, test types, and quality control measures for future releases.
 * Resources from AML module are now shared in a standard way.
 
-include::partial$release-notes/rn-headings.adoc[tag=fixedIssues,leveloffset=+2]
+=== Fixed Issues
 
 [%header%autowidth.spread]
 |===
@@ -221,12 +221,12 @@ include::partial$release-notes/rn-headings.adoc[tag=fixedIssues,leveloffset=+2]
 
 *January 7, 2021*
 
-include::partial$release-notes/rn-headings.adoc[tag=whatsNew,leveloffset=+2]
+=== What's New
 
 * Released REST SDK as a Maven plugin for integration into development cycles. (RSDK-152)
 * Validation errors are traced to the source and are shown in the error report when the build fails. (RSDK-16)
 
-include::partial$release-notes/rn-headings.adoc[tag=fixedIssues,leveloffset=+2]
+=== Fixed Issues
 
 [%header%autowidth.spread]
 |===
