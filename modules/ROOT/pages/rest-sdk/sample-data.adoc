@@ -14,17 +14,6 @@ The following example shows how sample data is displayed:
 
 image::sample-data-output.png[alt=Sample Data Output,width=175,height=500]
 
-== Definition of a Sample Data Resolver
-
-There are two types of sample data resolvers.
-
-* HTTP Request
-+
-Defines a custom HTTP request and transforms its result to generate the sample data
-
-* Same Operation
-+
-Replicates the request and transforms the operation or trigger to generate the sample data
 
 == HTTP Request Sample Data Resolver
 
@@ -69,39 +58,6 @@ sample data definition makes a request to `/flight/since/2021-01-01` to get a
 list of flights, and then uses the `"#[payload.flights[0]]"` expression to
 extract the first item from the results. It replicates a result from the trigger,
 as triggers propagate the response items one by one.
-
-== Same Operation Sample Data Resolver
-
-Same operation definitions are the easiest way to replicate the operation or trigger
-behavior to get sample data. Using the same operation definition requires declaration only since
-REST SDK handles the generation.
-
-The following example shows a same operation sample data resolver:
-
-[source, yaml]
-----
-triggers:
-  onNewFlightInline:
-    displayName: On New Flight Inline
-    path: /flight/since/{flightId}
-    method: get
-
-    items:
-      extraction:
-        expression: "#[payload.flights]"
-
-    #[...]
-
-    sampleData:
-      type: sameOperation
-----
-
-This example shows that implementing the same operation sample data consists of one line of yaml.
-
-This implementation sends a request to the operation or trigger path `/flight/since/{flightId}`
-using the `flightId` parameter that the user fills in the UI. It then transforms the
-server response using the trigger item extraction expression `"#[payload.flights]"` and
-gets the first result from that array to show as a sample.
 
 == Reusability
 
