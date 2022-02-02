@@ -8,7 +8,7 @@ the connector.
 
 == Set a Display Name for a Security Scheme Parameter
 
-To set a display name for a security scheme parameter, you must use the
+To set a display name for a security scheme parameter, use the
 `displayName` property, which is located in the security node.
 
 [source,yaml]
@@ -26,7 +26,7 @@ property is assigned the value `Auth Header`.
 
 == Ignore a Security Scheme
 
-To ignore a security scheme, you must use the `ignored` property, which is located
+To ignore a security scheme, use the `ignored` property, which is located
 in the security node.
 
 You can ignore a security scheme if your API specification defines a security
@@ -45,7 +45,7 @@ the connector descriptor.
 
 == Add Parameters for OAuth 2.0 Authorization
 
-To add parameters for OAuth 2.0 authorization, you must define the parameters in
+To add parameters for OAuth 2.0 authorization, define the parameters in
 the security node.
 
 You can define new parameters to add in the `Authorize` endpoint for
@@ -68,7 +68,7 @@ In this example, the query parameter `prompt` is added in the `Authorize` endpoi
 
 == Customize the OAuth Refresh Token Condition
 
-To customize the OAuth refresh token condition, you must use the `refreshTokenCondition`
+To customize the OAuth refresh token condition, use the `refreshTokenCondition`
 expression, which extends an OAuth security scheme. This feature is supported by
 Mule 4.4 and later.
 

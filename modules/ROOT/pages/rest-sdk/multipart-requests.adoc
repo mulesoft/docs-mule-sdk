@@ -7,7 +7,7 @@ Configure and customize multipart requests of the connector descriptor of the co
 
 == Define a Multipart Request
 
-To define a multipart request, you must add properties to the attachment endpoint.
+To define a multipart request, add properties to the attachment endpoint.
 
 Multipart content definition in both RAML 1.0 and OAS2 specifications lacks some
 features, such as the ability to define the content type of each part of
@@ -59,7 +59,7 @@ endpoints:
 
 == Set a Display Name for a Part
 
-To set a display name for a part, you must use the `displayName` property, which
+To set a display name for a part, use the `displayName` property, which
 is added to the attachment endpoint.
 
 Parameters in the request body can supply an alternative name using the
@@ -81,7 +81,7 @@ In the example above, the final connector UI shows `requestid` as `Request-ID`.
 
 == Set a Description for a Part
 
-To set a description for a part, you must use the `description` property,
+To set a description for a part, use the `description` property,
 which is added to the attachment endpoint.
 
 [source,yaml]
@@ -104,7 +104,7 @@ when working with this operation.
 
 == Define File Parts
 
-To define file parts, you must use the `file` property, which is added to the
+To define file parts, use the `file` property, which is added to the
 attachment endpoint.
 
 Use the `file` property to state that a body part represents a
@@ -125,7 +125,7 @@ endpoints:
 
 == Define the Content Type of a Part
 
-To define the content type of a part, you must use the `contentType` property,
+To define the content type of a part, use the `contentType` property,
 which is added to the attachment endpoint.
 
 Each part of a multipart request can define its own content type that is
@@ -157,7 +157,7 @@ In this example, the attributes object must be sent as an
 
 == Redefine the Expected Content for a Part
 
-To redefine the expected content for a part, you must use the `inputType`
+To redefine the expected content for a part, use the `inputType`
 property, which is added to the attachment endpoint.
 
 If the API specification does not specify the expected structure of a part (or

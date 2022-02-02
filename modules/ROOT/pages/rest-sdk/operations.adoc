@@ -7,7 +7,7 @@ Configure and customize an existing operation of the connector descriptor of the
 
 == Set an Operation Identifier for an Operation
 
-To set an operation identifier for an operation, you must use the REST SDK
+To set an operation identifier for an operation, use the REST SDK
 default provided mechanism.
 
 REST SDK relies on an operation identifier to generate classes for resources.
@@ -31,7 +31,7 @@ Use these three bindings to modify the mechanism:
 
 == Set a Display Name for an Operation
 
-To set a display name for an operation, you must use the `displayName` property,
+To set a display name for an operation, use the `displayName` property,
 which is located in the operation node.
 
 [source,yaml]
@@ -58,7 +58,7 @@ image::operation-display-name.png[]
 
 == Change a Generated Display Name for an Operation
 
-To change a generated display name for an operation, you must use either the
+To change a generated display name for an operation, use either the
 REST SDK default DataWeave script or a custom DataWeave script.
 
 * <<default>>
@@ -148,7 +148,7 @@ or both an HTTP `method` and an HTTP full `path` with an `operationId` with a nu
 [[custom-op-id]]
 ==== Change a Generated Display Name for an Operation Using a Custom DataWeave Script Using an Operation ID
 
-If you are using an `operationId` in your custom DataWeave script, you must change
+If you are using an `operationId` in your custom DataWeave script, change
 the DataWeave script for `operationIdentifier` as well.
 
 For example, suppose there is an API that contains dates and extensions in the
@@ -246,7 +246,7 @@ display name is now `Create Accounts Messages SMS Media`, assuming the `method` 
 
 == Set a Description for an Operation
 
-To set a description for an operation, you must use the `description` property,
+To set a description for an operation, use the `description` property,
 which is located in the operation node.
 
 [source,yaml]
@@ -275,7 +275,7 @@ image::operation-description-tooltip.png[]
 [[select-default-media-type-for-an-operation]]
 == Select a Default Media Type for an Operation
 
-To select a default media type for an operation, you must use the `inputMediaType`
+To select a default media type for an operation, use the `inputMediaType`
 and `outputMediaType` properties, which are located in the operation node.
 
 Both RAML and OAS API specifications enable you to define multiple media types for
@@ -314,7 +314,7 @@ the default media type is selected following this priority:
 
 To select a default media type for all operations, similar to how a default media type is
 defined in xref:rest-sdk/operations.adoc#select-default-media-type-for-an-operation[Select a Default Media Type for an Operation], but you want
-to do it globally, you must use the `defaultInputMediaType` and `defaultOutputMediaType`
+to do it globally, use the `defaultInputMediaType` and `defaultOutputMediaType`
 properties, which are located at the root of the connector descriptor.
 
 [source,yaml]
@@ -338,7 +338,7 @@ endpoints:
 
 == Ignore an Operation or an Endpoint
 
-To ignore an operation or an endpoint, you must use the `ignored` property,
+To ignore an operation or an endpoint, use the `ignored` property,
 which can be defined at either the operation level or the endpoint level.
 
 Use the `ignored` property when you do not want to generate an operation in the
@@ -374,7 +374,7 @@ are generated for this resource.
 
 == Ignore Operations and Triggers by Default
 
-To ignore operations and triggers by default, you must use the `ignoreOperations`
+To ignore operations and triggers by default, use the `ignoreOperations`
 property, which is located at the root of the connector descriptor.
 
 Set the `ignoreOperations` property to `true` to ignore previously declared
@@ -406,7 +406,7 @@ to all of the operations and triggers.
 
 == Hide an Operation
 
-To hide an operation, you must use the `ignore` property.
+To hide an operation, use the `ignore` property.
 
 Operations declared in the connector's first (base) layer can be hidden by
 ignoring them in a subsequent descriptor layer to generate a connector with a
@@ -456,7 +456,7 @@ is not available to the user.
 
 == Rename an Operation
 
-To rename an operation, you must use the `displayName` property.
+To rename an operation, use the `displayName` property.
 
 Use the `displayName` property to customize operation names.
 
@@ -508,8 +508,8 @@ changes the operation name in the generated connector for the user.
 
 == Redefine an Input Type or an Output Type for an Operation
 
-To redefine an input type or an output type for an operation, you must
-use the `inputType` and `outputType` properties, which are located at the operation node.
+To redefine an input type or an output type for an operation, use the
+`inputType` and `outputType` properties, which are located at the operation node.
 
 The API specification may not define an input type or an output type, but if you
 need to define them, you can set the `inputType` and `outputType` properties at
@@ -575,7 +575,7 @@ In this case, the JSON schema appears as follows:
 
 == Override an Input Type or an Output Type for an Operation
 
-To override an input type or an output type for an operation, you must use the
+To override an input type or an output type for an operation, use the
 `inputType` and the `outputType` properties, which are located at the operation node.
 
 Use the `inputType` and the `outputType` properties to override the input type and
@@ -585,7 +585,7 @@ in the API specification is ignored.
 
 == Skip Output Type Validations for an Operation
 
-To skip output type validations for an operation, you must use the `skipOutputTypeValidation`
+To skip output type validations for an operation, use the `skipOutputTypeValidation`
 property, which can be used globally at the root of the connector descriptor or
 in the operation node.
 
@@ -622,7 +622,7 @@ be used instead of the `skipOutputTypeValidation` property.
 
 == Declare Void for an Operation
 
-To declare void for an operation, you must use the `voidOperation` property, which is located
+To declare void for an operation, use the `voidOperation` property, which is located
 in the operation node.
 
 `GET`, `POST`, `PATCH`, and `OPTIONS` operations defined in the API specification must

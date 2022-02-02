@@ -30,18 +30,18 @@ the next page in the response body or in the link header.
 
 == Pagination Configuration Parameters
 
-For all paginations strategies, you must define name, type, and other
+For all pagination strategies, you must define name, type, and other
 parameters. Use the following parameters to configure your pagination:
 
 
 Offset based paging::
 
 * name +
-String that identifies the pagination through the connector descriptor. You must
-use the pagination name when an operation is paged using this strategy.
+String that identifies the pagination through the connector descriptor. Use the
+pagination name when an operation is paged using this strategy.
 
 * type +
-Defines the behavior of the pagination strategy. You must use `_offset_` when
+Defines the behavior of the pagination strategy. Use `_offset_` when
 using this strategy.
 
 * offsetParamName +
@@ -58,11 +58,11 @@ Provides the expression used to extract the item data from the response.
 Marker-based paging::
 
 * name +
-String that identifies the pagination through the connector descriptor. You must
-use the pagination name when an operation is paged using this strategy.
+String that identifies the pagination through the connector descriptor. Use the
+pagination name when an operation is paged using this strategy.
 
 * type +
-Defines the behavior of the pagination strategy. You must use `_marker_` when
+Defines the behavior of the pagination strategy. Use `_marker_` when
 using this strategy.
 
 * nextTokenParamName +
@@ -80,11 +80,11 @@ Provides the expression used to extract the item data from the response.
 Page number::
 
 * name +
-String that identifies the pagination through the connector descriptor. You must
-use the pagination name when an operation is paged using this strategy.
+String that identifies the pagination through the connector descriptor. Use
+the pagination name when an operation is paged using this strategy.
 
 * type +
-Defines the behavior of the pagination strategy. You must use `_pageNumber_` when
+Defines the behavior of the pagination strategy. Use `_pageNumber_` when
 using this strategy.
 
 * pageNumberParamName +
@@ -106,11 +106,11 @@ Provides the expression used to extract the item data from the response.
 Hypermedia paging::
 
 * name +
-String that identifies the pagination through the connector descriptor. You must
-use the pagination name when an operation is paged using this strategy.
+String that identifies the pagination through the connector descriptor. Use
+the pagination name when an operation is paged using this strategy.
 
 * type +
-Defines the behavior of the pagination strategy. You must use `_hypermedia_` when
+Defines the behavior of the pagination strategy. Use `_hypermedia_` when
 using this strategy.
 
 * nextUrl +
@@ -184,7 +184,7 @@ the DataWeave expression is `#[payload.data]`.
 
 == Define a Pagination Strategy
 
-To define a pagination strategy, you must create a pagination node inside the
+To define a pagination strategy, create a pagination node inside the
 `paginations` property, which is located at the root of the connector descriptor.
 
 Suppose the connector has a paged content search. The following example shows
