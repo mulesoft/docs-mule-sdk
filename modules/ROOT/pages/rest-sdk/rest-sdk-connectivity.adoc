@@ -17,11 +17,11 @@ Using REST SDK results in:
 
 Follow this path to build your own connector using REST SDK:
 
-. xref:rest-sdk/overview.adoc[Features in REST SDK]
+. xref:rest-sdk/overview.adoc[Overview]
 +
 Learn about REST SDK features and use cases.
 
-. xref:rest-sdk/setup-and-installation.adoc[Set Up and Install REST SDK]
+. xref:rest-sdk/setup-and-installation.adoc[Setup and Installation]
 +
 Complete prerequisites and install the REST SDK plugin.
 
