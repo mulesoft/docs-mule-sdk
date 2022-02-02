@@ -7,7 +7,7 @@ Configure and customize the initial content of the connector descriptor of the c
 
 == Set a Display Name for the Connector
 
-To set a name for the connector, you must use the `connectorName`
+To set a name for the connector, use the `connectorName`
 property, which is located at the root of the connector descriptor.
 
 [source,yaml]
@@ -35,7 +35,7 @@ image::shop-studio-list.png[]
 
 == Set a Description for the Connector
 
-To set a description for the connector, you must use  the
+To set a description for the connector, use the
 `connectorDescription` property, which is located at the root of the
 connector descriptor.
 
@@ -64,10 +64,10 @@ property of the connector POM file.
 
 == Define a Maven GAV for the Connector
 
-To define a Maven GAV for the connector, you must use  the `connectorGav`
+To define a Maven GAV for the connector, use the `connectorGav`
 property, which is located at the root of the connector descriptor.
 
-You must select a `groupId`, `artifactId`, and `version`, which appears in the
+Select a `groupId`, `artifactId`, and `version`, which appears in the
 connector POM file, and identify it as a Maven asset.
 
 [source,yaml]
@@ -91,7 +91,7 @@ baseUri:
 
 == Select a Category for the Connector
 
-To select a category for the connector, you must use the
+To select a category for the connector, use the
 `connectorCategory` property, which is located at the root of the
 connector descriptor.
 
@@ -122,7 +122,7 @@ baseUri:
 
 == Set a Namespace for the Connector
 
-To set a namespace for the connector, you must use the `extensionXml` property,
+To set a namespace for the connector, use the `extensionXml` property,
 which is located at the root of the connector descriptor.
 
 You can select the XML prefix for the connector using the `extensionXml`
@@ -168,7 +168,7 @@ operation:
 
 == Select a Base Java Package for the Connector
 
-To select a base Java package for the connector, you must use the `baseJavaPackage`
+To select a base Java package for the connector, use the `baseJavaPackage`
 property, which is located at the root of the connector descriptor.
 
 The generated connector is Java based, and you can use the `baseJavaPackage` property to
@@ -201,7 +201,7 @@ image::base-java-package.png[]
 
 == Select a Base URI for the Connector
 
-To select a base URI for the connector, you must use the `baseUri`
+To select a base URI for the connector, use the `baseUri`
 property, which is located at the root of the connector descriptor.
 
 You can select the XML prefix for the connector using the `baseUri`

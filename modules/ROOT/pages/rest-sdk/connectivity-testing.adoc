@@ -14,7 +14,7 @@ methods to the generated connection providers in the connector descriptor.
 
 == Add a Test Connection Method
 
-To add a test connection method, you must define a test connection method in
+To add a test connection method, define a test connection method in
 the `testConnection` property, which is located in the connector descriptor.
 
 A test connection can be defined globally for all of the generated connections

@@ -251,7 +251,7 @@ Extract the identity using the `#[item.id]` expression.
 == Ignore a Trigger
 
 To ignore a trigger that was declared on a previous layer,
-you must use the `ignored` property:
+use the `ignored` property:
 
 [source,yaml]
 ----
@@ -264,7 +264,7 @@ The trigger, *myTrigger*, is ignored and is not generated.
 
 == Ignore Operations and Triggers by Default
 
-To ignore operations and triggers by default, you must use the `ignoreOperations`
+To ignore operations and triggers by default, use the `ignoreOperations`
 property, which is located at the root of the connector descriptor.
 
 Set the `ignoreOperations` property to `true` to ignore previously declared

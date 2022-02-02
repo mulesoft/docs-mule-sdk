@@ -7,7 +7,7 @@ Configure and customize a parameter of the connector descriptor of the connector
 
 == Set a Display Name for a Parameter
 
-To set a display name for a parameter, you must use the
+To set a display name for a parameter, use the
 `displayName` property, which is located in the parameter node.
 
 You can set a display name for any parameter type. Define parameters using the
@@ -36,7 +36,7 @@ image::parameter-details-studio.png[]
 
 == Set a Description for a Parameter
 
-To set a description for a parameter, you must use the `description`
+To set a description for a parameter, use the `description`
 property, which is located in the parameter node.
 
 You can set a description for any parameter type. Define parameters using the
@@ -67,7 +67,7 @@ image::parameter-description-tooltip.png[]
 
 == Ignore a Parameter
 
-To ignore a parameter, you must use the `ignored` property, which is located in
+To ignore a parameter, use the `ignored` property, which is located in
 the parameter node.
 
 You can ignore a parameter for any parameter type. Parameters can be ignored when
@@ -98,7 +98,7 @@ defined. The example also shows how to ignore a query parameter from an operatio
 
 == Select a Query Parameter Array Format
 
-To select a query parameter array format, you must use the `queryParameterArrayFormat`
+To select a query parameter array format, use the `queryParameterArrayFormat`
 property, which can be used globally at the root of the connector descriptor or
 in the operation node.
 
