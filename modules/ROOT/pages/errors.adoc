@@ -62,7 +62,7 @@ public enum HierarchalError implements ErrorTypeDefinition<HierarchalError> {
 
 === Registering Errors in the Module
 
-The `@Extension` annotated class should be annotated with `@Error` to indicate which errors a Module handles. This annotation references an `ErrorTypeDefinition` `enum` containing the defined errors.
+The `@Extension` annotated class should be annotated with `@ErrorTypes` to indicate which errors a Module handles. This annotation references an `ErrorTypeDefinition` `enum` containing the defined errors.
 
 [source,java,linenums]
 ----
