@@ -157,6 +157,9 @@ What if the watermark values do not implement `Comparable`, or what if I want to
 
 You can simply set a `Comparator` to the `PollContext` by calling its method `setWatermarkComparator`.
 
+[NOTE]
+If the watermark updates are not set before polling is complete, you can add a latch to avoid updating the watermark in two iterations.
+
 === PollItemStatus
 
 If you call the `accept` method, you get a `PollItemStatus` in return. This is an `Enum` that can take the following values:
