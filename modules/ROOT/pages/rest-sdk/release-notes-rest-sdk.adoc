@@ -3,6 +3,69 @@ ifndef::env-site,env-github[]
 include::../_attributes.adoc[]
 endif::[]
 
+== 0.8.0-RC2
+
+*February 22, 2022*
+
+=== What's New
+
+==== Specification Format Support
+
+* You can now use AMF to auto-detect API formats. (RSDK-175)
+* Added support for file encodings. (RSDK-671)
+
+==== Custom Operations
+
+* You can now ignore an endpoint parameter in custom operations. (RSDK-513)
+* You can now add a value provider body level in custom operations. (RSDK-603)
+* Added support for schema type definitions' response bodies in custom operations. (RSDK-579)
+* Custom operations can now be set as a void output. (RSDK-662)
+* Added pagination support for custom operations. (RSDK-777)
+* Added the ability to use a DataWeave expression to build the multipart body content on custom operations without hardcoding the boundary value. (RSDK-847)
+* Added Inversion of Control (IoC) in custom operations and endpoints. (RSDK-849)
+* You can now use the DataWeave expected output in custom operations. (RSDK-617)
+* Using Mule SDK reserved words is now restricted in custom operations. (RSDK-614)
+
+==== Triggers
+
+* Trigger outputs can now be reshaped. (RSDK-542)
+* You can now use the customizable request body method for triggers. (RSDK-756)
+* Added value providers for triggers. (RSDK-833)
+* Added trigger composition support. (RSDK-543)
+* The startValue element for triggers is enabled to work with start times. (RSDK-735)
+
+==== Project Structure
+
+===== Connectors Parent POM
+
+* Added the REST SDK connectors parent POM. (RSDK-547)
+
+===== REST SDK Archetype
+
+* Added the rest-sdk-archetype. (RSDK-602)
+* The archetype module now depends on the MOJO module. (RSDK-675)
+* Added distributionManagement to the archetype POM. (RSDK-602)
+* Parameterized the archetype's API specification format. (RSDK-788)
+
+==== RevAPI
+
+* Enabled the revAPI extension for extension models in connectors. (RSDK-653)
+
+==== Native Java Classes Support 
+
+
+== 0.7.1
+
+*January 4, 2022*
+
+=== Fixed Issues
+
+[%header%autowidth.spread]
+|===
+|Issue|ID
+|Upgraded library dependencies. | (RSDK-811)
+|===
+
 == 0.7.0
 
 *August 19, 2021*
