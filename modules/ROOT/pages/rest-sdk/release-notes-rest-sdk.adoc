@@ -51,7 +51,72 @@ endif::[]
 
 * Enabled the revAPI extension for extension models in connectors. (RSDK-653)
 
-==== Native Java Classes Support 
+==== Native Java Classes Support
+
+* Added support for native operations. (RSDK-744)
+* Added support for native triggers. (RSDK-745)
+* Added support for custom connection providers as a native mechanism. (RSDK-814)
+* Added support for a native connection provider. (RSDK-752)
+* Added support for native enrichers:
+** Value providers (RSDK-817)
+** Sample data (RSDK-818)
+
+==== Aliases Customization
+
+* Added aliases at the connection provider level. (RSDK-733)
+* Added aliases for operation adapters. (RSDK-757)
+* Added aliases at the descriptor level for triggers. (RSDK-732)
+* Added aliases for custom operation parameters. (RSDK-803)
+* Added aliases for trigger parameters. (RSDK-802)
+
+==== Private Operations
+
+* Added support for private operations. (RSDK-729)
+
+==== Connector Refinement Framework
+
+===== Three Layer Generation (Base/Refinement/Implementation)
+
+* Added the ability to split operations into three layers. (RSDK-707, RSDK-712)
+* Added the ability to split connection providers into three layers. (RSDK-708)
+* Added the ability to split trigger code generation into three layers. (RSDK-711)
+* Added the ability to split configuration into three layers. (RSDK-773)
+* Added operation layer generation for endpoints. (RSDK-828)
+* Connection providers are now extensible via Java code. (RSDK-663)
+* Custom operations can now rewrite error handling interceptors with custom code. (RSDK-772)
+* An error message is now thrown when a file present in the override folder does not exist in the generated project. (RSDK-784)
+
+===== Refinements Support
+
+* Added refinement to the project structure and syntax. (RSDK-801)
+* Added a configuration node in the connector descriptor and the ability to define refinements for it. (W-106877372)
+* Added fixes to validations for projects with no refinement or override folders. (RSDK-838)
+* Refinements with parameters now have their own namespace. (W-10576456)
+* Refinements now notify with INFO when generating the class. (RSDK-839)
+* Refined classes now have a consistent name with declaration. (RSDK-843)
+* Refined classes without the declarative counterpart now WARN the developer. (RSDK-840)
+* Java SDK is now able to pick a trigger's description in refinable code generation. (RSDK-776)
+
+==== Miscellaneous
+
+* Added the mule-alias property to the operation descriptor. (RSDK-731)
+* The sample data result media type is now obtained from the response. (RSDK-747)
+* Added the ability to define a global HTTP response interceptor for endpoints. (RSDK-275)
+* Test connections now have the ability to customize status code error messages. (RSDK-810)
+* Added support for security parameter customization. (RSDK-687)
+* Removed shading from generated connectors. (RSDK-236)
+* Refactored RequestParameters. (RSDK-911)
+* Only used parameters are now added to enrichers. (RSDK-893)
+* SDK annotations rely on mule-extensions-api instead of mule-sdk-api when no binding expressions are needed. (RSDK-549)
+* Added missing primitive types. (RSDK-715)
+* Removed the sample data Same operation. (RSDK-886)
+* Added support for API specifications that contain multiple API key security schemes. (RSDK-267)
+* Custom operations can now select a base operation using operationId or a method and a path. (RSDK-642)
+* Added the ability to use configuration and connection provider bindings in the descriptor. (RSDK-656, RSDK-688)
+* The expression language is now set by the injection mechanism for further reuse in Java. (RSDK-717)
+* Implemented a Java API to intercept the HTTP response to allow custom error handling. (RSDK-705)
+* Added DataWeave script support for value providers. (RSDK-791)
+* Added several internal refactors and addressed code quality, performance, and extensibility. 
 
 
 == 0.7.1
