@@ -184,11 +184,15 @@ endif::[]
 |Using voidOperation is now compliant with design and runtime specifics. | (RSDK-883)
 |Inline enrichers now properly capture the parameters used in triggers. | (RSDK-897)
 |Inline enrichers now properly capture the parameters used in operations. | (RSDK-896)
-|Fixed NPE in parameters. | (RSDK-605)
+|Fixed response media type usage for custom operations. | (RSDK-674)
+|Fixed sample data and value provider usage for custom operations. | (RSDK-674)
+|Fixed early expansion of URI parameters. | (RSDK-674)
+|Fixed scenarios in which OAuth reconnection consumed the response body. | (W-10576891)
+|The target/ignored folder is now formatted when connector classes are generated. | (RSDK-685)
+|The RestConnection implementation now requires an expression language.  | (RSDK-718)
+|Null types in JSON schemas are now ignored for correct metadata generation. | (RSDK-702)
+|Fixed the naming generation strategy for aliases and descriptions. | (RSDK-734)
 |===
-
-
-
 
 == 0.7.1
 
