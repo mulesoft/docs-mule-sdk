@@ -116,7 +116,78 @@ endif::[]
 * The expression language is now set by the injection mechanism for further reuse in Java. (RSDK-717)
 * Implemented a Java API to intercept the HTTP response to allow custom error handling. (RSDK-705)
 * Added DataWeave script support for value providers. (RSDK-791)
-* Added several internal refactors and addressed code quality, performance, and extensibility. 
+* Added several internal refactors and addressed code quality, performance, and extensibility.
+
+=== Enhancements
+
+==== User Interface
+
+* REST SDK now reports the number of errors in a build failure. (RSDK-900)
+* Removed the warning message when loading the extension model during the generateSources phase. (RSDK-604)
+
+==== Validations
+
+* Replaced Regex with DataWeave AST to validate scripts. (RSDK-769)
+* You can now validate parameters used in operation adapter bindings. (RSDK-661)
+* Added a validation that ensures security schemes in the connector descriptor are present in the API specification. (W-10576485)
+* Improved parameter internal name validation. (RSDK-649)
+* Added a validation so that page_number is not ignored in the pageNumber pagination type. (RSDK-528)
+* Added new validations for triggers and operations. (RSDK-641, RSDK-651)
+* Invalid connector descriptors are now correctly validated. (RSDK-696)
+* Added a validation rule to check for optional parameters assigned to arguments in sample data and value providers. (RSDK-767)
+
+==== Dialect Syntax
+
+* Configuration binding names now have consistent naming. (RSDK-770)
+* Clarified syntax when referring to a base operation. (RSDK-664)
+* Pluralized dialect and binding parameters. (RSDK-774)
+
+==== Version Upgrades
+
+* Upgraded AMF to version 5. (RSDK-527)
+* Lots of other version upgrades for dependencies and vulnerability fixes.
+
+=== Fixed Issues
+
+[%header%autowidth.spread]
+|===
+|Issue|ID
+|A connection provider is now generated when there are no endpoints. | (W-10576439)
+|Fixed circular dependencies and order validations. | (W-10576609, W-10678379)
+|Fixed NPE when setting a typeSchema for a trigger's parameter definition in custom operations. | (RSDK-850)
+|Fixed value provider arguments validation. | (RSDK-895)
+|Fixed OAuth validations. | (RSDK-856)
+|Fixed the NoInputMediaTypeDefinedRule. | (RSDK-501)
+|Fixed NPE in parameters. | (RSDK-605)
+|Marker pagination no longer generates a token parameter that is not used. | (RSDK-246)
+|Query parameters are now case-insensitive. | (RSDK-618)
+|URI parameters are now case-sensitive. | (RSDK-646)
+|MavenGav is now optional for the generate sources goal. | (RSDK-622)
+|Fixed generated code in the AuthConnectionProvider class. | (RSDK-627)
+|Base URI is now properly generated in the connector descriptor. | (RSDK-294)
+|REST SDK does not check API endpoints that are ignored in the connector descriptor anymore. | (RSDK-531)
+|Content annotation with primary is used for scenarios with a single payload. | (RSDK-292)
+|Fixed possible collisions on generated schemas. | (RSDK-559)
+|The type or typeSchema property is now mandatory. | (RSDK-660)
+|Fixed NPE when nesting multiple schemas. | (RSDK-678)
+|The summary (tooltip) is now displayed for the trigger operations. | (RSDK-606)
+|Missing the connectorName now no longer throws an exception. | (RSDK-679)
+|The correct display name is now generated for triggers. | (RSDK-668)
+|Fixed hypermedia pagination regression. | (RSDK-640)
+|REST SDK no longer generates an invalid setExpressionLanguage operation. | (RSDK-725)
+|Using sample data or value providers with missing parameters now triggers an error at compilation. | (RSDK-746, RSDK-751)
+|Fixed non thread-safe parameter bindings in operations. | (RSDK-762)
+|All warnings are now displayed in the console.  | (RSDK-749)
+|Added a missing validation in bindings for operation adapters. | (RSDK-764)
+|The binding parameter validation now works properly. | (RSDK-748)
+|Fixed how categoryName is defined for metadata resolvers. | (RSDK-888)
+|Using voidOperation is now compliant with design and runtime specifics. | (RSDK-883)
+|Inline enrichers now properly capture the parameters used in triggers. | (RSDK-897)
+|Inline enrichers now properly capture the parameters used in operations. | (RSDK-896)
+|Fixed NPE in parameters. | (RSDK-605)
+|===
+
+
 
 
 == 0.7.1
