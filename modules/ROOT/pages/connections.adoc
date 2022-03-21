@@ -124,15 +124,19 @@ The connections are pooled. A cache of connections is maintained so that they ca
 
 This is useful when connections are expensive to create or when concurrent access to a connection instance is not supported.
 
-For this pooling strategy, a pooling profile configuration is automatically added to the connection. See link:
+For this pooling strategy, a pooling profile configuration is automatically added to the connection.
 
 You can enable pooling connection management by implementing the `PoolingConnectionProvider` interface.
+
+Refer to xref:mule-runtime::tuning-pooling-profiles.adoc[Pooling Profiles] for more information.
 
 === Cached Strategy
 
 For each configuration instance, a connection is established and cached so that one specific configuration always gets the same connection. The connection is maintained until the configuration itself is stopped.
 
 You can enable cached connection management by implementing the `CachedConnectionProvider` interface.
+
+Refer to xref:mule-runtime::tuning-caching.adoc[Caching] for more information.
 
 === No Strategy
 
