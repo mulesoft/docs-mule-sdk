@@ -80,6 +80,11 @@ Find the `@Extension` annotated class and
  examine <<module-structure#, module structure>> and the different
 elements that you can add to a module. Use these elements to modify a connector.
 
+
+[[customicon]]
+include::partial$set-custom-icon.adoc[]
+
+
 == Add Your Connector to Studio
 
 Once your connector is working, you can try it in Anypoint Studio.
@@ -104,4 +109,4 @@ its `groupId`, `artifactId`, and `version`.
 ...
 ----
 
-NOTE: Different features are available in different vesions of the SDK for Java. See xref:choosing-version.adoc[Choosing the SDK version] to pick the right version for your connector.
+NOTE: Different features are available in different versions of the SDK for Java. See xref:choosing-version.adoc[Choosing the SDK version] to pick the right version for your connector.
