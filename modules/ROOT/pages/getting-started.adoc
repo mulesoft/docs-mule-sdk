@@ -81,7 +81,6 @@ Find the `@Extension` annotated class and
 elements that you can add to a module. Use these elements to modify a connector.
 
 
-[[customicon]]
 include::partial$set-custom-icon.adoc[]
 
 
