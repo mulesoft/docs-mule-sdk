@@ -89,7 +89,7 @@ public class OutputOperationTypeResolver implements OutputTypeResolver<ActionIde
 
 [source,java,linenums]
 ----
-public class InputOperationTypeResolver implements {
+public class InputOperationTypeResolver implements InputTypeResolver<ActionIdentifier> {
 
   @Override
   public MetadataType getInputMetadata(MetadataContext context, ActionIdentifier key)
