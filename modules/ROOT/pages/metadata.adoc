@@ -10,7 +10,7 @@ Although this feature is optional, MuleSoft strongly recommends that you use Dat
 
 Note that this documentation assumes that you are familiar with the architecture of connectors and with the concept of DataSense from the perspective of an end user.
 
-
+[[component-metadata]]
 == What is the Metadata of a Component?
 
 Integration developers often spend a lot of time trying to determine the input and output types for a given component (operation, sources, and so on) so they can transform the data at hand to connect the output of one component to the input of another. This often requires use of API documentation for each component to discover the parameters. This process is inefficient, fallible, and often frustrating.

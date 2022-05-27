@@ -11,9 +11,7 @@ isolated from each other.
 
 == Declaring an OutputTypeResolver and AttributesTypeResolver
 
-The `OutputTypeResolver` assigns a `MetadataType` to a class to resolve the output of the component.
-
-Both `OutputTypeResolver` and `AttributesTypeResolver` implementations handle the requests for resolving a `MetadataType` based on the information provided by the `MetadataContext` and most importantly, using the `MetadataKey` to identify the `MetadataType` required by the end user (who is creating a Mule app).
+Both `OutputTypeResolver` and `AttributesTypeResolver` implementations handle the requests for resolving a `MetadataType` based on the information provided by the `MetadataContext` and most importantly, using the `MetadataKey` to identify the `MetadataType` required by the end user (who is creating a Mule app). Refer to xref:metadata.adoc#component-metadata[] for more information about the `MetadataType`.
 
 The `OutputTypeResolver<T>` and `AttributesTypeResolver<T>` interfaces are parameterized with the generic `T`, which must match the type of the `MetadataKeyId` parameter. The examples here use type `String` for the generic because it is the most common `MetadataKeyId` type. (Other documentation will revisit this generic and go in detail about when the type should change to something other than `String`.)
 
