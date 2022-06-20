@@ -3,6 +3,44 @@ ifndef::env-site,env-github[]
 include::../_attributes.adoc[]
 endif::[]
 
+== 0.8.0-RC3
+
+*June 3, 2022*
+
+=== What's New
+
+* The connector descriptor now has a single way of referencing expressions. (W-11012260, W-11012258, W-11012269, W-11012283, W-10974868, W-11012266)
+* Parameters must have a way of defining if there are attributes or child elements. (W-11009987, W-10877327)
+* Dialect nodes' type is now `kind`. (W-10974927, W-10974900, W-10974935, W-10974864)
+* There is now a rule for typeSchema and mediaType relationships. (W-10943919)
+* There are now native support line number error reports. (W-10576483)
+* The generated connector name no longer ends in `Connector Mule4Connector`. (W-10576586)
+* There is now a new rule for when a schema file does not exist. (W-10850036)
+* There is now sonar analysis on generated sources. (W-10930008)
+* Validation of required parameters is not ignored. (W-10576655)
+* You can now define outputMediaType for sample data and value providers. (W-10576515)
+* Users can now clearly see NPE errors. (W-10840016)
+* Errors messages are now improved when placing a security scheme not declared by the API specification. (W-10758397)
+* Custom operations now have pagination validations. (W-10686600)
+* There are now internal refactors and updated dependencies.
+
+=== Fixed Issues
+
+[%header%autowidth.spread]
+|===
+|Issue|ID
+|Generated sample data providers no longer contain unnecessary parameters. | W-10981576
+|Script expression overrides no longer have missing validations. | W-10576415
+|The typeSchema response now overrides the base endpoint schema. | W-10934217
+|There was an NPE in the FileSchemeExistRule. | W-10959692
+|The response body value is now optional. | W-10942175
+|There is no longer an NPE when feeding empty DataWeave scripts in identifier DataWeave expressions. | W-10576640
+|Stream responses are no longer materialized to String when not necessary. | W-10876636
+|The jacoco dependency is no longer missing. | W-10921698
+|There is no longer an error when accessing N times to the same stream. | W-10576384
+|Pagination without the pagination parameter no longer throws an NPE. | W-10818662
+|===
+
 == 0.8.0-RC2
 
 *February 22, 2022*
