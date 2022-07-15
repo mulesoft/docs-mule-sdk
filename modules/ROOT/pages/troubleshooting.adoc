@@ -5,7 +5,7 @@ include::_attributes.adoc[]
 endif::[]
 :keywords: mule, sdk, troubleshooting, logging, known issue, bug, error, limitations
 
-*Available since version 1.4*
+The following troubleshooting features are available starting from Mule SDK 1.4.
 
 To troubleshoot Java SDK, learn how to enable logging (including verbose logging) and how to interpret common error messages.
 
@@ -113,17 +113,23 @@ image:enable-sdk-logging-runtime-manager.png[sdk-verbose-logging-runtime-manager
 Refer to the table that shows how to specify the component's fully qualified name.
 . Click *Apply Changes*.
 
-=== Logging examples
+== Logging Examples
 
-Here are some examples that show which logs can be expected to be shown.
+The following examples show expected logs for SDK components:
 
-These logs were taken from the following simple application :
+* <<source-logging-example>>
+* <<polling-source-logging-example>>
+* <<polling-source-watermarking-logging-example>>
+* <<pooling-connection-provider-logging-example>>
 
-image:troubleshooting-app.png[sdk-troubleshooting-app]
+The logs in these examples are from a Mule application that consists of an FTP Connector source that lists files in an FTP server and a logger that logs the name of the file it processes.
 
-This app consists on an FTP Connector listener which lists file in an FTP Server, and a logger that logs the name of the file it processes.
+image:troubleshooting-app.png[Mule flow in Studio that shows FTP Connector source and Logger]
 
-==== Source lifecycle examples:
+[[source-logging-example]]
+=== Source Logging Example
+
+The following example shows logs for Source:
 
 [source]
 ----
@@ -133,7 +139,10 @@ org.mule.runtime.module.extension.internal.runtime.source.ExtensionMessageSource
 org.mule.runtime.module.extension.internal.runtime.source.ExtensionMessageSource: Message source 'listener' on flow 'ftp-troubleshooting-examples' is stopping
 ----
 
-==== Polling Source item processing examples:
+[[polling-source-logging-example]]
+=== Polling Source Logging Example
+
+The following example shows logs for Polling Source:
 
 [source]
 ----
@@ -141,14 +150,20 @@ org.mule.runtime.module.extension.internal.runtime.source.poll.PollingSourceWrap
 org.mule.runtime.module.extension.internal.runtime.source.poll.PollingSourceWrapper: Item with id:[/ftp-example.json] is rejected with status:[FILTERED_BY_WATERMARK]
 ----
 
-==== Polling Source watermarking example:
+[[polling-source-watermarking-logging-example]]
+=== Polling Source Watermarking Logging Example
+
+The following example shows logs for Polling Source Watermarking:
 
 [source]
 ----
 org.mule.runtime.module.extension.internal.runtime.source.poll.PollingSourceWrapper: A new watermark maximum has been found when processing item with id /ftp-example.json for source in flow ftp-troubleshooting-examples
 ----
 
-==== Connection Pools status examples:
+[[pooling-connection-provider-logging-example]]
+=== Pooling Connection Provider Logging Example
+
+The following example shows logs for Pooling Connection Provider:
 
 [source]
 ----
