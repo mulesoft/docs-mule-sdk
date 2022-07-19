@@ -82,7 +82,7 @@ The generated Mule 4 extension appears in the target folder.
 * For MuleSoft Certified Connectors (Free):
 +
 .Example: Annotations for Azure Storage
-[sounce,annotations,linenums]
+[source,annotations,linenums]
 ----
 @Extension(name = “Azure Storage”, category = CERTIFIED, vendor = “Whishworks")
 @RequiresEnterpriseLicense(allowEvaluationLicense = true)
@@ -90,7 +90,7 @@ The generated Mule 4 extension appears in the target folder.
 * For MuleSoft Certified Connectors (Additional Fee):
 +
 .Example: Annotations for SAP Hybris
-[sounce,annotations,linenums]
+[source,annotations,linenums]
 ----
 @Extension(name = “SAP Hybris”, category = CERTIFIED, vendor = “Admios")
 @RequiresEnterpriseLicense
