@@ -196,7 +196,7 @@ No parameter other than a primary content *should* default to payload. This mean
 
 == Handle Dates and Time Parameters
 
-Date and time parameters *must* be implemented by using java.time.LocalDate, java.time.LocalDateTime or java.time.ZonedDateTime types. Do not use java.util.Date or java.util.Calendar.
+Date and time parameters *must* be implemented by using java.time.LocalDate, java.time.LocalDateTime, or java.time.ZonedDateTime types. Do not use java.util.Date or java.util.Calendar.
 
 == Check the End-to-End Experience
 
