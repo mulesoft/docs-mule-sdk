@@ -5,6 +5,8 @@ include::_attributes.adoc[]
 endif::[]
 :keywords: mule, sdk, troubleshooting, logging, known issue, bug, error, limitations
 
+The following troubleshooting features are available starting from Mule SDK 1.4.
+
 To troubleshoot Java SDK, learn how to enable logging (including verbose logging) and how to interpret common error messages.
 
 == Logging
@@ -110,6 +112,64 @@ image:enable-sdk-logging-runtime-manager.png[sdk-verbose-logging-runtime-manager
 . Add the component's fully qualified name and the logging level (DEBUG or TRACE).
 Refer to the table that shows how to specify the component's fully qualified name.
 . Click *Apply Changes*.
+
+== Logging Examples
+
+The following examples show expected logs for SDK components:
+
+* <<source-logging-example>>
+* <<polling-source-logging-example>>
+* <<polling-source-watermarking-logging-example>>
+* <<pooling-connection-provider-logging-example>>
+
+The logs in these examples are from a Mule application that consists of an FTP Connector source that lists files in an FTP server and a logger that logs the name of the file it processes.
+
+image:troubleshooting-app.png[Mule flow in Studio that shows FTP Connector source and Logger]
+
+[[source-logging-example]]
+=== Source Logging Example
+
+The following example shows logs for Source:
+
+[source]
+----
+org.mule.runtime.module.extension.internal.runtime.source.ExtensionMessageSource: Message source 'listener' on flow 'ftp-troubleshooting-examples' threw exception. Attempting to reconnect...
+org.mule.runtime.module.extension.internal.runtime.source.ExtensionMessageSource: Message source 'listener' on flow 'ftp-troubleshooting-examples' successfully reconnected
+org.mule.runtime.module.extension.internal.runtime.source.ExtensionMessageSource: Message source 'listener' on flow 'ftp-troubleshooting-examples' could not be reconnected. Will be shutdown.
+org.mule.runtime.module.extension.internal.runtime.source.ExtensionMessageSource: Message source 'listener' on flow 'ftp-troubleshooting-examples' is stopping
+----
+
+[[polling-source-logging-example]]
+=== Polling Source Logging Example
+
+The following example shows logs for Polling Source:
+
+[source]
+----
+org.mule.runtime.module.extension.internal.runtime.source.poll.PollingSourceWrapper: Item with id:[/ftp-example.json] is accepted
+org.mule.runtime.module.extension.internal.runtime.source.poll.PollingSourceWrapper: Item with id:[/ftp-example.json] is rejected with status:[FILTERED_BY_WATERMARK]
+----
+
+[[polling-source-watermarking-logging-example]]
+=== Polling Source Watermarking Logging Example
+
+The following example shows logs for Polling Source Watermarking:
+
+[source]
+----
+org.mule.runtime.module.extension.internal.runtime.source.poll.PollingSourceWrapper: A new watermark maximum has been found when processing item with id /ftp-example.json for source in flow ftp-troubleshooting-examples
+----
+
+[[pooling-connection-provider-logging-example]]
+=== Pooling Connection Provider Logging Example
+
+The following example shows logs for Pooling Connection Provider:
+
+[source]
+----
+org.mule.runtime.core.internal.connection.PoolingConnectionManagementStrategy: Acquiring connection org.mule.extension.ftp.internal.connection.FtpFileSystem@1a0c776f from the pool FTP_Config-5e20b7d9-417d-4307-ab4c-9ef3e7ae4d9b
+org.mule.runtime.core.internal.connection.PoolingConnectionManagementStrategy: Status for pool FTP_Config-5e20b7d9-417d-4307-ab4c-9ef3e7ae4d9b: 1 connections are active out of 5 max active limit, 0 connections are idle out of 5 max idle limit
+----
 
 == Error: Cannot Find org.mule.sdk.api Classes
 
