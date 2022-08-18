@@ -33,7 +33,7 @@ public class ObjectStoreOperations {
 
 Here are some common Mule services:
 
-* `LockFactory`: All Mule components that require synchronization to access shared data must be synchronized using locks from the default implementation of this interface.
+* `LockFactory`: All Mule components that require synchronization to access shared data must be synchronized using locks from the default implementation of this interface. For more information regarding `LockFactory`, refer to xref:4.4@mule-runtime::distributed-locking.adoc[Distributed Locking].
 
 * `ExpressionManager`: Provides universal access for evaluating expressions embedded in Mule configurations, such as XML, Java, scripting, and annotations.
 
