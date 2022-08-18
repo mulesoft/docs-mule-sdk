@@ -47,6 +47,8 @@ The next example reads XML and sets an XPath filter using the new `xpath` functi
 </flow>
 ----
 
+To view the actual implementation of the simplified example shown above, refer to https://github.com/mulesoft/mule-xml-module/blob/1.3.3/src/main/java/org/mule/module/xml/internal/xpath/XPathFunction.java[XPathFunction.java].
+
 == Restrictions: Config-less and Connection-less
 
 By definition, functions are not allowed to depend on or receive a particular
