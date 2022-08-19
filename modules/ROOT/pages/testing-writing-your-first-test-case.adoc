@@ -100,6 +100,16 @@ Event event = flowRunner("sayHiFlow").run();
 Execution of the flow returns an `Event` that contains the `payload`, `attributes`, `vars`, and all the available information about the execution of the
 flow.
 
+[NOTE]
+====
+If your flow returns a stream, you must call the keepStreamsOpen() method to prevent the runtime from closing streams (which is the normal behavior when a flow ends). If you do not call the keepStreamsOpen() method, you receive a `CursorProviderAlreadyClosedException` error when consuming a stream. The following example shows how to call the keepStreamsOpen() method:
+
+[source,java,linenums]
+----
+Event event = flowRunner("streamFlow").keepStreamsOpen().run();
+----
+====
+
 === 4.2 Retrieving the Payload Value
 
 After executing the flow, you have an `event` variable that contains the result
