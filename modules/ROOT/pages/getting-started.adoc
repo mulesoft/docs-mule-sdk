@@ -22,7 +22,7 @@ Install and verify that the following tools are working in your local environmen
 
 * Java Development Kit 8 (JDK 8) to compile and build your Java code.
 
-* Apache Maven, version 3.3.9 or higher, to manage your project’s build.
+* Apache Maven 3.3.9 or later to manage your project’s build.
 
 [[setup_ide]]
 
