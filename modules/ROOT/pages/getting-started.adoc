@@ -22,7 +22,7 @@ Install and verify that the following tools are working in your local environmen
 
 * Java Development Kit 8 (JDK 8) to compile and build your Java code.
 +
-NOTE: The maximum supported version for XML SDK is JDK 11, however, you can use JDK 11 only for running your application. Compilation with XML SDK must be done with JDK 8.
+NOTE: The maximum supported version for Java SDK is JDK 11, however, you can use JDK 11 only for running your application. Compilation with XML SDK must be done with JDK 8.
 
 * Apache Maven 3.3.9 or later to manage your project’s build.
 
