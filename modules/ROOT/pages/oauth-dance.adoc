@@ -25,7 +25,7 @@ After the dance is complete, you execute an operation using the access token obt
                                        authorizationUrl="http://..." accessTokenUrl="http://..."/
                                        localAuthorizationUrl="http://localhost:8080/.." scope="this that and those"
                                        resourceOwnerId="#[vars.ownerId]" /> <!-- <1> -->
-        <sfdc:oauth-callback-config listenerConfig="myHtttpListener"
+        <sfdc:oauth-callback-config listenerConfig="myHttpListener"
                                     callbackPath="/callback"
                                     authorizePath="/authorize" />  <!-- <2> -->
 </sfdc:config>

@@ -126,7 +126,7 @@ You can fire notifications from `@OnSuccess`, `@OnError`, and `@OnTerminate` met
   public void onSuccess(@ParameterGroup(name = "Success Info", showInDsl = true) PersonalInfo successInfo,
                         NotificationEmitter notificationEmitter) {
 
-    // on sucess body
+    // on success body
     notificationEmitter.fire(FINISHED_EVENT, TypedValue.of(successInfo.getSimpleObject()));
   }
 ----

@@ -124,7 +124,7 @@ This is what the generated DSL looks like:
 accessTokenUrl="http://..."/
 localAuthorizationUrl="http://localhost:8080/.." scope="this that and those" resourceOwnerId="#[ownerId]"
 before="myBeforeFlow" after="myAfterFlow" />
-        <sfdc:oauth-callback-config listenerConfig="myHtttpListener" callbackPath="/callback" authorizePath="/authorize" />
+        <sfdc:oauth-callback-config listenerConfig="myHttpListener" callbackPath="/callback" authorizePath="/authorize" />
         <sfdc:oauth-store-config objectStore="oauthObjectStore" />
 </sfdc:config>
 ----
@@ -201,7 +201,7 @@ The obtained access tokens are stored in an `ObjectStore`. By default, the SDK w
         <sfdc:oauth-authorization-code consumerKey="${sfdc.consumerkey}" consumerSecret="${sfdc.consumersecret}"
         authorizationUrl="http://..." accessTokenUrl="http://..."/
         localAuthorizationUrl="http://localhost:8080/.." />
-        <sfdc:oauth-callback-config listenerConfig="myHtttpListener" callbackPath="/callback" authorizePath="/authorize" />
+        <sfdc:oauth-callback-config listenerConfig="myHttpListener" callbackPath="/callback" authorizePath="/authorize" />
         <sfdc:oauth-store-config objectStore="tokenStore" /> // <2>
 </sfdc:config>
 ----

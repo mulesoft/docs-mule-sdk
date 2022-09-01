@@ -68,7 +68,7 @@ Consider the case of an HTTP request. Depending on which endpoint you hit, the o
 [source,java,linenums]
 ----
 @MediaType(value =  "*/*", strict = false)
-public InputStream rquest(String path) {
+public InputStream request(String path) {
   return httpClient.request(path);
 }
 ----
