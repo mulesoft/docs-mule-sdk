@@ -38,13 +38,13 @@ public void receiveContent(TypedValue<InputStream> content) {
     DataType dataType = content.getDataType();
     MediaType mediaType = dataType.getMediaType();
     boolean streamType = dataType.isStreamType();
-    Long lenght = content.getLength().orElse(-1L);
+    Long length = content.getLength().orElse(-1L);
 
     InputStream theContent = content.value(); // The proper value
 
     System.out.println(mediaType);  // application/json; UTF-8
     System.out.println(streamType); // true
-    System.out.println(lenght);     // 18
+    System.out.println(length);     // 18
 }
 ----
 
