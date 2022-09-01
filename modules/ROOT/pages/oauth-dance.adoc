@@ -24,10 +24,10 @@ After the dance is complete, you execute an operation using the access token obt
         <sfdc:oauth-authorization-code consumerKey="${sfdc.consumerkey}" consumerSecret="${sfdc.consumersecret}"
                                        authorizationUrl="http://..." accessTokenUrl="http://..."/
                                        localAuthorizationUrl="http://localhost:8080/.." scope="this that and those"
-                                       resourceOwnerId="#[vars.ownerId]" /> <!-- <1> -->
+                                       resourceOwnerId="#[vars.ownerId]" /> // <1>
         <sfdc:oauth-callback-config listenerConfig="myHttpListener"
                                     callbackPath="/callback"
-                                    authorizePath="/authorize" />  <!-- <2> -->
+                                    authorizePath="/authorize" /> // <2>
 </sfdc:config>
 ----
 

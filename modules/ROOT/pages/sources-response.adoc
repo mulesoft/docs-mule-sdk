@@ -58,7 +58,7 @@ Here is another oversimplified example from the HTTP connector:
 
 [source,java,linenums]
 ----
-@EmitsResponse
+@EmitsResponse // <1>
 public class HttpListener extends Source<InputStream, HttpRequestAttributes> {
 
     @Override
