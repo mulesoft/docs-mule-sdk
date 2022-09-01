@@ -58,7 +58,7 @@ Here is another oversimplified example from the HTTP connector:
 
 [source,java,linenums]
 ----
-@EmitsResponse
+@EmitsResponse // <1>
 public class HttpListener extends Source<InputStream, HttpRequestAttributes> {
 
     @Override
@@ -84,16 +84,16 @@ public class HttpListener extends Source<InputStream, HttpRequestAttributes> {
     }
 }
 ----
-
-<1> The example annotates the source with `@EmitsResponse` because this `HttpListener` might send a response.
-<2> Because the `@OnSuccess` method is invoked asynchronously (and most likely in parallel), it is necessary to communicate state to the callback method. More precisely, it is necessary to provide some kind of reference regarding the actual request to reply into. To accomplish that, the example creates a new `SourceCallbackContext` using the `SourceCallback`.
-<3> The example adds a variable into the context that holds an `HttpResponseContext`. This is a custom object defined in the
+[calloutlist]
+. The example annotates the source with `@EmitsResponse` because this `HttpListener` might send a response.
+. Because the `@OnSuccess` method is invoked asynchronously (and most likely in parallel), it is necessary to communicate state to the callback method. More precisely, it is necessary to provide some kind of reference regarding the actual request to reply into. To accomplish that, the example creates a new `SourceCallbackContext` using the `SourceCallback`.
+. The example adds a variable into the context that holds an `HttpResponseContext`. This is a custom object defined in the
 connector that knows how to send responses.
-<4> The example generates and pushes the message through the `SourceCallback`, using both the `Result` object and the newly create context.
-<5> The callback method has two parameters, a `@Content` one for the body of the response to be sent and the HTTP status code of the response. There is a third argument of type `SourceCallbackContext`. This is not a parameter but a way to tell the SDK that to recover the same context that was passed to the `handle()` method.
-<6> Because the HTTP protocol does not always send a response, the example checks to see if the response status code requires the response to be sent or not.
-<7> If a response is needed, the example recovers the response context that was originally set on the context.
-<8> The response is sent.
+. The example generates and pushes the message through the `SourceCallback`, using both the `Result` object and the newly create context.
+. The callback method has two parameters, a `@Content` one for the body of the response to be sent and the HTTP status code of the response. There is a third argument of type `SourceCallbackContext`. This is not a parameter but a way to tell the SDK that to recover the same context that was passed to the `handle()` method.
+. Because the HTTP protocol does not always send a response, the example checks to see if the response status code requires the response to be sent or not.
+. If a response is needed, the example recovers the response context that was originally set on the context.
+. The response is sent.
 
 == Listening for Error Outputs
 
