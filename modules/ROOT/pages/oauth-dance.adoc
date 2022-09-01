@@ -30,9 +30,9 @@ After the dance is complete, you execute an operation using the access token obt
                                     authorizePath="/authorize" /> // <2>
 </sfdc:config>
 ----
-[calloutlist]
-. The `resourceOwnerId` parameter is set to an expression. Each time an OAuth-protected operation is executed, that expression will be evaluated, and the token associated with that value will be used.
-. The example sets the authorization endpoint `authorizePath`.
+
+<1> The `resourceOwnerId` parameter is set to an expression. Each time an OAuth-protected operation is executed, that expression will be evaluated, and the token associated with that value will be used.
+<2> The example sets the authorization endpoint `authorizePath`.
 
 === Invalidating Access Tokens
 
