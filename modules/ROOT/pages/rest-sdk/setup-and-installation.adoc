@@ -1,0 +1,60 @@
+= Setup and Installation
+ifndef::env-site,env-github[]
+include::../_attributes.adoc[]
+endif::[]
+
+To get started with REST SDK, ensure that your environment meets the installation
+prerequisites and then follow the steps to install the REST SDK plugin.
+
+== Prerequisites
+
+Before you install and use REST SDK, verify that your environment includes the following required tools:
+
+* Java 8 SDK
+* Apache Maven (3.3.9 or later)
+
+== Install the REST SDK Plugin
+
+The plugin is a distribution of one or more related MOJOs (Maven plain Old Java Objects). Each
+MOJO is an executable goal in Maven.
+
+If you have access to the MuleSoft repositories, Maven automatically downloads
+the plugin when you try to use it.
+
+=== Get Access to the MuleSoft Maven Repository
+
+Although MuleSoft repositories are public, you must configure Maven to access
+them.
+
+. Access the appropriate `settings.xml` Maven configuration file: +
+* Linux: `Linux: ~/.m2/settings.xml` +
+* Mac: `Mac: ~/.m2/settings.xml` +
+* Windows: `C:\Users\<UserName>\.m2\settings.xml`
+
+. In `settings.xml`, add a new plugin repository to the `<profile>` section, for example:
+
++
+[source,xml]
+----
+    <profiles>
+        <profile>
+            <id>default-profile</id>
+            <activation>
+                <activeByDefault>true</activeByDefault>
+            </activation>
+
+            <pluginRepositories>
+                <pluginRepository>
+                    <id>mulesoft-releases</id>
+                    <name>Mule Releases Repository</name>
+                    <url>https://repository.mulesoft.org/nexus/content/repositories/releases/</url>
+                </pluginRepository>
+            </pluginRepositories>
+
+        </profile>
+    </profiles>
+----
+
+== What's Next
+
+After you've set up your project, you can xref:rest-sdk/scaffold-a-connector-descriptor.adoc[scaffold a connector descriptor].

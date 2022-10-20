@@ -3,13 +3,18 @@ ifndef::env-site,env-github[]
 include::../_attributes.adoc[]
 endif::[]
 
+Configure and customize multipart requests of the connector descriptor of the connector.
+
 == Define a Multipart Request
 
-Multipart content definition in both RAML 1.0 and OAS2 lacks some
-features, such as the ability to define the content type of each part of
-a multipart body. The connector descriptor can amend these issues.
+To define a multipart request, add properties to the attachment endpoint.
 
-In the following example, the API spec defines a multipart request:
+Multipart content definition in both RAML 1.0 and OAS2 specifications lacks some
+features, such as the ability to define the content type of each part of
+a multipart body. You can amend these issues by defining properties in
+the connector descriptor.
+
+The following example shows an API specification defining a multipart request:
 
 [source,yaml]
 ----
@@ -29,8 +34,8 @@ In the following example, the API spec defines a multipart request:
        description: Successful call
 ----
 
-The following example shows several improvements to the multipart
-request by adding extra information to the body parts of the POST
+The following example shows several improvements to the API specification definition
+of the multipart request by adding extra information to the body parts of the POST
 attachment endpoint:
 
 [source,yaml]
@@ -54,9 +59,11 @@ endpoints:
 
 == Set a Display Name for a Part
 
+To set a display name for a part, use the `displayName` property, which
+is added to the attachment endpoint.
+
 Parameters in the request body can supply an alternative name using the
-`displayName` property. In the example above, the final connector UI
-shows `requestid` as `Request-ID`.
+`displayName` property.
 
 [source,yaml]
 ----
@@ -70,11 +77,12 @@ endpoints:
              displayName: "Request-ID"
 ----
 
+In the example above, the final connector UI shows `requestid` as `Request-ID`.
+
 == Set a Description for a Part
 
-The previous example assigned descriptions to 2 of the parts defined in
-the body. This appears to the users as a contextual tooltip when working
-with this operation.
+To set a description for a part, use the `description` property,
+which is added to the attachment endpoint.
 
 [source,yaml]
 ----
@@ -90,10 +98,17 @@ endpoints:
              description: A list of attributes for this attachment
 ----
 
+In this example, the two parts defined in the body now contain descriptions.
+The description you set for a part appears in Anypoint Studio as a tooltip
+when working with this operation.
+
 == Define File Parts
 
-You must use the `file` property to state that a body part represents a
-file. This creates an implicit parameter with the filename that the user
+To define file parts, use the `file` property, which is added to the
+attachment endpoint.
+
+Use the `file` property to state that a body part represents a
+file, which creates an implicit parameter with the filename that the user
 must fill to use the generated operation.
 
 [source,yaml]
@@ -110,13 +125,16 @@ endpoints:
 
 == Define the Content Type of a Part
 
+To define the content type of a part, use the `contentType` property,
+which is added to the attachment endpoint.
+
 Each part of a multipart request can define its own content type that is
 sent in the content disposition header of that part when the HTTP
 request is done.
 
-You define the value that the header should have in the request by using
-the `contentType` property. This also helps the user of the connector know
-what content type is expected for that part.
+You define the value that the header must have in the request by using
+the `contentType` property. Using the `contentType` property also helps the
+user of the connector know what content type is expected for that part.
 
 [source,yaml]
 ----
@@ -134,18 +152,20 @@ endpoints:
 ----
 
 In this example, the attributes object must be sent as an
-`application/json` object and that the expected file type is a .txt or
+`application/json` object and the expected file type is a .txt or
 .csv.
 
 == Redefine the Expected Content for a Part
 
-If the API spec does not specify the expected structure of a part (or
+To redefine the expected content for a part, use the `inputType`
+property, which is added to the attachment endpoint.
+
+If the API specification does not specify the expected structure of a part (or
 defines it in an incorrect way), you can redefine it using a JSON
 schema.
 
-You must use the `inputType` property. The value for this property must be
-the path to the JsonSchema relative to the location of the Connector
-Descriptor file.
+The value for the `inputType` property must be the path to the JsonSchema
+relative to the location of the connector descriptor file.
 
 [source,yaml]
 ----

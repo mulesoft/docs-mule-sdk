@@ -3,44 +3,304 @@ ifndef::env-site,env-github[]
 include::../_attributes.adoc[]
 endif::[]
 
-REST SDK is a tool that allows you to create connectors based on an API specification supplying additional connector capabilities via a connector descriptor.
+== 0.8.0-RC3
 
-== 0.6.0
+*June 3, 2022*
 
-*August 2, 2021*
+=== What's New
 
-=== What’s New
-
-* Added support for custom Composer metadata in IO metadata types. (RSDK-495, RSDK-242)
-* Min mule version is now 4.3.0 for all generated connectors. (RSDK-521)
+* The connector descriptor now has a single way of referencing expressions. (W-11012260, W-11012258, W-11012269, W-11012283, W-10974868, W-11012266)
+* Parameters must have a way of defining if there are attributes or child elements. (W-11009987, W-10877327)
+* Dialect nodes' type is now `kind`. (W-10974927, W-10974900, W-10974935, W-10974864)
+* There is now a rule for typeSchema and mediaType relationships. (W-10943919)
+* There are now native support line number error reports. (W-10576483)
+* The generated connector name no longer ends in `Connector Mule4Connector`. (W-10576586)
+* There is now a new rule for when a schema file does not exist. (W-10850036)
+* There is now sonar analysis on generated sources. (W-10930008)
+* Validation of required parameters is not ignored. (W-10576655)
+* You can now define outputMediaType for sample data and value providers. (W-10576515)
+* Users can now clearly see NPE errors. (W-10840016)
+* Errors messages are now improved when placing a security scheme not declared by the API specification. (W-10758397)
+* Custom operations now have pagination validations. (W-10686600)
+* There are now internal refactors and updated dependencies.
 
 === Fixed Issues
 
 [%header%autowidth.spread]
 |===
-|Issue|Number
-|Added support for Long and Int64 type parameters defined in API specifications. | (RSDK-526)
-|nextUrl is not incorrectly modified anymore for hypermedia pagination. | (RSDK-500)
-|RestSampleDataProvider now generates the corresponding output attributes. | (RSDK-509)
+|Issue|ID
+|Generated sample data providers no longer contain unnecessary parameters. | W-10981576
+|Script expression overrides no longer have missing validations. | W-10576415
+|The typeSchema response now overrides the base endpoint schema. | W-10934217
+|There was an NPE in the FileSchemeExistRule. | W-10959692
+|The response body value is now optional. | W-10942175
+|There is no longer an NPE when feeding empty DataWeave scripts in identifier DataWeave expressions. | W-10576640
+|Stream responses are no longer materialized to String when not necessary. | W-10876636
+|The jacoco dependency is no longer missing. | W-10921698
+|There is no longer an error when accessing N times to the same stream. | W-10576384
+|Pagination without the pagination parameter no longer throws an NPE. | W-10818662
+|===
+
+== 0.8.0-RC2
+
+*February 22, 2022*
+
+=== What's New
+
+==== Specification Format Support
+
+* You can now use AMF to auto-detect API formats. (RSDK-175)
+* Added support for file encodings. (RSDK-671)
+
+==== Custom Operations
+
+* You can now ignore an endpoint parameter in custom operations. (RSDK-513)
+* You can now add a value provider body level in custom operations. (RSDK-603)
+* Added support for schema type definitions' response bodies in custom operations. (RSDK-579)
+* Custom operations can now be set as a void output. (RSDK-662)
+* Added pagination support for custom operations. (RSDK-777)
+* Added the ability to use a DataWeave expression to build the multipart body content on custom operations without hardcoding the boundary value. (RSDK-847)
+* Added Inversion of Control (IoC) in custom operations and endpoints. (RSDK-849)
+* You can now use the DataWeave expected output in custom operations. (RSDK-617)
+* Using Mule SDK reserved words is now restricted in custom operations. (RSDK-614)
+
+==== Triggers
+
+* Trigger outputs can now be reshaped. (RSDK-542)
+* You can now use the customizable request body method for triggers. (RSDK-756)
+* Added value providers for triggers. (RSDK-833)
+* Added trigger composition support. (RSDK-543)
+* The startValue element for triggers is enabled to work with start times. (RSDK-735)
+
+==== Project Structure
+
+===== Connectors Parent POM
+
+* Added the REST SDK connectors parent POM. (RSDK-547)
+
+===== REST SDK Archetype
+
+* Added the rest-sdk-archetype. (RSDK-602)
+* The archetype module now depends on the MOJO module. (RSDK-675)
+* Added distributionManagement to the archetype POM. (RSDK-602)
+* Parameterized the archetype's API specification format. (RSDK-788)
+
+==== RevAPI
+
+* Enabled the revAPI extension for extension models in connectors. (RSDK-653)
+
+==== Native Java Classes Support
+
+* Added support for native operations. (RSDK-744)
+* Added support for native triggers. (RSDK-745)
+* Added support for custom connection providers as a native mechanism. (RSDK-814)
+* Added support for a native connection provider. (RSDK-752)
+* Added support for native enrichers:
+** Value providers (RSDK-817)
+** Sample data (RSDK-818)
+
+==== Aliases Customization
+
+* Added aliases at the connection provider level. (RSDK-733)
+* Added aliases for operation adapters. (RSDK-757)
+* Added aliases at the descriptor level for triggers. (RSDK-732)
+* Added aliases for custom operation parameters. (RSDK-803)
+* Added aliases for trigger parameters. (RSDK-802)
+
+==== Private Operations
+
+* Added support for private operations. (RSDK-729)
+
+==== Connector Refinement Framework
+
+===== Three Layer Generation (Base/Refinement/Implementation)
+
+* Added the ability to split operations into three layers. (RSDK-707, RSDK-712)
+* Added the ability to split connection providers into three layers. (RSDK-708)
+* Added the ability to split trigger code generation into three layers. (RSDK-711)
+* Added the ability to split configuration into three layers. (RSDK-773)
+* Added operation layer generation for endpoints. (RSDK-828)
+* Connection providers are now extensible via Java code. (RSDK-663)
+* Custom operations can now rewrite error handling interceptors with custom code. (RSDK-772)
+* An error message is now thrown when a file present in the override folder does not exist in the generated project. (RSDK-784)
+
+===== Refinements Support
+
+* Added refinement to the project structure and syntax. (RSDK-801)
+* Added a configuration node in the connector descriptor and the ability to define refinements for it. (W-106877372)
+* Added fixes to validations for projects with no refinement or override folders. (RSDK-838)
+* Refinements with parameters now have their own namespace. (W-10576456)
+* Refinements now notify with INFO when generating the class. (RSDK-839)
+* Refined classes now have a consistent name with declaration. (RSDK-843)
+* Refined classes without the declarative counterpart now WARN the developer. (RSDK-840)
+* Java SDK is now able to pick a trigger's description in refinable code generation. (RSDK-776)
+
+==== Miscellaneous
+
+* Added the mule-alias property to the operation descriptor. (RSDK-731)
+* The sample data result media type is now obtained from the response. (RSDK-747)
+* Added the ability to define a global HTTP response interceptor for endpoints. (RSDK-275)
+* Test connections now have the ability to customize status code error messages. (RSDK-810)
+* Added support for security parameter customization. (RSDK-687)
+* Removed shading from generated connectors. (RSDK-236)
+* Refactored RequestParameters. (RSDK-911)
+* Only used parameters are now added to enrichers. (RSDK-893)
+* SDK annotations rely on mule-extensions-api instead of mule-sdk-api when no binding expressions are needed. (RSDK-549)
+* Added missing primitive types. (RSDK-715)
+* Removed the sample data Same operation. (RSDK-886)
+* Added support for API specifications that contain multiple API key security schemes. (RSDK-267)
+* Custom operations can now select a base operation using operationId or a method and a path. (RSDK-642)
+* Added the ability to use configuration and connection provider bindings in the descriptor. (RSDK-656, RSDK-688)
+* The expression language is now set by the injection mechanism for further reuse in Java. (RSDK-717)
+* Implemented a Java API to intercept the HTTP response to allow custom error handling. (RSDK-705)
+* Added DataWeave script support for value providers. (RSDK-791)
+* Added several internal refactors and addressed code quality, performance, and extensibility.
+
+=== Enhancements
+
+==== User Interface
+
+* REST SDK now reports the number of errors in a build failure. (RSDK-900)
+* Removed the warning message when loading the extension model during the generateSources phase. (RSDK-604)
+
+==== Validations
+
+* Replaced Regex with DataWeave AST to validate scripts. (RSDK-769)
+* You can now validate parameters used in operation adapter bindings. (RSDK-661)
+* Added a validation that ensures security schemes in the connector descriptor are present in the API specification. (W-10576485)
+* Improved parameter internal name validation. (RSDK-649)
+* Added a validation so that page_number is not ignored in the pageNumber pagination type. (RSDK-528)
+* Added new validations for triggers and operations. (RSDK-641, RSDK-651)
+* Invalid connector descriptors are now correctly validated. (RSDK-696)
+* Added a validation rule to check for optional parameters assigned to arguments in sample data and value providers. (RSDK-767)
+
+==== Dialect Syntax
+
+* Configuration binding names now have consistent naming. (RSDK-770)
+* Clarified syntax when referring to a base operation. (RSDK-664)
+* Pluralized dialect and binding parameters. (RSDK-774)
+
+==== Version Upgrades
+
+* Upgraded AMF to version 5. (RSDK-527)
+* Lots of other version upgrades for dependencies and vulnerability fixes.
+
+=== Fixed Issues
+
+[%header%autowidth.spread]
+|===
+|Issue|ID
+|A connection provider is now generated when there are no endpoints. | (W-10576439)
+|Fixed circular dependencies and order validations. | (W-10576609, W-10678379)
+|Fixed NPE when setting a typeSchema for a trigger's parameter definition in custom operations. | (RSDK-850)
+|Fixed value provider arguments validation. | (RSDK-895)
+|Fixed OAuth validations. | (RSDK-856)
+|Fixed the NoInputMediaTypeDefinedRule. | (RSDK-501)
+|Fixed NPE in parameters. | (RSDK-605)
+|Marker pagination no longer generates a token parameter that is not used. | (RSDK-246)
+|Query parameters are now case-insensitive. | (RSDK-618)
+|URI parameters are now case-sensitive. | (RSDK-646)
+|MavenGav is now optional for the generate sources goal. | (RSDK-622)
+|Fixed generated code in the AuthConnectionProvider class. | (RSDK-627)
+|Base URI is now properly generated in the connector descriptor. | (RSDK-294)
+|REST SDK does not check API endpoints that are ignored in the connector descriptor anymore. | (RSDK-531)
+|Content annotation with primary is used for scenarios with a single payload. | (RSDK-292)
+|Fixed possible collisions on generated schemas. | (RSDK-559)
+|The type or typeSchema property is now mandatory. | (RSDK-660)
+|Fixed NPE when nesting multiple schemas. | (RSDK-678)
+|The summary (tooltip) is now displayed for the trigger operations. | (RSDK-606)
+|Missing the connectorName now no longer throws an exception. | (RSDK-679)
+|The correct display name is now generated for triggers. | (RSDK-668)
+|Fixed hypermedia pagination regression. | (RSDK-640)
+|REST SDK no longer generates an invalid setExpressionLanguage operation. | (RSDK-725)
+|Using sample data or value providers with missing parameters now triggers an error at compilation. | (RSDK-746, RSDK-751)
+|Fixed non thread-safe parameter bindings in operations. | (RSDK-762)
+|All warnings are now displayed in the console.  | (RSDK-749)
+|Added a missing validation in bindings for operation adapters. | (RSDK-764)
+|The binding parameter validation now works properly. | (RSDK-748)
+|Fixed how categoryName is defined for metadata resolvers. | (RSDK-888)
+|Using voidOperation is now compliant with design and runtime specifics. | (RSDK-883)
+|Inline enrichers now properly capture the parameters used in triggers. | (RSDK-897)
+|Inline enrichers now properly capture the parameters used in operations. | (RSDK-896)
+|Fixed response media type usage for custom operations. | (RSDK-674)
+|Fixed sample data and value provider usage for custom operations. | (RSDK-674)
+|Fixed early expansion of URI parameters. | (RSDK-674)
+|Fixed scenarios in which OAuth reconnection consumed the response body. | (W-10576891)
+|The target/ignored folder is now formatted when connector classes are generated. | (RSDK-685)
+|The RestConnection implementation now requires an expression language.  | (RSDK-718)
+|Null types in JSON schemas are now ignored for correct metadata generation. | (RSDK-702)
+|Fixed the naming generation strategy for aliases and descriptions. | (RSDK-734)
+|===
+
+== 0.7.1
+
+*January 4, 2022*
+
+=== Fixed Issues
+
+[%header%autowidth.spread]
+|===
+|Issue|ID
+|Upgraded library dependencies. | (RSDK-811)
+|===
+
+== 0.7.0
+
+*August 19, 2021*
+
+=== What's New
+
+* Added support to declare sample data and value providers in custom operations. (RSDK-511, RSDK-512)
+* RestRequestBuilder now handles parameter formatting and URI templating automatically. (RSDK-4)
+* Added a new validation rule to avoid collisions with internal parameter names. (RSDK-524)
+* Added support to bind body fields as parameters for sample data. (RSDK-534)
+
+=== Fixed Issues
+
+[%header%autowidth.spread]
+|===
+|Issue|ID
+|Parameters with number data types are now correctly formatted and sent in requests. | (RSDK-4)
+|Unsupported intersection types in custom metadata loaders were generated. | (RSDK-495)
+|Some files that were not generated by REST SDK were formatted. | (RSDK-535)
+|===
+
+== 0.6.0
+
+*August 2, 2021*
+
+=== What's New
+
+* Added support for custom metadata in IO metadata types. (RSDK-495, RSDK-242)
+* The minimum Mule version is now 4.3.0 for all generated connectors. (RSDK-521)
+
+=== Fixed Issues
+
+[%header%autowidth.spread]
+|===
+|Issue|ID
+|Added support for long and Int64 type parameters defined in API specifications. | (RSDK-526)
+|The next URL is now not incorrectly modified for hypermedia pagination. | (RSDK-500)
+|The RestSampleDataProvider now generates the corresponding output attributes. | (RSDK-509)
 |===
 
 == 0.5.0
 
 *July 19, 2021*
 
-=== What’s New
+=== What's New
 
 * Added code regeneration capabilities for REST SDK projects. (RSDK-484)
-* It is now possible to generate custom operations as Composer sidecars. (RSDK-482)
+* It is now possible to generate custom operations as sidecars. (RSDK-482)
 
 === Fixed Issues
 
 [%header%autowidth.spread]
 |===
-|Issue|Number
-|Fixed a NullPointerException that occurred when working with REST SDK 0.5.0. | (RSDK-495)
-|Generated class names for ENUMS that no longer collide with each other. | (RSDK-514)
-|Fixed the RestSampleDataProvider definition. | (RSDK-499)
+|Issue|ID
+|A NullPointerException occurred when generating a connector with REST SDK 0.4.1. | (RSDK-495)
+|Class names for enums are now generated to no longer collide with each other. | (RSDK-514)
+|The RestSampleDataProvider was defined incorrectly. | (RSDK-499)
 |===
 
 == 0.4.1
@@ -51,42 +311,42 @@ REST SDK is a tool that allows you to create connectors based on an API specific
 
 [%header%autowidth.spread]
 |===
-|Issue|Number
+|Issue|ID
 |Using certain authentication methods caused an error that made the connection optional. | (RSDK-210)
-|Execution error for hypermedia pagination. | (RSDK-453)
+|Hypermedia pagination returned an execution error when the last page did not contain a link header. | (RSDK-453)
 |===
 
 == 0.4.0
 
 *June 23, 2021*
 
-=== What’s New
+=== What's New
 
-* Added support for operation adapters for L3. (RSDK-331, RSDK-434)
+* Added support for operation adapters. (RSDK-331, RSDK-434)
 * Added support for value providers at the body level. (RSDK-71, RSDK-419)
 
 === Fixed Issues
 
 [%header%autowidth.spread]
 |===
-|Issue|Number
-|Changed the default timeout unit from minutes to seconds. | (RSDK-305)
-|Fixed issues with some validation rules for triggers. | (RSDK-436)
+|Issue|ID
+|The default timeout unit was changed from minutes to seconds. | (RSDK-305)
+|Some validation rules failed due to empty trigger definitions. | (RSDK-436)
 |===
 
 == 0.3.0
 
 *June 3, 2021*
 
-=== What’s New
+=== What's New
 
-* Composition layers can ignore all previously declared operations and select only a subset to generate. (RSDK-402)
+* Added the ability to ignore all previously declared operations and select only a subset to generate. (RSDK-402)
 
 === Fixed Issues
 
 [%header%autowidth.spread]
 |===
-|Issue|Number
+|Issue|ID
 |Generated connectors did not show code coverage in Sonar. | (RSDK-249)
 |Operation and trigger descriptions were not trimmed properly. Descriptions now have an increased character limit. | (RSDK-300)
 |Some validation rules did not run. | (RSDK-238)
@@ -96,127 +356,127 @@ REST SDK is a tool that allows you to create connectors based on an API specific
 
 *May 21, 2021*
 
-=== What’s New
+=== What's New
 
-* Min Mule version is now 4.3.0 by default for the generated connectors (RSDK-393)
-* Added a new validation engine for simple composition (RSDK-401)
-* Operation display names declared in the API specs are now used to generate the operation display name (RSDK-412)
-* Added support for PREMIUM and CERTIFIED connector categories (RSDK-90)
-* Added a license.md file generation for corresponding categories (RSDK-216)
+* The minimum Mule version is now 4.3.0 by default for generated connectors. (RSDK-393)
+* Added a new validation framework. (RSDK-401)
+* Operation display names declared in API specifications are now used to generate the operation display names in the connector. (RSDK-412)
+* Added support for premium and certified connector categories. (RSDK-90)
+* Added LICENSE.md file generation for corresponding categories. (RSDK-216)
 
 === Fixed Issues
 
 [%header%autowidth.spread]
 |===
-|Issue|Number
-|Evaluation licenses are now correctly generated |(RSDK-218)
-|Trigger parameters marked as optional are now generated optionally | (RSDK-410)
-|Renamed TLS tab in the connector configuration to Security tab |(RSDK-238)
+|Issue|ID
+|Evaluation licenses are now correctly generated. | (RSDK-218)
+|Trigger parameters marked as optional are now generated optionally. | (RSDK-410)
+|The TLS tab is now renamed to the Security tab in the connector configuration. | (RSDK-238)
 |===
 
 == 0.2.0
 
 *April 28, 2021*
 
-=== What’s New
+=== What's New
 
-* Hiding operations for Composer (RSDK-344)
-* Changing operation names for Composer (RSDK-348)
-* Sample data transformations (RSDK-286)
-* Response validation (RSDK-111)
-* Naming algorithm improvements (RSDK-254)
-* Hypermedia Pagination (RSDK-26)
-* Custom properties for OAuth Dance (RSDK-371)
-* Auto-detecting API spec formats (RSDK-54)
+* Added support to hide operations. (RSDK-344)
+* Added support to change operation names. (RSDK-348)
+* Added support for sample data transformations. (RSDK-286)
+* Added support for response validation. (RSDK-111)
+* Added support for hypermedia pagination. (RSDK-26)
+* Added support for custom properties for the OAuth dance. (RSDK-371)
+* Added support to auto-detect API specification formats. (RSDK-54)
+* Added improvements to the naming algorithm. (RSDK-254)
 
 === Fixed Issues
 
 [%header%autowidth.spread]
 |===
-|Issue|Number
-|Pagination in triggers |(RSDK-85)
-|Pagination enhancement | (RSDK-272)
-|Token refresh in triggers |(RSDK-238)
-|Request body modifications | (RSDK-181)
+|Issue|ID
+|Triggers did not support watermarking. | (RSDK-85)
+|Pagination now stops if the page number is greater than the total number of pages. | (RSDK-272)
+|Token refresh did not work for triggers. | (RSDK-238)
+|The naming for the request body field can now be changed. | (RSDK-181)
 |===
 
 == 0.1.5
 
 *March 15, 2021*
 
-=== What’s New
+=== What's New
 
-* OAS 3 support (RSDK-41)
-* Maven distribution framework (RSDK-152)
-* Validation error improvements (RSDK-16)
-* Short term testing framework (RSDK-123)
+* Added support for OAS 3. (RSDK-41)
+* Added support to use the Maven distribution framework. (RSDK-152)
+* Added validation error improvements. (RSDK-16)
+* Added a testing framework to test generated connectors. (RSDK-123)
 
 === Fixed Issues
 
 [%header%autowidth.spread]
 |===
-|Issue|Number
-|Redefining trigger metadata | (RSDK-91)
-|Use of multiple REST SDK connectors in the same app | (RSDK-232)
-|Value providers for error responses | (RSDK-228)
+|Issue|ID
+|Trigger metadata can now be redefined. | (RSDK-91)
+|Multiple REST SDK connectors can now be used in the same app. | (RSDK-232)
+|Value providers returned incorrect error responses. | (RSDK-228)
 |===
 
 == 0.1.4
 
 *February 11, 2021*
 
-=== What’s New
+=== What's New
 
-* New resolver framework and re-implementation of Value Providers (RSDK-154, RSDK-156, RSDK-160, RSDK-243, RSDK-247)
-* Feedback for output directory (RSDK-265)
+* Added support for a new resolver framework and re-implementation of value providers. (RSDK-154, RSDK-156, RSDK-160, RSDK-243, RSDK-247)
+* Provided more feedback about the output directory to the user. (RSDK-265)
 
 === Fixed Issues
 
 [%header%autowidth.spread]
 |===
-|Issue|Number
-|Generated connectors were not discoverable on Exchange when released | (RSDK-269)
-|Connector generation failure for wildcard media types | (RSDK-264)
-|Invalid yaml file for wildcard media types| (RSDK-271)
+|Issue|ID
+|Generated connectors were not discoverable on Anypoint Exchange when released. | (RSDK-269)
+|Connector generation failed for wildcard media types. | (RSDK-264)
+|There was an invalid yaml file error for wildcard media types. | (RSDK-271)
 |===
 
 == 0.1.3
 
 *January 28, 2021*
 
-=== What’s New
+=== What's New
 
-* Added test cases, test types, and quality control measures for future releases
-* Resources from AML module are shared in a standard way
+* Added test cases, test types, and quality control measures for future releases.
+* Resources from AML module are now shared in a standard way.
 
 === Fixed Issues
 
 [%header%autowidth.spread]
 |===
-|Issue|Number
-|Failed deployment for applications with more than one REST SDK Connector | (RSDK-232)
-|NullPointerException for value resolving | (RSDK-231)
+|Issue|ID
+|Deployment failed for applications with more than one REST SDK connector. | (RSDK-232)
+|A NullPointerException was returned for value resolving. | (RSDK-231)
 |===
 
 == 0.1.2
 
 *January 7, 2021*
 
-=== What’s New
+=== What's New
 
-* Released REST SDK as a Maven plugin for integration into development cycles (RSDK-152)
-* Validation errors are traced to the source and are shown in error report when the build fails (RSDK-16)
+* Released REST SDK as a Maven plugin for integration into development cycles. (RSDK-152)
+* Validation errors are traced to the source and are shown in the error report when the build fails. (RSDK-16)
 
 === Fixed Issues
 
 [%header%autowidth.spread]
 |===
-|Issue|Number
-|Packaging the CLI Jar caused a NPE error| (RSDK-137)
-|Paths to API specs and descriptors caused a NPE error | (RSDK-139)
-|Duplicate variable names| (RSDK-170)
-|Sample data generated incorrectly| (RSDK-173)
-|Generating boolean parameters for triggers caused an error| (RSDK-79)
-|Incorrect metadata generation for paged operations| (RSDK-17)
-|Generating a paginated operation did not hide or rename the pagination parameter| (RSDK-211)
+|Issue|ID
+|Packaging the CLI jar caused an NPE error. | (RSDK-137)
+|Paths to API specifications and descriptors caused an NPE error. | (RSDK-139)
+|Duplicate variable names were generated in classes. | (RSDK-170)
+|Sample data was generated incorrectly. | (RSDK-173)
+|Generating boolean parameters for triggers caused an error. | (RSDK-79)
+|There was incorrect metadata generation for paged operations. | (RSDK-17)
+|Generating a paginated operation did not hide or rename the pagination parameter. | (RSDK-211)
 |===

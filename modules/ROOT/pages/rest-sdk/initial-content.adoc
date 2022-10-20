@@ -1,11 +1,13 @@
-= Customize the Connector's Content
+= Customize the Connector's Initial Content
 ifndef::env-site,env-github[]
 include::../_attributes.adoc[]
 endif::[]
 
+Configure and customize the initial content of the connector descriptor of the connector.
+
 == Set a Display Name for the Connector
 
-To set a name for the connector, you must set the `connectorName`
+To set a name for the connector, use the `connectorName`
 property, which is located at the root of the connector descriptor.
 
 [source,yaml]
@@ -26,13 +28,14 @@ baseUri:
  type: parameter
 ----
 
-The name you set for the connector appears in the Mule Palette in Anypoint Studio and when you xref:exchange::to-publish-assets-maven.adoc[publish the connector to Anypoint Exchange].
+The name you set for the connector appears in the Mule Palette in Anypoint
+Studio and when you xref:exchange::to-publish-assets-maven.adoc[publish the connector to Anypoint Exchange].
 
 image::shop-studio-list.png[]
 
 == Set a Description for the Connector
 
-To set a description for the connector, you must set the
+To set a description for the connector, use the
 `connectorDescription` property, which is located at the root of the
 connector descriptor.
 
@@ -56,15 +59,16 @@ baseUri:
  type: parameter
 ----
 
-This description appears in the Connector POM file’s `<description>`
-property.
+The description you set for the connector appears in the `<description>`
+property of the connector POM file.
 
-== Set the Connector’s GAV
+== Define a Maven GAV for the Connector
 
-You can define a Maven GAV for the connector using the `connectorGav`
-property, which is located at the root of the connector descriptor. You
-must select a `groupId`, `artifactId`, and `version` which appear in the
-generated connector POM and identify it as a Maven asset.
+To define a Maven GAV for the connector, use the `connectorGav`
+property, which is located at the root of the connector descriptor.
+
+Select a `groupId`, `artifactId`, and `version`, which appears in the
+connector POM file, and identify it as a Maven asset.
 
 [source,yaml]
 ----
@@ -87,11 +91,14 @@ baseUri:
 
 == Select a Category for the Connector
 
-You can select a category for the connector using the
+To select a category for the connector, use the
 `connectorCategory` property, which is located at the root of the
 connector descriptor.
 
-The possible values for this property are `select`, `premium`, `community` and `certified`.
+The `connectorCategory` property indicates who is able to use this connector. The
+possible values for the `connectorCategory` property are `select`, `premium`,
+`community`, and `certified`. If the category is `select` or `premium`, the
+respective license is added.
 
 [source,yaml]
 ----
@@ -113,16 +120,13 @@ baseUri:
  type: parameter
 ----
 
-This property indicates who is able to use this connector.
+== Set a Namespace for the Connector
 
-If the category is `select` or `premium` their respective license will be added.
-
-== Set the Connector’s Namespace
+To set a namespace for the connector, use the `extensionXml` property,
+which is located at the root of the connector descriptor.
 
 You can select the XML prefix for the connector using the `extensionXml`
-property, which is located at the root of the connector descriptor.
-
-The value for the `extensionXml` property must be assigned to a valid
+property. The value set for the `extensionXml` property must be assigned to a valid
 XML namespace.
 
 [source,yaml]
@@ -145,11 +149,11 @@ baseUri:
  type: parameter
 ----
 
-The value set for the `extensionXml` property defines how the XML for
-using this connector in the Mule runtime has to look.
+The value set for the `extensionXml` property defines how the XML looks when
+using the connector in Mule runtime engine.
 
-The following example shows use of a connector’s operation whose prefix
-is `shop`:
+The following example shows the use of a connector's prefix, `shop`, in an
+operation:
 
 [source,xml]
 ----
@@ -162,14 +166,14 @@ is `shop`:
 			initialOffset="#[attributes.uriParams['start']]"/>
 ----
 
-== Select a Base Java Package
+== Select a Base Java Package for the Connector
 
-The generated connector is Java based, and you can use this property to
+To select a base Java package for the connector, use the `baseJavaPackage`
+property, which is located at the root of the connector descriptor.
+
+The generated connector is Java based, and you can use the `baseJavaPackage` property to
 select the base package over which the rest of the project structure is
 built.
-
-You can set the base Java package by using the `baseJavaPackage`, which
-is located at the root of the connector descriptor.
 
 [source,yaml]
 ----
@@ -195,10 +199,30 @@ The base Java package is used as the root package:
 
 image::base-java-package.png[]
 
-== Select a Base URI
+== Select a Base URI for the Connector
+
+To select a base URI for the connector, use the `baseUri`
+property, which is located at the root of the connector descriptor.
 
 You can select the XML prefix for the connector using the `baseUri`
-property, which is located at the root of the connector descriptor.
+property.
+
+There are three types of base URIs:
+
+* <<parameter, Parameter Base URI>>
+* <<fixed, Fixed Base URI>>
+* <<multiple, Multiple Base URI>>
+
+[[parameter]]
+=== Parameter Base URI
+
+The parameter base URI enables the developer to set a value by default,
+and then also enables the user to change the value.
+
+Use the parameter base URI when the user can host the API, or when there are
+different environments that the user accesses while using the connector.
+
+The parameter base URI is used as the base URI for all operations.
 
 [source,yaml]
 ----
@@ -219,34 +243,23 @@ baseUri:
  type: parameter
 ----
 
-There are 3 types of base URIs:
-
-* Parameter
-* Fixed
-* Multiple
-
-=== Parameter URI
-
-The parameter base URI allows the developer to set a value by default,
-and then the final user can change it. This is for cases where the API
-can be hosted by the user, or there are different environments that the
-final users want to access using this connector.
-
-This base URI is used as the base URI for all operations.
-
-The generated connector configuration appears as follows
+The following image shows how the generated connector configuration appears:
 
 image::shop-studio-config.png[]
 
-The user gets the default value preloaded, and they can edit it.
+The user sees the default value preloaded, but the user can also edit the value.
 
-=== Fixed URI
+[[fixed]]
+=== Fixed Base URI
 
-Fixed base URIs are similar to parameter URIs, although the user cannot
-edit fixed URIs As such, all the operations in the generated connector
-always access the same server. You can use fixed URIs when there is a
-centralized server that has a fixed location, such as a connector for
-GitHub.
+The fixed base URI is similar to the parameter base URI, however the user cannot
+change the value of a fixed base URI.
+
+Use the fixed base URI when there is a centralized server that has a fixed
+location, such as a connector for GitHub.
+
+The fixed base URI is used as the base URI for all operations to always
+access the same server.
 
 [source,yaml]
 ----
@@ -267,13 +280,16 @@ baseUri:
 In this case, the `baseUri` field does not appear in the connector
 configuration and the user cannot change it.
 
-=== Multiple URI
+[[multiple]]
+=== Multiple Base URI
 
-Multiple base URIs work as a set of predefined fixed base URIs.
+The multiple base URI works as a set of predefined fixed base URIs.
 
-This is useful in the case where your API has to hit APIs located in
-different places, such as an API that manages users, but also allows you
-to upload files to a different server.
+Use the multiple base URI when your API works with APIs located in different
+places, such as an API that manages users.
+
+The multiple base URI is used as the base URI for operations to
+access different servers.
 
 [source,yaml]
 ----
@@ -303,11 +319,13 @@ endpoints:
 ----
 
 In this case, all operations defined under `/api/users` access the
-https://users.com/api/users[https://users.com/api/users] endpoint, and
-the ones defined under `/api/upload` access
-https://users.com/api/upload[https://upload.users.com/api/upload].
+\https://users.com/api/users endpoint, and
+all operations defined under `/api/upload` access the
+\https://users.com/api/upload endpoint.
 
-=== TLS Support
+== Define TLS Support for the Connector
 
-TLS support is automatically generated and does not need to be specified in the connector descriptor.
-The only requirement for TLS support to be generated in the connector Configuration is that the API spec must declare support for the HTTPS protocol.
+TLS support is automatically generated and does not need to be specified in the
+connector descriptor. For TLS support to be generated in the connector
+configuration, the API specification must declare support for the
+HTTPS protocol.

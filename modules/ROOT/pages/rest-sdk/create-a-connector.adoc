@@ -1,0 +1,89 @@
+= Create a Connector
+ifndef::env-site,env-github[]
+include::../_attributes.adoc[]
+endif::[]
+
+After scaffolding and modifying the connector descriptor, use a MOJO to create a connector
+from an API specification and a connector descriptor.
+
+== Create the Connector
+
+To create the connector, run the `createConnector` MOJO:
+
+----
+mvn com.mulesoft.connectivity:rest-sdk-mojo:<PLUGIN_VERSION>:createConnector -DapiSpec=<PATH_TO_SPEC>/api.raml -Ddescriptor=<PATH_TO_DESCRIPTOR>/descriptor.yaml
+----
+
+The variables in the syntax represent the following:
+
+* `<PLUGIN_VERSION>` is the version of the REST SDK plugin you want to
+use. If you omit this parameter, the latest version is used.
+* `<PATH_TO_SPEC>` is the path to the location of your API specification.
+* `<PATH_TO_DESCRIPTOR>` is the path to the location of your connector descriptor.
+
+In the example MOJO command above, the *apiSpec* parameter and the *descriptor* parameter are added using
+the `-D` prefix since they are required parameters. You can also add additional parameters to the `createConnector` MOJO using
+the `-D` prefix:
+
+----
+mvn com.mulesoft.connectivity:rest-sdk-mojo:<PLUGIN_VERSION>:createConnector -DapiSpec=<PATH_TO_SPEC>/api.raml -Ddescriptor=<PATH_TO_DESCRIPTOR>/descriptor.yaml -DspecFormat=RAML -DoutputDir=./output/dir/ -DskipValidation=FALSE -DdynamicMetadata=FALSE
+----
+
+The `createConnector` MOJO uses the following parameters:
+
+[cols=",,,",options="header",]
+|===
+|*Parameter* |*Required* |*Description* |*Default Value*
+|apiSpec |Yes
+|Relative path to the API specification for which to
+create a connector. |-
+
+|descriptor |Yes
+|Relative paths to the connector descriptors used to customize the connector. Can be a single relative path to a connector descriptor or a comma-separated list of relative paths to connector descriptors.|-
+
+|specFormat a| No |
+
+Format of the API specification.
+
+{sp} +
+
+Allowed values are `RAML`, `JsonOAS`, `YamlOAS`, `JsonOAS3`, and `YamlOAS3`.
+
+{sp} +
+
+For API specification formats that are not supported, use https://www.apimatic.io/transformer/[API Transformer] by APIMatic to transform the format into `RAML` or `OAS` to use the tooling provided by REST SDK.
+|If not specified, REST SDK autodetects the format based on the file extension and content.
+
+|outputDir a| No |
+
+Path in which the connector is located.
+
+{sp} +
+
+The generated file is named `output.yaml` and is located in the specified
+folder.
+|Current directory
+
+
+|skipValidation |No |Enables you to skip the validation step for an API
+specification. Selecting `TRUE` might result in an invalid API specification or
+issues generating the connector descriptor.
+
+|`FALSE`
+
+
+|dynamicMetadata
+|No
+|Creates backward-compatible dynamic metadata for operations.
+|`FALSE`
+
+|===
+
+== What's Next
+
+After you've created your base connector from an API specification and a connector descriptor,
+you can optionally create an instance of your connector descriptor and
+xref:rest-sdk/create-a-customization-layer.adoc[add a customization layer], which develops
+another layer of functionality for your connector. Otherwise, you can
+xref:rest-sdk/customize-your-connector.adoc[customize your connector] to start
+modifying your connector.
