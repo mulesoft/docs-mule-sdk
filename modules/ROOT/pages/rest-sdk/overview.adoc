@@ -38,7 +38,7 @@ REST SDK currently supports the following features:
 * Support for reconnection
 * HTTP proxy support
 * Automatic error handling
-** GET operations will return a Null response instead of a NOT_FOUND error
+** GET operations return a null response instead of a `NOT_FOUND` error
 * Support for multiple base URLs
 * Provision of the ability to modify or extend the generated connector using Java SDK in the following ways:
 ** Add additional security schemes
