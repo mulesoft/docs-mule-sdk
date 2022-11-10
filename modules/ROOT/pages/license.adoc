@@ -54,7 +54,7 @@ Before submitting the developed connector to MuleSoft for certification, the pro
 +
 . Request the key and keystore from MuleSoft:
 .. The public `.key` is the file that you store in the connector.
-.. The `.jks` master keystore is for you as the partner to generate licenses with.
+.. The `.jks` keystore is for you as the partner to generate licenses with.
 
 == Adjusting the Connector Code and Storing the Public Key
 
