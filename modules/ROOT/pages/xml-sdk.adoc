@@ -365,6 +365,9 @@ Note that incorrect credentials return this error response from GitHub:
 | Documentation for the `<property>`.
 |===
 
+[NOTE]
+Extensions made with the XML SDK do not support implicit configurations. This means that even though all properties defined in the extension are optional, a configuration must be given to all operations. You may create a configuration without specifying the values of its parameters in order to use all the default values.
+
 === Module
 
 The `<module>` element is the root of an XML SDK module. It contains all properties and operations that belong to the module.
