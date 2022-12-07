@@ -366,7 +366,7 @@ Note that incorrect credentials return this error response from GitHub:
 |===
 
 [NOTE]
-Extensions made with the XML SDK do not support implicit configurations. This means that even though all properties defined in the extension are optional, a configuration must be given to all operations. You may create a configuration without specifying the values of its parameters in order to use all the default values.
+Extensions made with XML SDK do not support implicit configurations, which means even though all properties defined in the extension are optional, all operations must have a configuration. You can create a configuration without specifying the values of its parameters so you can use the default values.
 
 === Module
 
