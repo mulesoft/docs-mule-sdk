@@ -75,6 +75,7 @@ This is difficult because connectors *must* differentiate between the following 
 * The access token is valid, but lacks privileges to perform a given action
 * The access token has been remotely revoked
 
+[[always-query-the-state-object-on-each-request]]
 === Always Query the State Object on Each Request
 
 The AuthorizationCodeState and ClientCredentialsState objects are the means through which connectors gain access to the access tokens that Mule manages. Most precisely, this happens through the getAccessToken() method that both classes share.
