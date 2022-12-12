@@ -61,7 +61,7 @@ public class SalesforceOAuthConnectionProvider<C> implements ConnectionProvider<
       throw new SalesforceException(MessageFormat.format(COULD_NOT_EXTRACT_FIELD, "instanceId"));
     }
 
-    return new SalesforceClient(state.getAccessToken(), instanceId, apiVersion);
+    return new SalesforceClient(state, instanceId, apiVersion); // <1>
   }
 
   public void disconnect(SalesforceClient connection) {
@@ -74,6 +74,8 @@ public class SalesforceOAuthConnectionProvider<C> implements ConnectionProvider<
   }
 }
 ----
+
+<1> Notice that the connection is receiving the state and not the access token. Access tokens can be refreshed or unauthorized at any time leaving the connection useless, it is important to always query the state object any time the access token is needed. <<define-configurations-and-connection-providers#_always_query_the_state_object_on_each_request, Check for more info>>
 
 The class implements `ConnectionProvider`, just like other connections in the SDK.  Operations that are authenticated through the object operate over the `SalesforceClient` object that the provider returns. This is an important design consideration because it permits you to decouple of the operation from the authentication method that is used because the connector could define another `ConnectionProvider` that uses plain old, basic authentication, and all the operations would remain fully compatible.
 
