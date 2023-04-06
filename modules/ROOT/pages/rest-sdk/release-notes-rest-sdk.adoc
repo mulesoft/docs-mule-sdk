@@ -421,6 +421,18 @@ endif::[]
 |Value providers returned incorrect error responses. | (RSDK-228)
 |===
 
+== 0.1.4-HF1
+
+*March 22, 2023*
+
+=== Fixed Issues
+
+[%header%autowidth.spread]
+|===
+|Issue|ID
+|Passing a JSON payload as a CSV file now works as expected in the *Create Multipart* operation in Google Drive Connector.| (W-12717050)
+|===
+
 == 0.1.4
 
 *February 11, 2021*
