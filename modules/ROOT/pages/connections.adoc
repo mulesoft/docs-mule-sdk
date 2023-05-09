@@ -124,7 +124,19 @@ The connections are pooled. A cache of connections is maintained so that they ca
 
 This is useful when connections are expensive to create or when concurrent access to a connection instance is not supported.
 
-For this pooling strategy, a pooling profile configuration is automatically added to the connection.
+For this pooling strategy, a pooling profile configuration is automatically added to the connection. The following table shows the default values for the pooling profile of type *Use default connection pool configuration*:
+
+[%header%autowidth.spread]
+|===
+|*Name* |*Default Value*
+|*Max Active* |`5`
+|*Max Idle* |`5`
+|*Max Wait* |`5`
+|*Exhausted Action* |`GROW`
+|*Initialisation Policy* |`INITIALIZE_ONE`
+|*Min Eviction Millis* |`1800000`
+|*Eviction Check Interval Millis* |`-1`
+|===
 
 You can enable pooling connection management by implementing the `PoolingConnectionProvider` interface.
 
