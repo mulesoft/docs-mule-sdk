@@ -197,7 +197,7 @@ cannot find symbol
 [ERROR]   location: variable streamingHelper of type org.mule.runtime.extension.api.runtime.streaming.StreamingHelper
 ----
 
-The `org.mule.sdk.api` package is an *Experimental* feature still under active development. It shouldn't be used unless explicitly instructed by a non-experimental feature documentation page. Being experimental, Mulesoft does not guarantee support or backwards compatibility on any class defined in said package.
+The `org.mule.sdk.api` package is an experimental feature still under active development. Do not use this package unless it is explicitly instructed by a non-experimental feature documentation page. Since this package is experimental, MuleSoft does not guarantee support or backward compatibility on any class defined in the package.
 
 You should also consider that the classes and interfaces in said artifact are not necessarily recognized by all Mule versions. More precisely, none of the `org.mule.sdk.api` classes will be recognized on Mule versions prior to 4.4, and even so, not all of its components are supported in 4.4+.
 
