@@ -199,6 +199,6 @@ cannot find symbol
 
 The `org.mule.sdk.api` package is an experimental feature still under active development. Do not use this package unless it is explicitly instructed by a non-experimental feature documentation page. Since this package is experimental, MuleSoft does not guarantee support or backward compatibility on any class defined in the package.
 
-You should also consider that the classes and interfaces in said artifact are not necessarily recognized by all Mule versions. More precisely, none of the `org.mule.sdk.api` classes will be recognized on Mule versions prior to 4.4, and even so, not all of its components are supported in 4.4+.
+You should also consider that the classes and interfaces in the `org.mule.sdk.api` package are not necessarily recognized by all Mule versions. More precisely, none of the `org.mule.sdk.api` classes are recognized by Mule versions earlier than 4.4, and not all of its components are supported in Mule 4.4 and later.
 
 To fix this error, avoid using the `org.mule.sdk.api` package and use an equivalent class or annotation from the `org.mule.runtime.extension.api` package instead.
