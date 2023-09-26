@@ -114,7 +114,7 @@ By installing this connector, you consent to MuleSoft sharing your contact infor
 Your license terms
 ----
 +
-You can develop or add operations to your connector by following the <<index, Mule SDK documentation>>.
+You can develop or add operations to your connector by following the xref:index.adoc[Mule SDK documentation].
 +
 After you complete the preceding steps, the structure of your connector is ready for Mule 4.
 +
