@@ -205,7 +205,7 @@ Before publishing your module, test it in Anypoint Studio and Anypoint Design Ce
 You *must* check for the following:
 
 * DataSense is correctly resolved for all input parameters and output values.
-* Each component's parameter <<layout>> is correct.
+* Each component's parameter xref:parameter-layout.adoc[layout] is correct.
 * No typos exist in labels and descriptions.
 * Users can easily build an application that uses the module’s main use cases.
 

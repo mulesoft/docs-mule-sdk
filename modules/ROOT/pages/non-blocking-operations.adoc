@@ -39,7 +39,7 @@ always need to be specified through void methods.
 <2> An operation becomes non-blocking when it has an argument of type `CompletionCallback`. This interface uses generics to
 specify the operation's return type. The first generic is the type of the output payload, and the second one the type of the
 output attributes. These generics are mandatory.
-<3> The return value is passed through the `success(Result)` method of the `CompletionCallback`. See <<_result, Result>> for more
+<3> The return value is passed through the `success(Result)` method of the `CompletionCallback`. See xref:result-object.adoc[Result] for more
 information on the `Result` object
 <4> Non-blocking operations should not throw exceptions. Any errors should be channeled through the `error()` method in the callback.
 

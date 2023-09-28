@@ -1515,7 +1515,7 @@ fun toUpper(persons: Array<Person>): Array<Person> =
     persons map toUpper($)
 ----
 
-The resource file *must* be placed inside a new folder named after the module's name (which was defined in the  <<module-exporting-resources], main module file>>).
+The resource file *must* be placed inside a new folder named after the module's name (which was defined in the  <<module-exporting-resources, main module file>>).
 In this example, the module is named `module-exporting-resources`, so the folder must be named `module_exporting_resources`. Note that hyphens are replaced with underscores.
 All files contained in this new folder or its subfolders are automatically exported by the XML SDK.
 
