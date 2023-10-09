@@ -1,0 +1,95 @@
+= Operating the MUnit Extensions Maven Plugin
+ifndef::env-site,env-github[]
+include::_attributes.adoc[]
+endif::[]
+
+This section shows you how to run your tests using the plugin.
+
+== Running MUnit Tests for a Module Project
+
+[source,console]
+----
+mvn clean verify
+----
+
+== Running a Specific MUnit Test Suite
+
+You can instruct MUnit Maven Plugin to only run tests that belong to a specific test suite by using the property `munit.test`.
+
+[source,console]
+----
+mvn clean verify -Dmunit.test=<regex-test-suite>
+----
+.The property `munit.test` accepts regular expressions. The expression is applied to the name of the MUnit Test Suite file. The regular expression language is the Java implementation. This path is relative to `src/test/munit`.
+
+The following is a valid example:
+[source,console]
+----
+mvn clean verify -Dmunit.test=.*my-test.*
+----
+
+You can leverage this feature by adding naming conventions to your MUnit Test suites.
+
+== To Run Specific MUnit Tests
+
+In the same way that you instruct MUnit to run one test suite, you can also tell it to run a specific test inside that test suite. To do so, we again make use of the property `munit.test`, with one addition:
+
+[source,console]
+----
+mvn clean verify -Dmunit.test=<regex-test-suite>#<regex-test-name>
+----
+
+The addition is the special character `#`. To the right of it, you should type the test name. It also accepts regular expressions. The expression is applied to the attribute `name` of the MUnit Test.
+
+The following is a valid example:
+[source,console]
+----
+mvn clean verify -Dmunit.test=.*my-test.*#.*test-scenario-1.*
+----
+
+[TIP]
+--
+The tests inside the MUnit Test Suite that don't match the regular expression is flagged as *ignored*.
+--
+
+== To Run Tests Using a Specific Tag
+
+You can choose to run only the tests that you grouped under one specific tag.
+
+[source,console]
+----
+mvn clean verify -Dmunit.tags=<munit-tag>
+----
+
+== To Skip All Tests
+
+When building your module, you may want to prevent a test from running. MUnit leverages the same mechanism as Maven, so if you wish to skip tests, you can make use of the parameter `skipTests`.
+
+.Skipping Tests example
+[source,console]
+----
+mvn clean verify -DskipTests
+----
+
+== To Debug Tests
+
+When testing your module, you may want to debug your code. MUnit leverages Java remote debugging, so if you wish to debug your tests you can make user of the parameter `munit.debug`.
+
+.Debugging Code example
+[source,console]
+----
+mvn clean verify -Dmunit.debug
+----
+
+[TIP]
+--
+The default debugger will listen on port 5005. You can override the debugger JVM argument line by specifying it as the value of the property.
+
+_mvn clean verify -Dmunit.debug="-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=8002"_
+--
+
+
+== See Also
+
+* xref:2.2@munit::faq-how-to-read-munit-test-results.adoc[FAQ: How To Read MUnit Test Results]
+* xref:munit-extensions-maven-plugin-configuration.adoc[MUnit Extensions Maven Plugin Configuration]

@@ -1,0 +1,24 @@
+= Testing Your Module
+ifndef::env-site,env-github[]
+include::_attributes.adoc[]
+endif::[]
+
+Testing ensures that a piece of code works correctly. To properly test your module, you need to ensure two types of unit testing: one that tests your module's internal business logic, and another one that tests the interaction between your module and the runtime to ensure compatibility with the Mule ecosystem.
+
+The Module Testing Framework (Beta) leverages MUnit to provide this Mule ecosystem.
+
+Test cases that test internal business logic run during the `test` phase of your module's lifecycle. MUnit tests goal is to test the interaction of your module with the Mule environment. These tests run during the `integration-test` phase of your module's lifecycle.
+
+Below are a series of articles that explain in detail how to test your module. These articles provide a step-by-step introduction on how to test a module and explain the basics of the Module Testing Framework (Beta)
+and how to execute a simple operation from a Module:
+
+* xref:testing-writing-your-first-munit-test.adoc[Writing your first MUnit test]
+* xref:mtf-testing-examples.adoc[SDK Testing Examples]
+* xref:munit-extensions-maven-plugin.adoc[Operating the MUnit Extensions Maven Plugin]
+* xref:munit-extensions-maven-plugin-configuration.adoc[MUnit Extensions Maven Plugin Configuration]
+* xref:metadata-testing.adoc[Metadata Testing]
+* xref:connectivity-testing.adoc[Connectivity Testing]
+
+== See Also
+
+* xref:2.2@munit::index.adoc[MUnit]

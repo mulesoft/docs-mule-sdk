@@ -1,0 +1,78 @@
+= Expecting Errors
+ifndef::env-site,env-github[]
+include::_attributes.adoc[]
+endif::[]
+
+Apart from validating the successful execution of your module's operations, you also must validate the errors that your module throws and the descriptions they generate.
+
+== Prerequesites
+
+* You are familiar with how to define the errors that your module throws. +
+See xref:errors.adoc[Errors Definition] for more information.
+
+== Example
+
+Consider a module that defines errors as follows:
+
+.Error Type Definition
+[source,java,linenums]
+----
+public enum SimpleError implements ErrorTypeDefinition<SimpleError> {
+  INVALID_PARAMETER, TIME_OUT, NOT_ALLOWED
+}
+----
+
+.Error Type Provider
+[source,java,linenums]
+----
+public class ExecuteErrorsProvider implements ErrorTypeProvider {
+    @Override
+    public Set<ErrorTypeDefinition> getErrorTypes() {
+        HashSet<ErrorTypeDefinition> errors = new HashSet<>();
+        errors.add(SimpleError.INVALID_PARAMETER);
+        errors.add(SimpleError.TIME_OUT);
+        return errors;
+    }
+}
+----
+
+.Operation That Throws Error
+[source,java,linenums]
+----
+@Throws(ExecuteErrorsProvider.class)
+public void execute(Integer number) {
+    if (number <= 0) {
+        throw new ModuleException("Parameter 'number' should be greater than 0", SimpleError.INVALID_PARAMETER);
+    }
+}
+----
+
+You can create tests to validate the expected error type and error description.
+
+== Validating an Expected Error Type
+
+You can validate that the error thrown by the module in the example has the proper error type as follows:
+
+.Expect Error Type
+[source, xml, linenums]
+----
+<munit:test name="testErrorType" expectedErrorType="TEST-CONNECTOR:INVALID_PARAMETER">
+    <munit:execution>
+        <test-connector:execute number="0"/>
+    </munit:execution>
+</munit:test>
+----
+
+== Validating an Expected Error Description
+
+You can validate that the error thrown by the module in the example has the proper error description as follows:
+
+.Expect error description
+[source, xml, linenums]
+----
+<munit:test name="testErrorDescription" expectedErrorDescription="Parameter 'number' should be greater than 0">
+    <munit:execution>
+        <test-connector:execute number="0"/>
+    </munit:execution>
+</munit:test>
+----

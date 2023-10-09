@@ -1,0 +1,138 @@
+= Metadata Testing Examples
+ifndef::env-site,env-github[]
+include::_attributes.adoc[]
+endif::[]
+
+The following examples provide a basic structure for testing the metadata defined for your module.
+
+== Prerequesites
+
+* You are familiar with how to define metadata in your module. +
+See xref:metadata.adoc[Adding DataSense Support] and xref:metadata-testing.adoc[Metadata Testing] for more information.
+
+== Example
+
+Implementations provided in the following example use fixed values to simplify the code. You must obtain metadata through external services.
+
+Your module can define the following metadata:
+
+.Operation with Metadata
+[source, java, linenums]
+----
+@OutputResolver(output = ExampleOutputResolver.class)
+public Object withMetadata(@MetadataKeyId(ExampleKeysResolver.class) String param) {
+    return null;
+}
+----
+
+.TypeKeysResolver
+[source, java, linenums]
+----
+public class ExampleKeysResolver implements TypeKeysResolver {
+
+  @Override
+  public Set<MetadataKey> getKeys(MetadataContext metadataContext) {
+    Set<MetadataKey> metadataKeys = new HashSet<>();
+    metadataKeys.add(newKey("firstKey").withDisplayName("First Key").build());
+    metadataKeys.add(newKey("secondKey").withDisplayName("Second Key").build());
+    return metadataKeys;
+  }
+
+  @Override
+  public String getCategoryName() {
+    return "ExampleCategory";
+  }
+
+}
+----
+
+.OutputResolver
+[source, java, linenums]
+----
+public class ExampleOutputResolver implements OutputTypeResolver<String> {
+
+  @Override
+  public String getResolverName() {
+    return "exampleResolver";
+  }
+
+  @Override
+  public MetadataType getOutputType(MetadataContext context, String param) throws MetadataResolvingException {
+    if (param == null || param.isEmpty()) {
+      throw new MetadataResolvingException("No metadata available for an empty param", FailureCode.INVALID_METADATA_KEY);
+    }
+    ObjectTypeBuilder objectType = context.getTypeBuilder().objectType();
+    objectType.addField().key("name").value().stringType();
+    objectType.addField().key("age").value().numberType();
+    return objectType.build();
+  }
+
+  @Override
+  public String getCategoryName() {
+    return "ExampleCategory";
+  }
+}
+----
+
+== Validating Metadata Keys
+
+The following example validates that the keys have the proper `Display` names:
+
+.Tooling test to validate metadata keys
+[source, xml, linenums]
+----
+<mtf:tooling-test name="keysTest">
+    <mtf:get-metadata-keys>
+        <test-connector:with-metadata />
+    </mtf:get-metadata-keys>
+    <mtf:validation>
+        <munit-tools:assert-equals actual="#[payload.firstKey.displayName]" expected="#['First Key']"/>
+        <munit-tools:assert-equals actual="#[payload.secondKey.displayName]" expected="#['Second Key']"/>
+    </mtf:validation>
+</mtf:tooling-test>
+----
+
+== Validating a Metadata Type
+
+The following test validates the `Metadata Type` value returned by the operation:
+
+.Tooling Test to Validate the Output Metadata Type of an Operation
+[source, xml, linenums]
+----
+<mtf:tooling-test name="outputMetadataTest">
+    <mtf:get-output-metadata>
+        <test-connector:with-metadata param="aValue"/>
+    </mtf:get-output-metadata>
+    <mtf:validation>
+        <munit-tools:assert-equals actual="#[payload.format]" expected="#['java']"/>
+        <munit-tools:assert-equals actual="#[payload.fields[0].key.name]" expected="#['name']"/>
+        <munit-tools:assert-equals actual="#[payload.fields[0].model.'type']" expected="#['String']"/>
+        <munit-tools:assert-equals actual="#[payload.fields[1].key.name]" expected="#['age']"/>
+        <munit-tools:assert-equals actual="#[payload.fields[1].model.'type']" expected="#['Number']"/>
+    </mtf:validation>
+</mtf:tooling-test>
+----
+
+== Validating an Expected Failure
+
+In the previous example, the module throws a `MetadataResolvingException` error when the parameter is null or empty.
+
+The following test validates that the proper failure code and message are thrown when the parameter is invalid:
+
+.Tooling test to validate metadata failures
+[source, xml, linenums]
+----
+<mtf:tooling-test name="failureTest"
+                  expectFailureMessage="No metadata available for an empty param"
+                  expectFailureCode="INVALID_METADATA_KEY">
+    <mtf:get-output-metadata>
+        <test-connector:with-metadata param=""/>
+    </mtf:get-output-metadata>
+</mtf:tooling-test>
+----
+
+
+
+
+
+
