@@ -125,9 +125,9 @@ To configure your module to run your MUnit tests, you must configure your `pom.x
 [[write-your-test]]
 == Write Your MUnit Test
 
-You test a module by executing its operations and making assertions about the result of these executions.
+To test your module, your MUnit test must execute of the module's operations and make assertions about the result of these executions.
 
-The MUnit Test XML must be placed inside the `src/test/munit` folder of the module project.
+The MUnit test XML must be placed inside the `src/test/munit` folder of the module project.
 
 [source,xml,linenums]
 ----
@@ -171,7 +171,7 @@ The MUnit Test XML must be placed inside the `src/test/munit` folder of the modu
 [[run-your-test]]
 == Run Your MUnit Test
 
-To run your test from the command line using Maven:
+Run your test from the command line using Maven:
 
 [source,bash,linenums]
 ----
