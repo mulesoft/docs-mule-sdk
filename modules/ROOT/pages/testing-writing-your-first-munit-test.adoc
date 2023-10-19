@@ -10,13 +10,13 @@ This section provides a step-by-step example for testing a module using MUnit. T
 To test your module, you must:
 
 . <<configure-your-module, Configure your module>>.
-. <<write-your-test, Write your test>>.
-. <<run-your-test, Run your test>>.
+. <<write-your-test, Write your MUnit test>>.
+. <<run-your-test, Run your MUnit test>>.
 
 [[configure-your-module]]
 == Configure Your Module
 
-To configure your module to run your MUnit test cases, you need to configure your `pom.xml` file.
+To configure your module to run your MUnit tests, you must configure your `pom.xml` file:
 
 . Add the following properties:
 +
@@ -123,8 +123,8 @@ To configure your module to run your MUnit test cases, you need to configure you
 ----
 
 [[write-your-test]]
-== Write Your Test
-//mention munit
+== Write Your MUnit Test
+
 You test a module by executing its operations and making assertions about the result of these executions.
 
 The MUnit Test XML must be placed inside the `src/test/munit` folder of the module project.
@@ -149,10 +149,10 @@ The MUnit Test XML must be placed inside the `src/test/munit` folder of the modu
 
     <munit:test name="sayHiTest">
         <munit:execution>
-            <basic:say-hi person="Mariano Gonzalez"/>
+            <basic:say-hi person="Your Name"/>
         </munit:execution>
         <munit:validation>
-            <munit-tools:assert-equals actual="#[payload]" expected="#['Hello Mariano Gonzalez!!!']"/>
+            <munit-tools:assert-equals actual="#[payload]" expected="#['Hello!']"/>
         </munit:validation>
     </munit:test>
 
@@ -169,7 +169,7 @@ The MUnit Test XML must be placed inside the `src/test/munit` folder of the modu
 ----
 
 [[run-your-test]]
-== Run Your Test
+== Run Your MUnit Test
 
 To run your test from the command line using Maven:
 

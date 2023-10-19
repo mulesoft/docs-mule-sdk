@@ -120,7 +120,7 @@ of the flow execution. This variable is required for obtaining the value of the 
     Object payloadValue = event.getMessage()
                                .getPayload()
                                .getValue();
-    assertThat(payloadValue, is("Hello Mariano Gonzales!!!"))
+    assertThat(payloadValue, is("Hello!"))
 ----
 
 === 4.3 Summary
@@ -136,7 +136,7 @@ public void executeSayHiOperation() throws Exception {
                                     .getMessage()
                                     .getPayload()
                                     .getValue());            //<2>
-  assertThat(payloadValue, is("Hello Mariano Gonzales!!!")); //<3>
+  assertThat(payloadValue, is("Hello!")); //<3>
 }
 ----
 <1> Executes the `sayHiFlow` flow.
