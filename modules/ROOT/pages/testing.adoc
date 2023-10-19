@@ -7,10 +7,6 @@ Test your module built with Mule SDK for Java or XML to ensure the interaction b
 
 You can test your module with Module Testing Framework (MTF). FlowRunner is deprecated. 
 
-* <<mtf.adoc, Module Testing Framework (MTF)>>
-* <<testing-writing-your-first-test-case#, FlowRunner (Deprecated)>> 
+* xref:mtf.adoc[Module Testing Framework (MTF)]
+* xref:testing-writing-your-first-test-case[FlowRunner (Deprecated)] 
 
-
-Here are a series of articles that explain in detail how to test your module. It provides a step-by-step introduction on how to test a module. It explains the basis of a Module Test Case and how to execute a simple operation from a Module.
-
-* <<testing-writing-your-first-test-case#, Writing your first test case>> (with xref:testing-writing-your-first-test-case.adoc#testing-flowrunner[FlowRunner])

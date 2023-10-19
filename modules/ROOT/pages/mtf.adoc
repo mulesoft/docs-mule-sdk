@@ -3,38 +3,18 @@ ifndef::env-site,env-github[]
 include::_attributes.adoc[]
 endif::[]
 
-Module Testing Framework (MTF) enables you to build tests for modules built with Mule SDK for Java or XML to ensure the interaction between modules and Mule runtime is compatible with the Mule ecosystem. MTF supports functional tests for your modules. These tests are run during the `integration-test` phase of your module's lifecycle. 
+Module Testing Framework (MTF) enables you to create tests for modules built with Mule SDK for Java or XML to ensure the interaction between modules and Mule runtime is compatible with the Mule ecosystem. MTF supports functional tests for your modules. These tests are run during the `integration-test` phase of your module's lifecycle. 
 
-MTF is a plugin that extends xref:munit::index.adoc[MUnit]. While MUnit tests applications, MTF leverages MUnit to specifically test modules. If you build custom modules, you must use MTF to 
+MTF is a plugin that extends MUnit. While MUnit tests applications, MTF leverages MUnit to specifically test modules. If you build custom modules, you must use MTF to create tests to ensure module functionality and compatibility. 
 
+== Before You Begin
 
+Before you begin using MTF, you must have:
 
- MTF is helpful because it allows you to run mule apps in a "lightweight" form and it not only provides a way to test connector's operations but also design operations
+* Familiarity with MUnit
+* Anypoint Studio 
 
-custom module, java 17
+== See Also 
 
-mtf performs functional tests, such as operations (non desgn and design), sources,
-
-
-
-Before You Begin
-- munit 
-
-
-Next Steps
-
-See Also 
-
-Below are a series of articles that explain in detail how to test your module. These articles provide a step-by-step introduction on how to test a module and explain the basics of the Module Testing Framework (Beta)
-and how to execute a simple operation from a Module:
-
-* xref:testing-writing-your-first-munit-test.adoc[Writing your first MUnit test]
-* xref:mtf-testing-examples.adoc[SDK Testing Examples]
-* xref:munit-extensions-maven-plugin.adoc[Operating the MUnit Extensions Maven Plugin]
-* xref:munit-extensions-maven-plugin-configuration.adoc[MUnit Extensions Maven Plugin Configuration]
-* xref:metadata-testing.adoc[Metadata Testing]
-* xref:connectivity-testing.adoc[Connectivity Testing]
-
-== See Also
-
-* xref:2.2@munit::index.adoc[MUnit]
+* xref:munit::index.adoc[MUnit]
+* xref:1.1@mule-sdk::index.adoc[Mule SDK]
