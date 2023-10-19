@@ -3,8 +3,13 @@ ifndef::env-site,env-github[]
 include::_attributes.adoc[]
 endif::[]
 
-Testing ensures that a piece of code works correctly. Testing a module is more than simply creating test cases for the business logic. A lot of testing of the interaction
-between the Module and Mule is required to ensure compatibility with the Mule ecosystem.
+Test your module built with Mule SDK for Java or XML to ensure the interaction between your module and Mule runtime is compatible with the Mule ecosystem.
+
+You can test your module with Module Testing Framework (MTF). FlowRunner is deprecated. 
+
+* <<mtf.adoc, Module Testing Framework (MTF)>>
+* <<testing-writing-your-first-test-case#, FlowRunner (Deprecated)>> 
+
 
 Here are a series of articles that explain in detail how to test your module. It provides a step-by-step introduction on how to test a module. It explains the basis of a Module Test Case and how to execute a simple operation from a Module.
 
