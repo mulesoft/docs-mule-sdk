@@ -1,18 +1,20 @@
-= Writing Your First MUnit Test (Beta)
+= Creating Your Test 
 ifndef::env-site,env-github[]
 include::_attributes.adoc[]
 endif::[]
 
-This section provides a step-by-step introduction to testing a module's operation using MUnit. It explains how to configure your module and how to create a simple MUnit test.
+To test your module, you must create MUnit tests because MTF is built on top of MUnit. 
 
-== Prerequisites
+This section provides a step-by-step example for testing a module using MUnit. This example is based on the module project generated with the Mule Extensions Archetype in xref:getting-started.adoc#generating-a-project-using-the-maven-archetype-directly[Creating Your First SDK Project].
 
-* This article assumes you are familiar with MUnit concepts. +
-To learn more about MUnit, see the xref:2.2@munit::index.adoc[MUnit] documentation.
-* MUnit test cases should be located in the `src/test/munit` folder of your module.
-* This example is based on the module project generated with the Mule Extension Archetype following the xref:getting-started.adoc#generating-a-project-using-the-maven-archetype-directly[Creating Your First SDK Project] instructions.
+To test your module, you must:
 
-== Configuring your Module
+. <<configure-your-module, Configure your module>>.
+. <<write-your-test, Write your test>>.
+. <<run-your-test, Run your test>>.
+
+[[configure-your-module]]
+== Configure Your Module
 
 To configure your module to run your MUnit test cases, you need to configure your `pom.xml` file.
 
@@ -120,8 +122,9 @@ To configure your module to run your MUnit test cases, you need to configure you
 </project>
 ----
 
-== Writing Your MUnit Test
-
+[[write-your-test]]
+== Write Your Test
+//mention munit
 You test a module by executing its operations and making assertions about the result of these executions.
 
 The MUnit Test XML must be placed inside the `src/test/munit` folder of the module project.
@@ -165,7 +168,8 @@ The MUnit Test XML must be placed inside the `src/test/munit` folder of the modu
 </mule>
 ----
 
-== Running your test
+[[run-your-test]]
+== Run Your Test
 
 To run your test from the command line using Maven:
 
