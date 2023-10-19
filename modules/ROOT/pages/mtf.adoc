@@ -5,7 +5,7 @@ endif::[]
 
 Module Testing Framework (MTF) tests your module built with Mule SDK for Java or XML to ensure the interaction between your module and Mule runtime is compatible with the Mule ecosystem. These tests run during the `integration-test` phase of your module's lifecycle.
 
-MTF is a plugin that extends xref:2.2@munit::index.adoc[MUnit]. While MUnit tests applications, MTF leverages MUnit to test modules. MTF enables you to run 
+MTF is a plugin that extends xref:2.3@munit::index.adoc[MUnit]. While MUnit tests applications, MTF leverages MUnit to test modules. MTF enables you to run 
 
  MTF is helpful because it allows you to run mule apps in a "lightweight" form and it not only provides a way to test connector's operations but also design operations
 
