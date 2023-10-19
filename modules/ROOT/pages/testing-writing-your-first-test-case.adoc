@@ -47,7 +47,7 @@ The Mule app XML must be placed inside the `src/test/resources` folder of the mo
     </basic:config>
 
     <flow name="sayHiFlow">
-        <basic:say-hi person="Mariano Gonzales"/>
+        <basic:say-hi person="Your Name"/>
     </flow>
 
     <flow name="retrieveInfoFlow">
