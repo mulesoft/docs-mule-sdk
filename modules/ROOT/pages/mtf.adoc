@@ -17,4 +17,4 @@ Before you begin using MTF, you must have:
 == See Also 
 
 * xref:munit::index.adoc[MUnit]
-* xref:1.1@mule-sdk::index.adoc[Mule SDK]
+* xref:studio::index.adoc[Anypoint Studio]
