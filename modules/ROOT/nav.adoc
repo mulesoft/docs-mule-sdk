@@ -85,7 +85,7 @@
 * xref:testing.adoc[Testing Your Module]
  ** xref:mtf.adoc[Module Testing Framework (MTF)]
   *** xref:testing-writing-your-first-munit-test.adoc[Creating Your Test]
-  *** xref:mtf-testing-examples.adoc[SDK Testing Examples]
+  *** xref:mtf-testing-examples.adoc[MTF Test Examples]
    **** xref:mtf-expecting-errors.adoc[Expecting Errors]
    **** xref:mtf-metadata-testing.adoc[Metadata Testing Examples]
    **** xref:mtf-parameterized-tests.adoc[Parameterized Test]

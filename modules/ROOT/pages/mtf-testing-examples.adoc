@@ -1,17 +1,17 @@
-= SDK Testing Examples
+= MTF Test Examples
 ifndef::env-site,env-github[]
 include::_attributes.adoc[]
 endif::[]
 
-This section links to examples that demonstrate common MUnit for SDK development usages, patterns and best practices.
+This section links to examples of tests that demonstrate common uses, patterns, and best practices for your modules.
 
 [%header%autowidth.spread,cols="a,a"]
 |===
 | Example | Description
-| xref:mtf-testing-sources.adoc[Testing Sources] | Different kind of sources require different kind of testing approaches
-| xref:mtf-expecting-errors.adoc[Error Expectation] | Validate that your module throws the proper errors
-| xref:mtf-metadata-testing.adoc[Metadata Testing] | Examples on how to test your Module's metadata
-| xref:mtf-parameterized-tests.adoc[Parameterized test] | Using parameterization to reuse your tests
-| xref:mtf-using-test-classes.adoc[Using Test classes] | How to use auxiliary classes for your tests
-| xref:testing-oauth-modules.adoc[Testing OAuth Enabled Connectors] | How to test connectors that use OAuth authentication
+| xref:mtf-testing-sources.adoc[Sources Tests] | Different kind of sources require different kind of testing approaches
+| xref:mtf-expecting-errors.adoc[Expected Errors Tests] | Validate that your module throws the proper errors.
+| xref:mtf-metadata-testing.adoc[Metadata Tests] | Test your module's metadata.
+| xref:mtf-parameterized-tests.adoc[Parameterized Tests] | Use parameterization to reuse your tests.
+| xref:mtf-using-test-classes.adoc[Class Tests] | Use auxiliary classes for your tests.
+| xref:testing-oauth-modules.adoc[OAuth Enabled Modules Tests] | Test modules that use OAuth authentication.
 |===
