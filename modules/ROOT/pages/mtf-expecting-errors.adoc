@@ -1,11 +1,11 @@
-= Expecting Errors
+= Expected Errors
 ifndef::env-site,env-github[]
 include::_attributes.adoc[]
 endif::[]
 
-Apart from validating the successful execution of your module's operations, you also must validate the errors that your module throws and the descriptions they generate.
+You must validate the error types and error descriptions that your module throws.
 
-== Prerequesites
+== Prerequisites
 
 * You are familiar with how to define the errors that your module throws. +
 See xref:errors.adoc[Errors Definition] for more information.
