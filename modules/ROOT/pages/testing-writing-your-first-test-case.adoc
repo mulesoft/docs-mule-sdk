@@ -3,6 +3,8 @@ ifndef::env-site,env-github[]
 include::_attributes.adoc[]
 endif::[]
 
+NOTE: This guide uses FlowRunner, which is deprecated. To test your modules, refer to the xref:mtf.adoc[MTF] documentation instead.
+
 This section provides a step-by-step introduction to testing a module's
 operation. It explains the basics of test cases that you must perform.
 
