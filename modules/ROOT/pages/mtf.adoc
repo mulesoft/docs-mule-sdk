@@ -3,7 +3,7 @@ ifndef::env-site,env-github[]
 include::_attributes.adoc[]
 endif::[]
 
-Module Testing Framework (MTF) enables you to create tests for modules built with Mule SDK for Java or XML to ensure the interaction between modules and Mule runtime is compatible with the Mule ecosystem. MTF supports functional tests for your modules. These tests are run during the `integration-test` phase of your module's lifecycle. 
+Use Module Testing Framework (MTF) to create tests for modules built with Mule SDK for Java or XML to ensure the interaction between modules and Mule runtime is compatible with the Mule ecosystem. MTF supports functional tests for your modules. You run these tests during the `integration-test` phase of your module's lifecycle. 
 
 MTF is a plugin that extends MUnit. While MUnit tests applications, MTF leverages MUnit to specifically test modules. If you build custom modules, you must use MTF to create tests to ensure module functionality and compatibility. 
 

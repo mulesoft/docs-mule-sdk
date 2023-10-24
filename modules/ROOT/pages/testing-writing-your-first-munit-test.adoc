@@ -3,15 +3,13 @@ ifndef::env-site,env-github[]
 include::_attributes.adoc[]
 endif::[]
 
-To test your module, you must create MUnit tests because MTF is built on top of MUnit. 
-
-This section provides a step-by-step example for testing a module using MUnit. This example is based on the module project generated with the Mule Extensions Archetype in xref:getting-started.adoc#generating-a-project-using-the-maven-archetype-directly[Creating Your First SDK Project].
-
-To test your module, you must:
+To test your module, you must create MUnit tests because MTF depends on MUnit. To test your module, you must:
 
 . <<configure-your-module, Configure your module>>.
 . <<write-your-test, Write your MUnit test>>.
 . <<run-your-test, Run your MUnit test>>.
+
+The following example, based on the module project generated with the Mule Extensions Archetype in xref:getting-started.adoc#generating-a-project-using-the-maven-archetype-directly[Creating Your First SDK Project], shows a step-by-step process of testing a module using MUnit. 
 
 [[configure-your-module]]
 == Configure Your Module
@@ -77,7 +75,7 @@ To configure your module to run your MUnit tests, you must configure your `pom.x
   ...
 </project>
 ----
-. Add the MUnit Extensions Maven Plugin:
+. Add the MUnit Extensions Maven plugin:
 +
 [source,xml,linenums]
 ----
@@ -127,7 +125,7 @@ To configure your module to run your MUnit tests, you must configure your `pom.x
 
 To test your module, your MUnit test must execute the module's operations and make assertions about the result of these executions.
 
-The MUnit test XML must be placed inside the `src/test/munit` folder of the module project.
+You must place the MUnit test XML inside the `src/test/munit` folder of the module project.
 
 [source,xml,linenums]
 ----
@@ -179,6 +177,8 @@ mvn clean verify
 ----
 
 This outputs the result of your test run:
+
+[source,bash,linenums]
 ----
 ================================================================================
 === Running suite: basic-operations-test.xml                                 ===
@@ -196,6 +196,6 @@ This outputs the result of your test run:
 
 == See Also
 
-* xref:munit-extensions-maven-plugin-configuration.adoc[Configuring the MUnit Extensions Maven Plugin]
-* xref:munit-extensions-maven-plugin.adoc[Running the MUnit Extensions Maven Plugin]
+* xref:munit-extensions-maven-plugin-configuration.adoc[]
+* xref:munit-extensions-maven-plugin.adoc[]
 
