@@ -3,7 +3,7 @@ ifndef::env-site,env-github[]
 include::_attributes.adoc[]
 endif::[]
 
-You must validate the error types and error descriptions that your module throws.
+Validate the error types and error descriptions that your module throws.
 
 == Prerequisites
 
