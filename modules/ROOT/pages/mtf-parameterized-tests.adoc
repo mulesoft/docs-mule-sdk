@@ -1,15 +1,14 @@
-= Parameterized Test
+= Parameterization
 ifndef::env-site,env-github[]
 include::_attributes.adoc[]
 endif::[]
 
-A parameterized suite allows you to run the same tests with different inputs. See xref:munit::munit-parameterized-suite.adoc[MUnit Parameterized Test Suite] for more information.
+Use a parameterized suite to run the same tests with different inputs. For more information, refer to xref:munit::munit-parameterized-suite.adoc[MUnit Parameterized Test Suite].
 
 == Configuration Parameterization Example
 
-The following example shows a test suite with two parameterizations, each of them pointing to a different configuration:
+The following example shows a test suite with two parameterizations, each pointing to a different configuration:
 
-.Operation with a config
 [source, java, linenums]
 ----
 public Integer withConfig(@Config ExampleConfig config) {
@@ -19,7 +18,6 @@ public Integer withConfig(@Config ExampleConfig config) {
 
 You can test different configurations as follows:
 
-.Test that runs against different configurations
 [source, xml, linenums]
 ----
 <munit:config name="parameterized-configs-test">
@@ -54,9 +52,8 @@ You can test different configurations as follows:
 
 == Input Data Parameterization Example
 
-Suppose that you want to execute one operation but with different inputs, each with different expected outputs: for example, testing an operation that replaces one string input with another. Your operation uses the following syntax:
+Suppose you want to execute one operation but with different inputs, and each input has different expected outputs. For example, testing an operation that replaces one string input with another. Your operation uses the following syntax:
 
-.Operation for Different Inputs
 [source, java, linenums]
 ----
 public String replace(String input, String toReplace, String replacement) {
@@ -64,9 +61,8 @@ public String replace(String input, String toReplace, String replacement) {
 }
 ----
 
-Your test for several different inputs to one operation looks like this:
+Your test for several different inputs for one operation looks like this:
 
-.Test Case with Different Inputs
 [source, xml, linenums]
 ----
 <munit:config name="parameterized-inputs-test">
