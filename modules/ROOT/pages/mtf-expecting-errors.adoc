@@ -7,14 +7,13 @@ You must validate the error types and error descriptions that your module throws
 
 == Prerequisites
 
-* You are familiar with how to define the errors that your module throws. +
-See xref:errors.adoc[Errors Definition] for more information.
+* You must know how to define the errors that your module throws. For more information, refer to xref:errors.adoc[Errors Definition].
 
 == Example
 
-Consider a module that defines errors as follows:
+Suppose there is a module that defines errors as follows:
 
-.Error Type Definition
+.Error type definition
 [source,java,linenums]
 ----
 public enum SimpleError implements ErrorTypeDefinition<SimpleError> {
@@ -22,7 +21,7 @@ public enum SimpleError implements ErrorTypeDefinition<SimpleError> {
 }
 ----
 
-.Error Type Provider
+.Error type provider
 [source,java,linenums]
 ----
 public class ExecuteErrorsProvider implements ErrorTypeProvider {
@@ -36,7 +35,7 @@ public class ExecuteErrorsProvider implements ErrorTypeProvider {
 }
 ----
 
-.Operation That Throws Error
+.Operation that throws the error
 [source,java,linenums]
 ----
 @Throws(ExecuteErrorsProvider.class)
@@ -53,7 +52,6 @@ You can create tests to validate the expected error type and error description.
 
 You can validate that the error thrown by the module in the example has the proper error type as follows:
 
-.Expect Error Type
 [source, xml, linenums]
 ----
 <munit:test name="testErrorType" expectedErrorType="TEST-CONNECTOR:INVALID_PARAMETER">
@@ -67,7 +65,6 @@ You can validate that the error thrown by the module in the example has the prop
 
 You can validate that the error thrown by the module in the example has the proper error description as follows:
 
-.Expect error description
 [source, xml, linenums]
 ----
 <munit:test name="testErrorDescription" expectedErrorDescription="Parameter 'number' should be greater than 0">
