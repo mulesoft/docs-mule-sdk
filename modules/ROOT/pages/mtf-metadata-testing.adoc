@@ -302,7 +302,7 @@ public class ExampleOutputResolver implements OutputTypeResolver<String> {
 }
 ----
 
-== Validating Metadata Keys
+== Testing Metadata Keys
 
 The following example validates that the keys have the proper `Display` names:
 
@@ -319,7 +319,7 @@ The following example validates that the keys have the proper `Display` names:
 </mtf:tooling-test>
 ----
 
-== Validating a Metadata Type
+== Testing a Metadata Type
 
 The following test validates the `Metadata Type` output value returned by the operation:
 
@@ -339,7 +339,7 @@ The following test validates the `Metadata Type` output value returned by the op
 </mtf:tooling-test>
 ----
 
-== Validating an Expected Failure
+== Testing an Expected Failure
 
 In the previous example, the module throws a `MetadataResolvingException` error when the parameter is null or empty.
 
