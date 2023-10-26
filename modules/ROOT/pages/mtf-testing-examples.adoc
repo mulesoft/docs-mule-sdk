@@ -3,7 +3,7 @@ ifndef::env-site,env-github[]
 include::_attributes.adoc[]
 endif::[]
 
-This section links to examples of tests that demonstrate common uses, patterns, and best practices for your modules.
+Here are some examples of tests that demonstrate common uses, patterns, and best practices for your modules.
 
 [%header%autowidth.spread,cols="a,a"]
 |===
