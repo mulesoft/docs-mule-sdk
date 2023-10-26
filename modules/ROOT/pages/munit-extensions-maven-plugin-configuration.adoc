@@ -1,4 +1,4 @@
-= MUnit Extensions Maven Plugin Configuration
+= Configuring the MUnit Extensions Maven Plugin
 ifndef::env-site,env-github[]
 include::_attributes.adoc[]
 endif::[]

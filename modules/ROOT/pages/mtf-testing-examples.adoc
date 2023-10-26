@@ -10,8 +10,9 @@ Here are some examples of tests that demonstrate common uses, patterns, and best
 | Example | Description
 | xref:mtf-testing-sources.adoc[Sources] | Learn how different types of sources require different types of testing approaches.
 | xref:mtf-expecting-errors.adoc[Expected Errors] | Validate that your module throws the proper errors.
-| xref:mtf-metadata-testing.adoc[Metadata] | Test your module's metadata.
 | xref:mtf-parameterized-tests.adoc[Parameterization] | Use parameterization to reuse your tests.
 | xref:mtf-using-test-classes.adoc[Classes] | Use auxiliary classes for your tests.
 | xref:testing-oauth-modules.adoc[OAuth Enabled Modules] | Test modules that use OAuth authentication.
+| xref:mtf-metadata-testing.adoc[Metadata] | Test your module's metadata.
+| xref:connectivity-testing.adoc[Connectivity] | Test your module's connectivity.
 |===

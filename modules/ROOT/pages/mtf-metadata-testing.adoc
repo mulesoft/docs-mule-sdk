@@ -7,7 +7,7 @@ Test the metadata defined for your module.
 
 == Prerequisites
 
-* You must know how to define `MetadataType` for your module. For more information, refer to xref:metadata.adoc[Adding DataSense Support].
+* You must know how to define metadata in your module. For more information, refer to xref:metadata.adoc[Adding DataSense Support].
 * To create metadata tests, you must add the `mtf-tools` dependency to your project:
 +
 [source,xml,linenums]
@@ -237,14 +237,6 @@ The `actual` field defaults to `payload`. You can choose to not specify the `act
 --
 <mtf:assert-type fromSchema="expected-person.xsd"/>
 --
-
-
-The following examples provide a basic structure for testing the metadata defined for your module.
-
-== Prerequesites
-
-* You are familiar with how to define metadata in your module. +
-See xref:metadata.adoc[Adding DataSense Support] and xref:metadata-testing.adoc[Metadata Testing] for more information.
 
 == Example
 
