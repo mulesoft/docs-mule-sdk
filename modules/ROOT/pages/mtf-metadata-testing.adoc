@@ -242,9 +242,9 @@ The `actual` field defaults to `payload`. You can choose to not specify the `act
 
 Implementations provided in the following example use fixed values to simplify the code. You must obtain metadata through external services.
 
-Your module can define the following metadata:
+This module defines the following metadata:
 
-.Operation with Metadata
+.Operation with metadata
 [source, java, linenums]
 ----
 @OutputResolver(output = ExampleOutputResolver.class)
@@ -306,7 +306,6 @@ public class ExampleOutputResolver implements OutputTypeResolver<String> {
 
 The following example validates that the keys have the proper `Display` names:
 
-.Tooling test to validate metadata keys
 [source, xml, linenums]
 ----
 <mtf:tooling-test name="keysTest">
@@ -322,9 +321,8 @@ The following example validates that the keys have the proper `Display` names:
 
 == Validating a Metadata Type
 
-The following test validates the `Metadata Type` value returned by the operation:
+The following test validates the `Metadata Type` output value returned by the operation:
 
-.Tooling Test to Validate the Output Metadata Type of an Operation
 [source, xml, linenums]
 ----
 <mtf:tooling-test name="outputMetadataTest">
@@ -347,7 +345,6 @@ In the previous example, the module throws a `MetadataResolvingException` error 
 
 The following test validates that the proper failure code and message are thrown when the parameter is invalid:
 
-.Tooling test to validate metadata failures
 [source, xml, linenums]
 ----
 <mtf:tooling-test name="failureTest"
