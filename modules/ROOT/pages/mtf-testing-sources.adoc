@@ -9,7 +9,7 @@ There are several types of sources, each with its own distinct testing strategy.
 
 == Sources That Emit a Response
 
-The most common type of test is when the source generates a synchronous response. To test a source that emits a response, you must trigger the source to get that response, and then assert it.
+The most common type of test is when the source generates a synchronous response. To test a source that emits a response, trigger the source to get that response, and then assert it.
 
 For example, in the case of `http:listener`, you can trigger the source with `http:request`:
 
