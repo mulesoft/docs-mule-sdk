@@ -90,7 +90,7 @@
    **** xref:mtf-expecting-errors.adoc[Expected Errors]
    **** xref:mtf-parameterized-tests.adoc[Parameterization]
    **** xref:mtf-using-test-classes.adoc[Classes]
-   **** xref:testing-oauth-modules.adoc[OAuth Enabled Connectors]
+   **** xref:testing-oauth-modules.adoc[OAuth-Enabled Modules]
    **** xref:mtf-metadata-testing.adoc[Metadata]
    **** xref:connectivity-testing.adoc[Connectivity]
   *** xref:munit-extensions-maven-plugin-configuration.adoc[Configuring the MUnit Extensions Maven Plugin]

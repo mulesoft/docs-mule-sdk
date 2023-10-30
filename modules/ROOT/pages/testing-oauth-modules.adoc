@@ -1,18 +1,18 @@
-= Testing OAuth-Enabled Connectors
+= OAuth-Enabled Modules
 ifndef::env-site,env-github[]
 include::_attributes.adoc[]
 endif::[]
 
-Mule runtime engine supports authorization through various OAuth grant types, including `Authorization Code`. This grant type allows an external system (for example, your Mule application) to operate on behalf of a user without requiring user authentication.
+Mule runtime engine supports authorization through various OAuth grant types, including the Authorization Code grant type, which allows an external system (for example, your Mule application) to operate on behalf of a user without requiring user authentication.
 
-However, because the `Authorization Code` grant type is designed to force human intervention in the authentication process that identifies users using OAuth (OAuth dance), building an automated test for an application using this grant type is challenging.
+However, because the Authorization Code grant type is designed to force human intervention in the authentication process that identifies users using OAuth (OAuth dance), building an automated test for an application using this grant type is challenging.
 
-To overcome this challenge, you can use the Storage Event processor to bypass the OAuth dance by manually providing a valid access token. Note the following requirements:
+To overcome this challenge, you can use the Storage Event processor to bypass the OAuth dance by manually providing a valid access token. Ensure the following requirements are met:
 
-* It is your responsibility to manually obtain the token.
-* It is your responsibility to be aware that the token will eventually expire. +
+* You must manually obtain the token.
+* You must be aware that the token eventually expires. +
 How often the token expires depends on the service provider to which you are connecting.
-* It is your responsibility to obtain a new token and update the test with it.
+* You must obtain a new token and update the test with it.
 
 == Example
 
@@ -34,9 +34,9 @@ Consider the following configuration of Salesforce Connector using OAuth authent
 ----
 
 <1> The application defines an object store named `tokenStore`.
-<2> It uses the `tokenStore` object store to store the OAuth token.
+<2> The application uses the `tokenStore` object store to store the OAuth token.
 
-To use the token stored in `tokenStore` in an MUnit test, create a flow and insert your token in an MUnit Storage Event processor:
+To use the OAuth token stored in `tokenStore` in an MUnit test, create a flow and insert your token in an MUnit Storage Event processor:
 
 [source,xml,linenums]
 ----
@@ -54,9 +54,9 @@ To use the token stored in `tokenStore` in an MUnit test, create a flow and inse
 </flow>
 ----
 
-Note that the `ownerConfigName` element matches the name of the Salesforce configuration. The access token and other properties shown here are placeholders for the values that you obtain by manually performing the OAuth dance. Then you supply the token to the test via system properties, a properties file, or whatever mechanism you choose.
+Note that the `ownerConfigName` element matches the name of the Salesforce configuration. The access token and other properties shown here are placeholders for the values that you obtain by manually performing the OAuth dance. You can then supply the token to the MUnit test through system properties, a properties file, or any other mechanism you choose.
 
-After you supply the token values, your Munit test has the following structure:
+After you supply the token values, your MUnit test has the following structure:
 
 [source,xml,linenums]
 ----
