@@ -3,7 +3,7 @@ ifndef::env-site,env-github[]
 include::_attributes.adoc[]
 endif::[]
 
-Use a parameterized suite to run the same tests with different inputs. For more information, refer to xref:munit::munit-parameterized-suite.adoc[MUnit Parameterized Test Suite].
+Use a parameterized suite to run the same tests with different inputs. For more information, refer to xref:munit::munit-parameterized.adoc[MUnit Parameterized Test Suite].
 
 == Configuration Parameterization Example
 
