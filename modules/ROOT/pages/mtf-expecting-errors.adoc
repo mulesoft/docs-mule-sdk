@@ -5,7 +5,7 @@ endif::[]
 
 Validate the error types and error descriptions that your module throws.
 
-== Prerequisites
+== Before You Begin
 
 * You must know how to define the errors that your module throws. For more information, refer to xref:errors.adoc[Errors Definition].
 

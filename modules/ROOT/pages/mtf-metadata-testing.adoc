@@ -5,7 +5,7 @@ endif::[]
 
 Test the metadata defined for your module.
 
-== Prerequisites
+== Before You Begin
 
 * You must know how to define metadata in your module. For more information, refer to xref:metadata.adoc[Adding DataSense Support].
 * To create metadata tests, you must add the `mtf-tools` dependency to your project:
