@@ -21,7 +21,7 @@ Test the connectivity defined for your module.
 </dependency>
 ----
 
-CAUTION: Connectivity testing is available since Mule runtime engine 4.2.0. If your module has a minimum Mule version earlier than 4.2.0, add `minMuleVersion` to your connectivity testing suite, for example: `<munit:config name="connectivity-testing-suite" minMuleVersion="4.2.0"/>`
+CAUTION: Connectivity testing is available since Mule runtime engine 4.2.0. If your module has a minimum Mule version earlier than 4.2.0, add `minMuleVersion` to your connectivity testing suite, for example: `<munit:config name="connectivity-testing-suite" minMuleVersion="4.2.0"/>`.
 
 == Testing Connectivity
 
