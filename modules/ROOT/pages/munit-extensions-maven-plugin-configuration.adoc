@@ -138,7 +138,7 @@ To skip runtime discovery, add the following line to the runtime configuration:
 
 From the command line, the property is `discoverRuntimes.skip`. The default value is `false`.
 
-== Dynamic Ports
+== Using Dynamic Ports
 
 [IMPORTANT]
 MUnit 2.2 and later introduce the `dynamic-port` global element, that allows you to define dynamic ports at the MUnit suite level. +
@@ -557,4 +557,4 @@ If any of the suite files or resources are not present in the classpath, the plu
 
 == See Also
 
-* xref:munit-extensions-maven-plugin.adoc[MUnit Extensions Maven Plugin]
+* xref:munit-extensions-maven-plugin.adoc[]
