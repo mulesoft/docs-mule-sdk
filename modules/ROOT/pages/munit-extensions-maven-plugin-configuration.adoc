@@ -3,12 +3,12 @@ ifndef::env-site,env-github[]
 include::_attributes.adoc[]
 endif::[]
 
-== Additional argument lines
+The MUnit Extensions Maven plugin provides testing capabilities for extension development. Learn how to configure the MUnit Extensions Maven plugin to test your modules. 
 
-Since the tests are being run in a new JVM, additional argument lines can be specified
-to the JVM. Each argument should be specified in separate `argLine`.
+== Specifying Additional Argument Lines
 
-.Argument lines
+Since you run the tests in a new JVM, you can specify additional argument lines to the JVM. Specify each argument in a separate `argLine`.
+
 [source,xml,linenums]
 ----
 <plugins>
@@ -27,14 +27,13 @@ to the JVM. Each argument should be specified in separate `argLine`.
 </plugins>
 ----
 
-== To Enable Runtime Discovery
+== Enabling Runtime Discovery
 
-Runtime Discovery looks for all runtime versions published on nexus, to run
+Runtime discovery looks for all Mule runtime versions published on Nexus to run
 against your tests.
 
-To enable MUnit Runtime Discovery, add the following configuration to the MUnit Plugin:
+To enable runtime discovery, add the following configuration to the MUnit Extensions Maven plugin:
 
-.MUnit Runtime Discovery
 [source,xml,linenums]
 ----
 <plugins>
@@ -53,18 +52,16 @@ To enable MUnit Runtime Discovery, add the following configuration to the MUnit 
   </plugin>
 </plugins>
 ----
-<1> This enables the runtime discovery feature for all released CE runtimes
+<1> This enables the runtime discovery feature for all released CE runtimes.
 
 From the command line, the property is `discoverRuntimes.product`.
 
-NOTE: Product can be CE, EE or ALL (both CE and EE)
+NOTE: The `product` can be CE (Community Edition), EE (Enterprise Edition), or ALL (both CE and EE).
 
-=== To Include Snapshots
+=== Including Snapshots
 
-If you want to include snapshot versions of the runtime you can add the following
-line to the runtime configuration:
+To include snapshot versions of Mule runtime, add the following line to the runtime configuration:
 
-.MUnit Runtime Discovery - Include Snapshots
 [source,xml,linenums]
 ----
 <runtimeConfiguration>
@@ -75,15 +72,12 @@ line to the runtime configuration:
 </runtimeConfiguration>
 ----
 
-From the command line, the property is `discoverRuntimes.includeSnapshots`.
-
-Default value is `false`.
+From the command line, the property is `discoverRuntimes.includeSnapshots`. The default value is `false`.
 
 === Discovering Only the Latest Patches
 
-If you want to discover only the latest patch versions of Mule runtime engine, add the following line to the runtime configuration:
+To discover only the latest patch versions of Mule runtime, add the following line to the runtime configuration:
 
-.MUnit Runtime Discovery - Include Latest Patches
 [source,xml,linenums]
 ----
 <runtimeConfiguration>
@@ -94,15 +88,12 @@ If you want to discover only the latest patch versions of Mule runtime engine, a
 </runtimeConfiguration>
 ----
 
-From the command line, the property is `discoverRuntimes.latestPatches`.
-
-Default value is `true`.
+From the command line, the property is `discoverRuntimes.latestPatches`. The default value is `true`.
 
 === Discovering Since a Minimum Version
 
-By default, the runtime discovery searches for all Mule runtime engine versions since the `minMuleVersion` of the module. You can change this minimum version adding the following to the runtime configuration:
+By default, runtime discovery searches for all Mule runtime versions since the `minMuleVersion` of the module. To change this minimum version, add the following line to the runtime configuration:
 
-.MUnit Runtime Discovery - Minimum Version
 [source,xml,linenums]
 ----
 <runtimeConfiguration>
@@ -113,17 +104,12 @@ By default, the runtime discovery searches for all Mule runtime engine versions 
 </runtimeConfiguration>
 ----
 
-From the command line, the property is `discoverRuntimes.minMuleVersion`.
+From the command line, the property is `discoverRuntimes.minMuleVersion`. The default value is the `minMuleVersion` of the module.
 
-Default value is the `minMuleVersion` of the module.
+=== Running Against Additional Runtimes
 
-=== To Run Against Additional Runtimes
+By default, the MUnit Extensions Maven plugin runs against the `minMuleVersion` and the required product of the module. To specify additional runtimes to run against, add the following lines to the runtime configuration:
 
-By default, the plugin runs against the minMuleVersion and the required product of the module.
-If you want to specify additional runtimes to run against, you can add the following to the runtime
-configuration:
-
-.MUnit Runtime Configuration - Additional Runtimes
 [source,xml,linenums]
 ----
 <runtimeConfiguration>
@@ -136,11 +122,10 @@ configuration:
 
 From the command line, the property is `additionalRuntimes`.
 
-=== To Skip Runtime Discovery
+=== Skipping Runtime Discovery
 
-If you wish to skip runtime discovery, you can add the following line to the runtime configuration:
+To skip runtime discovery, add the following line to the runtime configuration:
 
-.MUnit Runtime Discovery - Include Snapshots
 [source,xml,linenums]
 ----
 <runtimeConfiguration>
@@ -151,9 +136,7 @@ If you wish to skip runtime discovery, you can add the following line to the run
 </runtimeConfiguration>
 ----
 
-From the command line, the property is `discoverRuntimes.skip`.
-
-Default value is `false`.
+From the command line, the property is `discoverRuntimes.skip`. The default value is `false`.
 
 == Dynamic Ports
 
