@@ -7,8 +7,8 @@ Test the metadata defined for your module.
 
 == Before You Begin
 
-* You must know how to define metadata in your module. For more information, refer to xref:metadata.adoc[Adding DataSense Support].
-* To create metadata tests, you must add the `mtf-tools` dependency to your project:
+* Know how to define metadata in your module. For more information, refer to xref:metadata.adoc[].
+* To create metadata tests, add the `mtf-tools` dependency to your project:
 +
 [source,xml,linenums]
 ----

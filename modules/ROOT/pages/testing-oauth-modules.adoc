@@ -7,14 +7,14 @@ Mule runtime engine supports authorization through various OAuth grant types, in
 
 However, because the Authorization Code grant type is designed to force human intervention in the authentication process that identifies users using OAuth (OAuth dance), building an automated test for an application using this grant type is challenging.
 
-To overcome this challenge, you can use the Storage Event processor to bypass the OAuth dance by manually providing a valid access token. Ensure the following requirements are met:
+To overcome this challenge, use the Storage Event processor to bypass the OAuth dance by manually providing a valid access token. Ensure the following requirements are met:
 
 * You must manually obtain the token.
 * You must be aware that the token eventually expires. +
 How often the token expires depends on the service provider to which you are connecting.
 * You must obtain a new token and update the test with it.
 
-== Example
+== Example: OAuth-Enabled Module
 
 Consider the following configuration of Salesforce Connector using OAuth authentication:
 
