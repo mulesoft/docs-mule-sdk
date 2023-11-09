@@ -238,7 +238,7 @@ The `actual` field defaults to `payload`. You can choose to not specify the `act
 <mtf:assert-type fromSchema="expected-person.xsd"/>
 --
 
-== Example
+== Example: Metadata Test
 
 Implementations provided in the following example use fixed values to simplify the code. You must obtain metadata through external services.
 
@@ -302,7 +302,7 @@ public class ExampleOutputResolver implements OutputTypeResolver<String> {
 }
 ----
 
-== Testing Metadata Keys
+== Test Metadata Keys
 
 The following example validates that the keys have the proper `Display` names:
 
@@ -319,7 +319,7 @@ The following example validates that the keys have the proper `Display` names:
 </mtf:tooling-test>
 ----
 
-== Testing a Metadata Type
+== Test a Metadata Type
 
 The following test validates the `Metadata Type` output value returned by the operation:
 
@@ -339,7 +339,7 @@ The following test validates the `Metadata Type` output value returned by the op
 </mtf:tooling-test>
 ----
 
-== Testing an Expected Failure
+== Test an Expected Failure
 
 In the previous example, the module throws a `MetadataResolvingException` error when the parameter is null or empty.
 
