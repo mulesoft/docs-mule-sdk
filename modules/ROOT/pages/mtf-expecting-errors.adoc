@@ -7,11 +7,11 @@ Validate the error types and error descriptions that your module throws.
 
 == Before You Begin
 
-* You must know how to define the errors that your module throws. For more information, refer to xref:errors.adoc[Errors Definition].
+You must know how to define the errors that your module throws. For more information, refer to xref:errors.adoc[].
 
-== Example
+== Example: Error Definition 
 
-Suppose there is a module that defines errors as follows:
+In this example, the module defines errors as follows:
 
 .Error type definition
 [source,java,linenums]
@@ -46,11 +46,11 @@ public void execute(Integer number) {
 }
 ----
 
-You can create tests to validate the expected error type and error description.
+Use MTF to create tests to validate the expected error type and error description.
 
-== Validating an Expected Error Type
+== Validate an Expected Error Type
 
-You can validate that the error thrown by the module in the example has the proper error type as follows:
+To validate that the error thrown by the module in the example has the proper error type:
 
 [source, xml, linenums]
 ----
@@ -61,9 +61,9 @@ You can validate that the error thrown by the module in the example has the prop
 </munit:test>
 ----
 
-== Validating an Expected Error Description
+== Validate an Expected Error Description
 
-You can validate that the error thrown by the module in the example has the proper error description as follows:
+To validate that the error thrown by the module in the example has the proper error description:
 
 [source, xml, linenums]
 ----
