@@ -35,7 +35,7 @@ To invoke static methods using DataWeave, add the `java!` prefix to the package 
 </munit:test>
 ----
 
-== Use Classes With Java Module
+== Use Classes with Java Module
 
 To use classes with Java Module:
 
