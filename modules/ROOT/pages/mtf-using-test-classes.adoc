@@ -3,7 +3,7 @@ ifndef::env-site,env-github[]
 include::_attributes.adoc[]
 endif::[]
 
-When creating test cases, use Java classes located in `src/test/java`. Use Java classes through DataWeave or through Java Module.
+When creating test cases, use Java classes located in `src/test/java` with DataWeave or Java Module.
 
 In the following example, assume that your class is located in `src/test/java/com/example/MyUtilClass.java`:
 
@@ -19,7 +19,7 @@ public class Helper {
 }
 ----
 
-== Use Classes Through DataWeave
+== Use Classes With DataWeave
 
 To invoke static methods using DataWeave, add the `java!` prefix to the package name of the class:
 
@@ -35,9 +35,9 @@ To invoke static methods using DataWeave, add the `java!` prefix to the package 
 </munit:test>
 ----
 
-== Use Classes Through Java Module
+== Use Classes With Java Module
 
-To use classes through Java Module:
+To use classes with Java Module:
 
 . Ensure that Java Module is in your project:
 +

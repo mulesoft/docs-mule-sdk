@@ -5,13 +5,14 @@ endif::[]
 
 Mule runtime engine supports authorization through various OAuth grant types, including the Authorization Code grant type, which allows an external system (for example, your Mule application) to operate on behalf of a user without requiring user authentication.
 
-However, because the Authorization Code grant type is designed to force human intervention in the authentication process that identifies users using OAuth (OAuth dance), building an automated test for an application using this grant type is challenging.
+However, because the Authorization Code grant type forces human intervention in the authentication process that identifies users using OAuth (OAuth dance), building an automated test for an application using this grant type is challenging.
 
 To overcome this challenge, use the Storage Event processor to bypass the OAuth dance by manually providing a valid access token. Ensure the following requirements are met:
 
 * You must manually obtain the token.
-* You must be aware that the token eventually expires. +
-How often the token expires depends on the service provider to which you are connecting.
+* You must be aware that the token eventually expires. 
++
+How often the token expires depends on the service provider you are connecting to.
 * You must obtain a new token and update the test with it.
 
 == Example: OAuth-Enabled Module
@@ -32,9 +33,9 @@ Consider the following configuration of Salesforce Connector using OAuth authent
 	</sfdc:oauth-connection>
 </sfdc:config>
 ----
-
-<1> The application defines an object store named `tokenStore`.
-<2> The application uses the `tokenStore` object store to store the OAuth token.
+[calloutlist]
+.. The application defines an object store named `tokenStore`.
+.. The application uses the `tokenStore` object store to store the OAuth token.
 
 To use the OAuth token stored in `tokenStore` in an MUnit test, create a flow and insert your token in an MUnit Storage Event processor:
 
@@ -72,6 +73,6 @@ After you supply the token values, your MUnit test has the following structure:
     </munit:validation>
 </munit:test>
 ----
-
-<1> Inserting the token by invoking the `storeOAuthToken` flow is the very first step in the test.
-<2> The `<sfdc:upsert>` operation references the same config name and `resourceOwnerId` that matches the token you inserted.
+[calloutlist]
+.. Inserting the token by invoking the `storeOAuthToken` flow is the very first step in the test.
+.. The `<sfdc:upsert>` operation references the same config name and `resourceOwnerId` that matches the token you inserted.
