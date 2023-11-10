@@ -19,7 +19,7 @@ public class Helper {
 }
 ----
 
-== Use Classes With DataWeave
+== Use Classes with DataWeave
 
 To invoke static methods using DataWeave, add the `java!` prefix to the package name of the class:
 
