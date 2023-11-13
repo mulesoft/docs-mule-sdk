@@ -44,7 +44,7 @@ To enable runtime discovery, add the following configuration to the MUnit Extens
       ...
       <runtimeConfiguration>
           <discoverRuntimes>
-              <product>CE</product> <1>
+              <product>CE</product> //<1>
           </discoverRuntimes>
       </runtimeConfiguration>
       ...
@@ -52,7 +52,8 @@ To enable runtime discovery, add the following configuration to the MUnit Extens
   </plugin>
 </plugins>
 ----
-<1> This enables the runtime discovery feature for all released CE runtimes.
+[calloutlist]
+.. This enables the runtime discovery feature for all released CE runtimes.
 
 From the command line, the property is `discoverRuntimes.product`.
 
@@ -141,19 +142,19 @@ From the command line, the property is `discoverRuntimes.skip`. The default valu
 == Use Dynamic Ports
 
 [IMPORTANT]
-MUnit 2.2 and later introduce the `dynamic-port` global element, that allows you to define dynamic ports at the MUnit suite level. +
-Using this element instead of the plugin configuration described below allows you to set the dynamic port both from Maven and Studio. +
-See xref:2.2@munit::dynamic-ports.adoc[Dynamic Ports] in MUnit to learn how to configure this element.
-
-When testing a Mule application in a continuous integration (CI) environment, you might encounter the following scenario:
-
+MUnit 2.2 and later introduces the `dynamic-port` global element, which you can use to define dynamic ports at the MUnit suite level. +
+Use this element instead of the plugin configuration described below to set the dynamic port both from Maven and Studio. +
+For more information about how to configure this element, refer to xref:munit::dynamic-ports.adoc[Dynamic Ports].
 
 When testing a module in a continuous integration (CI) environment, you might encounter the following scenario:
 
 `Your test tries to open a specific port. The port is already in use. The test fails with a port binding exception.`
 
+To solve this, use the MUnit Extensions Maven plugin that comes with a built-in feature to do just that.
+
+
 The easy solution to this problem is to have your test use a free port.
-The MUnit Maven Plugin comes with a built-in feature to do just that.
+The MUnit Extensions Maven plugin comes with a built-in feature to do just that.
 
 `MUnit Dynamic Ports` instructs the MUnit Maven Plugin to look for unbound ports and reserve them before running the tests over the module. Each port selected is placed in a system property under the name indicated in the configuration.
 The test can acquire the port number through the use of placeholders afterward.
