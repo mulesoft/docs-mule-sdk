@@ -222,7 +222,7 @@ To run specific tests, add a line for the specific test:
 </plugins>
 ----
 
-== Run Tests With Specific Tags
+== Run Tests with Specific Tags
 
 To run tests with specific tags, add a line for the test with the specific tag:
 
@@ -304,7 +304,7 @@ To specify the Mule runtime version that your tested module runs on, add a line 
 
 WARNING: If this option is set, runtime discovery and `additionalRuntimes` don't take effect.
 
-== Specify The Runtime Product
+== Specify the Runtime Product
 
 You can specify the type of runtime that your tested module runs on. 
 
@@ -327,7 +327,7 @@ The two possible values are `MULE` for Community Edition, and `MULE_EE` for Ente
 
 WARNING: If this option is set, runtime discovery and `additionalRuntimes` don't take effect.
 
-== Specify The JVM
+== Specify the JVM
 
 You can specify the JVM (or the Java executable) that your tested module runs on. Populate the property with the path to the executable.
 
@@ -372,7 +372,7 @@ To set additional environment variables during the test run, specify them with t
 
 Use environment variables to replace placeholders such as `${MY_ENV}` (from the example above).
 
-== Redirect Test Output to File
+== Redirect Test Output to a File
 
 When running several tests, the build output can be complicated to read. You can redirect the build output of each test suite to a file so the build output contains the test results and the respective file contains standard output of each test suite.
 
