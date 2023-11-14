@@ -157,7 +157,7 @@ TIP: The ports to select by the MUnit Extensions Maven plugin are taken from the
 [CAUTION]
 --
 The dynamic ports feature is available only as part of the MUnit Extensions Maven Plugin. +
-You cannot expect this feature to work when running tests from inside Anypoint Studio.
+You can't expect this feature to work when running tests from inside Anypoint Studio.
 --
 
 === Enable Dynamic Ports
@@ -283,9 +283,9 @@ To skip the rest of the tests if one test suite fails, add a line to skip after 
 
 The default value is `false`.
 
-== Specify the Runtime Version
+== Specify the Mule Runtime Version
 
-MUnit allows you to specify the runtime version in which your module being tested will run.
+To specify the Mule runtime version that your tested module runs on, add a line for the Mule runtime version:
 
 [source,xml,linenums]
 ----
@@ -302,12 +302,13 @@ MUnit allows you to specify the runtime version in which your module being teste
 </plugins>
 ----
 
-WARNING: If this option is set, runtime discovery and additionalRuntimes won't take effect.
+WARNING: If this option is set, runtime discovery and `additionalRuntimes` don't take effect.
 
-== To Specify The Runtime Product
+== Specify The Runtime Product
 
-MUnit allows you to specify the type of runtime in which your module being tested will run. +
-The two possible values are MULE for community edition, and MULE_EE for Enterprise Edition.
+You can specify the type of runtime that your tested module runs on. 
+
+The two possible values are `MULE` for Community Edition, and `MULE_EE` for Enterprise Edition.
 
 [source,xml,linenums]
 ----
@@ -324,12 +325,11 @@ The two possible values are MULE for community edition, and MULE_EE for Enterpri
 </plugins>
 ----
 
-WARNING: If this option is set, runtime discovery and additionalRuntimes won't take effect.
+WARNING: If this option is set, runtime discovery and `additionalRuntimes` don't take effect.
 
-== To Specify The JVM
+== Specify The JVM
 
-MUnit allows you to specify the jvm (or the java executable) in which your module being tested will run.
-The property should be populated with the path to the executable.
+You can specify the JVM (or the Java executable) that your tested module runs on. Populate the property with the path to the executable.
 
 [source,xml,linenums]
 ----
@@ -346,14 +346,12 @@ The property should be populated with the path to the executable.
 </plugins>
 ----
 
-From the command line, the property is `-Dmunit.jvm`
+From the command line, the property is `-Dmunit.jvm`.
 
-== Environment Variables
+== Set Environment Variables
 
-To set additional environment variables during the test run, you can specify
-them with the respective key and value.
+To set additional environment variables during the test run, specify them with the respective key and value:
 
-.Additional Environment Variables
 [source,xml,linenums]
 ----
 <plugins>
@@ -372,8 +370,7 @@ them with the respective key and value.
 </plugins>
 ----
 
-Environment variables can be used to replace placeholders such as `${MY_ENV}`
-(using the example above).
+Use environment variables to replace placeholders such as `${MY_ENV}` (from the example above).
 
 == Redirect Test Output to File
 
