@@ -374,18 +374,12 @@ Use environment variables to replace placeholders such as `${MY_ENV}` (from the 
 
 == Redirect Test Output to File
 
-When running several tests, the build output can get very complex to read. You may want
-to redirect the output of each Test suite to a file. This way what remains in the build
-output will be the test results and to check the standard output of each test suite you can find it
-in its respective file.
+When running several tests, the build output can be complicated to read. You can redirect the build output of each test suite to a file so the build output contains the test results and the respective file contains standard output of each test suite.
 
-These files will be located in the `testOutputDirectory` folder following this naming convention:
-`munit.${suiteName}-output.txt`, where the `suiteName` represents the name of the XML file relative to the
-MUnit test folder.
+These files are located in the `testOutputDirectory` folder and follow the `munit.${suiteName}-output.txt` naming convention, in which `suiteName` is the name of the XML file relative to the MUnit test folder.
 
-The test run output that doesn't belong to a particular suite won't be printed to keep the build output clean, but it can be enabled by running maven in _debug_ mode.
+To keep the build output clean, the test run output that doesn't belong to a particular suite doesn't print, but you can enable it by running Maven in debug mode.
 
-.Redirect test output to file
 [source,xml,linenums]
 ----
 <plugins>
@@ -401,13 +395,12 @@ The test run output that doesn't belong to a particular suite won't be printed t
 </plugins>
 ----
 
-By default, it is set to `false`
+The default value is `false`.
 
-== System Properties Variables
+== Define System Properties Variables
 
-You may wish to define specific system variables needed for your MUnit test to run successfully. The example below shows how you can send them.
+You can define specific system variables needed for your MUnit test to run successfully:
 
-.Setting system property variables
 [source,xml,linenums]
 ----
 <plugins>
@@ -427,9 +420,9 @@ You may wish to define specific system variables needed for your MUnit test to r
 
 [TIP]
 ====
-Depending on the execution context, the system properties values may vary. When referencing these properties, it is a good practice to override their value to enforce test reproducibility.
+Depending on the execution context, the system properties values might vary. When referencing these properties, override their value to enforce test reproducibility.
 
-You can do so using the ­`-D` argument when running MUnit with Maven. +
+You can do so by using the ­`-D` argument when running MUnit with Maven. +
 Variables passed with the `-D` argument take full priority over any other property.
 
 For example:
@@ -439,10 +432,10 @@ For example:
 
 == Test Output Directory
 
-You may want to choose the location where the test output files will be created.
-The path specified can be absolute or written as a maven placeholder.
+You can choose the location where the test output files are created.
+The specified path can be an absolute path or a Maven placeholder.
 
-.Test output directory with absolute path
+.Test output directory with an absolute path
 [source,xml,linenums]
 ----
 <plugins>
@@ -458,22 +451,21 @@ The path specified can be absolute or written as a maven placeholder.
 </plugins>
 ----
 
-.Test output directory using maven placeholders
+.Test output directory with a Maven placeholder
 [source,xml,linenums]
 ----
 <testOutputDirectory>${project.build.directory}/my/output/folder</testOutputDirectory>
 ----
 
-By default, the files will be created in `${project.build.directory}/munit-reports/output/`.
+By default, the files are created in `${project.build.directory}/munit-reports/output/`.
 
-== Shared Libraries
+== Specify Shared Libraries
 
-When requiring external libraries as explained xref:external-libs[here], you need to specify
+When requiring external libraries (as explained in xref:external-libs.adoc[]), specify
 these libraries as `sharedLibraries` (apart from having the corresponding dependencies in the project).
 
-For example if you defined the following annotation in your module:
+For example, if you define the following external library in your module:
 
-.External Library
 [source,java,linenums]
 ----
 @ExternalLib(name = "My External Library",
@@ -481,9 +473,8 @@ requiredClassName = "com.example.MyClass",
 coordinates = "com.example:my-external-library:1.2.3")
 ----
 
-You should configure the plugin in the following way:
+You must configure the plugin in the following way:
 
-.Shared Libraries
 [source,xml,linenums]
 ----
 <plugins>
@@ -504,16 +495,10 @@ You should configure the plugin in the following way:
 </plugins>
 ----
 
-== Importing External Suites and Resources
+== Import External Suites and Resources
 
-If you want to reuse suite files across different modules and they are present in an external artifact, the plugin
-allows you to include them in the run (as if they were present in the `src/test/munit` and `src/test/resources` folders).
+To reuse suite files that are present in an external artifact across different modules, include the suite files in the configuration as if they are present in the `src/test/munit` and `src/test/resources` folders. Ensure you add the dependencies in the plugin's classpath.
 
-Make sure that the dependencies are in the plugin's classpath adding them as dependencies of the plugin.
-
-You should configure the plugin in the following way:
-
-.External suites and resources
 [source,xml,linenums]
 ----
 <plugins>
@@ -543,7 +528,6 @@ You should configure the plugin in the following way:
 ----
 
 If any of the suite files or resources are not present in the classpath, the plugin fails.
-
 
 == See Also
 
