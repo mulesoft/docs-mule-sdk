@@ -150,28 +150,20 @@ When testing a module in a continuous integration (CI) environment, you might en
 
 `Your test tries to open a specific port. The port is already in use. The test fails with a port binding exception.`
 
-To solve this, use the MUnit Extensions Maven plugin that comes with a built-in feature to do just that.
+To solve this, use the dynamic ports built-in feature in the MUnit Extensions Maven plugin to have your test use a free port. Dynamic ports instruct the MUnit Extensions Maven plugin to look for unbound ports and reserves them before running the tests over the module. Each port selected is placed in a system property under the name indicated in the configuration. The test can acquire the port number through the use of placeholders afterward.
 
-
-The easy solution to this problem is to have your test use a free port.
-The MUnit Extensions Maven plugin comes with a built-in feature to do just that.
-
-`MUnit Dynamic Ports` instructs the MUnit Maven Plugin to look for unbound ports and reserve them before running the tests over the module. Each port selected is placed in a system property under the name indicated in the configuration.
-The test can acquire the port number through the use of placeholders afterward.
-
-TIP: The Ports to be selected by the plugin are taken from the following range: `[40000,50000)`
+TIP: The ports to select by the MUnit Extensions Maven plugin are taken from the following range: `[40000,50000)`.
 
 [CAUTION]
 --
-Dynamic Ports feature is only available as part of the MUnit Maven Plugin. +
-You can not expect this feature to work when running tests from inside Anypoint Studio.
+The dynamic ports feature is available only as part of the MUnit Extensions Maven Plugin. +
+You cannot expect this feature to work when running tests from inside Anypoint Studio.
 --
 
 === Enable Dynamic Ports
 
-To enable the feature, you need to add the following code to the `configuration` section of the MUnit Maven Plugin:
+To enable the dynamic ports feature, add the following code to the `configuration` section of the MUnit Extensions Maven plugin:
 
-.Dynamic Ports Configuration
 [source,xml,linenums]
 ----
 <plugins>
@@ -189,9 +181,8 @@ To enable the feature, you need to add the following code to the `configuration`
 </plugins>
 ----
 
-If you have the `${http.port}` placeholder in your test, the configuration looks something like:
+If you have the `${http.port}` placeholder in your test, the configuration looks like this:
 
-.Example
 [source,xml,linenums]
 ----
 <dynamicPorts>
@@ -199,13 +190,10 @@ If you have the `${http.port}` placeholder in your test, the configuration looks
 </dynamicPorts>
 ----
 
-== Enable surefire reports
+== Disable Surefire Reports
 
-MUnit has built-in support for Surefire. No additional configuration is needed for this but it can be disabled if not needed.
+MUnit has built-in support for Surefire. No additional configuration is needed but it can be disabled if not needed.
 
-
-//_TODO: Where? Properties? pluginConfig?
-.Disabling surefire reports
 [source,xml,linenums]
 ----
 <enableSurefireReports>false</enableSurefireReports>
@@ -213,9 +201,11 @@ MUnit has built-in support for Surefire. No additional configuration is needed f
 
 The reports can be found under `${project.build.directory}/surefire-reports`.
 
-By default, it is set to `true`.
+The default value is `true`.
 
-== To Run Specific Tests
+== Run Specific Tests
+
+To run specific tests, add a line for the specific test:
 
 [source,xml,linenums]
 ----
@@ -232,7 +222,9 @@ By default, it is set to `true`.
 </plugins>
 ----
 
-== To Run Tests With Specific Tags
+== Run Tests With Specific Tags
+
+To run tests with specific tags, add a line for the test with the specific tag:
 
 [source,xml,linenums]
 ----
@@ -249,9 +241,11 @@ By default, it is set to `true`.
 </plugins>
 ----
 
-You can specify more than one tag by separating them using a comma.
+You can specify more than one tag by separating them with a comma.
 
-== To Skip MUnit Tests
+== Skip MUnit Tests
+
+To skip MUnit tests, add a line to skip MUnit tests:
 
 [source,xml,linenums]
 ----
@@ -268,13 +262,9 @@ You can specify more than one tag by separating them using a comma.
 </plugins>
 ----
 
+== Skip Tests After One Suite Fails
 
-// CONFIGURATION
-
-== To Skip Tests After One Suite Fails
-
-MUnit allows you to skip the rest of the tests if one test suite fails. +
-If not specified, this value is false by default.
+To skip the rest of the tests if one test suite fails, add a line to skip after failure:
 
 [source,xml,linenums]
 ----
@@ -291,7 +281,9 @@ If not specified, this value is false by default.
 </plugins>
 ----
 
-== To Specify the Runtime Version
+The default value is `false`.
+
+== Specify the Runtime Version
 
 MUnit allows you to specify the runtime version in which your module being tested will run.
 
