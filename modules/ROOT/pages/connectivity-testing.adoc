@@ -7,8 +7,8 @@ Test the connectivity defined for your module.
 
 == Before You Begin
 
-* Know how to define a connection for your module. For more information, refer to xref:connections.adoc[].
-* To create connectivity tests, add the `mtf-tools` dependency to your project:
+* Understand how to define a connection for your module. For more information, refer to xref:connections.adoc[].
+* Add the `mtf-tools` dependency to your project:
 +
 [source,xml,linenums]
 ----
@@ -21,7 +21,7 @@ Test the connectivity defined for your module.
 </dependency>
 ----
 
-CAUTION: Connectivity testing is available since Mule runtime engine 4.2.0. If your module has a minimum Mule version earlier than 4.2.0, add `minMuleVersion` to your connectivity testing suite, for example: `<munit:config name="connectivity-testing-suite" minMuleVersion="4.2.0"/>`.
+CAUTION: Connectivity testing is available as of Mule runtime engine version 4.2.0. If your module has a minimum Mule version earlier than 4.2.0, add `minMuleVersion` to your connectivity testing suite, for example: `<munit:config name="connectivity-testing-suite" minMuleVersion="4.2.0"/>`.
 
 == Test Connectivity
 
@@ -29,7 +29,7 @@ The `test-connectivity` processor establishes a connection using the given confi
 
 === Successful Connection
 
-When you test that a connection is valid, you are validating that the processor does not fail. A successful connection test looks as follows:
+When you test that a connection is valid, you are validating that the processor does not fail. A successful connection test appears as follows:
 
 [source,xml,linenums]
 ----

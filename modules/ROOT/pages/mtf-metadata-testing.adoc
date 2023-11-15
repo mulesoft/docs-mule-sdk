@@ -7,8 +7,8 @@ Test the metadata defined for your module.
 
 == Before You Begin
 
-* Know how to define metadata in your module. For more information, refer to xref:metadata.adoc[].
-* To create metadata tests, add the `mtf-tools` dependency to your project:
+* Understand how to define metadata in your module. For more information, refer to xref:metadata.adoc[].
+* Add the `mtf-tools` dependency to your project:
 +
 [source,xml,linenums]
 ----
@@ -21,11 +21,11 @@ Test the metadata defined for your module.
 </dependency>
 ----
 
-CAUTION: Metadata testing is available since Mule runtime engine 4.2.0. When running your tests against an earlier version, suites containing metadata tests are ignored.
+CAUTION: Metadata testing is available as of Mule runtime engine version 4.2.0. When running your tests against an earlier version, suites containing metadata tests are ignored.
 
 == Tooling Test
 
-The `tooling-test` component validates the module's metadata at design time, unlike the `munit:test` component that validates the module's metadata at execution. The `tooling-test` component is represented as follows:
+The `tooling-test` component validates the module's metadata at design time, unlike the `munit:test` component, which validates the module's metadata at execution. The following code describes the `tooling-test` component:
 
 [source,xml,linenums]
 ----
@@ -34,7 +34,7 @@ The `tooling-test` component validates the module's metadata at design time, unl
 </mtf:tooling-test>
 ----
 
-When a suite with a tooling test runs, XML validations are disabled. When testing metadata, it might be necessary to avoid filling required parameters.
+When a suite with a tooling test runs, XML validations are disabled. When testing metadata, it might be necessary to avoid entering required parameters.
 
 The tooling test can have the following parameters:
 
@@ -43,22 +43,22 @@ The tooling test can have the following parameters:
 |Name |Description
 
 |`name`
-| Mandatory. Defines the name of the test. The name must be unique inside the test suite.
+| Required. Defines the name of the test. The name must be unique inside the test suite.
 
 |`description`
-|Describes the scenario that is tested.
+|Describes the scenario to test.
 
 |`ignore`
-|Defines whether the test is ignored. If this parameter is not present, the test is not ignored.
+|Specifies whether to ignore the test. If this parameter is not present, the test is not ignored.
 
 |`tags`
-|Comma-separated list of tags to assign to the test.
+|Specifies a comma-separated list of tags to assign to the test.
 
 |`expectFailureCode`
-|Defines the failure code that is received after the metadata calculation of this test.
+|Defines the failure code that is received after calculating the metadata for this test.
 
 |`expectFailureMessage`
-|Defines the failure message that is received after the metadata calculation of this test.
+|Defines the failure message that is received after calculating the metadata for this test.
 
 |===
 
@@ -79,7 +79,7 @@ Contains all the validations regarding the result of the metadata scope.
 
 == Metadata Scopes
 
-Use metadata scopes in the tooling test. You can use only one metadata scope in each test. You can use either an operation or a source in each of these scopes.
+Use metadata scopes in the tooling test. You can use only one metadata scope in each test and you can use either an operation or a source in each metadata scope.
 
 === Metadata Keys
 
@@ -115,7 +115,7 @@ The `input metadata` scope obtains the metadata type for the specified parameter
 
 === Output Metadata
 
-The `output metadata` obtains the metadata type for the output `payload` of the module. The `payload` contains a JSON representation of the metadata type:
+The `output metadata` scope obtains the metadata type for the output `payload` of the module, which contains a JSON representation of the metadata type:
 
 [source,xml,linenums]
 ----
@@ -186,7 +186,7 @@ A common use case when testing metadata is validating failures that might occur 
 
 Use the assert type processor to assert the metadata type structure returned by metadata scopes such as `get-input-metadata`, `get-output-metadata`, and `get-attributes-metadata`.
 
-The assert type processor compares the structure of both metadata types and ignores fields such as `format` or `annotations`. To perform assertions over these fields, you can use the `payload` result of the metadata scopes operations as shown in the previous examples.
+The assert type processor compares the structure of both metadata types and ignores fields such as `format` or `annotations`. To perform assertions over these fields, use the `payload` result of the metadata scopes operations as shown in the previous examples.
 
 If the assertion fails, the processor throws a `java.lang.AssertionError` error.
 
@@ -217,7 +217,7 @@ The `actual` field defaults to `payload`. You can choose to not specify the `act
 
 To compare a metadata type structure with another metadata type structure obtained from a schema, use the `fromSchema` parameter.
 
-The `fromSchema` parameter supports metadata types such as JSON schema, XSD schema, and RAML data types. The file extensions must be `.json`, `.xsd`, and `.raml` respectively and must be stored in the `src/test/resources` folder.
+The `fromSchema` parameter supports metadata types, such as JSON schema, XSD schema, and RAML data types. The file extensions must be `.json`, `.xsd`, and `.raml` respectively, and must be stored in the `src/test/resources` folder.
 
 [source,xml,linenums]
 ----
