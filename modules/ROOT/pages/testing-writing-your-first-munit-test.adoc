@@ -36,6 +36,9 @@ To configure your module to run your MUnit tests, you must configure your `pom.x
   ...
 </project>
 ----
++
+NOTE: Starting from version 1.x, this configuration might already be set up given a minMuleVersion parent.
++
 . Add the Maven Resources Plugin:
 +
 [source,xml,linenums]
