@@ -3,7 +3,7 @@ ifndef::env-site,env-github[]
 include::_attributes.adoc[]
 endif::[]
 
-Learn how to run your tests using the MUnit Extensions Maven plugin.
+Learn how to run your tests by using the MUnit Extensions Maven plugin.
 
 == Run MUnit Tests for a Module Project
 
@@ -16,14 +16,14 @@ mvn clean verify
 
 == Run a Specific MUnit Test Suite
 
-You can instruct the MUnit Extensions Maven plugin to run tests that only belong to a specific test suite by using the `munit.test` property.
+You can instruct the MUnit Extensions Maven plugin to run tests that belong only to a specific test suite by using the `munit.test` property:
 
 [source,console]
 ----
 mvn clean verify -Dmunit.test=<regex-test-suite>
 ----
 
-The `munit.test` property accepts regular expressions. The expression is applied to the name of the MUnit test suite file. The regular expression language is the Java implementation. This path is relative to `src/test/munit`.
+The `munit.test` property accepts regular, Java expressions applied to the name of the MUnit test suite file. The path is relative to `src/test/munit`.
 
 For example:
 
@@ -36,14 +36,14 @@ You can leverage this feature by adding naming conventions to your MUnit test su
 
 == Run Specific MUnit Tests
 
-In the same way that you instruct MUnit to run one test suite, you can also instruct MUnit to run a specific test inside that test suite. To do so, use the `munit.test` property, with one addition:
+In the same way that you instruct MUnit to run one test suite, you can also instruct MUnit to run a specific test inside that test suite. To do so, use the `munit.test` property, followed by `#` and the test name:
 
 [source,console]
 ----
 mvn clean verify -Dmunit.test=<regex-test-suite>#<regex-test-name>
 ----
 
-The addition is the special character `#`. After `#`, you can type the test name. It also accepts regular expressions. The expression is applied to the attribute `name` of the MUnit test.
+The test also accepts regular expressions applied to the `name` attribute:
 
 For example:
 
@@ -52,14 +52,11 @@ For example:
 mvn clean verify -Dmunit.test=.*my-test.*#.*test-scenario-1.*
 ----
 
-[TIP]
---
-The tests inside the MUnit test suite that don't match the regular expression are flagged as *ignored*.
---
+The MUnit Extensions Maven plugin flags tests inside the MUnit test suite as *ignored* if they don't match the regular expression. 
 
 == Run Tests Using a Specific Tag
 
-You can choose to run only the tests that you grouped under one specific tag.
+You can choose to run only the tests that you grouped under one specific tag:
 
 [source,console]
 ----
@@ -68,7 +65,7 @@ mvn clean verify -Dmunit.tags=<munit-tag>
 
 == Skip All Tests
 
-When building your module, you can prevent a test from running. MUnit leverages the same mechanism as Maven, so use the `skipTests` parameter to skip tests.
+When building your module, you can prevent a test from running by using the `skipTests` parameter:
 
 [source,console]
 ----
@@ -77,19 +74,19 @@ mvn clean verify -DskipTests
 
 == Debug Tests
 
-When testing your module, you can debug your code. MUnit leverages Java remote debugging, so use the `munit.debug` parameter to debug your tests.
+When testing your module, you can debug your code. MUnit leverages Java remote debugging, so use the `munit.debug` parameter to debug your tests:
 
 [source,console]
 ----
 mvn clean verify -Dmunit.debug
 ----
 
-[TIP]
---
 The default debugger listens on port 5005. You can override the debugger JVM argument line by specifying it as the value of the property:
 
+[source,console]
+----
 mvn clean verify -Dmunit.debug="-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=8002"
---
+----
 
 == See Also
 
