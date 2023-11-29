@@ -63,6 +63,8 @@ You can choose to run only the tests that you grouped under one specific tag:
 mvn clean verify -Dmunit.tags=<munit-tag>
 ----
 
+For more information about how to tag your tests, refer to xref:munit::munit-test-concept.adoc#test-tag-attribute[].
+
 == Skip All Tests
 
 When building your module, you can prevent a test from running by using the `skipTests` parameter:
