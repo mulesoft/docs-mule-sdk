@@ -218,7 +218,7 @@ To run a specific test, add an `munitTest` property for each specific test to th
 
 == Run Tests with Specific Tags
 
-To run tests with specific tags, add an `munitTags` property for the test with the specific tag to the configuration section of the MUnit Extensions Maven plugin. Separate the tags with commas:
+To run tests with specific tags, add an `munitTags` property for the tests with the specific tags to the configuration section of the MUnit Extensions Maven plugin. Separate the tags with commas, for example:
 
 [source,xml,linenums]
 ----
@@ -228,7 +228,7 @@ To run tests with specific tags, add an `munitTags` property for the test with t
       <artifactId>munit-extensions-maven-plugin</artifactId>
       <configuration>
       ...
-      <munitTags>exampleMunitTag,exampleMunitTag2</munitTags>
+      <munitTags>exampleMUnitTag,exampleMUnitTag2</munitTags>
       ...
     </configuration>
   </plugin>
@@ -256,7 +256,7 @@ To skip MUnit tests, add a `skipMunitTests` property to skip MUnit tests to the 
 
 == Skip Tests After One Suite Fails
 
-To skip the rest of the tests if one test suite fails, add a `skipAfterFailure` property to skip after failure to the configuration section of the MUnit Extensions Maven plugin:
+To skip the rest of the tests if one test suite fails, add a `skipAfterFailure` property to the configuration section of the MUnit Extensions Maven plugin:
 
 [source,xml,linenums]
 ----

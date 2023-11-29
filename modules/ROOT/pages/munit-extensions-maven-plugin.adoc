@@ -23,7 +23,7 @@ You can instruct the MUnit Extensions Maven plugin to run tests that belong only
 mvn clean verify -Dmunit.test=<regex-test-suite>
 ----
 
-The `munit.test` property accepts regular, Java expressions applied to the name of the MUnit test suite file. The path is relative to `src/test/munit`.
+The `munit.test` property accepts regular Java expressions applied to the name of the MUnit test suite file. The path is relative to `src/test/munit`.
 
 For example:
 
