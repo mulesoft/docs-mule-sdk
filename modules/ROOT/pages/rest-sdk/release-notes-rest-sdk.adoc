@@ -3,6 +3,18 @@ ifndef::env-site,env-github[]
 include::../_attributes.adoc[]
 endif::[]
 
+== 0.11.0
+
+*September 8, 2023*
+
+* This release includes only non-user-impacting changes.
+
+== 0.10.0
+
+*August 28, 2023*
+
+* This release includes only non-user-impacting changes.
+
 == 0.8.0-RC3
 
 *June 3, 2022*
@@ -400,6 +412,14 @@ endif::[]
 |The naming for the request body field can now be changed. | (RSDK-181)
 |===
 
+== 0.1.5-HF1
+
+*December 7, 2023*
+
+=== What's New
+
+* The Rest SDK Commons patch is now compatible with Java 17.
+
 == 0.1.5
 
 *March 15, 2021*
@@ -451,6 +471,14 @@ endif::[]
 |Connector generation failed for wildcard media types. | (RSDK-264)
 |There was an invalid yaml file error for wildcard media types. | (RSDK-271)
 |===
+
+== 0.1.3-HF1
+
+*December 7, 2023*
+
+=== What's New
+
+* The Rest SDK Commons patch is now compatible with Java 17.
 
 == 0.1.3
 
