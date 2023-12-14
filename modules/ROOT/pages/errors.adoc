@@ -6,7 +6,7 @@ endif::[]
 
 In Mule, errors are a way of communicating that something went wrong and providing meaningful information so that a user can take corrective action depending on the kind of error that was thrown.
 
-See xref:4.1@mule-runtime::error-handling.adoc[About Error Handling] for more detail.
+See xref:mule-runtime::error-handling.adoc[About Error Handling] for more detail.
 
 
 == Defining Module Errors

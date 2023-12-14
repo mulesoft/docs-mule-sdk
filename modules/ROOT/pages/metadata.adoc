@@ -21,7 +21,7 @@ Note that unlike xref:value-providers.adoc[Value Providers], which are meant to 
 
 The term "types" refers to the `MetadataType` of an element. A `MetadataType` represents the kind and structure of a given element, like `StringType` or `NumberType` for elements that are basic string or numbers, `ArrayType` for collections, `ObjectType` for complex structures with nested elements (like a POJO or a JSON object), and `AnyType` for elements whose type is actually unknown and can be any of the other available types.
 
-See xref:4.1@mule-runtime::dataweave-types.adoc[DataWeave Types].
+See xref:dataweave::dataweave-types.adoc[DataWeave Types].
 
 === Static Metadata
 

@@ -215,7 +215,7 @@ Both outputs (`<output>` and `<output-attributes>`) become part of the `MuleMess
 | `type`
 | required
 |
-| The type of error code to throw (or remap) in the `<body>`. More info about xref:4.1@mule-runtime::mule-error-concept.adoc[Mule Error concept].
+| The type of error code to throw (or remap) in the `<body>`. More info about xref:mule-runtime::mule-error-concept.adoc[Mule Error concept].
 
 |===
 
@@ -900,7 +900,7 @@ Marking multiple global elements with `xmlns:connection="true"` makes the compil
 
 In some cases, operations within the `<body>` throw error codes that should not be propagated as-is. In this case, you need to remap the codes to something more meaningful to the end user. In other cases, the issues might pertain to conditions within the `<operation>`.
 
-The XML SDK relies on xref:4.1@mule-runtime::mule-error-concept.adoc#about-error-mappings[error mappings] for the former. For the latter, the xref:4.1@mule-runtime::raise-error-component-reference.adoc[raise error component] is used.
+The XML SDK relies on xref:mule-runtime::mule-error-concept.adoc#error-mappings[error mappings] for the former. For the latter, the xref:mule-runtime::raise-error-component-reference.adoc[raise error component] is used.
 
 This example performs error mapping in an operation that divides two numbers:
 
