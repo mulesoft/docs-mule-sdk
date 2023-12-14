@@ -154,7 +154,7 @@ You can use your existing account for Connectivity Assets Manager. If you do not
 You can install your connector to Studio 7 using this command to create a connector for use in Studio 7:
 `mvn clean install`
 +
-See <<local_install, Installation Example>> for detailed steps.
+See <<installation_example, Installation Example>> for detailed steps.
 
 [[question_4]]
 *How can I make a connector available in Anypoint Design Center?*
@@ -264,7 +264,7 @@ image::ex-connector-in-palette.png[Example: Cookbook connector in Studio palette
 
 https://www.mulesoft.com/webinars/api/intro-to-anypoint-design-center-flow-designer[Intro to Anypoint Design Center - Flow Designer]
 
-xref:4.1@mule-runtime::index.adoc[About Mule Runtime]
+xref:mule-runtime::index.adoc[About Mule Runtime]
 
 xref:index.adoc[Mule SDKs]
 

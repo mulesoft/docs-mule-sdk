@@ -13,4 +13,4 @@ There are two types of streaming:
 
 == See Also
 
-xref:4.1@mule-runtime::streaming-about.adoc#repeatable_streams[About Streaming]
+xref:mule-runtime::streaming-about.adoc#repeatable-streams[About Streaming]

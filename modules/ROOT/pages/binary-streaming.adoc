@@ -95,4 +95,4 @@ The file must be immutable for you to use this feature. That means that once the
 == See Also
 
 * xref:streaming.adoc[Streaming]
-* xref:4.1@mule-runtime::streaming-about.adoc#repeatable_streams[Repeatable Streams]
+* xref:mule-runtime::streaming-about.adoc#repeatable-streams[Repeatable Streams]
