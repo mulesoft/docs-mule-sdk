@@ -923,7 +923,7 @@ This example performs error mapping in an operation that divides two numbers:
 
 If the divisor `numberB` is zero, the `div` operation results in the `MULE:EXPRESSION` runtime error, which does not describe the error specifically enough.
 
-To create a more specific error, you can use error mapping to make the `div` operation produce the `MATH-XML-SDK:DIVISION_BY_ZERO` error, for example:
+To create a more specific error, you can use error mapping to make the `div` operation produce the `MATH-XML-SDK:DIVISION_BY_ZERO` error. You must include the namespace in the custom error to avoid unexpected behavior. For example:
 
 [source,xml,linenums]
 ----
@@ -936,7 +936,7 @@ To create a more specific error, you can use error mapping to make the `div` ope
     </parameters>
     <body>
       <mule:set-payload value="#[vars.numberA / vars.numberB]">
-        <mule:error-mapping targetType="DIVISION_BY_ZERO" sourceType="MULE:EXPRESSION"/>
+        <mule:error-mapping targetType="MATH-XML-SDK:DIVISION_BY_ZERO" sourceType="MULE:EXPRESSION"/>
       </mule:set-payload>
     </body>
     <output type="number"/>
