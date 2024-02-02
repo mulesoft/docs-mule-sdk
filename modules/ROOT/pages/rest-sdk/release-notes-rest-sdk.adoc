@@ -15,6 +15,14 @@ endif::[]
 
 * This release includes only non-user-impacting changes.
 
+== 0.8.0-RC4
+
+*February 6, 2024*
+
+=== What's New
+
+* REST SDK now supports Java 17. 
+
 == 0.8.0-RC3
 
 *June 3, 2022*
