@@ -33,6 +33,10 @@ Packages from the JDK are treated differently since modules don’t export them 
 
 However, the module *must* use only Java packages available on all of the JDKs supported by the Mule versions that the module is compatible with. Vendor-specific packages such as com.sun *must not* be used.
 
+=== Java 17 Compatibility
+
+Starting with Mule 4.6.0, Java 17 is supported. See xref:general::java-support.adoc[].
+
 === Java 11 Compatibility
 
 Starting with Mule 4.2.0, JDK 11 is also supported. That means that when depending on native Java APIs, the module *must* account for the fact that the needed API might not be available given Java’s new modular architecture (also known as https://openjdk.java.net/projects/jigsaw/[Project Jigsaw], first introduced in Java 9).
