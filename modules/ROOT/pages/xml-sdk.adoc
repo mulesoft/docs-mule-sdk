@@ -1218,7 +1218,7 @@ Starting with Mule 4.6, XML SDK supports Transport Layer Security (TLS). Use TLS
 
 === Parameter Declaration
 
-Use the `xmlns:tlsEnabled=true` annotation to indicate the component to support TLS. The annotated element does not necessarily have to be a top-level element. In the following example, the annotated element is `<http:request-connection>` which is a child of the `<http:request-config>` top-level element:
+Use the `xmlns:tlsEnabled=true` annotation to specify that the component supports TLS. The annotated element does not necessarily have to be a top-level element. In the following example, the annotated element is `<http:request-connection>` which is a child of the `<http:request-config>` top-level element:
 
 [source,xml,linenums]
 ----
