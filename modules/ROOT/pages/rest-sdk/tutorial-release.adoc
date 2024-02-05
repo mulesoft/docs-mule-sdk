@@ -1,0 +1,133 @@
+= Step 4: Release the Connector
+
+Release the connector to staging and production by following these steps.
+
+== Step 4.1: Promote the Connector to Staging
+
+. Ensure the connector is onboarded onto lower environments. Refer to
+xref:rest-sdk/tutorial-design.adoc#onboardlower[Onboard Connector Onto Lower Environments].
+. Expose the connector by adding or changing the relevant entry on
+https://github.com/mulesoft/citizen-platform-connectors-models-service/blob/master/citizen-platform-connectors-models-service/src/main/resources/application.yml[application.yml]
+under the path `connectors.environments.KSTG.foo` and putting in the version
+that should be promoted.
+
++
+[source,yaml]
+----
+# ...
+connectors:
+  environments:
+    # ...
+    KSTG:
+      # ...
+      trello: 1.3.0
+    # ...
+# ...
+----
++
+
+. Add or update the connector to the unit tests, for which you should add a similar entry
+to https://github.com/mulesoft/citizen-platform-connectors-models-service/blob/master/citizen-platform-connectors-models-service/src/test/resources/connectors-configuration-test.yml[connectors-configuration-test.yml]:
+
++
+[source,yaml]
+----
+# ...
+KSTG:
+  # ...
+  trello: 1.3.0
+# ...
+----
++
+
+. Run `mvn clean test` to validate that the build passes.
+. Create a pull request for your newly promoted connector.
+. Merge the pull request.
+
+== Step 4.2: Release the Connector to Production
+
+. Ensure the connector is onboarded onto staging.
+. Expose the connector by adding or changing the relevant entries on https://github.com/mulesoft/citizen-platform-connectors-models-service/blob/master/citizen-platform-connectors-models-service/src/main/resources/application.yml[application.yml],
+under the paths connectors.environments.<KPROD & KPROD_EU>.foo and putting in the
+version that should be released.
+
++
+[source,yaml]
+----
+# ...
+connectors:
+  environments:
+    # ...
+    KPROD_EU:
+      # ...
+      trello: 1.2.0
+    KPROD:
+      # ...
+      trello: 1.3.0
+# ...
+----
++
+
+. Add the connector to the unit tests, for which you should add similar entries
+to https://github.com/mulesoft/citizen-platform-connectors-models-service/blob/master/citizen-platform-connectors-models-service/src/test/resources/connectors-configuration-test.yml[connectors-configuration-test.yml]:
+
++
+[source,yaml]
+----
+# ...
+KPROD_EU:
+  # ...
+  trello: 1.2.0
+KPROD:
+  # ...
+  trello: 1.3.0
+----
++
+
+. Create or update the corresponding prod test for the connector. Refer to
+https://github.com/mulesoft/citizen-platform-connectors-models-service/blob/master/citizen-platform-connectors-models-service/src/test/java/com/mulesoft/citizen/platform/connectors_models/mocks/ConnectorsMocks.java[ConnectorsMocks.java]
+and https://github.com/mulesoft/citizen-platform-connectors-models-service/blob/master/citizen-platform-connectors-models-service/src/test/java/com/mulesoft/citizen/platform/connectors_models/controllers/ConnectorsControllerTest.java[ConnectorsControllerTest.java].
+Changes should be similar to these diffs:
+
+
++
+[source, java, linenums]
+----
+// ...
++
++  public static ListedConnector getFooConnector() {
++    return ListedConnector.builder("trello", "Trello", "MuleSoft Composer connector for Trello.", "1.3.0")
++    .withConnection(???)  // Whether the connector requires a connection (see CONNECTORS_WITHOUT_CONNECTION in ./citizen-platform-connectors-models-service/src/main/java/com/mulesoft/citizen/platform/connectors_models/configuration/RegisteredConnectorConfig.java)
++    .withTrigger(???)     // Whether the connector has sources.
++    .withAction(???)      // Whether the connector has operations.
++    .build();
++  }
+   // ...
+----
++
+
++
+[source, java, linenums]
+----
+// ...
+
+   @Test
+   public void connectorsEndpointReturnsAListOfConnectorsWithAllAvailableConnectors() throws Exception {
+     // ...
+     List expectedConnectorsList = Arrays.asList(
+       // ...
+-      ConnectorsMocks.getOtherConnector() // Deleted
++      ConnectorsMocks.getOtherConnector(),
++      ConnectorsMocks.getTrelloConnector()  // <- This is our connector
+     );
+
+     // ...
+   }
+
+   // ...
+----
++
+
+. Run `mvn clean test` to validate that the build passes.
+. Create a pull request for your soon to be released connector.
+. Merge the pull request.

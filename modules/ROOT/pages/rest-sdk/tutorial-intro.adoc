@@ -1,0 +1,13 @@
+= Build a Connector from Start to Finish
+
+REST SDK enables you to build a connector using an API specification within
+just a few simple steps.
+
+The following topics show how to build a connector after the Anypoint Connector
+development is complete. For more information on how to build Anypoint Connectors,
+refer to xref:rest-sdk/project-setup.adoc[Getting Started].
+
+. xref:rest-sdk/tutorial-prereq.adoc[Prerequisites]
+. xref:rest-sdk/tutorial-design.adoc[Design the Connector]
+. xref:rest-sdk/tutorial-iterate.adoc[Iterate Over the Connector Design]
+. xref:rest-sdk/tutorial-release.adoc[Release the Connector]
