@@ -1218,7 +1218,7 @@ Starting with Mule 4.6, XML SDK supports Transport Layer Security (TLS). Use TLS
 
 === Parameter Declaration
 
-Use the `xmlns:tlsEnabled=true` annotation to indicate the component to support TLS. The annotated element does not necessarily have to be a top level element. In the following example, the annotated element is `<http:request-connection>` which is a child of the `<http:request-config>` top level element.
+Use the `xmlns:tlsEnabled=true` annotation to indicate the component to support TLS. The annotated element does not necessarily have to be a top-level element. In the following example, the annotated element is `<http:request-connection>` which is a child of the `<http:request-config>` top-level element:
 
 [source,xml,linenums]
 ----
@@ -1229,16 +1229,16 @@ basePath ....>
   host=...>
 ----
 
-The `<tls:context>` parameter can be specified only in one component. Using it on more than one component results in an error. 
+You can specify the `<tls:context>` parameter in only one component. Using it on more than one component results in an error. 
 
 XML SDK adds a `<tls:context>` parameter in the configuration of the generated extension. This parameter is optional unless the `<tls:context>` parameter in the target element is required and doesn’t have a default value.
 
-When the extension is used, the supplied `<tls:context>` parameter is mapped to the config element with this annotation. 
+In the generated extension, the supplied `<tls:context>` parameter is mapped to the config element with this annotation. 
 
-==== Inline Declaration
+You can declare the `<tls:context>` parameter inline or by-reference:
 
-The following example shows an inline declaration of the `<tls:context>` parameter:
-
+* Inline declaration
++
 [source,xml,linenums]
 ----
 <concur:config name="inline">
@@ -1250,10 +1250,8 @@ The following example shows an inline declaration of the `<tls:context>` paramet
 </concur:config>
 ----
 
-==== By-Reference Declaration
-
-The following example shows a by-reference declaration of the `<tls:context>` parameter:
-
+* By-reference declaration
++
 [source,xml,linenums]
 ----
 <tls:context name="myTlsContext">
@@ -1281,7 +1279,7 @@ basePath ....>
   </http:request-connection>
 ----
 
-In this case, the value that comes from the module definition is used as the default. The synthetic parameter is still added to the module’s config, which, if provided, is used as an override. Providing a default value at the target element makes the synthetic parameter optional even if the parameter at the target element is required. This applies to both inline and by-reference declarations.
+In this case, the value that comes from the module definition is used as the default. The synthetic parameter is also added to the module config, which, if provided, is used as an override. For both inline and by-reference declarations, providing a default value at the target element makes the synthetic parameter optional even if the parameter at the target element is required. 
 
 == Working Examples of XML SDK Modules
 
