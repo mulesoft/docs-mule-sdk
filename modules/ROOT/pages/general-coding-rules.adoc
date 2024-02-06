@@ -39,8 +39,12 @@ Starting with Mule 4.6.0, Java 17 is supported. See xref:general::java-support.a
 
 Some changes include:
 
-* Removing Java EE libraries. See xref:general::customer-connector-upgrade.adoc#upgrade-third-party-libraries[Java EE Libraries].
-* `JavaSupportVersion` annotation. See xref:general::customer-connector-upgrade.adoc#release-your-custom-connector[Supported Java Version Concept].
+* Java EE libraries removal
++
+See xref:general::customer-connector-upgrade.adoc#upgrade-third-party-libraries[Java EE Libraries].
+* `JavaSupportVersion` annotation
++
+See xref:general::customer-connector-upgrade.adoc#release-your-custom-connector[Supported Java Version Concept].
 
 === Java 11 Compatibility
 
