@@ -1211,6 +1211,76 @@ To use the operations from the <<example2, example>> above in a Mule app, it is 
 </mule>
 ----
 
+[[xml-sdk-tls]]
+== TLS Support
+
+Starting with Mule 4.6, XML SDK supports Transport Layer Security (TLS). Use TLS to enhance security for your app. XML SDK connectors can support the `<tls:context>` parameter in their configuration parameters.
+
+=== Parameter Declaration
+
+Use the `xmlns:tlsEnabled=true` annotation to specify that the component supports TLS. The annotated element does not necessarily have to be a top-level element. In the following example, the annotated element is `<http:request-connection>` which is a child of the `<http:request-config>` top-level element:
+
+[source,xml,linenums]
+----
+<http:request-config
+name="concur-httpreq-config" xmlns:connection="true"
+basePath ....>
+  <http:request-connection xmlns:tlsEnabled="true"
+  host=...>
+----
+
+You can specify the `<tls:context>` parameter in only one component. Using it on more than one component results in an error. 
+
+XML SDK adds a `<tls:context>` parameter in the configuration of the generated extension. This parameter is optional unless the `<tls:context>` parameter in the target element is required and doesn’t have a default value.
+
+In the generated extension, the supplied `<tls:context>` parameter is mapped to the config element with this annotation. 
+
+You can declare the `<tls:context>` parameter inline or by-reference:
+
+* Inline declaration
++
+[source,xml,linenums]
+----
+<concur:config name="inline">
+   <tls:context>
+      <tls:key-store keyPassword="changeit"
+         password="changeit"
+         path="ssltest-keystore.jks"/>
+  </tls:context>
+</concur:config>
+----
+
+* By-reference declaration
++
+[source,xml,linenums]
+----
+<tls:context name="myTlsContext">
+  <tls:key-store keyPassword="changeit"
+    password="changeit"
+    path="ssltest-keystore.jks"/>
+</tls:context>
+<concur:config name="byRef" tlsContext="myTlsContext" />
+----
+
+=== Parameter Default Value
+
+The target element can already provide a value for the `<tls:context>` parameter, for example:
+
+[source,xml,linenums]
+----
+<http:request-config
+name="concur-httpreq-config" xmlns:connection="true"
+basePath ....>
+  <http:request-connection xmlns:tlsEnabled="true"
+  host=...>
+	  <tls:context>
+      <tls:trust-store path="ssltest-cacerts.jks" password="changeit2"/>
+    </tls:context>a
+  </http:request-connection>
+----
+
+In this case, the value that comes from the module definition is used as the default. The synthetic parameter is also added to the module config, which, if provided, is used as an override. For both inline and by-reference declarations, providing a default value at the target element makes the synthetic parameter optional even if the parameter at the target element is required. 
+
 == Working Examples of XML SDK Modules
 
 https://github.com/mulesoft-labs/smart-connectors-integration-tests
