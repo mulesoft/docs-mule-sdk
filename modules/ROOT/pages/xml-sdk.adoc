@@ -127,10 +127,10 @@ To use an XML SDK module in a Mule app, you simply add it to a Mule flow, for ex
 
 | `role`
 | required
-| `behavior`
+| `BEHAVIOUR`
 | Set of defined roles for a given parameter that modifies the generated XSD for the current `<parameter>`.
 
-* `behavior` renders an attribute.
+* `BEHAVIOUR` renders an attribute.
 * `CONTENT` implies support for DataWeave in place as a child element.
 * `PRIMARY` works like `CONTENT` but maps to the payload by default.
 
