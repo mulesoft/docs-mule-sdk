@@ -204,7 +204,7 @@ All parameters have a matching Javadoc that explains the purpose of that paramet
 +
 Sometimes a configuration object defines a parameter that *should* globally affect a connector. However, some components might want to override that parameter.
 +
-The canonical example of this is a charset encoding. A file connector could define the encoding to use at a configuration level. However, in the context of an application, one might have one specific flow in which a different encoding *should* be used (even though the rest of the application might still use the one specified in the config). The @ConfigOverride annotation *must* be used in these cases. This is not only a matter of simplifying your own code (as opposed to manually checking for an override and defaulting to the config one instead). The @ConfigOverride not only does that automatically, it also hints the Studio and Flow designer with the fact that the parameter is overriding a config parameter allowing the UI to surface this accordingly.
+The canonical example of this is a charset encoding. A file connector could define the encoding to use at a configuration level. However, in the context of an application, one might have one specific flow in which a different encoding *should* be used (even though the rest of the application might still use the one specified in the config). The @ConfigOverride annotation *must* be used in these cases. This is not only a matter of simplifying your own code (as opposed to manually checking for an override and defaulting to the config one instead). The @ConfigOverride not only does that automatically, but in Studio also overrides the config parameter allowing the UI to surface this accordingly.
 +
 xref:mule-sdk::config-override.adoc[Configuration Overrides] are explained at length in this article.
 +
@@ -341,7 +341,7 @@ This is just a convenience internal type, derived from good practices of the pro
 +
 Therefore, modifications to it, or even the decision to replace it with something else, results in a backwards compatibility problem.
 +
-* Complex objects are hard to translate into a good user experience in Studio and Flow Designer.
+* Complex objects are hard to translate into a good user experience in Studio.
 +
 All of the these issues can be traced to one root cause: the module’s structure *should not* reflect nor be affected by the nuances of the programming language being used (notice that we wouldn’t be having this discussion if the XML SDK would be used here instead).
 +

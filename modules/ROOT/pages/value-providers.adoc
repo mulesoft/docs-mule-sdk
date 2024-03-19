@@ -87,7 +87,7 @@ public void publishAs(@Content Object content,
 }
 ----
 +
-. Now, you can use it in Studio or Design Center to start retrieving values.
+. Now, you can use it in Studio to start retrieving values.
 +
 image::value-provider-static.gif[align="center"]
 
