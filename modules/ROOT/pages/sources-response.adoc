@@ -49,8 +49,7 @@ Even if the source does not emit responses, it might need callback methods for r
 
 The source can declare a method with the `@OnSuccess` annotation so that the method is executed when the flow successfully processes the message (either because no errors were thrown or because they were all handled gracefully).
 
-This method can have arguments that are treated as source parameters. Note that the user of the connector cannot (and does not need to) tell the difference  between a regular parameter and a callback one. For that use, it is all the same, and tooling (Studio or Flow Designer) will tell the user which parameters
-accept expressions and which ones do not. The user should not need to worry about anything else.
+This method can have arguments that are treated as source parameters. Note that the user of the connector cannot (and does not need to) tell the difference  between a regular parameter and a callback one. For that use, it is all the same, and Studio shows which parameters accept expressions and which ones do not. The user should not need to worry about anything else.
 
 Another important thing to keep in mind is that the processing of the message once the source has pushed it to the flow is asynchronous. So the `@OnSuccess` method will also be invoked asynchronously.
 

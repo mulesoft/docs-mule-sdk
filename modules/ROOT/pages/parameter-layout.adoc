@@ -28,7 +28,7 @@ image::example.png[Example]
 
 `@Summary` is for a short description of the purpose of a parameter.
 
-For example, this description can be used in Design Center as the text to be displayed while hovering over the parameter:
+For example, this description can be used in Studio as the text to be displayed while hovering over the parameter:
 
 [source,java,linenums]
 ----
@@ -86,7 +86,7 @@ Note that this annotation should only be used in parameters of `String` type.
 private String sql;
 ----
 
-In Design Center, the `@Text` will be rendered like this:
+In Studio, the `@Text` will be rendered like this:
 
 image::text.png[Text large input]
 

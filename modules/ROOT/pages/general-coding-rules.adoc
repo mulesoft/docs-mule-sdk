@@ -213,7 +213,7 @@ Date and time parameters *must* be implemented by using java.time.LocalDate, jav
 
 == Check the End-to-End Experience
 
-Before publishing your module, test it in Anypoint Studio and Anypoint Design Center. Make sure it provides good usability and a good experience. A module that works but is hard to use is not complete.
+Before publishing your module, test it in Anypoint Studio. Make sure it provides good usability and a good experience. A module that works but is hard to use is not complete.
 
 You *must* check for the following:
 

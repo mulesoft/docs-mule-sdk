@@ -156,37 +156,6 @@ You can install your connector to Studio 7 using this command to create a connec
 +
 See <<installation_example, Installation Example>> for detailed steps.
 
-[[question_4]]
-*How can I make a connector available in Anypoint Design Center?*
-
-* To test your connector in Design Center, publish your connector into your organization in Exchange.
-+
-You should see a `pom.xml` something like this once you are done:
-+
-----
-<modelVersion>4.0.0</modelVersion>
-<groupId>org.mule.extension</groupId>
-<artifactId>cookbook-connector</artifactId>
-<version>1.0.0</version>
-<packaging>mule-extension</packaging>
-<name>Cookbook Extension</name>
-----
-+
-Follow these steps:
-+
-. Create an Anypoint Platform account.
-+
-Note that this account must be different from the account you use with Connectivity Assets Manager.
-+
-. Add Anypoint credentials to the local Maven `settings.xml` file with the `private-exchange` server ID.
-. Rename `groupid` in the connector to your business group ID.
-. Run this Maven `deploy` command with your business group ID :
-+
-[source,text,linenums]
-----
-mvn clean deploy -DaltDeploymentRepository=private-exchange::default::https://maven.anypoint.mulesoft.com/api/v1/organizations/<business_group_id>/maven
-----
-
 *Can a module recognize that it is being executed from Studio as opposed to on premises or in Runtime Manager, or are there any related concerns?*
 
 Background: If a connector has a custom license code based on the target AS/400 server serial numbers, the license check is performed dynamically as the connection is established. MuleSoft allows customers to evaluate the connector within Studio without a license. However, the connector does not work when running on premises or in Runtime Manager.
@@ -261,8 +230,6 @@ Your connector will now appear the palette. This example shows a Cookbook connec
 image::ex-connector-in-palette.png[Example: Cookbook connector in Studio palette]
 
 == See Also
-
-https://www.mulesoft.com/webinars/api/intro-to-anypoint-design-center-flow-designer[Intro to Anypoint Design Center - Flow Designer]
 
 xref:mule-runtime::index.adoc[About Mule Runtime]
 

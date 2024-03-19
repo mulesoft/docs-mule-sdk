@@ -107,7 +107,7 @@ public void execute(){
 }
 ----
 
-In the Studio or Flow Designer, an operation that is annotated with `@Throws` annotated Operation will provide a hint to the user about the errors the operation can throw:
+In the Studio, an operation that is annotated with `@Throws` annotated Operation will provide a hint to the user about the errors the operation can throw:
 
 image::studio-errors.gif[align="center"]
 
