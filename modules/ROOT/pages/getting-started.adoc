@@ -42,7 +42,7 @@ You are prompted to provide required field values, then a new project is generat
 
 The generated project contains the basic Mule <<module-structure#, module structure>> with some basic classes, a dummy implementation, and two running tests that use the generated module.
 
-Because this project is a Maven project, it contains a `pom.xml` file that contains all the information and configuration details used by Maven to perform the build. This generated POM file inherits from the module's parent POM, which contains all the common configurations and defaults for all Mule module projects.
+Because this project is a Maven project, it contains a `pom.xml` file that contains all the information and configuration details used by Maven to perform the build. This generated POM file inherits from the module's parent POM, which contains all the common configurations and defaults for all Mule module projects. The parent `pom.xml` file does not include any release information, so you must add the release repository to the parent `pom.xml` file manually.
 
 [source,xml,linenums]
 ----
