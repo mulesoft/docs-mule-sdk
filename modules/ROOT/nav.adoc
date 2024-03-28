@@ -29,6 +29,7 @@
   *** xref:scopes.adoc[Scopes]
   *** xref:errors.adoc[Errors]
   *** xref:reconnection.adoc[Reconnection]
+  *** xref:java-version-support.adoc[Java Version Support]
  ** xref:metadata.adoc[Metadata]
   *** xref:metadata-keys.adoc[Keys Metadata]
   *** xref:metadata-input.adoc[Input Metadata]

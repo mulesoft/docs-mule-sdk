@@ -1,0 +1,39 @@
+= Java Version Support
+
+Specify the Java compatibility of your custom module. In Mule 4.5.0 and later, custom modules that do not specify the Java compatibility are assumed to be compatible with Java 8 and Java 11 only. If your custom module is compatible with Java 17, you must specify the Java compatibility to include Java 17.
+
+Communicating the Java compatibility of your custom module also ensures:
+
+* Safe upgrades
++
+Users can determine whether their Mule applications can safely upgrade to Java 17, ensuring a smooth transition and avoiding potential issues.
+
+* Server health
++
+Certain module versions might cause problems or resource leaks when deployed on Java 17, so identifying and avoiding these versions helps maintain overall server health.
+
+* 
+
+
+
+
+
+
+
+
+identifying and avoiding these module versions helps maintain overall server health. 
+
+Transparency regarding extension versions is crucial as certain versions may lead to issues or resource leaks when deployed on Java 17. Identifying and steering clear of these versions is vital for maintaining overall server health.
+
+
+
+
+
+
+
+
+
+
+Specify the Java compatibility of your custom module. 
+
+
