@@ -31,7 +31,7 @@ To specify Java compatibility of your custom module:
 </dependency>
 ----
 
-. Add the `@JavaVersionSupport` annotation in the same class as the `@Extension` annotation and include the JAVA_17 value, for example: 
+. Add the `@JavaVersionSupport` annotation in the same class as the `@Extension` annotation and include the supported Java versions as values, for example: 
 +
 [source,java,linenums]
 ----
