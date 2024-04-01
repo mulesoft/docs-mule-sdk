@@ -20,7 +20,7 @@ Providing clear information about Java compatibilty enhances the user experience
 
 To specify Java compatibility of your custom module:
 
-. Generate metadata to specify Java compatibility of your custom module by adding or upgrading the custom connector `mule-sdk-api` dependency to the latest version: 
+. Generate metadata to specify Java compatibility of your custom module by adding or upgrading the custom connector `mule-sdk-api` dependency to the latest version, for example: 
 +
 [source,xml,linenums]
 ----
