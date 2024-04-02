@@ -330,6 +330,12 @@ Modules *must* be versioned using the https://semver.org/[Semantic Versioning] s
 
 The entirety of the module’s source code *must* correctly apply camel casing. This is critical since otherwise the SDK will not be able to correctly generate the XML DSL or process layouts.
 
+== Specify Java Compatibility
+
+Specify the Java compatibility of your custom module. In Mule 4.5.0 and later, custom modules that do not specify the Java compatibility are assumed to be compatible with Java 8 and Java 11 only. If your custom module is compatible with Java 17, you must specify the Java compatibility to include Java 17.
+
+For more information, refer to xref:java-version-support.adoc[].
+
 == See Also
 
 * https://help.mulesoft.com[MuleSoft Help Center]
