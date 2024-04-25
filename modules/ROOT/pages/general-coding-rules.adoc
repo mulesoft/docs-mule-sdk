@@ -37,15 +37,6 @@ However, the module *must* use only Java packages available on all of the JDKs s
 
 Starting with Mule 4.6.0, Java 17 is supported. See xref:general::java-support.adoc[].
 
-Some changes include:
-
-* Java EE libraries removal
-+
-See xref:general::customer-connector-upgrade.adoc#upgrade-third-party-libraries[Java EE Libraries].
-* `JavaSupportVersion` annotation
-+
-See xref:general::customer-connector-upgrade.adoc#release-your-custom-connector[Supported Java Version Concept].
-
 === Java 11 Compatibility
 
 Starting with Mule 4.2.0, JDK 11 is also supported. That means that when depending on native Java APIs, the module *must* account for the fact that the needed API might not be available given Java’s new modular architecture (also known as https://openjdk.java.net/projects/jigsaw/[Project Jigsaw], first introduced in Java 9).
@@ -338,6 +329,12 @@ Modules *must* be versioned using the https://semver.org/[Semantic Versioning] s
 == Use Strict Camel Casing
 
 The entirety of the module’s source code *must* correctly apply camel casing. This is critical since otherwise the SDK will not be able to correctly generate the XML DSL or process layouts.
+
+== Specify Java Compatibility
+
+include::partial$specify-java-compatibility.adoc[]
+
+For more information, refer to xref:java-version-support.adoc[].
 
 == See Also
 
