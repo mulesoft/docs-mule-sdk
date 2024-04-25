@@ -332,7 +332,7 @@ The entirety of the module’s source code *must* correctly apply camel casing. 
 
 == Specify Java Compatibility
 
-Specify the Java compatibility of your custom module. In Mule 4.5.0 and later, custom modules that do not specify the Java compatibility are assumed to be compatible with Java 8 and Java 11 only. If your custom module is compatible with Java 17, you must specify the Java compatibility to include Java 17.
+include::partial$specify-java-compatibility.adoc[]
 
 For more information, refer to xref:java-version-support.adoc[].
 
