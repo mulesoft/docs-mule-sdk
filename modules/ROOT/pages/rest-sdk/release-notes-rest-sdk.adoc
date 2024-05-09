@@ -21,7 +21,7 @@ endif::[]
 
 === What's New
 
-* REST SDK now supports Java 17. 
+* This version of REST SDK now supports Java 17. 
 
 == 0.8.0-RC3
 
@@ -264,6 +264,14 @@ endif::[]
 |Upgraded library dependencies. | (RSDK-811)
 |===
 
+== 0.7.0-HF1
+
+*March 18, 2024*
+
+=== What's New
+
+* This version of REST SDK now supports Java 17. 
+
 == 0.7.0
 
 *August 19, 2021*
@@ -323,6 +331,14 @@ endif::[]
 |The RestSampleDataProvider was defined incorrectly. | (RSDK-499)
 |===
 
+== 0.4.1-HF1
+
+*April 9, 2024*
+
+=== What's New
+
+* This version of REST SDK now supports Java 17. 
+
 == 0.4.1
 
 *June 30, 2021*
@@ -335,6 +351,14 @@ endif::[]
 |Using certain authentication methods caused an error that made the connection optional. | (RSDK-210)
 |Hypermedia pagination returned an execution error when the last page did not contain a link header. | (RSDK-453)
 |===
+
+== 0.4.0-HF1
+
+*April 9, 2024*
+
+=== What's New
+
+* This version of REST SDK now supports Java 17. 
 
 == 0.4.0
 
@@ -354,6 +378,14 @@ endif::[]
 |Some validation rules failed due to empty trigger definitions. | (RSDK-436)
 |===
 
+== 0.3.0-HF1
+
+*April 10, 2024*
+
+=== What's New
+
+* This version of REST SDK now supports Java 17. 
+
 == 0.3.0
 
 *June 3, 2021*
@@ -371,6 +403,14 @@ endif::[]
 |Operation and trigger descriptions were not trimmed properly. Descriptions now have an increased character limit. | (RSDK-300)
 |Some validation rules did not run. | (RSDK-238)
 |===
+
+== 0.2.1-HF1
+
+*May 3, 2024*
+
+=== What's New
+
+* This version of REST SDK now supports Java 17. 
 
 == 0.2.1
 
@@ -448,6 +488,14 @@ endif::[]
 |Multiple REST SDK connectors can now be used in the same app. | (RSDK-232)
 |Value providers returned incorrect error responses. | (RSDK-228)
 |===
+
+== 0.1.4-HF2
+
+*March 18, 2024*
+
+=== What's New
+
+* This version of REST SDK now supports Java 17. 
 
 == 0.1.4-HF1
 
