@@ -45,8 +45,7 @@ public PagingProvider<DbConnection, Map<String, Object>> list(@Text String sql) 
 +
 So, this signature means that it will return the results of the query in pages, using a `DbConnection` object, and each item in the stream will be a `Map<String, Object>` that represents each row in the result.
 +
-<2> `getPage()` fetches the next page and returns it. It receives the connection to use to fetch that page. When the stream is over, this method needs to
-//TODO: WHAT DOES "this method" SEE above "need to" DO?
+<2> `getPage()` fetches the next page and returns it. It receives the connection to use to fetch that page. When the stream is over, this method needs to return an empty List. Implementations should ensure that no empty pages are returned before the stream is finished.
 <3> Depending on the operation's logic, you might need logic to obtain the first page versus logic to obtain the next pages.
 <4> Another feature of object streaming is the ability to tell how many objects are actually in the streams. To determine that, you need to implement the `getTotalResults()` method. The problem is that not all APIs support that. For example, the _Salesforce_ API supports that, but JDBC (the API powering the Database connector) does not. That is why this method returns a Java `Optional`, in
 this case, an empty one. Users of your paginated operation can obtain this value through an expression similar to `#[payload.size]`.
