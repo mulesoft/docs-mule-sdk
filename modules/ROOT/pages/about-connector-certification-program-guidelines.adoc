@@ -27,6 +27,8 @@ Partners or developers are required to provide full support for each of their co
 * Partner responds to all support queries escalated from MuleSoft within one business day.
 * Partner makes a best effort to resolve technical support issues for customers within five business days.
 
+For help addressing issues related to partner-certified connectors, partners can contact `\MSPartnerSupport@salesforce.com`.
+
 == Pricing For Your Connector
 
 Partners or developers have sole discretion to decide whether to make your connectors available for free or for a fee. However, all connectors must be available at no cost within Anypoint Studio. While not mandatory, we recommend providing customers a trial of your connector for design and deployment.
