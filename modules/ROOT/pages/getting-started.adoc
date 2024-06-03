@@ -6,12 +6,12 @@ endif::[]
 
 Create your first Mule SDK project in just a few steps:
 
-* Install required software
-* Generate a project using Maven and explore it
-* Set up your IDE
-* Build the project you generated
-* Develop a connector or module
-* Run the connector or module in Anypoint Studio
+. Install the required software.
+. Generate a project using Maven and explore it.
+. Set up your IDE.
+. Build the project you generated.
+. Develop a connector or module.
+. Run the connector or module in Anypoint Studio.
 
 The SDK provides a Maven plugin and a Maven archetype to create new projects. The archetype is a project template; use it to ensure your new project has a consistent structure, employs recommended practices, and contains a few elements for you to experiment with.
 
@@ -61,14 +61,14 @@ For the SDK to work, you must pass the command line parameter `-parameters` to t
 
 If you are using IntelliJ:
 
-. Go to `Preferences > Build, Execution, Deployment > Compiler > Java Compiler`.
-. Add `-parameters` in the `Additional command line parameters` section.
+. Go to *Preferences > Build, Execution, Deployment > Compiler > Java Compiler*.
+. Add `-parameters` in the *Additional command line parameters* section.
 
-image::intellij-config.gif[600,600]
+image::intellij-config.png["Navigation path to the command line parameter input field.",600,600]
 
 == Build the Project
 
-Once your project is generated, build it:
+After your project is generated, build it:
 
 ----
 mvn clean install
