@@ -20,11 +20,11 @@ The SDK provides a Maven plugin and a Maven archetype to create new projects. Th
 
 Install and verify that the following tools are working in your local environment:
 
-* Java Development Kit 8 (JDK 8) to compile and build your Java code.
+* Java Development Kit 8 (JDK 8) to compile and build your custom Java code.
 +
-NOTE: The maximum supported version for Java SDK is JDK 17, however, you can use JDK 17 only for running your application. Compilation with Java SDK must be done with JDK 8.
+NOTE: The maximum supported version for running your applications is JDK 17. However, if there is custom Java code in your application, then during packaging, the custom code is always compiled using JDK 8. 
 
-* Apache Maven 3.3.9 or later to manage your project’s build.
+* Apache Maven 3.8.7 or later to manage your project’s build.
 
 [[setup_ide]]
 
