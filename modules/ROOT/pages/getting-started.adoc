@@ -22,7 +22,7 @@ Install and verify that the following tools are working in your local environmen
 
 * Java Development Kit 8 (JDK 8) to compile and build your custom Java code.
 +
-NOTE: The maximum supported version for running your applications is JDK 17 for Mule runtime 4.6.x and later. During the packaging of your app, the custom code *must* be compiled for Java language level 1.8.
+NOTE: The maximum supported version for running your applications is JDK 17 for Mule runtime 4.6.x and later. During the packaging of your app, all code, including third-party dependencies, *must* be compiled for Java language level 1.8.
 
 * Apache Maven 3.8.7 or later to manage your project’s build.
 
@@ -64,7 +64,7 @@ If you are using IntelliJ:
 . Go to *Preferences > Build, Execution, Deployment > Compiler > Java Compiler*.
 . Add `-parameters` in the *Additional command line parameters* section.
 
-image::intellij-config.png["Navigation path to the command line parameter input field.",600,600]
+image::intellij-config.png["IntelliJ menu navigation path to the command line parameter input field.",600,600]
 
 == Build the Project
 
