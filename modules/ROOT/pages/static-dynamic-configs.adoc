@@ -66,7 +66,7 @@ Although it is easy to create dynamic configurations, you still need a configura
 
 Returning to the <<multi_tenancy, FTP multi-tenant>> example, the worst case scenario mandates that a new configuration instance is produced on a per-message basis. Depending on the app, these instances not be needed once the transfer is completed.
 
-By default, dynamic instances of any configuration element are automatically disposed of after 5 minutes of inactivity.
+By default, dynamic instances of any configuration element are automatically disposed of between 5 to 10 minutes after the configuration has been idle. This is because the disposal depends not only on the configuration's expiration time, which is set to 5 minutes by default, but also on the frequency of the Expiration Monitor, which runs every 5 minutes and ultimately performs the disposal.
 
 [TIP]
 The instance is inactive if no operation has started _or finished_ in that lapse. If an FTP transfer started 6 minutes ago, but the file is too big, and the transfer is still in progress, that configuration will not be expire.
