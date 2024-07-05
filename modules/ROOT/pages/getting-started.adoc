@@ -111,3 +111,7 @@ its `groupId`, `artifactId`, and `version`.
 ----
 
 NOTE: Different features are available in different versions of the SDK for Java. See xref:choosing-version.adoc[Choosing the SDK version] to pick the right version for your connector.
+
+== Publish Your Connector or Module to Anypoint Exchange
+
+After you run your connector or module in Studio, publish your connector or module to Anypoint Exchange. For more information, refer to xref:exchange::to-publish-assets-maven.adoc[].
