@@ -28,6 +28,18 @@ public class BasicOperationsTestCase extends MuleArtifactFunctionalTestCase {
 }
 ----
 
+You must include the following tag in your pom.xml file:
+
+[source,xml,linenums]
+----
+<parent>
+<groupId>org.mule.extensions</groupId>
+<artifactId>mule-modules-parent</artifactId>
+<version>1.6.0</version>
+</parent>
+----
+
+
 == 2. Writing Your Mule App
 
 You test a module by running Mule app that uses the module, executing its flows and making assertions about the result of these executions.
