@@ -453,7 +453,7 @@ private LocalDateTime createdUntil;
 +
 As a summary, here’s a simple flow chart to aid with the decision process of how to use POJOs and parameter groups.
 
-image::mule-sdk-dsl-parameter-pojos.png[Decision tree for POJOs and parameter groups]
+image::mule-sdk-dsl-parameter-pojos.png["Decision tree for POJOs and parameter groups"]
 
 * Implementing `equals` and `hashCode` methods
 

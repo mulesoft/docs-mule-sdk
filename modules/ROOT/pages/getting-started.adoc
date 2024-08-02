@@ -64,7 +64,7 @@ If you are using IntelliJ:
 . Go to *Preferences > Build, Execution, Deployment > Compiler > Java Compiler*.
 . Add `-parameters` in the *Additional command line parameters* section.
 
-image::intellij-config.png["IntelliJ menu navigation path to the command line parameter input field.",600,600]
+image::intellij-config.png["IntelliJ menu navigation path to the command line parameter input field", 600, 600]
 
 == Build the Project
 
