@@ -205,7 +205,7 @@ Using `@ParameterGroup` also makes a UI contribution rendering all the `@Paramet
 inside the group together in a box, separating them from other `@Parameters` that don't
 belong to that group, for example:
 
-image::group.png[Parameter Group]
+image::group.png["Example of a parameter group"]
 
 As you can see in the image above, the `Connection` group contains 4 parameters,
 and there are others like `Soap Version` that are not in that group. That is a nice way

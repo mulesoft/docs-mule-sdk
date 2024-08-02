@@ -21,7 +21,7 @@ When using the `@Extension` annotation, you need to provide a descriptive and co
 Once you have created an empty module, you can start adding elements to it.
 
 .Basic Module Structure
-image::model.png[Module Basic Model Diagram]
+image::model.png["Model of a basic module"]
 
 At a high level, the elements are:
 

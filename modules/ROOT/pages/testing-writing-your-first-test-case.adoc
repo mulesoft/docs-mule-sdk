@@ -69,7 +69,7 @@ The Mule app XML must be placed inside the `src/test/resources` folder of the mo
 </mule>
 ----
 
-image::first-test-app.png[align="center"]
+image::first-test-app.png["Basic example of a Mule app"]
 
 Tip: An easy way to write Mule apps is to create them in Anypoint Studio,
 copy the generated XML, and paste it inside the Module project.

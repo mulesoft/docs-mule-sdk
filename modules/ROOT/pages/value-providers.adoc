@@ -89,7 +89,7 @@ public void publishAs(@Content Object content,
 +
 . Now, you can use it in Studio to start retrieving values.
 +
-image::value-provider-static.gif[align="center"]
+image::value-provider-static.gif["Workflow of selecting a predefined value or defining a custom value"]
 
 === Value Providers with Connections or Configurations
 
@@ -261,7 +261,7 @@ public class DayValueProvider implements ValueProvider {
 +
 As shown in the animation below, the `Day` selector gets populated dynamically based on the `Month enum` parameter value.
 +
-image::value-provider-months.gif[align="center"]
+image::value-provider-months.gif["Example of value provider with context parameters"]
 
 [[value-structure]]
 ==== Value Structure

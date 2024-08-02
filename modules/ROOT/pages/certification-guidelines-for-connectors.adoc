@@ -209,7 +209,7 @@ This example shows the `cookbook` connector installation to a local Maven reposi
 +
 . Create a Mule project in Studio 7, and open `pom.xml` for this project in Studio 7.
 +
-image::pom-file.png[pom.xml file example]
+image::pom-file.png["Folder structure of the pom xml file"]
 +
 +
 . Add a dependency setting (`<dependency/>`) for your connector to the `pom.xml`.
@@ -227,7 +227,7 @@ For example, the following `<dependency/>` enables Studio 7 to find the `cookboo
 +
 Your connector will now appear the palette. This example shows a Cookbook connector in the Studio palette:
 +
-image::ex-connector-in-palette.png[Example: Cookbook connector in Studio palette]
+image::ex-connector-in-palette.png["Example of Cookbook Connector in the Studio palette"]
 
 == See Also
 

@@ -85,7 +85,7 @@ mvn clean package -DexcludeTests=false
 Once the process finishes, a `Build Success` message is displayed.
 The generated extension project is placed under the `_{rootdir}/target/generated-sources/extension_` folder.
 
-image::dmt.png[folder structure]
+image::dmt.png["Folder structure of the extension project"]
 
 == Supported Components
 

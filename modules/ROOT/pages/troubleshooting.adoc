@@ -45,7 +45,7 @@ The following steps describe how to enable verbose logging using Anypoint Studio
 . Open the `log4j2.xml` file inside the folder.
 
 +
-image:enable-sdk-logging-studio.png[enable-sdk-logging-studio]
+image:enable-sdk-logging-studio.png["Folder structure of the log4j2 xml file"]
 +
 
 . Add an `<AsyncLogger>` tag inside the `<Loggers>` tag:
@@ -106,7 +106,7 @@ The following steps describe how to enable verbose logging using Anypoint Runtim
 . Go to the *Logging* tab.
 
 +
-image:enable-sdk-logging-runtime-manager.png[sdk-verbose-logging-runtime-manager]
+image:enable-sdk-logging-runtime-manager.png["Logging tab in Runtime Manager"]
 +
 
 . Add the component's fully qualified name and the logging level (DEBUG or TRACE).
@@ -124,7 +124,7 @@ The following examples show expected logs for SDK components:
 
 The logs in these examples are from a Mule application that consists of an FTP Connector source that lists files in an FTP server and a logger that logs the name of the file it processes.
 
-image:troubleshooting-app.png[Mule flow in Studio that shows FTP Connector source and Logger]
+image:troubleshooting-app.png["Mule flow in Studio that shows FTP Connector source and Logger"]
 
 [[source-logging-example]]
 === Source Logging Example

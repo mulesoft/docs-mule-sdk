@@ -22,7 +22,7 @@ private String port;
 
 That parameter will be rendered as:
 
-image::example.png[Example]
+image::example.png["Example of a parameter that takes values"]
 
 == @Summary
 
@@ -40,7 +40,7 @@ private TimeUnit connectionTimeoutUnit;
 
 That parameter will be rendered like this:
 
-image::summary.png[Summary tooltip]
+image::summary.png["Example of a tooltip that provides a summary of a parameter"]
 
 == @Placement
 
@@ -68,7 +68,7 @@ private String foobar;
 
 `foo` and `bar` parameters will be rendered in a new tab `"Advanced"` like this:
 
-image::placement-tab.png[Tab]
+image::placement-tab.png["Example list of tabs"]
 
 == @Text
 
@@ -88,7 +88,7 @@ private String sql;
 
 In Studio, the `@Text` will be rendered like this:
 
-image::text.png[Text large input]
+image::text.png["Example of a large text input"]
 
 `@Text` also affects the DSL of the element that contains the parameter. using it creates a child element that accepts `CDATA` content. For example, assume that you have this operation:
 
@@ -150,7 +150,7 @@ Indicates that the parameter needs to be masked when it is populated from the UI
 Note that this annotation should only be used in parameters of `String` type.
 
 .Example in the UI
-image::password.png[Password input]
+image::password.png["Example of a password input"]
 
 == Putting It All Together
 
