@@ -26,7 +26,7 @@ NOTE: The maximum supported version for running your applications is JDK 17 for 
 
 * Apache Maven 3.8.7 or later to manage your project’s build.
 +
-NOTE: The mule-extensions-parent is not compatible with Apache Maven 3.9.x.
+NOTE: The `mule-extensions-parent` isn't compatible with Apache Maven 3.9.x.
 
 [[setup_ide]]
 
