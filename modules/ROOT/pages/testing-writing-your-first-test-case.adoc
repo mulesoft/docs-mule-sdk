@@ -15,7 +15,7 @@ the results.
 * Mule App XML: A Mule app that makes use of the Module to test.
 
 Note that this documentation is based on the module project generated with the Mule Extension Archetype (<<getting-started#generating-a-project-using-the-maven-archetype-directly,Creating Your First SDK Project>>).
-Learn how to test a module using this example and refer to that documentation for the parent dependency, which includes all the dependencies required to build the test case.  
+Learn how to test a module using this example and refer to that documentation for the parent dependency, which includes all the dependencies required to build the test case. To export packages, refer to xref:mule-runtime::how-to-export-resources.adoc[]. 
 
 == 1. Creating the Test Case Class
 
