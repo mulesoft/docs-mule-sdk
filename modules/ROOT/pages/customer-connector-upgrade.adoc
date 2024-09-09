@@ -1,0 +1,19 @@
+= Upgrading Java for Custom Connectors (Customers)
+
+include::general::partial$partner-and-customer-guide.adoc[tags=customer-upgrade-note]
+
+include::general::partial$partner-and-customer-guide.adoc[tags=connector-intro]
+
+include::general::partial$partner-and-customer-guide.adoc[tags=before-you-begin]
+
+include::general::partial$partner-and-customer-guide.adoc[tags=min-mule-version-munit]
+
+include::general::partial$partner-and-customer-guide.adoc[tags=mule-sdk-connectors]
+
+include::general::partial$partner-and-customer-guide.adoc[tags=test-custom-connector-munit]
+
+include::general::partial$partner-and-customer-guide.adoc[tags=communicate-support-level]
+
+== See Also
+
+* xref:general::java-support.adoc[]
