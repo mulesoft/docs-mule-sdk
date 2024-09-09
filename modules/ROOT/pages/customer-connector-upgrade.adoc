@@ -10,10 +10,12 @@ include::general::partial$partner-and-customer-guide.adoc[tags=min-mule-version-
 
 include::general::partial$partner-and-customer-guide.adoc[tags=mule-sdk-connectors]
 
+include::general::partial$partner-and-customer-guide.adoc[tags=mule-sdk-connectors-review-mule-runtime-sdk]
+
+include::general::partial$partner-and-customer-guide.adoc[tags=mule-sdk-connectors-add-missing-code]
+
 include::general::partial$partner-and-customer-guide.adoc[tags=test-custom-connector-munit]
 
 include::general::partial$partner-and-customer-guide.adoc[tags=communicate-support-level]
 
-== See Also
-
-* xref:general::java-support.adoc[]
+include::partial$partner-and-customer-guide.adoc[tags=see-also-sdk]
