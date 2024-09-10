@@ -53,7 +53,7 @@ This *should* be modeled as two different operations:
 
 Metadata Key parameters are treated as special because they are allowed to change the output type of an operation. This change can be considered in two levels:
 
-* The operation still always returns an apple, but the definition of what an apple is changes dependending to the system instance or user that is being used (even if the structure of the apple is dynamic, it’s still an apple)
+* The operation always returns an apple, but the definition of an apple changes depending on the system instance or user in use. Even if the structure of the apple is dynamic, it remains an apple.
 * The operation is generic and the Metadata Key parameters actually determine which type will be returned.
 
 For example:
