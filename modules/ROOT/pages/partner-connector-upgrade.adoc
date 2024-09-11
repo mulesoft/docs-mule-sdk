@@ -14,6 +14,8 @@ include::general::partial$partner-and-customer-guide.adoc[tags=mule-sdk-connecto
 
 include::general::partial$partner-and-customer-guide.adoc[tags=mule-sdk-connectors-add-missing-code]
 
+include::general::partial$partner-and-customer-guide.adoc[tags=custom-configuration-properties-provider-partners]
+
 include::general::partial$partner-and-customer-guide.adoc[tags=test-custom-connector-mtf]
 
 include::general::partial$partner-and-customer-guide.adoc[tags=communicate-support-level]
