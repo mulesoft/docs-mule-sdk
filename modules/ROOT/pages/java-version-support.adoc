@@ -8,10 +8,6 @@ Communicating the Java compatibility of your custom module also ensures:
 +
 Users can determine whether their Mule applications can safely upgrade to Java 17, ensuring a smooth transition and avoiding potential issues.
 
-* Server health
-+
-Certain module versions might cause problems or resource leaks when deployed on Java 17, so identifying and avoiding these versions helps maintain overall server health.
-
 * User experience
 +
 Providing clear information about Java compatibilty enhances the user experience, especially for Anypoint Exchange users who rely on this information for selecting modules. 
@@ -47,14 +43,7 @@ You can mark your custom connector as compatible with Java 17 only; however, you
 
 When you deploy a Mule app, Mule verifies that all modules in the Mule app are compatible with the Java version. If Mule finds an incompatibility, Mule throws an error and the application does not deploy. 
 
-If your code is compatible with Java 17 but you do not declare Java 17 compatibility, you can still get a successful test run. 
-
-To run a quick check on your custom connector or if all dependencies are not ready, pass the following argument to skip hard checks on the Java support declaration:
-
-[source,bash]
-----
--M-Dmule.jvm.version.extension.enforcement=LOOSE
-----
+If your code is compatible with Java 17 but you do not declare Java 17 compatibility, you can still get a successful test run (only when running a test on Java 8).
 
 == See Also
 
