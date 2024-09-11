@@ -8,10 +8,6 @@ Communicating the Java compatibility of your custom module also ensures:
 +
 Users can determine whether their Mule applications can safely upgrade to Java 17, ensuring a smooth transition and avoiding potential issues.
 
-* Server health
-+
-Certain module versions might cause problems or resource leaks when deployed on Java 17, so identifying and avoiding these versions helps maintain overall server health.
-
 * User experience
 +
 Providing clear information about Java compatibilty enhances the user experience, especially for Anypoint Exchange users who rely on this information for selecting modules. 
