@@ -7,7 +7,7 @@ Because Mule 4.6.x exposes Java EE libraries differently than earlier Mule versi
 [source,java,linenums]
 ----
 <properties>
-	<muleJavaEeBomVersion>4.6.0</muleJavaEeBomVersion>
+ <muleJavaEeBomVersion>4.6.0</muleJavaEeBomVersion>
 </properties>
 <dependencyManagement>
  <dependencies>
