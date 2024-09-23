@@ -1275,7 +1275,7 @@ basePath ....>
   host=...>
 	  <tls:context>
       <tls:trust-store path="ssltest-cacerts.jks" password="changeit2"/>
-    </tls:context>a
+    </tls:context>
   </http:request-connection>
 ----
 
