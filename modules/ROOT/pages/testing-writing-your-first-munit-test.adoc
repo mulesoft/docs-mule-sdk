@@ -1,0 +1,204 @@
+= Creating Your Test 
+ifndef::env-site,env-github[]
+include::_attributes.adoc[]
+endif::[]
+
+To test your module, you must create MUnit tests because MTF depends on MUnit. To test your module, you must:
+
+. <<configure-your-module, Configure your module>>.
+. <<write-your-test, Write your MUnit test>>.
+. <<run-your-test, Run your MUnit test>>.
+
+The following example, based on the module project generated with the Mule Extensions Archetype in xref:getting-started.adoc#generating-a-project-using-the-maven-archetype-directly[Creating Your First SDK Project], shows a step-by-step process of testing a module using MUnit. 
+
+[[configure-your-module]]
+== Configure Your Module
+
+To configure your module to run your MUnit tests, you must configure your `pom.xml` file:
+
+. Add the following properties:
++
+[source,xml,linenums]
+----
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+   …
+   <properties>
+    <!-- Remove when a new parent version with MTF is available -->
+    <munit.input.directory>src/test/munit</munit.input.directory>
+    <munit.output.directory>${basedir}/target/test-mule/munit</munit.output.directory>
+    <munit.extensions.maven.plugin.version>1.2.0</munit.extensions.maven.plugin.version>
+    <munit.version>3.1.0</munit.version>
+    <maven.resources.plugin.version>3.1.0</maven.resources.plugin.version>
+    ...
+  </properties>
+  ...
+</project>
+----
++
+NOTE: Starting from version 1.x, this configuration might already be set up given a minMuleVersion parent.
++
+. Add the Maven Resources Plugin:
++
+[source,xml,linenums]
+----
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+   …
+   <build>
+    <plugins>
+      ...
+      <plugin>
+          <artifactId>maven-resources-plugin</artifactId>
+          <version>${mavenResourcesVersion}</version>
+          <executions>
+              <execution>
+                  <id>copy-munit-resources</id>
+                  <phase>process-test-resources</phase>
+                  <goals>
+                      <goal>copy-resources</goal>
+                  </goals>
+                  <configuration>
+                      <outputDirectory>${munit.output.directory}</outputDirectory>
+                      <resources>
+                          <resource>
+                              <directory>${munit.input.directory}</directory>
+                              <filtering>true</filtering>
+                          </resource>
+                      </resources>
+                  </configuration>
+              </execution>
+          </executions>
+      </plugin>
+      ...
+    </plugins>
+  </build>
+  ...
+</project>
+----
+. Add the MUnit Extensions Maven plugin:
++
+[source,xml,linenums]
+----
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+   …
+   <build>
+    <plugins>
+      ...
+      <plugin>
+         <groupId>com.mulesoft.munit</groupId>
+         <artifactId>munit-extensions-maven-plugin</artifactId>
+         <version>${munit.extensions.maven.plugin.version}</version>
+         <executions>
+             <execution>
+                 <goals>
+                     <goal>test</goal>
+                 </goals>
+                 <phase>integration-test</phase>
+             </execution>
+         </executions>
+        <dependencies>
+             <dependency>
+                 <groupId>com.mulesoft.munit</groupId>
+                 <artifactId>munit-runner</artifactId>
+                 <version>${munit.version}</version>
+                 <classifier>mule-plugin</classifier>
+             </dependency>
+             <dependency>
+                 <groupId>com.mulesoft.munit</groupId>
+                 <artifactId>munit-tools</artifactId>
+                 <version>${munit.version}</version>
+                 <classifier>mule-plugin</classifier>
+             </dependency>
+         </dependencies>
+      </plugin>
+      ...
+    </plugins>
+  </build>
+  ...
+</project>
+----
+
+[[write-your-test]]
+== Write Your MUnit Test
+
+To test your module, your MUnit test must execute the module's operations and make assertions about the result of these executions.
+
+You must place the MUnit test XML inside the `src/test/munit` folder of the module project.
+
+[source,xml,linenums]
+----
+<mule xmlns="http://www.mulesoft.org/schema/mule/core"
+      xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xmlns:basic="http://www.mulesoft.org/schema/mule/basic"
+      xmlns:munit="http://www.mulesoft.org/schema/mule/munit"
+      xmlns:munit-tools="http://www.mulesoft.org/schema/mule/munit-tools"
+      xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+      http://www.mulesoft.org/schema/mule/munit-tools http://www.mulesoft.org/schema/mule/munit-tools/current/mule-munit-tools.xsd
+      http://www.mulesoft.org/schema/mule/munit http://www.mulesoft.org/schema/mule/munit/current/mule-munit.xsd
+          http://www.mulesoft.org/schema/mule/basic http://www.mulesoft.org/schema/mule/basic/current/mule-basic.xsd">
+
+    <basic:config name="config" configId="configId">
+        <basic:connection requiredParameter="aValue" />
+    </basic:config>
+
+    <munit:config name="basic-operations-test"/>
+
+    <munit:test name="sayHiTest">
+        <munit:execution>
+            <basic:say-hi person="Your Name"/>
+        </munit:execution>
+        <munit:validation>
+            <munit-tools:assert-equals actual="#[payload]" expected="#['Hello!']"/>
+        </munit:validation>
+    </munit:test>
+
+    <munit:test name="retrieveInfoTest">
+        <munit:execution>
+            <basic:retrieve-info config-ref="config"/>
+        </munit:execution>
+        <munit:validation>
+            <munit-tools:assert-equals actual="#[payload]" expected="#['Using Configuration [configId] with Connection id [aValue:100]']"/>
+        </munit:validation>
+    </munit:test>
+
+</mule>
+----
+
+[[run-your-test]]
+== Run Your MUnit Test
+
+Run your test from the command line using Maven:
+
+[source,bash,linenums]
+----
+mvn clean verify
+----
+
+This outputs the result of your test run:
+
+[source,bash,linenums]
+----
+================================================================================
+=== Running suite: basic-operations-test.xml                                 ===
+================================================================================
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
++ Running test: sayHiTest                                                      +
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
++ Running test: retrieveInfoTest                                               +
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+================================================================================
+= Tests run: 2 - Failed: 0 - Errors: 0 - Skipped: 0 - Time elapsed: 2.55 sec   =
+================================================================================
+----
+
+== See Also
+
+* xref:munit-extensions-maven-plugin-configuration.adoc[]
+* xref:munit-extensions-maven-plugin.adoc[]
+

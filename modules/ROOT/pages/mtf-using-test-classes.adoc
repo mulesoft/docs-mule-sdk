@@ -1,0 +1,72 @@
+= Classes
+ifndef::env-site,env-github[]
+include::_attributes.adoc[]
+endif::[]
+
+When creating test cases, use Java classes located in `src/test/java` with DataWeave or Java Module.
+
+In the following example, assume that your class is located in `src/test/java/com/example/MyUtilClass.java`:
+
+[source, java, linenums]
+----
+package com.example.test;
+
+public class Helper {
+
+  public static long getCurrentMillis() {
+    return System.currentTimeMillis();
+  }
+}
+----
+
+== Use Classes with DataWeave
+
+To invoke static methods using DataWeave, add the `java!` prefix to the package name of the class:
+
+[source, xml, linenums]
+----
+<munit:test name="usingJavaInDW">
+    <munit:behavior>
+        <set-variable variableName="number" value="#[java!com::example::test::Helper::currentMillis()]" />
+    </munit:behavior>
+    <munit:execution>
+        <test-connector:execute number="#[vars.number]"/>
+    </munit:execution>
+</munit:test>
+----
+
+== Use Classes with Java Module
+
+To use classes with Java Module:
+
+. Ensure that Java Module is in your project:
++
+[source, xml, linenums]
+----
+<dependency>
+    <groupId>org.mule.module</groupId>
+    <artifactId>mule-java-module</artifactId>
+    <version>${javaModule.version}</version>
+    <classifier>mule-plugin</classifier>
+    <scope>test</scope>
+</dependency>
+----
+. Use any of the operations in Java Module. In this example, invoke a static method of a class:
++
+[source, xml, linenums]
+----
+<munit:test name="usingJavaInDW">
+    <munit:behavior>
+        <set-variable variableName="number" value="#[java!com::example::test::Helper::currentMillis()]" />
+    </munit:behavior>
+    <munit:execution>
+        <test-connector:execute number="#[vars.number]"/>
+    </munit:execution>
+</munit:test>
+----
+
+The MUnit Extensions Maven Plugin automatically exports any test packages and test resources in your project. If your module already exports a class located in `src/main/java`, then any test classes with the same package located in `src/test/java` are not exported because this causes a conflict. To export both classes, change the test classes to a different package.
+
+
+
+

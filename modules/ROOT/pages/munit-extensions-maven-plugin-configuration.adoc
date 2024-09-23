@@ -1,0 +1,521 @@
+= Configuring the MUnit Extensions Maven Plugin
+ifndef::env-site,env-github[]
+include::_attributes.adoc[]
+endif::[]
+
+The MUnit Extensions Maven plugin provides testing capabilities for extension development. Learn how to configure the MUnit Extensions Maven plugin to test your modules. 
+
+== Specify Additional Argument Lines
+
+Because you run the tests in a new JVM, you can specify additional argument lines to the JVM. Specify each argument in a separate `argLine`.
+
+[source,xml,linenums]
+----
+<plugins>
+  <plugin>
+    <groupId>com.mulesoft.munit</groupId>
+    <artifactId>munit-extensions-maven-plugin</artifactId>
+    <configuration>
+      ...
+      <argLines>
+          <argLine>-XX:MaxPermSize=512m</argLine>
+          <argLine>-Xmx1024m</argLine>
+      </argLines>
+      ...
+    </configuration>
+  </plugin>
+</plugins>
+----
+
+== Enable Runtime Discovery
+
+Runtime discovery looks for all Mule runtime versions published on Nexus to run
+against your tests.
+
+To enable runtime discovery, add the following configuration to the MUnit Extensions Maven plugin:
+
+[source,xml,linenums]
+----
+<plugins>
+  <plugin>
+    <groupId>com.mulesoft.munit.tools</groupId>
+    <artifactId>munit-extensions-maven-plugin</artifactId>
+    <configuration>
+      ...
+      <runtimeConfiguration>
+          <discoverRuntimes>
+              <product>`Product`</product> //<1>
+          </discoverRuntimes>
+      </runtimeConfiguration>
+      ...
+    </configuration>
+  </plugin>
+</plugins>
+----
+
+The `Product` can be CE (Community Edition), EE (Enterprise Edition), or ALL (both CE and EE). For example, if the `Product` is CE, the runtime discovery feature is enabled for all released CE runtimes. 
+
+From the command line, use the `discoverRuntimes.product` property to enable runtime discovery.
+
+=== Include Snapshots
+
+To include snapshot versions of Mule runtime, add an `includeSnapshots` property to the runtime configuration:
+
+[source,xml,linenums]
+----
+<runtimeConfiguration>
+    <discoverRuntimes>
+        <product>CE</product>
+        <includeSnapshots>true</includeSnapshots>
+    </discoverRuntimes>
+</runtimeConfiguration>
+----
+
+From the command line, use the `discoverRuntimes.includeSnapshots` property to include snapshots. The default value is `false`.
+
+=== Discover Only the Latest Patches
+
+To discover only the latest patch versions of Mule runtime, add a `latestPatches` property to the runtime configuration:
+
+[source,xml,linenums]
+----
+<runtimeConfiguration>
+    <discoverRuntimes>
+        <product>CE</product>
+        <latestPatches>true</latestPatches>
+    </discoverRuntimes>
+</runtimeConfiguration>
+----
+
+From the command line, use the `discoverRuntimes.latestPatches` property to discover only the latest patches. The default value is `true`.
+
+=== Discover Since a Minimum Version
+
+By default, runtime discovery searches for all Mule runtime versions since the `minMuleVersion` of the module. To change the minimum version, add a `minMuleVersion` property to the runtime configuration:
+
+[source,xml,linenums]
+----
+<runtimeConfiguration>
+    <discoverRuntimes>
+        <product>CE</product>
+        <minMuleVersion>4.1.2</minMuleVersion>
+    </discoverRuntimes>
+</runtimeConfiguration>
+----
+
+From the command line, use the `discoverRuntimes.minMuleVersion` property to discover runtimes since a minimum version. The default value is the `minMuleVersion` of the module.
+
+=== Run Against Additional Runtimes
+
+By default, the MUnit Extensions Maven plugin runs against the `minMuleVersion` and the required product of the module. To specify additional runtimes to run against, add `additionalRuntime` properties to the runtime configuration:
+
+[source,xml,linenums]
+----
+<runtimeConfiguration>
+    <additionalRuntimes>
+        <additionalRuntime>MULE_EE:4.1.2</additionalRuntime>
+        <additionalRuntime>MULE:4.1.1</additionalRuntime>
+    </additionalRuntimes>
+</runtimeConfiguration>
+----
+
+From the command line, use the `additionalRuntimes` property to run against additional runtimes.
+
+=== Skip Runtime Discovery
+
+To skip runtime discovery, add a `skip` property to the runtime configuration:
+
+[source,xml,linenums]
+----
+<runtimeConfiguration>
+    <discoverRuntimes>
+        <product>CE</product>
+        <skip>true</skip>
+    </discoverRuntimes>
+</runtimeConfiguration>
+----
+
+From the command line, use the `discoverRuntimes.skip` property to skip runtime discovery. The default value is `false`.
+
+== Use Dynamic Ports
+
+[IMPORTANT]
+MUnit 2.2 and later introduces the `dynamic-port` global element, which you can use to define dynamic ports at the MUnit suite level. +
+Use this element instead of the plugin configuration described below to set the dynamic port from both Maven and Studio. +
+For more information about how to configure this element, refer to xref:munit::dynamic-ports.adoc[Dynamic Ports].
+
+When testing a module in a continuous integration (CI) environment, you might encounter the following scenario:
+
+`Your test tries to open a specific port. The port is already in use. The test fails with a port binding exception.`
+
+To solve this, use the dynamic ports built-in feature in the MUnit Extensions Maven plugin to have your test use a free port. Dynamic ports instruct the MUnit Extensions Maven plugin to look for unbound ports and reserves them before running the tests over the module. Each selected port is placed in a system property under the name indicated in the configuration. The test can acquire the port number through the use of placeholders afterward.
+
+The ports that the MUnit Extensions Maven plugin can select are in the following range: `[40000,50000)`.
+
+The dynamic ports feature is available only as part of the MUnit Extensions Maven plugin. This feature doesn't work when running tests from inside Anypoint Studio.
+
+=== Enable Dynamic Ports
+
+To enable the dynamic ports feature, add the following code to the `configuration` section of the MUnit Extensions Maven plugin:
+
+[source,xml,linenums]
+----
+<plugins>
+  <plugin>
+    <groupId>com.mulesoft.munit.tools</groupId>
+    <artifactId>munit-extensions-maven-plugin</artifactId>
+    <configuration>
+    ...
+    <dynamicPorts>
+      <dynamicPort>a.dynamic.port</dynamicPort>
+    </dynamicPorts>
+    ...
+    </configuration>
+  </plugin>
+</plugins>
+----
+
+If you have the `${http.port}` placeholder in your test, the configuration looks like this:
+
+[source,xml,linenums]
+----
+<dynamicPorts>
+  <dynamicPort>http.port</dynamicPort>
+</dynamicPorts>
+----
+
+== Disable Surefire Reports
+
+MUnit has built-in support for Surefire. You can disable this support if it's not needed.
+
+[source,xml,linenums]
+----
+<enableSurefireReports>false</enableSurefireReports>
+----
+
+The reports are located under `${project.build.directory}/surefire-reports`.
+
+The default value is `true`.
+
+== Run Specific Tests
+
+To run a specific test, add an `munitTest` property for each specific test to the configuration section of the MUnit Extensions Maven plugin:
+
+[source,xml,linenums]
+----
+<plugins>
+  <plugin>
+      <groupId>com.mulesoft.munit.tools</groupId>
+      <artifactId>munit-extensions-maven-plugin</artifactId>
+      <configuration>
+      ...
+      <munitTest>example-MunitTest-suite.xml</munitTest>
+      ...
+    </configuration>
+  </plugin>
+</plugins>
+----
+
+== Run Tests with Specific Tags
+
+To run tests with specific tags, add an `munitTags` property for the tests with the specific tags to the configuration section of the MUnit Extensions Maven plugin. Separate the tags with commas, for example:
+
+[source,xml,linenums]
+----
+<plugins>
+  <plugin>
+      <groupId>com.mulesoft.munit.tools</groupId>
+      <artifactId>munit-extensions-maven-plugin</artifactId>
+      <configuration>
+      ...
+      <munitTags>exampleMUnitTag,exampleMUnitTag2</munitTags>
+      ...
+    </configuration>
+  </plugin>
+</plugins>
+----
+
+== Skip MUnit Tests
+
+To skip MUnit tests, add a `skipMunitTests` property to skip MUnit tests to the configuration section of the MUnit Extensions Maven plugin:
+
+[source,xml,linenums]
+----
+<plugins>
+  <plugin>
+      <groupId>com.mulesoft.munit.tools</groupId>
+      <artifactId>munit-extensions-maven-plugin</artifactId>
+      <configuration>
+      ...
+      <skipMunitTests>True</skipMunitTests>
+      ...
+    </configuration>
+  </plugin>
+</plugins>
+----
+
+== Skip Tests After One Suite Fails
+
+To skip the rest of the tests if one test suite fails, add a `skipAfterFailure` property to the configuration section of the MUnit Extensions Maven plugin:
+
+[source,xml,linenums]
+----
+<plugins>
+  <plugin>
+      <groupId>com.mulesoft.munit.tools</groupId>
+      <artifactId>munit-extensions-maven-plugin</artifactId>
+      <configuration>
+      ...
+      <skipAfterFailure>true</skipAfterFailure>
+      ...
+    </configuration>
+  </plugin>
+</plugins>
+----
+
+The default value is `false`.
+
+== Specify the Mule Runtime Version
+
+To specify the Mule runtime version that your tested module runs on, add a `runtimeVersion` property for the Mule runtime version to the configuration section of the MUnit Extensions Maven plugin:
+
+[source,xml,linenums]
+----
+<plugins>
+  <plugin>
+    <groupId>com.mulesoft.munit.tools</groupId>
+    <artifactId>munit-extensions-maven-plugin</artifactId>
+    <configuration>
+      ...
+      <runtimeVersion>1.2.3</runtimeVersion>
+      ...
+    </configuration>
+  </plugin>
+</plugins>
+----
+
+If this option is set, runtime discovery and `additionalRuntimes` don't take effect.
+
+== Specify the Runtime Product
+
+You can specify the type of runtime that your tested module runs on. 
+
+Values are `MULE` for Community Edition, and `MULE_EE` for Enterprise Edition.
+
+[source,xml,linenums]
+----
+<plugins>
+  <plugin>
+    <groupId>com.mulesoft.munit.tools</groupId>
+    <artifactId>munit-extensions-maven-plugin</artifactId>
+    <configuration>
+      ...
+      <runtimeProduct>MULE</runtimeProduct>
+      ...
+    </configuration>
+  </plugin>
+</plugins>
+----
+
+If this option is set, runtime discovery and `additionalRuntimes` don't take effect.
+
+== Specify the JVM
+
+To specify the JVM (Java executable) that your tested module runs on, populate the `jvm` property with the path to the executable:
+
+[source,xml,linenums]
+----
+<plugins>
+  <plugin>
+    <groupId>com.mulesoft.munit.tools</groupId>
+    <artifactId>munit-extensions-maven-plugin</artifactId>
+    <configuration>
+      ...
+      <jvm>/path/to/jdk/bin/java</jvm>
+      ...
+    </configuration>
+  </plugin>
+</plugins>
+----
+
+From the command line, use the `-Dmunit.jvm` property to specify the JVM.
+
+== Set Environment Variables
+
+To set additional environment variables during the test run, specify them with the respective key and value:
+
+[source,xml,linenums]
+----
+<plugins>
+  <plugin>
+    <groupId>com.mulesoft.munit.tools</groupId>
+    <artifactId>munit-extensions-maven-plugin</artifactId>
+    <configuration>
+      ...
+      <environmentVariables>
+        <MY_ENV>exampleValue</MY_ENV>
+        <MY_OTHER_ENV>val2</MY_OTHER_ENV>
+      </environmentVariables>
+      ...
+    </configuration>
+  </plugin>
+</plugins>
+----
+
+Use environment variables to replace `${MY_ENV}` and `${MY_OTHER_ENV}`.
+
+== Redirect Test Output to a File
+
+When running several tests, the build output can be complicated to read. You can redirect the build output of each test suite to a file so that the build output contains the test results and the respective file contains the standard output of each test suite.
+
+These files are located in the `testOutputDirectory` folder and follow the `munit.${suiteName}-output.txt` naming convention, in which `suiteName` is the name of the XML file relative to the MUnit test folder.
+
+To keep the build output clean, the test run output that doesn't belong to a particular suite doesn't print, but you can enable it by running Maven in debug mode.
+
+[source,xml,linenums]
+----
+<plugins>
+  <plugin>
+    <groupId>com.mulesoft.munit.tools</groupId>
+    <artifactId>munit-extensions-maven-plugin</artifactId>
+    <configuration>
+      ...
+      <redirectTestOutputToFile>true</redirectTestOutputToFile>
+      ...
+    </configuration>
+  </plugin>
+</plugins>
+----
+
+The default value is `false`.
+
+== Define System Properties Variables
+
+You can define specific system variables needed for your MUnit test to run successfully:
+
+[source,xml,linenums]
+----
+<plugins>
+  <plugin>
+    <groupId>com.mulesoft.munit.tools</groupId>
+    <artifactId>munit-extensions-maven-plugin</artifactId>
+    <configuration>
+      ...
+      <systemPropertyVariables>
+        <my.property.key>my.property.value</my.property.key>
+      </systemPropertyVariables>
+      ...
+    </configuration>
+  </plugin>
+</plugins>
+----
+
+Depending on the execution context, the system properties values might vary. When referencing these properties, override their value to enforce test reproducibility.
+
+You can do so by using the ­`-D` argument when running MUnit with Maven. +
+Variables passed with the `-D` argument take full priority over any other property, for example, `-Dmy.property.key=my.property.another.value`.
+
+== Test Output Directory
+
+You can choose the location where the test output files are created.
+The specified path can be an absolute path or a Maven placeholder.
+
+If the specified path is an absolute path, the test output directory looks like this:
+
+[source,xml,linenums]
+----
+<plugins>
+  <plugin>
+    <groupId>com.mulesoft.munit.tools</groupId>
+    <artifactId>munit-extensions-maven-plugin</artifactId>
+    <configuration>
+      ...
+      <testOutputDirectory>/my/absolute/path</testOutputDirectory>
+      ...
+    </configuration>
+  </plugin>
+</plugins>
+----
+
+If the specified path is a Maven placeholder, the test output directory looks like this:
+
+[source,xml,linenums]
+----
+<testOutputDirectory>${project.build.directory}/my/output/folder</testOutputDirectory>
+----
+
+By default, the files are created in `${project.build.directory}/munit-reports/output/`.
+
+== Specify Shared Libraries
+
+When requiring external libraries (as explained in xref:external-libs.adoc[]), specify
+these libraries as `sharedLibraries`. You must also have the corresponding dependencies in the project.
+
+For example, if you define the following external library in your module:
+
+[source,java,linenums]
+----
+@ExternalLib(name = "My External Library",
+requiredClassName = "com.example.MyClass",
+coordinates = "com.example:my-external-library:1.2.3")
+----
+
+You must configure the plugin in the following way:
+
+[source,xml,linenums]
+----
+<plugins>
+  <plugin>
+    <groupId>com.mulesoft.munit.tools</groupId>
+    <artifactId>munit-extensions-maven-plugin</artifactId>
+    <configuration>
+      ...
+      <sharedLibraries>
+          <sharedLibrary>
+              <groupId>com.example</groupId>
+              <artifactId>my-external-library</artifactId>
+          </sharedLibrary>
+      </sharedLibraries>
+      ...
+    </configuration>
+  </plugin>
+</plugins>
+----
+
+== Import External Suites and Resources
+
+To reuse suite files that are present in an external artifact across different modules, include the suite files in the configuration as if they are present in the `src/test/munit` and `src/test/resources` folders. Ensure that you add the dependencies in the plugin's classpath.
+
+[source,xml,linenums]
+----
+<plugins>
+  <plugin>
+    <groupId>com.mulesoft.munit.tools</groupId>
+    <artifactId>munit-extensions-maven-plugin</artifactId>
+    <configuration>
+      ...
+        <externalSuites>
+            <externalSuite>suite1.xml</externalSuite>
+            <externalSuite>suite2.xml</externalSuite>
+        </externalSuites>
+        <externalResources>
+            <externalResource>example.json</externalResource>
+        </externalResources>
+      ...
+    </configuration>
+    <dependencies>
+        <dependency>
+            <groupId>com.example</groupId>
+            <artifactId>my-dependency</artifactId>
+            <version>1.0.0</version>
+        </dependency>
+    </dependencies>
+  </plugin>
+</plugins>
+----
+
+If any of the suite files or resources aren't present in the classpath, the plugin fails.
+
+== See Also
+
+* xref:munit-extensions-maven-plugin.adoc[]

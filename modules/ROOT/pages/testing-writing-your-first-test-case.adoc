@@ -3,6 +3,8 @@ ifndef::env-site,env-github[]
 include::_attributes.adoc[]
 endif::[]
 
+NOTE: This guide uses FlowRunner, which is deprecated. To test your modules, refer to the xref:mtf.adoc[MTF] documentation instead.
+
 This section provides a step-by-step introduction to testing a module's
 operation. It explains the basics of test cases that you must perform.
 
@@ -59,7 +61,7 @@ The Mule app XML must be placed inside the `src/test/resources` folder of the mo
     </basic:config>
 
     <flow name="sayHiFlow">
-        <basic:say-hi person="Mariano Gonzales"/>
+        <basic:say-hi person="Your Name"/>
     </flow>
 
     <flow name="retrieveInfoFlow">
@@ -132,7 +134,7 @@ of the flow execution. This variable is required for obtaining the value of the 
     Object payloadValue = event.getMessage()
                                .getPayload()
                                .getValue();
-    assertThat(payloadValue, is("Hello Mariano Gonzales!!!"))
+    assertThat(payloadValue, is("Hello!"))
 ----
 
 === 4.3 Summary
@@ -148,7 +150,7 @@ public void executeSayHiOperation() throws Exception {
                                     .getMessage()
                                     .getPayload()
                                     .getValue());            //<2>
-  assertThat(payloadValue, is("Hello Mariano Gonzales!!!")); //<3>
+  assertThat(payloadValue, is("Hello!")); //<3>
 }
 ----
 <1> Executes the `sayHiFlow` flow.
