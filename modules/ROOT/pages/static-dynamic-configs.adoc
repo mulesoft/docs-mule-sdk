@@ -85,7 +85,7 @@ SDK-based modules also support specifying custom timeouts for specific config de
 [TIP]
 No particular action is required from you for the `<expiration-policy />` element to be available. The SDK does this automatically.
 
-It is also possible to configure the global default at an app level so that any dynamic configuration has a different default. You set this up through the `<configuration>` element in the Mule DSL:
+It is also possible to configure the global default at an app level so that any dynamic configuration has a different default. You set this up through the `<configuration>` element in the xref:mule-runtime::about-mule-configuration.adoc[Mule DSL], which is provided for you in Anypoint Studio:
 
 [source,xml,linenums]
 ----
