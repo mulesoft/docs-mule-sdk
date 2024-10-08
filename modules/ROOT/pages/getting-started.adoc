@@ -25,8 +25,6 @@ Install and verify that the following tools are working in your local environmen
 NOTE: The maximum supported version for running your applications is Java 17 for Mule runtime 4.6.x and later. During the packaging of your app, all code, including third-party dependencies, *must* be compiled for Java 8.
 
 * Apache Maven 3.8.7 or later to manage your project’s build.
-+
-NOTE: The `mule-extensions-parent` isn't compatible with Apache Maven 3.9.x.
 
 [[setup_ide]]
 
