@@ -139,7 +139,7 @@ public class FetchOperationsWithAttributes {
                    .build();
     }
 
-    return return Result.<Object, Object>builder()
+    return Result.<Object, Object>builder()
                  .output(connection.getClient().fetch(entityKind))
                  .build();
   }

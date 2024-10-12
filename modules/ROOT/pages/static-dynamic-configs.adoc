@@ -24,7 +24,7 @@ A configuration is static when none of its parameters are assigned an expression
 
 All the parameters in the example have fixed values, so this configuration is  static.
 
-Note that that there is a difference between a parameter with a value that is not an expression and a parameter that does not accept expressions. The former might accept an expression as a value.
+Note that there is a difference between a parameter with a value that is not an expression and a parameter that does not accept expressions. The former might accept an expression as a value.
 
 == Dynamic Configurations
 
