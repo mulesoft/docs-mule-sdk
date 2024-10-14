@@ -33,7 +33,7 @@ org.mule.module
 
 === Knowing the Exported Packages and Return Types.
 
-MuleSoft recommends that that *all* exported classes belong to the module.
+MuleSoft recommends that *all* exported classes belong to the module.
 
 To avoid library clashes that make a module incompatible with other modules, app dependencies, or even runtimes, it is _highly recommended_ that you:
 

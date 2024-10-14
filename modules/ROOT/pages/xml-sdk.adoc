@@ -1561,7 +1561,7 @@ The following resource file is exported:
 /******************************************************************************************************************************
  NOTICE:
     This file, `dwModule.dwl`, must be referenced in the META-INF/mule-artifact/mule-artifact.json file to properly export the
-    resource so that the the functions being consumed (`five()`, `echo(String)`, `toUpper(Person)`, `toUpper(Array<Person)`) in
+    resource so that the functions being consumed (`five()`, `echo(String)`, `toUpper(Person)`, `toUpper(Array<Person)`) in
     the module `module-using-dw.xml` are accessible in the application using it (remember that smart connectors are macro
     expanded, thus the resources must be reached by the main app)
  ******************************************************************************************************************************/

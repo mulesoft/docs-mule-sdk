@@ -56,7 +56,7 @@ Implementing this interface requires implementation of the following methods:
 |`begin()` | This method is called, when the transaction must begin.
 |`commit()` | This is called when the transaction finished correctly and must be committed.
 |`rollback()` | This is called then the transaction finished with an error and this one
-must be be rollbacked.
+must be rollbacked.
 |===
 
 //TODO review how much of Operation TXs should be explained here and how much in the
