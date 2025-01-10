@@ -35,8 +35,8 @@ Note that the XML SDK is strongly typed, so the data type of defined parameters 
 
 Install and verify that the following tools are working in your local environment:
 
-* Java Development Kit 17 (JDK 17) or greater to compile and build your custom Java code.
-** For preexisting connectors, (see xref:java-version-support.adoc#jdk_8[JDK 8 might be needed]).
+* Java Development Kit 17 (JDK 17) or earlier to compile and build your custom Java code.
+** For preexisting connectors, xref:java-version-support.adoc#jdk_8[JDK 8 might be needed].
 * Apache Maven 3.9.8 or later to manage your project’s build.
 
 == XML SDK Basics

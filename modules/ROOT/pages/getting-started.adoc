@@ -20,8 +20,8 @@ The SDK provides a Maven plugin and a Maven archetype to create new projects. Th
 
 Install and verify that the following tools are working in your local environment:
 
-* Java Development Kit 17 (JDK 17) or greater to compile and build your custom Java code.
-** For preexisting connectors, (see xref:java-version-support.adoc#jdk_8[JDK 8 might be needed]).
+* Java Development Kit 17 (JDK 17) or earlier to compile and build your custom Java code.
+** For preexisting connectors, xref:java-version-support.adoc#jdk_8[JDK 8 might be needed].
 * Apache Maven 3.9.8 or later to manage your project’s build.
 
 [[setup_ide]]
@@ -50,6 +50,8 @@ Because this project is a Maven project, it contains a `pom.xml` file that conta
   <version>1.9.0</version>
 </parent>
 ----
+
+NOTE: Connectors used in Mule 4.4.x and Mule 4.6.x must use parent POM 1.4.x and 1.6.x respectively.
 
 == Set Up Your IDE
 
