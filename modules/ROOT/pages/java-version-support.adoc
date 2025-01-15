@@ -40,23 +40,6 @@ public class DatabaseConnector {
 ----
 
 [[bytecode_level]]
-. Ensure the bytecode level of the compiled classes of your custom module can be used in the lowest supported Java version. Use the Java compiler configuration from the Java SDK parent POM instead of modifying it, for example:
-+
-[source,xml,linenums]
-----
-    <parent>
-        <groupId>org.mule.extensions</groupId>
-        <artifactId>mule-modules-parent</artifactId>
-        <version>1.9.0</version>
-    </parent>
-
-    <properties>
-        <java.release.version>17</java.release.version>
-    </properties>
-----
-
-[[jdk_8]]
-+
 NOTE: If the `mule-modules-parent` version is earlier than 1.9.0, all code, including third-party dependencies, *must* be compiled for Java 8, and you must use Java 8 to build the connector.
 
 You can mark your custom module as compatible with a single Java version only; however, you must ensure that no adoption or backward compatibility issues exist. 
