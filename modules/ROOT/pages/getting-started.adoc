@@ -51,7 +51,7 @@ Because this project is a Maven project, it contains a `pom.xml` file that conta
 </parent>
 ----
 
-NOTE: Connectors used in Mule 4.4.x and Mule 4.6.x must use parent POM 1.4.x and 1.6.x respectively.
+NOTE: The parent POM defines the minimum Mule version, which must be compatible with the target Mule version.
 
 == Set Up Your IDE
 
