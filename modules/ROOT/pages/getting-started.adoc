@@ -51,7 +51,7 @@ Because this project is a Maven project, it contains a `pom.xml` file that conta
 </parent>
 ----
 
-NOTE: The parent POM defines the minimum Mule version, which must be compatible with the target Mule version.
+NOTE: The parent POM defines the minimum Mule version, which must be compatible with the target Mule version. The Mule runtime version you use determines the version of the mule-modules-parent. For example, if you use Mule runtime 4.6.0, you must use mule-modules-parent 1.6.0. If you must compile your connector with Java 17, you must use mule-modules-parent 1.9.0. 
 
 == Set Up Your IDE
 
