@@ -12,6 +12,7 @@ Users can determine whether their Mule applications can safely upgrade to run on
 +
 Providing clear information about Java compatibility enhances the user experience, especially for Anypoint Exchange users who rely on this information for selecting modules. 
 
+[[specify-java-compatibility]]
 == Specify Java Compatibility
 
 To specify Java compatibility of your custom module:
