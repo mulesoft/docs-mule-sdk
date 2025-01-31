@@ -35,11 +35,9 @@ Note that the XML SDK is strongly typed, so the data type of defined parameters 
 
 Install and verify that the following tools are working in your local environment:
 
-* Java Development Kit 8 (JDK 8) to compile and build your Java code.
-+
-NOTE: The maximum supported version for XML SDK is JDK 17, however, you can use JDK 17 only for running your application. Compilation with XML SDK must be done with JDK 8.
-
-* Apache Maven 3.3.9 or later to manage your project’s build.
+* Java Development Kit 17 (JDK 17) or earlier to compile and build your custom Java code.
+** For preexisting connectors, xref:java-version-support.adoc#jdk_8[JDK 8 might be needed].
+* Apache Maven 3.9.8 or later to manage your project’s build.
 
 == XML SDK Basics
 

@@ -63,7 +63,7 @@ The generated Mule 4 extension appears in the target folder.
 <parent>
   <groupId>org.mule.extensions</groupId>
   <artifactId>mule-modules-parent</artifactId>
-  <version>1.0.0</version>
+  <version>1.9.0</version>
 </parent>
 ----
 +
