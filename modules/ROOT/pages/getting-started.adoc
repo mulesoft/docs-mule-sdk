@@ -20,9 +20,11 @@ The SDK provides a Maven plugin and a Maven archetype to create new projects. Th
 
 Install and verify that the following tools are working in your local environment:
 
-* Java Development Kit 17 (JDK 17) or earlier to compile and build your custom Java code.
-** For preexisting connectors, xref:java-version-support.adoc#jdk_8[JDK 8 might be needed].
-* Apache Maven 3.9.8 or later to manage your project’s build.
+* Java Development Kit 8 (JDK 8) to compile and build your custom Java code.
++
+NOTE: The maximum supported version for running your applications is Java 17 for Mule runtime 4.6.x and later. During the packaging of your app, all code, including third-party dependencies, *must* be compiled for Java 8.
+
+* Apache Maven 3.8.7 or later to manage your project’s build.
 
 [[setup_ide]]
 
@@ -31,7 +33,7 @@ Install and verify that the following tools are working in your local environmen
 Run the `generate` command to create an extension project based on the Maven archetype:
 
 ----
-mvn org.mule.extensions:mule-extensions-archetype-maven-plugin:1.5.0:generate
+mvn org.mule.extensions:mule-extensions-archetype-maven-plugin:1.2.0:generate
 ----
 
 You are prompted to provide required field values, then a new project is generated.
@@ -47,11 +49,9 @@ Because this project is a Maven project, it contains a `pom.xml` file that conta
 <parent>
   <groupId>org.mule.extensions</groupId>
   <artifactId>mule-modules-parent</artifactId>
-  <version>1.9.0</version>
+  <version>1.6.3</version>
 </parent>
 ----
-
-NOTE: The parent POM defines the minimum Mule version, which must be compatible with the target Mule version. The Mule runtime version you use determines the version of the mule-modules-parent. For example, if you use Mule runtime 4.6.0, you must use mule-modules-parent 1.6.0. If you must compile your connector with Java 17, you must use mule-modules-parent 1.9.0. 
 
 == Set Up Your IDE
 
