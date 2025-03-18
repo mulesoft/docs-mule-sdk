@@ -17,20 +17,22 @@ This simplified HTTP request example shows how the SDK allows you to develop non
 
 [source,java,linenums]
 ----
-public void request(String url, @Connection HttpClient client, @Content String body, // <1>
+public void request(String url, @Connection HttpClient client, @Content InputStream body, // <1>
     CompletionCallback<InputStream, HttpAttributes> callback ) { // <2>
- client.send(url, body, new HttpResponseCallback() {
-   void onResponse(HttpResponse response) {
-     callback.success(Result.<InputStream, HttpAttributes>builder() // <3>
-                          .output(response.getBody())
-                          .attributes(toAttributes(response))
-                          .build());
-   }
-
-   void onError(Exception e) {
-     callback.error(e); // <4>
-   }
- });
+client.sendAsync(HttpRequest.builder()
+          .uri(url)
+          .method("POST")
+          .entity(new InputStreamHttpEntity(body))
+          .build()).whenComplete((response, e) -> {
+        if (e != null) {
+          callback.error(e);
+        } else {
+          callback.success(Result.<InputStream, HttpAttributes>builder() // <3>
+                           .output(response.getEntity().getContent())
+                           .attributes(toAttributes(response))
+                           .build());
+        }
+      });
 }
 ----
 

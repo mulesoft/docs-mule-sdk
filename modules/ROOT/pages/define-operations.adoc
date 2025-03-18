@@ -265,10 +265,7 @@ It’s common to confuse asynchronous with non-blocking. They are not the same t
 
 Be sure you have a good understanding of the principles of non-blocking IO and how it's implemented in Mule.
 
-See:
-
-* http://www.programmr.com/blogs/difference-between-asynchronous-and-non-blocking[The Difference Between Asynchronous and Non-Blocking]
-* xref:mule-sdk::non-blocking-operations.adoc[Mule Non-Blocking Operations]
+See xref:mule-sdk::non-blocking-operations.adoc[].
 
 === Use Transactions
 
