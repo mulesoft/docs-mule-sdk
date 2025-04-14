@@ -1,0 +1,75 @@
+= Expected Errors
+ifndef::env-site,env-github[]
+include::_attributes.adoc[]
+endif::[]
+
+Validate the error types and error descriptions that your module throws.
+
+== Before You Begin
+
+You must know how to define the errors that your module throws. For more information, refer to xref:errors.adoc[].
+
+== Example: Error Definition 
+
+In this example, the module defines errors as follows:
+
+.Error type definition
+[source,java,linenums]
+----
+public enum SimpleError implements ErrorTypeDefinition<SimpleError> {
+  INVALID_PARAMETER, TIME_OUT, NOT_ALLOWED
+}
+----
+
+.Error type provider
+[source,java,linenums]
+----
+public class ExecuteErrorsProvider implements ErrorTypeProvider {
+    @Override
+    public Set<ErrorTypeDefinition> getErrorTypes() {
+        HashSet<ErrorTypeDefinition> errors = new HashSet<>();
+        errors.add(SimpleError.INVALID_PARAMETER);
+        errors.add(SimpleError.TIME_OUT);
+        return errors;
+    }
+}
+----
+
+.Operation that throws the error
+[source,java,linenums]
+----
+@Throws(ExecuteErrorsProvider.class)
+public void execute(Integer number) {
+    if (number <= 0) {
+        throw new ModuleException("Parameter 'number' should be greater than 0", SimpleError.INVALID_PARAMETER);
+    }
+}
+----
+
+Use MTF to create tests to validate the expected error type and error description.
+
+== Validate an Expected Error Type
+
+To validate that the error thrown by the module in the example has the proper error type:
+
+[source, xml, linenums]
+----
+<munit:test name="testErrorType" expectedErrorType="TEST-CONNECTOR:INVALID_PARAMETER">
+    <munit:execution>
+        <test-connector:execute number="0"/>
+    </munit:execution>
+</munit:test>
+----
+
+== Validate an Expected Error Description
+
+To validate that the error thrown by the module in the example has the proper error description:
+
+[source, xml, linenums]
+----
+<munit:test name="testErrorDescription" expectedErrorDescription="Parameter 'number' should be greater than 0">
+    <munit:execution>
+        <test-connector:execute number="0"/>
+    </munit:execution>
+</munit:test>
+----

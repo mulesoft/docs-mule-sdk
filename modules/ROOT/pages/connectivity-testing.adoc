@@ -1,0 +1,71 @@
+= Connectivity 
+ifndef::env-site,env-github[]
+include::_attributes.adoc[]
+endif::[]
+
+Test the connectivity defined for your module.
+
+== Before You Begin
+
+* Understand how to define a connection for your module. For more information, refer to xref:connections.adoc[].
+* Add the `mtf-tools` dependency to your project:
++
+[source,xml,linenums]
+----
+<dependency>
+    <groupId>com.mulesoft.munit</groupId>
+    <artifactId>mtf-tools</artifactId>
+    <version>1.2.0</version>
+    <classifier>mule-plugin</classifier>
+    <scope>test</scope>
+</dependency>
+----
+
+== Test Connectivity
+
+The `test-connectivity` processor establishes a connection using the given configuration. If testing connectivity with the given configuration fails, the processor fails with the proper exception, description, and error type (if present).
+
+=== Successful Connection
+
+When you test that a connection is valid, you are validating that the processor does not fail. A successful connection test appears as follows:
+
+[source,xml,linenums]
+----
+<munit:test name="validConnectionTest">
+    <munit:execution>
+        <mtf:test-connectivity config-ref="validConnection"/>
+    </munit:execution>
+</munit:test>
+----
+
+=== Invalid Connection
+
+When a connection fails, the processor fails. Therefore, to test an invalid connection, include an expected exception and expected error description in the test:
+
+[source,xml,linenums]
+----
+<munit:test name="invalidConnectionTest"
+            expectedException="com.example.MyConnectionException"
+            expectedErrorDescription="An error occurred while connecting">
+    <munit:execution>
+        <mtf:test-connectivity config-ref="invalidConnection"/>
+    </munit:execution>
+</munit:test>
+----
+
+If the connection fails with an error type, you can include an expected error type as well:
+
+[source,xml,linenums]
+----
+<munit:test name="invalidConnectionWithErrorTypeTest"
+            expectedException="com.example.MyConnectionException"
+            expectedErrorType="EXAMPLE:INVALID_CREDENTIALS"
+            expectedErrorDescription="An error occurred while connecting">
+    <munit:execution>
+        <mtf:test-connectivity config-ref="invalidConnectionWithErrorType"/>
+    </munit:execution>
+</munit:test>
+----
+
+
+
