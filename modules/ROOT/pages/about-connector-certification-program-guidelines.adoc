@@ -4,7 +4,7 @@ include::_attributes.adoc[]
 endif::[]
 :keywords: connector, certification, sdk, program guidelines
 
-This document pertains to connector certification for Mule 4. For Mule 3 certification, see xref:3.9@connector-devkit::connector-certification-program-guidelines.adoc[DevKit documentation].
+This document pertains to connector certification for Mule 4.
 
 MuleSoft’s connector certification program guides you through the process of creating an enterprise-grade connector that is ready for certification by MuleSoft. Once certified, the connector is made available through Anypoint Exchange for discovery and use by customers and developers.
 
