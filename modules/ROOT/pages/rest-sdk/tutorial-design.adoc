@@ -1,0 +1,498 @@
+= Step 2: Design the Connector
+
+Start the process by designing the connector you would like to build.
+
+== Step 2.1: Choose an Anypoint Connector
+
+Choose an existing Anypoint Connector to modify, such as
+https://github.com/mulesoft/mule4-trello-connector[Trello Connector].
+
+== Step 2.2: Add L3 Capabilities
+
+Add L3 capabilities with customization-layer.yaml, in which you can modify the
+original connector by setting names, adding descriptions, filtering operations,
+changing operation names, or doing input and output transformations. Refer to
+xref:rest-sdk/customize-the-connector.adoc[Customize the Connector] for detailed
+information on this process.
+
+This https://github.com/mulesoft/mule4-trello-connector/blob/feature/citizen-connector/definitions/citizen-descriptor.yaml[link]
+shows an example of the L3 capabilities added to Trello Connector.
+
+== Step 2.3: Generate Java Code
+
+Use customization-layer.yaml to generate a connector with specific Java code.
+The generated code is packaged inside `target/generated-sources`.
+
+Optionally, extend the code using custom Java. It is important to note that
+in order to preserve the custom code when regenerating the connector, you must
+refactor the code by moving the Java class that needs to be extended into an
+overwrite folder.
+
+== Step 2.4: Generate Models
+
+Generate models using auto generation. Note that this generation takes
+inputs from customization-layer.yaml, which eliminates the need to manually fill
+in the gaps from generated models.
+
+. Get the extension model from Exchange and use it to create the customization
+model.
+. Use the same extension model with the new customization model to generate
+the Composer and transformation models.
+.  Store the generated models for later use.
+
+== Step 2.5: Onboard the Connector to Exchange
+
+Onboard the connector to Exchange using the following steps:
+
+. Clone the connector code into your machine.
++
+`git clone git@github.com:mulesoft/mule4-trello-connector.git`
+. Checkout the feature branch you want to release from.
++
+`git checkout feature/release/1.2.0`
+. Create a branch based off it for the release following the `citizen/release/$VERSION`
+naming convention.
++
+`git checkout -b citizen/release/1.2.0-DEV3`
+. Go to the project's main pom.xml and change the version to the release version.
++
+`<version>1.2.0-DEV3</version>`
+. Commit the change in this new branch.
++
+`git commit -m "Set version number for deploy"`
+. Build this branch.
++
+`mvn clean install -Dmule.disableSdkComponentIgnore=true -Duser.timezone=UTC -DskipTests`
+. Deploy to devx using the bash script.
++
+`./deploy.sh to devx`
+. Verify it is in the public org in Anypoint Platform and Exchange in
+https://devx.anypoint.mulesoft.com/exchange/.
+. Tag the version. Begin by fetching the latest tags.
++
+`git fetch --tags`
+. Check the latest tags to understand the standard in the previous version,
+for example in mule-trello-connector-1.1.0.
++
+`git tag -l`
+. Create a new tag following the `git tag $CONNECTOR_NAME-$VERSION` naming
+convention.
++
+`git tag mule-trello-connector-1.2.0-DEV3`
+. Push the tag using `git push origin $TAG_NAME`.
++
+`git push origin mule-trello-connector-1.2.0-DEV3`
+. If you want to deploy to qax, use the `./deploy.sh to qax` bash script. If
+you want to deploy to stgx, use the ``./deploy.sh to stgx` bash script.
+. Validate in either Exchange QAX or Exchange STGX using any Anypoint Platform
+user.
+
+== Step 2.6: Auto Generate Auth Schemas and Onboard to CFM
+
+Use Connection Schema and Connection Schema Metadata to generate a
+connection creation UI.
+
+The CFM Connectivity Service generates a Connection Schema Model
+based on an existing Connection Schema and an optional Connection Schema Metadata.
+
+To create a connection for a connector, the UI requests the Connection Schema
+Model for that connector. The UI reads that model and generates a form
+in the frontend for creating the connection.
+
+Ensure the Connection Schema is already onboarded before proceeding with the
+following steps:
+
+. Part 1: Standard Connection UI (no manual work needed)
++
+.. Once the Connection Schema is onboarded, the Connectivity Service generates
+a standard Connection Schema Model, inferring as much information as possible
+from the schema.
+.. The UI retrieves that Connection Schema Model when the user wants to create
+a connection for the schema's connector.
+.. The UI reads the retrieved Connection Schema Model from the API's response
+and generates a form with the fields needed for creating a connection for that
+connector.
++
+
+. Part 2: Customize the Connection UI.
+
++
+Customize the standard UI by providing
+a Connection Schema Metadata file through a pull request. The following
+https://github.com/mulesoft/citizen-platform-xapi-service/pull/278[pull request]
+shows an example of that for Trello Connector.
++
+
+.. Create a JSON file with the Connection Schema Metadata. Refer to the following
+https://github.com/mulesoft/cfm/blob/master/docs/connection-ui-autogeneration/creating-connection-schema-metadata.md[link]
+to learn how to create a Connection Schema Metadata file. The file name must be
+based on the connection schema's GAV: `{groupId}-{artifactId}-{version}.json`.
+.. Validate the Connection Schema Metadata with the xAPI by pushing a `test/`
+branch with your metadata and hitting the endpoint. As a result, the
+connectionSchemaModel property appears in the response with the
+generated Connection Schema Model with its Metadata. The customizations are shown
+in the metadata of the endpoint's response. Alternatively, validate it against
+the CFM Connectivity Service.
+
++
+`curl --location --request GET 'https://devx.composer.mulesoft.com/citizen-xapi/api/v1/organizations/ORG_ID/connection-schemas/connectors/CONNECTOR_NAME' \
+--header 'Authorization: Bearer ANYPOINT_ACCESS_TOKEN'`
++
+
+. Part 3: Validate the Auto Generated Connection UI
+
++
+To validate that the Connection Creation UI is generated as expected, you must:
++
+
+.. Open the Composer UI.
+.. Create a new flow.
+.. Select the connector which the Connection Schema was created for. Note that if
+the connector does not have any triggers, it will not appear here and you will need
+to search for the connector inside the flow.
+.. Once, you have selected your connector, a loading spinner may appear and
+when it goes away the form is generated.
+
++
+If you added metadata and want to test it integrated with the UI, push a `test/`
+or `integration/` branch with the added metadata and repeat the previous steps.
++
+
+
+== Step 2.7: Onboard onto OCS (Optional)
+
+
+Optionally onboard onto OCS using the following
+https://github.com/mulesoft/ocs/blob/master/docs/common/onboarding-a-new-service-provider.md[steps].
+
+
+[[onboardlower]]
+== Step 2.8: Onboard Connector Onto Lower Environments
+
+Use the following steps to onboard either a new connector or a new version of
+an already onboarded connector.
+
+=== Onboard a New Connector
+
+. Create a customization model, for example, by using the
+`./cli template trello` command. This creates a new file inside the
+customization folder:
+
++
+[source,yaml]
+----
+name: trello
+displayName: Trello
+description: MuleSoft Composer connector for Trello.
+iconUrl: www.fakeurl.com/icon.jpg
+artifactGav:  # TODO
+  groupId: ???  # Usually 'com.mulesoft.connectors'
+  artifactId: ???  # Probably either 'mule-trello-connector' or 'mule4-trello-connector'
+  version: ???
+configuration:  # TODO
+  name: ???  # Usually 'config'
+
+sources: []  # TODO
+#  - name: ???
+#    displayName: ???  # Optional
+#    description: ???  # Optional
+#    fields:  # Optional
+#      - name: ???
+#        displayName: ???  # Optional
+#        description: ???  # Optional
+#        visibility: SHOW
+#        # ...
+#    # ...
+
+operations: []  # TODO
+#  - name: ???
+#    displayName: ???  # Optional
+#    description: ???  # Optional
+#    fields:  # Optional
+#      - name: ???
+#        displayName: ???  # Optional
+#        description: ???  # Optional
+#        visibility: SHOW
+#        # ...
+#    # ...
+----
++
+
++
+You can remove all of the `TODO` and placeholder `???`.
+For now, fill in the `artifactGav` with the information of the specialist Connector that
+corresponds to the Composer Connector. The following example is for Trello
+Connector:
++
+
++
+[source,yaml]
+----
+# ...
+artifactGav:
+  groupId: com.mulesoft.connectors
+  artifactId: mule-trello-connector
+  version: 1.2.0
+# ...
+----
++
+
+. Optionally, download the extension model to use as a reference while completing
+the rest of the customization model by using the `./cli extension trello` command.
+This downloads the file into a JSON file.
+. Fill in the rest of the customization model. Use the technical specification
+and extension model to get the names of the operations and sources and their
+respective fields.
+
++
+[source,yaml]
+----
+name: trello
+displayName: Trello
+description: MuleSoft Composer connector for Trello.
+iconUrl: www.fakeurl.com/icon.jpg
+artifactGav:
+  groupId: com.mulesoft.connectors
+  artifactId: mule-trello-connector
+  version: 1.2.0
+configuration:
+  name: config
+
+sources:
+  - name: source1
+    displayName: Source 1
+    description: Source 1's description.
+    fields:
+      - name: field1
+        displayName: Field 1
+        description: Field 1's description.
+        visibility: SHOW
+        # ...
+  # ...
+
+operations:
+  - name: operation1
+    displayName: Operation 1
+    description: Operation 1's description.
+    fields:
+      - name: field1
+        displayName: Field 1
+        description: Field 1's description.
+        visibility: SHOW
+        # ...
+  # ...
+----
++
+
+. Run validations of the customization model while building it by using the
+`./cli validate foo` command.
+. Generate models using the cli tool by running `./cli connector trello` and then
+`./cli transformation trello`. Alternatively, run `./cli both trello` to generate
+both the conenctor and transformation.
+. Patch the generated output.
+.. Rename the version folder.
+.. Add the *schedulingStrategy* transformation. For each source in the
+`transformation_model.json`, add an entry on the transformations entry like this:
+The following examples show the entry and the final transformation:
++
+[source,json5]
+----
+{
+  "type": "multipleTypedField",
+  "name": "schedulingStrategy",
+  "path": "General.schedulingStrategy",
+  "dynamic": false,
+  "typeId": "FixedFrequencyScheduler",
+  "value": {
+    "FixedFrequencyScheduler": {
+      "frequency": 15,
+      "timeUnit": "SECONDS",
+      "startDelay": 0
+    },
+    "CronScheduler": {
+      "expression": "*****",
+      "timeZone": "-3 GTM"
+    }
+  },
+  "subtypes": {
+    "FixedFrequencyScheduler": "org.mule.runtime.core.api.source.scheduler.FixedFrequencyScheduler",
+    "CronScheduler": "org.mule.runtime.core.api.source.scheduler.CronScheduler"
+  }
+}
+----
++
+
+
++
+[source,json5]
+----
+{
+  // ...
+  "components": {
+    // ...
+    "source1": {
+      "type": "source",
+      "transformations": [
+        // ...
+        {
+          "type": "multipleTypedField",
+          "name": "schedulingStrategy",
+          "path": "General.schedulingStrategy",
+          "dynamic": false,
+          "typeId": "FixedFrequencyScheduler",
+          "value": {
+            "FixedFrequencyScheduler": {
+              "frequency": 15,
+              "timeUnit": "SECONDS",
+              "startDelay": 0
+            },
+            "CronScheduler": {
+              "expression": "*****",
+              "timeZone": "-3 GTM"
+            }
+          },
+          "subtypes": {
+            "FixedFrequencyScheduler": "org.mule.runtime.core.api.source.scheduler.FixedFrequencyScheduler",
+            "CronScheduler": "org.mule.runtime.core.api.source.scheduler.CronScheduler"
+          }
+        }
+        // ...
+      ]
+    }
+    // ...
+  }
+  // ...
+}
+----
++
+
+. Expose the new connector by adding the relevant entries to
+https://github.com/mulesoft/citizen-platform-connectors-models-service/blob/master/citizen-platform-connectors-models-service/src/main/resources/application.yml[application.yaml]
+under the path's `connectors.environments.<KDEV & KQA>.foo` and adding the
+new version.
+
++
+[source,yaml]
+----
+# ...
+connectors:
+  environments:
+    KDEV:
+      # ...
+      trello: 1.1.0
+    KQA:
+      # ...
+      trello: 1.2.0
+    # ...
+# ...
+----
++
+
+. Add the connector to the unit tests, for which you should add similar entries
+to https://github.com/mulesoft/citizen-platform-connectors-models-service/blob/master/citizen-platform-connectors-models-service/src/test/resources/connectors-configuration-test.yml[connectors-configuration-test.yml]:
+
++
+[source,yaml]
+----
+KDEV:
+  # ...
+  trello: 1.1.0
+KQA:
+  # ...
+  trello: 1.2.0
+# ...
+----
++
+
+. Run `mvn clean test` to validate that the build passes.
+. Create a pull request for your newly onboarded connector.
+. Merge the pull request.
+
+
+=== Onboard a New Version of an Already Onboarded Connector
+
+The following steps apply only when:
+
+* A schema already exists that is valid for a connector.
+* A new version of the same connector has been released.
+* The new version of the connector is compatible with the CFM schema. To check
+schema compatibility:
+  ** Verify that there are no changes in the `connectionProviders` part of the
+  connector's extension model. Note that it is okay if other parts of the model
+  have been modified.
+  ** If there are changes in the `connectionProviders` part, verify that the
+  connection provider with the same name as the schema's `labels.connectionProvider`
+  has not been modified.
+  ** If the matching connection provider has been modified, identify the
+  differences and reach out the CFM team to further analyze the case.
+
+
+If all of the above are true, you can proceed to onboard the new version using
+the following steps:
+
+. Open the schema.
+. Under `assets`, add the GAV of the new connector version. For example, for
+  the following schema:
+
++
+[source,yaml]
+----
+  {
+      "groupId": "com.mulesoft.schemas",
+      "artifactId": "mule-trello-connector-platform-oauth",
+      "version": "1.1",
+      ...
+      "assets": [
+          {
+          "groupId": "com.mulesoft.connectors",
+          "assetId": "mule4-trello-connector",
+          "version": "1.1.0"
+          }
+      ],
+      ...
+  }
+----
++
+
+. To onboard connector version `1.2.0`, the schema would look like this. Note that
+some schema fields were omitted with `...` for brevity. Only the
+assets section should be modified:
+
++
+[source,yaml]
+----
+{
+    "groupId": "com.mulesoft.schemas",
+    "artifactId": "mule-trello-connector-platform-oauth",
+    "version": "1.1",
+    ...
+    "assets": [
+        {
+        "groupId": "com.mulesoft.connectors",
+        "assetId": "mule4-trello-connector",
+        "version": "1.1.0"
+        },
+        {
+        "groupId": "com.mulesoft.connectors",
+        "assetId": "mule4-trello-connector",
+        "version": "1.2.0"
+        }
+    ],
+    ...
+}
+----
++
+
+. Get your changes deployed.
+
+* For lower environments (kdev, kqa): Check out branch `integration/main`, commit
+your changes, and push. Your changes will be automatically deployed.
+* For high environments (kstg, kprod, kprod-eu): Branch out from `master`, push
+your changes, and create a pull request. You will need approval from the CFM team to merge.
+After merging, merge `master` back into `integration/main` to prevent regressions
+to older connector versions in lower environments.
+
+== What's Next?
+
+Now that you have fully designed and deployed your connector, you can iterate
+over the design to add more features or fix bugs.
