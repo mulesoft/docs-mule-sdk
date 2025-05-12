@@ -206,4 +206,4 @@ To fix this error, avoid using the `org.mule.sdk.api` package and use an equival
 == See Also
 
 * https://help.mulesoft.com[MuleSoft Help Center]
-* https://issues.salesforce.com/[Known Issues]
+include::partial$release-notes/rn-known-issues.adoc[tag=knownIssuesSeeAlsoLink]
