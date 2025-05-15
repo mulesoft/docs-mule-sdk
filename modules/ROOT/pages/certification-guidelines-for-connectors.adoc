@@ -241,7 +241,7 @@ https://forums.mulesoft.com/spaces/14/anypoint-connectors.html[Connector/DevKit/
 
 xref:best-practices.adoc[Best Practices]
 
-https://github.com/mulesoft/mule4-slack-connector[Slack Connector]
+https://github.com/mulesoft-emu/mule4-slack-connector[Slack Connector]
 
 https://github.com/mulesoft/mule-http-connector/tree/1.2.0[HTTP Connector]
 
