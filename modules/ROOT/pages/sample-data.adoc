@@ -406,8 +406,7 @@ defined failure code.
 
 If your operation or source uses an OAuth connection, trigger a token
 refresh in the provider by throwing an `AccessTokenExpiredException` error inside
-the getSample() method, as done for
-https://docs.mulesoft.com/mule-sdk/1.1/oauth-token-expiration[operations or sources].
+the getSample() method, as done for xref:oauth-token-expiration.adoc[operations or sources].
 
 The following example illustrates a token refresh:
 
