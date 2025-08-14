@@ -6,7 +6,7 @@ endif::[]
 
 Conceptually, routers are <<operations#, operations>> that can receive many executable routes and a set of parameters that handle the execution of one, all, or none of them.
 
-Routes should be used for receiving multiple possible paths of execution, where the parameters of the route can be used to decide whether or not the contained processors should be executed. Stereotypes can be used in the route declaration to define are stereotypes for the contained chain. Routes do not allow complex parameters to be defined inline because the DSL content of the element will be exclusive of the parameterized <<operations#, operations>>.
+Routes should be used for receiving multiple possible paths of execution, where the parameters of the route can be used to decide whether or not the contained processors should be executed. Stereotypes can be used in the route declaration to define are stereotypes for the contained chain. Routes don't allow complex parameters to be defined inline because the DSL content of the element will be exclusive of the parameterized <<operations#, operations>>.
 
 == Defining a Route
 
@@ -78,7 +78,43 @@ Using the router consists of configuring the router parameters and then adding e
 </flow>
 ----
 
-This will execute the `http:request` operation contained by the `when` route every time the `payload` is not null. If a null `payload` arrives, the fallback `otherwise` is executed.
+This executes the `http:request` operation contained by the `when` route whenever the `payload` isn't `null`. If a `null` `payload` arrives, the fallback `otherwise` route executes intead.
+
+== Routers with a Dynamic Number of Routes
+
+Routers can declare a parameter that represents a dynamic list of routes. This enables you to create routers that accept zero, one, or many route instances, rather than a fixed set.
+
+To declare a list of routes, define a router parameter typed as `List<MyRoute>` in the router operation:
+
+[source,java,linenums]
+----
+public void choice(List<WhenRoute> whens,
+                   RouterCompletionCallback callback) {
+...
+}
+----
+
+The handling of the elements in the list is similar to the single-route approach. The code should select the route or routes to execute and then run them. The implementation decides whether to call one, none or many routes, and whether many calls are sequential or parallel.
+
+Using the router involves configuring the router parameters and then adding each route declaration, with its own parameters within its wrapper element:
+
+[source,xml,linenums]
+----
+<flow name="logDecoratorSampleFlow">
+    <docs:choice>
+      <docs:whens>
+        <docs:when shouldExecute="#[payload != null]">
+          <http:request config-ref="config" path="/" method="GET"/>
+        </docs:when>
+        <docs:when shouldExecute="#[payload == null]">
+          <logger message="Payload was null"/>
+        </docs:when>
+      </docs:whens>
+    </docs:choice>
+</flow>
+----
+
+This executes the `http:request` operation in the first `when` route whenever the `payload` isn't `null`. If a `null` `payload` arrives, the second `when` route executes instead.
 
 == Void Routers
 
@@ -86,7 +122,7 @@ This will execute the `http:request` operation contained by the `when` route eve
 
 You might need to create a router that at the end of its execution leaves the event and message the same as it was before the execution of the router. This type of router is called Void Router.
 
-To implement a Void Router, the method needs to have an argument of the `VoidCompletionCallback` type instead of `RouterCompletionCallback`. You use this callback the same was as before (with the `success` and `error` methods), except in this case, `success` does not receive any parameter.
+To implement a Void Router, the method needs to have an argument of the `VoidCompletionCallback` type instead of `RouterCompletionCallback`. You use this callback the same was as before (with the `success` and `error` methods), except in this case, `success` doesn't receive any parameter.
 
 == Restrictions
 
@@ -94,7 +130,7 @@ The following restrictions apply.
 
 === Config-less and Connection-less
 
-Routers have some restrictions that differentiate them from <<operations#, operations>>. By definition, routers are not allowed to depend on or receive a particular configuration or connection.
+Routers have some restrictions that differentiate them from <<operations#, operations>>. By definition, routers aren't allowed to depend on or receive a particular configuration or connection.
 
 === Always Non-Blocking
 
