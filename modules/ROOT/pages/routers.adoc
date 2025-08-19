@@ -94,7 +94,7 @@ public void choice(List<WhenRoute> whens,
 }
 ----
 
-The handling of the elements in the list is similar to the single-route approach. The code should select the route or routes to execute and then run them. The implementation decides whether to call one, none or many routes, and whether many calls are sequential or parallel.
+The handling of the elements in the list is similar to the single-route approach. The code should select the route or routes to execute and then run them. The implementation decides whether to call one, none, or many routes, and whether many calls are sequential or parallel.
 
 Using the router involves configuring the router parameters and then adding each route declaration, with its own parameters within its wrapper element:
 
