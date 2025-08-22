@@ -331,7 +331,7 @@ The following example shows a basic Authorization Code connection configuration.
 
 === OAuth Connection DSL with TLS Context Configuration
 
-This example shows how to configure a TLS context for the Authorization Code flow:
+This example shows how to configure a TLS context for the Authorization Code flow.
 
 [source,java,linenums]
 ----
