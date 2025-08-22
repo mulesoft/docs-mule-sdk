@@ -314,7 +314,7 @@ Many of the synthetic parameters accept expressions. Using expressions allows th
 
 === OAuth Connection DSL
 
-The following example shows a basic Authorization Code connection configuration:
+The following example shows a basic Authorization Code connection configuration.
 
 [source,java,linenums]
 ----
