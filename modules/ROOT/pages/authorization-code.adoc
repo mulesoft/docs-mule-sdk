@@ -231,14 +231,13 @@ public interface AuthorizationCodeState {
 Through this object, the provider gains access to the `accessToken` and other standard information that was obtained during the OAuth dance. Returning to the original Salesforce example, you can see how the `connect()` method makes use of
 this POJO to create the client.
 
-== Configure a Client Credentials Connector
+== Configure an Authorization Code Connector
 
-An important aspect of OAuth-enabled connectors or modules is how to use them. As much as the SDK does to hide the complexities of the OAuth protocol, things like the OAuth dance are unavoidable. The SDK's approach to this problem is to standardize the experience of all OAuth modules to keep simplifying the user experience.
-This section discusses the steps a user must take to use the module.
+OAuth-enabled connectors automatically support the Authorization Code grant type. This section shows the parameters and how to configure them.
 
 === Synthetic Parameters
 
-In addition to everything explicitly defined in the ConnectionProvider, the SDK automatically adds some extra parameters and injects the proper behavior for them.
+In addition to the parameters defined in the `ConnectionProvider`, the SDK automatically injects some standard OAuth parameters for Authorization Code:
 
 [cols="1,1,1,2,2", options="header"]
 |===
@@ -248,81 +247,105 @@ In addition to everything explicitly defined in the ConnectionProvider, the SDK 
 |Default Value
 |Description
 
-|`clientId`
+|`consumerKey`
 |YES
 |SUPPORTED
 |N.A.
-|The OAuth `clientId` value as registered with the service provider.
+|The OAuth consumer key as registered with the service provider.
 
-|`clientSecret`
+|`consumerSecret`
 |YES
 |NOT_SUPPORTED
 |N.A.
-|The OAuth `clientSecret` value as registered with the service provider.
+|The OAuth consumer secret registered with the service provider.
 
-|`tokenUrl`
-|NO
+|`authorizationUrl`
+|YES
 |SUPPORTED
-|Value provided in the `@ClientCredentials` annotation.
-|The service provider's token endpoint URL.
+|N.A.
+|The URL of the authorization endpoint to start the OAuth dance.
+
+|`accessTokenUrl`
+|YES
+|SUPPORTED
+|N.A.
+|The URL to request the access token after the OAuth dance.
 
 |`scopes`
 |NO
 |SUPPORTED
-|The value provided in the `@ClientCredentials` annotation.
-|The OAuth scopes to be requested during the dance. If not provided, this value defaults to those in the annotation.
-
-|`objectStore`
-|NO
-|NOT_SUPPORTED
 |N.A.
-|A reference to the ObjectStore used for storing each resource owner ID's data. If not specified, the runtime automatically provisions a default one.
+|The OAuth scopes to request during authorization. If not provided, defaults to those in the annotation.
 
-|`authServerProxyConfig`
+|`resourceOwnerId`
 |NO
-|NOT_SUPPORTED
+|SUPPORTED
 |N.A.
-|A reference to the proxy configuration used to perform the validation. 
+|The ID of the authenticated user.
+
+|`before`
+|NO
+|SUPPORTED
+|N.A.
+|A flow to execute before authentication.
+
+|`after`
+|NO
+|SUPPORTED
+|N.A.
+|A flow to execute after authentication.
 
 |`authServerTlsContext`
 |NO
 |NOT_SUPPORTED
 |N.A.
-|A reference to the TLS context configuration used to perform the validation, with the trust store configured. 
+|A reference to the TLS context configuration used for the authorization server.
+
+|`authServerProxyConfig`
+|NO
+|NOT_SUPPORTED
+|N.A.
+|A reference to the proxy configuration used for the authorization server.
 |===
 
 === About the Use of Expressions
 
-The synthetic parameters table identifies many of the synthetic parameters that accept expressions. Using expressions there has the same effect as using expressions in a regular parameter: it turns the configuration dynamic.
+Many of the synthetic parameters accept expressions. Using expressions allows the configuration to be dynamic, just like with regular parameters.
 
 === OAuth Connection DSL
 
-The following example shows generated DSL:
+The following example shows a basic Authorization Code connection configuration:
 
-[source, java, linenums]
+[source,java,linenums]
 ----
-<sfdc:config name="salesforce">
-    <sfdc:client-credentials-connection display="PAGE" immediate="FALSE" prompt="CONSENT">
-        <sfdc:oauth-client-credentials clientId="${sfdc.consumerkey}" clientSecret="${sfdc.consumersecret}" tokenUrl="http://..."/>
-        <sfdc:oauth-store-config objectStore="oauthObjectStore" />
-</sfdc:config>
+<test-oauth:auth-code-config name="oauth">
+        <test-oauth:connection display="PAGE" immediate="true" prompt="false">
+            <test-oauth:oauth-authorization-code consumerKey="${consumerKey}"
+                                                 consumerSecret="${consumerSecret}"
+                                                 authorizationUrl="${authorizationUrl}"
+                                                 accessTokenUrl="${accessTokenUrl}"
+                                                 scopes="${scopes}"
+                                                 after="afterFlow" />
+</test-oauth:auth-code-config>
 ----
-
-Regular and OAuth parameters are all shown at the connection provider level, as they would be in any other provider.
-The parameters related to the Client Credentials grant type are placed on a child element called <oauth-client-credentials>.
-The parameters related to ObjectStore are placed in a child element called <oauth-store-config>.
 
 === OAuth Connection DSL with TLS Context Configuration
 
-This example shows how to set a TLS context for OAuth client credentials authorization:
+This example shows how to configure a TLS context for the Authorization Code flow:
 
-[source, java, linenums]
+[source,java,linenums]
 ----
-<sfdc:config name="salesforce">
-    <sfdc:client-credentials-connection display="PAGE" immediate="FALSE" prompt="CONSENT">
-        <sfdc:oauth-client-credentials clientId="${sfdc.consumerkey}" clientSecret="${sfdc.consumersecret}" tokenUrl="http://..." authServerTlsContext="tlsContextServer"/>
-        <sfdc:oauth-store-config objectStore="oauthObjectStore" />
-</sfdc:config>
+<test-oauth:auth-code-config name="oauth">
+    <test-oauth:connection display="PAGE" immediate="true" prompt="false">
+        <test-oauth:oauth-authorization-code consumerKey="${consumerKey}"
+                                             consumerSecret="${consumerSecret}"
+                                             authorizationUrl="${authorizationUrl}"
+                                             accessTokenUrl="${accessTokenUrl}"
+                                             scopes="${scopes}"
+                                             after="afterFlow"
+                                             authServerTlsContext="tlsContextServer" />
+    </test-oauth:connection>
+</test-oauth:auth-code-config>
 
 <tls:context name="tlsContextServer">
     <tls:trust-store password="..." path="..."/>
@@ -331,24 +354,30 @@ This example shows how to set a TLS context for OAuth client credentials authori
 
 === OAuth Connection DSL with Proxy Configuration
 
-This example shows how to set a proxy configuration for OAuth client credentials authorization:
+This example shows how to set a proxy for the Authorization Code flow:
 
-[source, java, linenums]
+[source,java,linenums]
 ----
-<sfdc:config name="salesforce">
-    <sfdc:client-credentials-connection display="PAGE" immediate="FALSE" prompt="CONSENT">
-        <sfdc:oauth-client-credentials clientId="${sfdc.consumerkey}" clientSecret="${sfdc.consumersecret}" tokenUrl="http://..." authServerProxyConfig="proxyConfig"/>
-        <sfdc:oauth-store-config objectStore="oauthObjectStore" />
-</sfdc:config>
+<test-oauth:auth-code-config name="oauth">
+    <test-oauth:connection display="PAGE" immediate="true" prompt="false">
+        <test-oauth:oauth-authorization-code consumerKey="${consumerKey}"
+                                             consumerSecret="${consumerSecret}"
+                                             authorizationUrl="${authorizationUrl}"
+                                             accessTokenUrl="${accessTokenUrl}"
+                                             scopes="${scopes}"
+                                             after="afterFlow"
+                                             authServerProxyConfig="proxyConfig" />
+    </test-oauth:connection>
+</test-oauth:auth-code-config>
 
 <http:proxy name="proxyConfig" host="..." port="..."/>
 ----
 
 === Configuring a Custom ObjectStore
 
-The obtained access tokens are stored in an Object Store. By default, the SDK stores them in the app's default Object Store, but users can define their own custom Object Store, as shown in this example:
+Access tokens are stored in an Object Store. By default, the SDK uses the app's default Object Store, but you can define a custom one:
 
-[source, java, linenums]
+[source,java,linenums]
 ----
 <os:object-store name="tokenStore"
    entryTtl="1"
@@ -358,11 +387,17 @@ The obtained access tokens are stored in an Object Store. By default, the SDK st
    expirationInterval="30"
    expirationIntervalUnit="MINUTES" />
 
-<sfdc:config name="salesforce">
-    <sfdc:client-credentials-connection display="PAGE" immediate="FALSE" prompt="CONSENT">
-        <sfdc:oauth-client-credentials clientId="${sfdc.consumerkey}" clientSecret="${sfdc.consumersecret}" tokenUrl="http://..." />
-        <sfdc:oauth-store-config objectStore="tokenStore" />
-</sfdc:config>
+<test-oauth:auth-code-config name="oauth">
+    <test-oauth:connection display="PAGE" immediate="true" prompt="false">
+        <test-oauth:oauth-authorization-code consumerKey="${consumerKey}"
+                                             consumerSecret="${consumerSecret}"
+                                             authorizationUrl="${authorizationUrl}"
+                                             accessTokenUrl="${accessTokenUrl}"
+                                             scopes="${scopes}"
+                                             after="afterFlow" />
+        <test-oauth:oauth-store-config objectStore="tokenStore"/>
+    </test-oauth:connection>
+</test-oauth:auth-code-config>
 ----
 
 == Next Step
