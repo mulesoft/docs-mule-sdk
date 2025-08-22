@@ -237,7 +237,7 @@ OAuth-enabled connectors automatically support the Authorization Code grant type
 
 === Synthetic Parameters
 
-In addition to the parameters defined in the `ConnectionProvider`, the SDK automatically injects some standard OAuth parameters for Authorization Code:
+In addition to the parameters defined in the `ConnectionProvider`, the SDK automatically injects some standard OAuth parameters for Authorization Code.
 
 [cols="1,1,1,2,2", options="header"]
 |===
