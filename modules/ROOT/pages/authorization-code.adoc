@@ -77,7 +77,7 @@ public class SalesforceOAuthConnectionProvider<C> implements ConnectionProvider<
 
 <1> The connection receives the state object and not the access token. Access tokens can be refreshed or unauthorized at any time, which can make the connection useless, thus you must always query the state object whenever the access token is needed. For more information, refer to xref:define-configurations-and-connection-providers.adoc#always-query-the-state-object-on-each-request[Always Query the State Object on Each Request].
 
-The class implements `ConnectionProvider`, just like other connections in the SDK.  Operations that are authenticated through the object operate over the `SalesforceClient` object that the provider returns. This is an important design consideration because it permits you to decouple of the operation from the authentication method that is used because the connector could define another `ConnectionProvider` that uses plain old, basic authentication, and all the operations would remain fully compatible.
+The class implements `ConnectionProvider`, just like other connections in the SDK.  Operations that are authenticated through the object operate over the `SalesforceClient` object that the provider returns. This is an important design consideration because it permits you to decouple the operation from the authentication method that is used because the connector could define another `ConnectionProvider` that uses plain old, basic authentication, and all the operations would remain fully compatible.
 
 == @AuthorizationCode
 
@@ -119,24 +119,24 @@ public @interface AuthorizationCode {
 }
 ----
 
-== Connection Management strategy
+== Connection Management Strategy
 
-The provider in the example above does not implement any specialization of the `ConnectionProvider` interface, which means that the OAuth mechanism can be combined with the other connection management strategies. The connection objects can be pooled,
+The provider in the example above doesn't implement any specialization of the `ConnectionProvider` interface, which means that the OAuth mechanism can be combined with the other connection management strategies. The connection objects can be pooled,
 cached, or created from scratch each time, depending on which interface is used (`PoolingConnectionProvider`, `CachedConnectionProvider`, `ConnectionProvider`, and so on). For more information on connectivity management, see the <<connections#, connectivity reference>>.
 
-Be aware of the semantics of using the vanilla (generic) `ConnectionProvider` interface in this scenario. In a regular, “non-oauth” connection provider, using the vanilla interface means that each time a component requires a connection, a new one will be created, and it will be destroyed when the component is finished. Although this will remain true for the OAuth case, it does not mean that the OAuth dance will be performed again. New connection objects will be created, but the same access token will be reused as long as it remains valid.
+Be aware of the semantics of using the vanilla (generic) `ConnectionProvider` interface in this scenario. In a regular, “non-oauth” connection provider, using the vanilla interface means that each time a component requires a connection, a new one will be created, and it will be destroyed when the component is finished. Although this will remain true for the OAuth case, it doesn't mean that the OAuth dance will be performed again. New connection objects will be created, but the same access token will be reused as long as it remains valid.
 
-== Regular Parameters versus OAuth Parameters
+== Regular Parameters Versus OAuth Parameters
 
 This `ConnectionProvider` can have parameters, just like any other connection provider. However, you have to distinguish regular parameters from the concept of `@OAuthParameter`.
 
 An `OAuthParameter` is included as a custom parameter while performing the OAuth dance. So, for example, while the `apiVersion` parameter is something that the connection provider will use to create the `SalesforceClient`, the immediate parameter is actually sent on the OAuth request to the service provider.
 
-From the module's point of view, it is just another parameter for which the user will provide a value. You can combine these parameters with `@Optional`, `@Expression`, and all the other annotations you can use with the traditional `@Parameter` annotation. In the DSL, regular and oauth parameters appear together. The module's end user should not notice any difference.
+From the module's point of view, it is just another parameter for which the user will provide a value. You can combine these parameters with `@Optional`, `@Expression`, and all the other annotations you can use with the traditional `@Parameter` annotation. In the DSL, regular and oauth parameters appear together. The module's end user shouldn't notice any difference.
 
 === Request Alias
 
-Some custom OAuth parameters might include characters that not supported in Java. For example "Api-Key". Since you cannot use "-" as part of a field name, the `@OAuthParameter` annotation has an optional parameter called `requestAlias`, for example:
+Some custom OAuth parameters might include characters that aren't supported in Java. For example "Api-Key". Since you can't use "-" as part of a field name, the `@OAuthParameter` annotation has an optional parameter called `requestAlias`, for example:
 
 [source,java,linenums]
 ----
@@ -230,6 +230,140 @@ public interface AuthorizationCodeState {
 
 Through this object, the provider gains access to the `accessToken` and other standard information that was obtained during the OAuth dance. Returning to the original Salesforce example, you can see how the `connect()` method makes use of
 this POJO to create the client.
+
+== Configure a Client Credentials Connector
+
+An important aspect of OAuth-enabled connectors or modules is how to use them. As much as the SDK does to hide the complexities of the OAuth protocol, things like the OAuth dance are unavoidable. The SDK's approach to this problem is to standardize the experience of all OAuth modules to keep simplifying the user experience.
+This section discusses the steps a user must take to use the module.
+
+=== Synthetic Parameters
+
+In addition to everything explicitly defined in the ConnectionProvider, the SDK automatically adds some extra parameters and injects the proper behavior for them.
+
+[cols="1,1,1,2,2", options="header"]
+|===
+|Parameter Name
+|Required
+|Expressions
+|Default Value
+|Description
+
+|`clientId`
+|YES
+|SUPPORTED
+|N.A.
+|The OAuth `clientId` value as registered with the service provider.
+
+|`clientSecret`
+|YES
+|NOT_SUPPORTED
+|N.A.
+|The OAuth `clientSecret` value as registered with the service provider.
+
+|`tokenUrl`
+|NO
+|SUPPORTED
+|Value provided in the `@ClientCredentials` annotation.
+|The service provider's token endpoint URL.
+
+|`scopes`
+|NO
+|SUPPORTED
+|The value provided in the `@ClientCredentials` annotation.
+|The OAuth scopes to be requested during the dance. If not provided, this value defaults to those in the annotation.
+
+|`objectStore`
+|NO
+|NOT_SUPPORTED
+|N.A.
+|A reference to the ObjectStore used for storing each resource owner ID's data. If not specified, the runtime automatically provisions a default one.
+
+|`authServerProxyConfig`
+|NO
+|NOT_SUPPORTED
+|N.A.
+|A reference to the proxy configuration used to perform the validation. 
+
+|`authServerTlsContext`
+|NO
+|NOT_SUPPORTED
+|N.A.
+|A reference to the TLS context configuration used to perform the validation, with the trust store configured. 
+|===
+
+=== About the Use of Expressions
+
+The synthetic parameters table identifies many of the synthetic parameters that accept expressions. Using expressions there has the same effect as using expressions in a regular parameter: it turns the configuration dynamic.
+
+=== OAuth Connection DSL
+
+The following example shows generated DSL:
+
+[source, java, linenums]
+----
+<sfdc:config name="salesforce">
+    <sfdc:client-credentials-connection display="PAGE" immediate="FALSE" prompt="CONSENT">
+        <sfdc:oauth-client-credentials clientId="${sfdc.consumerkey}" clientSecret="${sfdc.consumersecret}" tokenUrl="http://..."/>
+        <sfdc:oauth-store-config objectStore="oauthObjectStore" />
+</sfdc:config>
+----
+
+Regular and OAuth parameters are all shown at the connection provider level, as they would be in any other provider.
+The parameters related to the Client Credentials grant type are placed on a child element called <oauth-client-credentials>.
+The parameters related to ObjectStore are placed in a child element called <oauth-store-config>.
+
+=== OAuth Connection DSL with TLS Context Configuration
+
+This example shows how to set a TLS context for OAuth client credentials authorization:
+
+[source, java, linenums]
+----
+<sfdc:config name="salesforce">
+    <sfdc:client-credentials-connection display="PAGE" immediate="FALSE" prompt="CONSENT">
+        <sfdc:oauth-client-credentials clientId="${sfdc.consumerkey}" clientSecret="${sfdc.consumersecret}" tokenUrl="http://..." authServerTlsContext="tlsContextServer"/>
+        <sfdc:oauth-store-config objectStore="oauthObjectStore" />
+</sfdc:config>
+
+<tls:context name="tlsContextServer">
+    <tls:trust-store password="..." path="..."/>
+</tls:context>
+----
+
+=== OAuth Connection DSL with Proxy Configuration
+
+This example shows how to set a proxy configuration for OAuth client credentials authorization:
+
+[source, java, linenums]
+----
+<sfdc:config name="salesforce">
+    <sfdc:client-credentials-connection display="PAGE" immediate="FALSE" prompt="CONSENT">
+        <sfdc:oauth-client-credentials clientId="${sfdc.consumerkey}" clientSecret="${sfdc.consumersecret}" tokenUrl="http://..." authServerProxyConfig="proxyConfig"/>
+        <sfdc:oauth-store-config objectStore="oauthObjectStore" />
+</sfdc:config>
+
+<http:proxy name="proxyConfig" host="..." port="..."/>
+----
+
+=== Configuring a Custom ObjectStore
+
+The obtained access tokens are stored in an Object Store. By default, the SDK stores them in the app's default Object Store, but users can define their own custom Object Store, as shown in this example:
+
+[source, java, linenums]
+----
+<os:object-store name="tokenStore"
+   entryTtl="1"
+   entryTtlUnit="HOURS"
+   maxEntries="100"
+   persistent="true"
+   expirationInterval="30"
+   expirationIntervalUnit="MINUTES" />
+
+<sfdc:config name="salesforce">
+    <sfdc:client-credentials-connection display="PAGE" immediate="FALSE" prompt="CONSENT">
+        <sfdc:oauth-client-credentials clientId="${sfdc.consumerkey}" clientSecret="${sfdc.consumersecret}" tokenUrl="http://..." />
+        <sfdc:oauth-store-config objectStore="tokenStore" />
+</sfdc:config>
+----
 
 == Next Step
 
