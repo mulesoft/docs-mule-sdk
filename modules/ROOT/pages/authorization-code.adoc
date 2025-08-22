@@ -375,7 +375,7 @@ This example shows how to set a proxy for the Authorization Code flow.
 
 === Custom ObjectStore Configuration
 
-Access tokens are stored in an Object Store. By default, the SDK uses the app's default Object Store, but you can define a custom one:
+Access tokens are stored in an Object Store. By default, the SDK uses the app's default Object Store, but you can define a custom one.
 
 [source,java,linenums]
 ----
