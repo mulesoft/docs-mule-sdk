@@ -354,7 +354,7 @@ This example shows how to configure a TLS context for the Authorization Code flo
 
 === OAuth Connection DSL with Proxy Configuration
 
-This example shows how to set a proxy for the Authorization Code flow:
+This example shows how to set a proxy for the Authorization Code flow.
 
 [source,java,linenums]
 ----
