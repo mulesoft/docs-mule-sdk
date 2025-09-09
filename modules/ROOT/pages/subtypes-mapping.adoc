@@ -154,7 +154,7 @@ In this example, we're adding an `oauth` authentication to the `http` module:
 ----
 @Extension(name = "OAuth")
 @Import(type = HttpRequestAuthentication.class) //<1>
-@SubTypeMapping(baseType = Authentication.class, //<2>
+@SubTypeMapping(baseType = HttpRequestAuthentication.class, //<2>
     subTypes = {DefaultAuthorizationCodeGrantType.class, ClientCredentialsGrantType.class})
 public class OAuthExtension {
 
@@ -162,7 +162,7 @@ public class OAuthExtension {
 ----
 
 <1> Declare the import from the HTTP Authentication type.
-<2> Add more subtype mappings to the `Authentication` type from the OAuth extension.
+<2> Add more subtype mappings to the `HttpRequestAuthentication` type from the HTTP extension.
 
 Now, once the two new authentication methods are implemented, we can parameterize them to the HTTP connector in any application, without modifying any code of the original extension `HTTP`. That is, for the same application we had above, we can add a new authentication method:
 

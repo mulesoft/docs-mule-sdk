@@ -1,5 +1,5 @@
 .xref:index.adoc[Mule SDK]
-* xref:index.adoc[Mule SDK]
+* xref:index.adoc[Overview]
 ** xref:partner-connector-upgrade.adoc[Upgrading Java for Custom Connectors (Partners)]
 ** xref:customer-connector-upgrade.adoc[Upgrading Java for Custom Connectors (Customers)]
 * xref:getting-started.adoc[Java SDK]
