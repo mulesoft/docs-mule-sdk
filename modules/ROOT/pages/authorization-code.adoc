@@ -233,7 +233,7 @@ this POJO to create the client.
 
 == Configure an Authorization Code Connector
 
-OAuth-enabled connectors automatically support the Authorization Code grant type. This section shows the parameters and how to configure them.
+OAuth-enabled connectors automatically support the Authorization Code grant type. This section describes the parameters and how to configure them.
 
 === Synthetic Parameters
 
