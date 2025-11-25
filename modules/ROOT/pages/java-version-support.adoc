@@ -10,14 +10,14 @@ Users can determine whether their Mule applications can safely upgrade to run on
 
 * User experience
 +
-Providing clear information about Java compatibility enhances the user experience, especially for Anypoint Exchange users who rely on this information for selecting modules. 
+Providing clear information about Java compatibility enhances the user experience, especially for Anypoint Exchange users who rely on this information for selecting modules.
 
 [[specify-java-compatibility]]
 == Specify Java Compatibility
 
 To specify Java compatibility of your custom module:
 
-. Generate metadata to specify Java compatibility of your custom module by adding or upgrading the custom module `mule-sdk-api` dependency to the latest version, for example: 
+. Generate metadata to specify Java compatibility of your custom module by adding or upgrading the custom module `mule-sdk-api` dependency to the latest version, for example:
 +
 [source,xml,linenums]
 ----
@@ -28,10 +28,13 @@ To specify Java compatibility of your custom module:
 </dependency>
 ----
 
-. Add the `@JavaVersionSupport` annotation in the same class as the `@Extension` annotation and include the supported Java versions as values, for example: 
+. Add the `@JavaVersionSupport` annotation in the same class as the `@Extension` annotation and include the supported Java versions as values, for example:
 +
 [source,java,linenums]
 ----
+import org.mule.sdk.api.annotation.JavaVersionSupport;
+import org.mule.sdk.api.meta.JavaVersion;
+
 @Extension(name = "Database")
 @Operations(...)
 @JavaVersionSupport({JavaVersion.JAVA_8, JavaVersion.JAVA_11, JavaVersion.JAVA_17})
@@ -42,9 +45,9 @@ public class DatabaseConnector {
 
 NOTE: If the `mule-modules-parent` version is earlier than 1.9.0, all code, including third-party dependencies, *must* be compiled for Java 8, and you must use Java 8 to build the connector.
 
-You can mark your custom module as compatible with a single Java version only; however, you must ensure that no adoption or backward compatibility issues exist. 
+You can mark your custom module as compatible with a single Java version only; however, you must ensure that no adoption or backward compatibility issues exist.
 
-When you deploy a Mule app, Mule verifies that all modules in the Mule app are compatible with the Java version. If Mule finds an incompatibility, Mule throws an error and the application does not deploy. 
+When you deploy a Mule app, Mule verifies that all modules in the Mule app are compatible with the Java version. If Mule finds an incompatibility, Mule throws an error and the application does not deploy.
 
 If your code is compatible with a given Java version but you do not declare that compatibility, you can still get a successful test run (only when running a test on Java 8).
 
