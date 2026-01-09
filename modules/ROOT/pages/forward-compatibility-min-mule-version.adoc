@@ -1,0 +1,74 @@
+= Working with Minimum Mule Versions
+ifndef::env-site,env-github[]
+include::_attributes.adoc[]
+endif::[]
+:keywords: mule, sdk, forward compatibility, minMuleVersion, MinMuleVersion annotation
+
+With forward compatibility, each component in your module—operations, sources, configurations, and connection providers—has its own Minimum Mule Version. This page explains how these versions are determined and how you can control them.
+
+== Automatic Calculation
+
+The SDK tooling automatically calculates the Minimum Mule Version for each component based on the APIs it uses. When a component interacts with an SDK API (annotations, interfaces, classes), it inherits the Minimum Mule Version requirement of that API.
+
+For example, if an operation uses an annotation that requires Mule 4.12.0, the operation's Minimum Mule Version is automatically set to 4.12.0.
+
+This calculation considers:
+
+* Annotations applied to the component class, fields, and methods
+* Interfaces implemented by the component
+* Types used in method parameters and return values
+* Superclasses extended by the component
+
+The final Minimum Mule Version for a component is the highest version required by any of the APIs it uses, but never lower than the baseline Minimum Mule Version.
+
+== Baseline Minimum Mule Version
+
+The baseline is the lowest Minimum Mule Version any component in your module can have. It is set via the `min.mule.version` property in your POM (defaults to `4.11.0`).
+
+Even if a component uses only APIs available since Mule 4.1.0, its Minimum Mule Version will be the baseline. This ensures consistency and prevents components from advertising support for runtime versions older than what you intend to support.
+
+== Checking a Feature's Minimum Mule Version
+
+Each API in the `org.mule.sdk.api` package is annotated with `@MinMuleVersion`, indicating the minimum runtime version required for that feature. You can check this annotation in the source code to understand the version requirements before using an API.
+
+For example, if you see `@MinMuleVersion("4.12.0")` on an annotation you want to use, any component using that annotation will require at least Mule 4.12.0.
+
+== Using @MinMuleVersion on Your Components
+
+While the SDK calculates Minimum Mule Versions automatically, you can use the `@MinMuleVersion` annotation to explicitly set a higher version for your components.
+
+[source,java,linenums]
+----
+import org.mule.sdk.api.annotation.MinMuleVersion;
+
+@MinMuleVersion("4.12.0")
+public class AdvancedOperations {
+
+  public void newFeatureOperation() {
+    // This operation requires Mule 4.12.0 or later
+  }
+}
+----
+
+Use this when you want to restrict a component to newer runtimes even though it could technically run on older versions. Common reasons include:
+
+* The component depends on runtime behavior changes not reflected in SDK APIs
+* You want to limit initial availability while gathering feedback
+* The component is designed to work alongside other features only available in newer runtimes
+
+You cannot use `@MinMuleVersion` to set a version lower than what the SDK calculates. If you try, the calculated version takes precedence and a warning is logged during the build.
+
+== How Minimum Mule Version Affects Visibility
+
+The Minimum Mule Version for each component is stored in the Extension Model. Design-time tools like Anypoint Studio and Anypoint Code Builder use this information to:
+
+* Filter out components that require a higher Mule version than the application's target runtime
+* Display warnings when a component may not be compatible with the selected runtime
+
+This ensures application developers see only the components they can use with their target runtime.
+
+== See Also
+
+* xref:forward-compatibility-setup.adoc[Setting Up Forward Compatibility]
+* xref:forward-compatibility-enforcement.adoc[Controlling Version Propagation]
+* xref:forward-compatibility.adoc[SDK Forward Compatibility]
