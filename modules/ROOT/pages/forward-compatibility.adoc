@@ -6,7 +6,7 @@ endif::[]
 
 In traditional SDK development, each SDK version is strictly tied to a specific Mule Runtime version. Using any new SDK feature requires bumping the SDK version, which automatically increases your module's minimum Mule version (`minMuleVersion`). This forces application developers to upgrade their entire Mule Runtime just to use a newer version of your module.
 
-Starting with Mule 4.11.0 and `mule-modules-parent` version 1.11.x, the SDK introduces forward compatibility, which decouples the SDK version you compile against from the minimum Mule version your module requires. This enables your module to offer new features for newer runtimes while continuing to support older runtimes with existing functionality.
+Starting with Mule 4.11.0 and using the new `mule-java-extension-parent`, the SDK introduces forward compatibility, which decouples the SDK version you compile against from the minimum Mule version your module requires. This enables your module to offer new features for newer runtimes while continuing to support older runtimes with existing functionality.
 
 == How It Works
 
@@ -28,13 +28,13 @@ When prompted, select a parent POM version of 1.11.x or later. The generated pro
 
 === Upgrading an Existing Module
 
-To enable forward compatibility in an existing module, update the parent POM version to 1.11.x or later:
+To enable forward compatibility in an existing module, adopt the new parent POM:
 
 [source,xml,linenums]
 ----
 <parent>
   <groupId>org.mule.extensions</groupId>
-  <artifactId>mule-modules-parent</artifactId>
+  <artifactId>mule-java-extension-parent</artifactId>
   <version>1.11.0</version>
 </parent>
 ----
