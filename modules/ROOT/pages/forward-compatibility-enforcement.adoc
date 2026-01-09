@@ -1,0 +1,53 @@
+= Controlling Version Propagation
+ifndef::env-site,env-github[]
+include::_attributes.adoc[]
+endif::[]
+:keywords: mule, sdk, forward compatibility, DoNotEnforceMinMuleVersion, version propagation
+
+By default, when a component uses an SDK API, it inherits that API's Minimum Mule Version requirement. However, some APIs are designed to enhance functionality without affecting runtime compatibility. This page explains how version propagation works and how you can control it.
+
+== APIs That Don't Propagate Their Version
+
+Some SDK APIs are annotated with `@DoNotEnforceMinMuleVersion`, which means using them does not raise your component's Minimum Mule Version. These are typically APIs that:
+
+* Provide design-time enhancements (sample data, metadata)
+* Add semantic information for tooling (semantic terms, display annotations)
+* Enable optional features that gracefully degrade on older runtimes
+
+For example, annotations like `@SampleData`, `@DisplayName`, and semantic annotations such as `@Url` or `@Password` do not affect your component's Minimum Mule Version, even though they were introduced in specific runtime versions.
+
+== Using @DoNotEnforceMinMuleVersion in Your Module
+
+In some cases, you may want to use an SDK API that would normally raise your component's Minimum Mule Version, but you have implemented fallback behavior for older runtimes. You can use `@DoNotEnforceMinMuleVersion` to prevent the version propagation.
+
+[source,java,linenums]
+----
+import org.mule.sdk.api.annotation.DoNotEnforceMinMuleVersion;
+import org.mule.sdk.api.annotation.param.Parameter;
+
+public class MyOperations {
+
+  public void myOperation(@DoNotEnforceMinMuleVersion @Parameter SomeNewType input) {
+    // This parameter type requires Mule 4.12.0, but we have fallback logic
+    // so we don't want it to raise the operation's Minimum Mule Version
+  }
+}
+----
+
+IMPORTANT: Use this annotation only when you have verified that your component works correctly on older runtimes. If the component depends on the API being fully functional, do not suppress the version propagation.
+
+== When to Use This Annotation
+
+Consider using `@DoNotEnforceMinMuleVersion` when:
+
+* You use a newer API but provide equivalent fallback behavior for older runtimes
+* You use runtime version checking to conditionally enable features (see xref:forward-compatibility-patterns.adoc[Forward Compatibility Patterns])
+* The API you're using is optional and its absence doesn't break core functionality
+
+Do not use this annotation simply to lower your component's Minimum Mule Version without implementing proper fallback behavior. Doing so can cause runtime errors when users deploy to older Mule versions.
+
+== See Also
+
+* xref:forward-compatibility-min-mule-version.adoc[Working with Minimum Mule Versions]
+* xref:forward-compatibility-patterns.adoc[Forward Compatibility Patterns]
+* xref:forward-compatibility.adoc[SDK Forward Compatibility]
