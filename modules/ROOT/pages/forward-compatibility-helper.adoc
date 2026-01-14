@@ -1,0 +1,71 @@
+= Using ForwardCompatibilityHelper
+ifndef::env-site,env-github[]
+include::_attributes.adoc[]
+endif::[]
+:keywords: mule, sdk, forward compatibility, ForwardCompatibilityHelper, DistributedTraceContextManager
+
+The `ForwardCompatibilityHelper` interface provides access to features that are normally exposed as implicit parameters, but in a way that allows modules using older SDK APIs to consume them without breaking compatibility with older runtimes.
+
+== Purpose
+
+Some runtime features, such as distributed tracing, are naturally exposed through implicit parameters. For new modules using `org.mule.sdk.api`, these features can be consumed directly. However, existing modules that use `org.mule.runtime.extension.api` types cannot directly use the new implicit parameters without breaking compatibility.
+
+`ForwardCompatibilityHelper` bridges this gap by accepting the legacy API types and providing access to the new features.
+
+== The sdk-compatibility-api Artifact
+
+`ForwardCompatibilityHelper` is defined in the `org.mule.sdk:mule-sdk-compatibility-api` artifact, in the `org.mule.sdk.compatibility.api.utils` package. This artifact knows both the legacy `org.mule.runtime.extension.api` types and the new `org.mule.sdk.api` types, allowing it to perform translations between them.
+
+== Injecting ForwardCompatibilityHelper
+
+To use `ForwardCompatibilityHelper`, inject it as an `Optional` in your component:
+
+[source,java,linenums]
+----
+import org.mule.sdk.compatibility.api.utils.ForwardCompatibilityHelper;
+import javax.inject.Inject;
+import java.util.Optional;
+
+public class MyOperations {
+
+  @Inject
+  private Optional<ForwardCompatibilityHelper> forwardCompatibilityHelper;
+
+  public void myOperation(CorrelationInfo correlationInfo) {
+    if (forwardCompatibilityHelper.isPresent()) {
+      // Use the helper on Mule 4.5.0+
+      DistributedTraceContextManager traceManager = 
+          forwardCompatibilityHelper.get().getDistributedTraceContextManager(correlationInfo);
+      // Use traceManager...
+    } else {
+      // Fallback for older runtimes where the helper is not available
+    }
+  }
+}
+----
+
+The `Optional` will contain an instance on Mule 4.5.0 and later. On older runtimes, the `Optional` will be empty.
+
+== Available Methods
+
+`ForwardCompatibilityHelper` provides methods to access the `DistributedTraceContextManager` for distributed tracing:
+
+* `getDistributedTraceContextManager(CorrelationInfo correlationInfo)` — for use in operations, accepts the legacy `org.mule.runtime.extension.api.runtime.parameter.CorrelationInfo`
+* `getDistributedTraceContextManager(org.mule.sdk.api.runtime.parameter.CorrelationInfo correlationInfo)` — for use in operations, accepts the new SDK API `CorrelationInfo`
+* `getDistributedTraceContextManager(SourceCallbackContext sourceCallbackContext)` — for use in sources
+
+== When to Use ForwardCompatibilityHelper
+
+Use `ForwardCompatibilityHelper` when:
+
+* Your module uses legacy `org.mule.runtime.extension.api` types
+* You want to add support for new features (like distributed tracing) without forcing users to upgrade their Mule Runtime
+* You need to bridge between legacy API types and new SDK API types
+
+For new modules built entirely with `org.mule.sdk.api`, you can typically consume these features directly through implicit parameters instead.
+
+== See Also
+
+* xref:forward-compatibility-patterns.adoc[Forward Compatibility Patterns]
+* xref:forward-compatibility-implicit-params.adoc[Implicit Parameters and Forward Compatibility]
+* xref:forward-compatibility.adoc[SDK Forward Compatibility]
