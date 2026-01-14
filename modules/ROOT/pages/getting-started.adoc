@@ -31,7 +31,7 @@ Install and verify that the following tools are working in your local environmen
 Run the `generate` command to create an extension project based on the Maven archetype:
 
 ----
-mvn org.mule.extensions:mule-extensions-archetype-maven-plugin:1.3.1:generate
+mvn org.mule.extensions:mule-extensions-archetype-maven-plugin:1.11.0:generate
 ----
 
 You are prompted to provide required field values, then a new project is generated.
@@ -46,12 +46,12 @@ Because this project is a Maven project, it contains a `pom.xml` file that conta
 ----
 <parent>
   <groupId>org.mule.extensions</groupId>
-  <artifactId>mule-modules-parent</artifactId>
-  <version>1.9.0</version>
+  <artifactId>mule-java-extension-parent</artifactId>
+  <version>1.11.0</version>
 </parent>
 ----
 
-NOTE: The parent POM defines the minimum Mule version, which must be compatible with the target Mule version. The Mule runtime version you use determines the version of the mule-modules-parent. For example, if you use Mule runtime 4.6.0, you must use mule-modules-parent 1.6.0. If you must compile your connector with Java 17, you must use mule-modules-parent 1.9.0. 
+NOTE: The parent POM defines a Minimum Mule Version by default, that version must be compatible with the target Mule version. See xref:forward-compatibility.adoc[Forward Compatibility] for more information on how to configure and work with Minimum Mule Versions.
 
 == Set Up Your IDE
 
