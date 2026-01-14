@@ -55,6 +55,7 @@ Note that `0.9.0` is a beta version of the Migration tool. See the <<question_1,
 The generated Mule 4 extension appears in the target folder.
 +
 .. If the migration tool reports errors indicating that it cannot auto-migrate parts of your connector, resolve these errors before continuing.
+// TODO TD-0302251: update this section once a new mule-certified-parent exists
 . Update your `pom.xml` file:
 +
 * Locate these `<parent/>` settings:
