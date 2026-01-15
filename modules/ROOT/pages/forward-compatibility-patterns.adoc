@@ -10,6 +10,8 @@ When building forward compatible modules, you often need to use newer SDK featur
 
 Use the `@RuntimeVersion` annotation to inject the current Mule Runtime version into your component. This annotation can be applied to fields of type `org.mule.runtime.api.meta.MuleVersion`.
 
+NOTE: The `mule-sdk-api` artifact has a dependency on `mule-api` for basic APIs that are not intended to evolve over time. `MuleVersion` is one of these stable APIs, so there is no `org.mule.sdk.api` counterpart for it. You can safely use `org.mule.runtime.api.meta.MuleVersion` in forward compatible modules.
+
 [source,java,linenums]
 ----
 import org.mule.runtime.api.meta.MuleVersion;

@@ -27,6 +27,36 @@ The baseline is the lowest Minimum Mule Version any component in your module can
 
 Even if a component uses only APIs available since Mule 4.1.0, its Minimum Mule Version will be the baseline. This ensures consistency and prevents components from advertising support for runtime versions older than what you intend to support.
 
+=== Example: Baseline vs Component-Level Versions
+
+The following diagram illustrates how the baseline and component-level Minimum Mule Versions work together:
+
+----
+Module: my-connector
+├── Baseline (min.mule.version): 4.11.0
+│
+├── listFiles operation
+│   └── Uses: @Parameter, StreamingHelper
+│   └── Calculated MMV: 4.11.0 (baseline)
+│
+├── uploadFile operation
+│   └── Uses: @Parameter, StreamingHelper, NewUploadFeature (requires 4.12.0)
+│   └── Calculated MMV: 4.12.0
+│
+└── streamWithCheckpoint operation
+    └── Uses: @Parameter, CheckpointHelper (requires 4.13.0)
+    └── Calculated MMV: 4.13.0
+----
+
+In this example:
+
+* All three operations are part of the same module release
+* `listFiles` works on Mule 4.11.0 and later
+* `uploadFile` works on Mule 4.12.0 and later
+* `streamWithCheckpoint` works on Mule 4.13.0 and later
+
+Application developers targeting Mule 4.11.0 see only `listFiles`. Those on 4.12.0 see `listFiles` and `uploadFile`. Those on 4.13.0 see all three operations.
+
 == Checking a Feature's Minimum Mule Version
 
 Each API in the `org.mule.sdk.api` package is annotated with `@MinMuleVersion`, indicating the minimum runtime version required for that feature. You can check this annotation in the source code to understand the version requirements before using an API.
