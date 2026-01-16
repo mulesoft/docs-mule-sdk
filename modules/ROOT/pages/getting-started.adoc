@@ -51,7 +51,7 @@ Because this project is a Maven project, it contains a `pom.xml` file that conta
 </parent>
 ----
 
-NOTE: The parent POM defines a Minimum Mule Version by default, that version must be compatible with the target Mule version. See xref:forward-compatibility.adoc[Forward Compatibility] for more information on how to configure and work with Minimum Mule Versions.
+NOTE: The generated POM defines a Minimum Mule Version by default, that version must be compatible with the target Mule version. See xref:forward-compatibility.adoc[Forward Compatibility] for more information on how to configure and work with Minimum Mule Versions.
 
 == Set Up Your IDE
 
