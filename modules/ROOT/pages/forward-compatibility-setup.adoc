@@ -21,9 +21,14 @@ To enable forward compatibility, your module must use the new `mule-java-extensi
 
 This parent POM automatically includes the `mule-sdk-api` artifact and configures the build tooling for forward compatibility.
 
-=== Upgrading Existing Modules
+[[upgrading-existing-modules]]
+== Upgrading Existing Modules
 
-The new parent POM enforces best practices by removing the provided-scope dependencies on `org.mule.runtime` modules that were present in older parent versions. When upgrading an existing module, you may encounter compilation errors due to missing imports.
+IMPORTANT: All forward compatible APIs in `org.mule.sdk.api` require Mule 4.5.0 or later. Before upgrading, consider whether having 4.5.0 as your module's Minimum Mule Version is acceptable. If your module must support runtimes older than 4.5.0, you cannot use forward compatibility.
+
+To upgrade an existing module, change the parent POM in your `pom.xml` to use `mule-java-extension-parent` version 1.11.0 or later.
+
+The new parent POM enforces best practices by removing the provided-scope dependencies on `org.mule.runtime` modules that were present in older parent versions.
 
 Any issues from these removals will manifest early as compilation errors, allowing you to address them before runtime. To resolve them, replace the `org.mule.runtime` imports with their `org.mule.sdk.api` counterparts.
 
@@ -41,13 +46,11 @@ When writing new code or migrating existing code, use APIs from the `org.mule.sd
 
 == Minimum Mule Version
 
-Unlike previous SDK versions, the parent POM version and the `mule-sdk-api` version do not directly determine your module's minimum Mule version. Instead, the minimum Mule version is controlled separately and calculated per component based on the APIs it uses.
+Unlike previous SDK versions, the parent POM version and the `mule-sdk-api` version do not directly determine your module's minimum Mule version. Instead, the Minimum Mule Version is calculated per component based on the APIs it uses.
 
 === Baseline Minimum Mule Version
 
-The baseline minimum Mule version for your module is set via the `min.mule.version` property in your POM. This property defaults to `4.11.0` when using `mule-java-extension-parent`.
-
-To override the baseline, add the property to your POM:
+When creating a new module with the archetype, the `min.mule.version` property is added to your POM with `4.11.0` as the default:
 
 [source,xml,linenums]
 ----
@@ -56,7 +59,9 @@ To override the baseline, add the property to your POM:
 </properties>
 ----
 
-Individual components in your module may have a higher minimum Mule version than the baseline if they use APIs that require newer runtime features. The SDK tooling calculates these component-level versions automatically. See xref:forward-compatibility-min-mule-version.adoc[Working with Minimum Mule Versions] for details.
+This baseline acts as a floor—no component can have a Minimum Mule Version lower than this value. You can adjust this value based on your module's requirements.
+
+See xref:forward-compatibility-min-mule-version.adoc[Working with Minimum Mule Versions] for details on how versions are calculated.
 
 == See Also
 

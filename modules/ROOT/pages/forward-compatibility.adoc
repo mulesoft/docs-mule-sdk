@@ -28,18 +28,7 @@ When prompted, select a parent POM version of 1.11.x or later. The generated pro
 
 === Upgrading an Existing Module
 
-To enable forward compatibility in an existing module, adopt the new parent POM:
-
-[source,xml,linenums]
-----
-<parent>
-  <groupId>org.mule.extensions</groupId>
-  <artifactId>mule-java-extension-parent</artifactId>
-  <version>1.11.0</version>
-</parent>
-----
-
-This sets a baseline minimum Mule version of 4.11.0, includes the `mule-sdk-api` artifact, and enables automatic minimum version calculation. You can then start using APIs from the `org.mule.sdk.api` package in your module code.
+To enable forward compatibility in an existing module, change the parent POM in your `pom.xml` to use `mule-java-extension-parent` version 1.11.0 or later. See xref:forward-compatibility-setup.adoc#upgrading-existing-modules[Upgrading Existing Modules] for detailed instructions and considerations.
 
 == Benefits
 

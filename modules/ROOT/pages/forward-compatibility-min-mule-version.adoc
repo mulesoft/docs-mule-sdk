@@ -19,17 +19,15 @@ This calculation considers:
 * Types used in method parameters and return values
 * Superclasses extended by the component
 
-The final Minimum Mule Version for a component is the highest version required by any of the APIs it uses, but never lower than the baseline Minimum Mule Version.
+The final Minimum Mule Version for a component is the highest version required by any of the APIs it uses.
 
 == Baseline Minimum Mule Version
 
-The baseline is the lowest Minimum Mule Version any component in your module can have. It is set via the `min.mule.version` property in your POM (defaults to `4.11.0`).
+The baseline Minimum Mule Version is set via the `min.mule.version` property in your POM. When creating a new module with the archetype, this property defaults to `4.11.0`. This baseline acts as a floor—no component can have a Minimum Mule Version lower than this value.
 
-Even if a component uses only APIs available since Mule 4.1.0, its Minimum Mule Version will be the baseline. This ensures consistency and prevents components from advertising support for runtime versions older than what you intend to support.
+=== Example: Component-Level Versions
 
-=== Example: Baseline vs Component-Level Versions
-
-The following diagram illustrates how the baseline and component-level Minimum Mule Versions work together:
+The following diagram illustrates how Minimum Mule Versions are calculated per component:
 
 ----
 Module: my-connector
@@ -51,11 +49,16 @@ Module: my-connector
 In this example:
 
 * All three operations are part of the same module release
-* `listFiles` works on Mule 4.11.0 and later
+* `listFiles` works on Mule 4.11.0 and later (the baseline)
 * `uploadFile` works on Mule 4.12.0 and later
 * `streamWithCheckpoint` works on Mule 4.13.0 and later
+* The module's Minimum Mule Version is 4.11.0 (the lowest among all components)
 
 Application developers targeting Mule 4.11.0 see only `listFiles`. Those on 4.12.0 see `listFiles` and `uploadFile`. Those on 4.13.0 see all three operations.
+
+=== Module-Level Minimum Mule Version
+
+While each component has its own Minimum Mule Version, the module as a whole also has a Minimum Mule Version. This is the lowest Minimum Mule Version among all its components, or the baseline Minimum Mule Version if it was specified. In the example above, the module's Minimum Mule Version is 4.11.0 because that is the lowest version required by any of its components (`listFiles`).
 
 == Checking a Feature's Minimum Mule Version
 
