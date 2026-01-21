@@ -4,11 +4,11 @@ include::_attributes.adoc[]
 endif::[]
 :keywords: mule, sdk, forward compatibility, RuntimeVersion, MuleVersion, conditional behavior
 
-When building forward compatible modules, you often need to use newer SDK features while providing fallback behavior for older runtimes. This page describes common patterns for implementing conditional behavior based on the runtime version.
+When building forward-compatible modules, you often need to use newer SDK features while providing fallback behavior for older runtimes. The following patterns show how to implement conditional behavior based on the Mule runtime version.
 
-== Checking the Runtime Version
+== Check the Mule Runtime Version
 
-Use the `@RuntimeVersion` annotation to inject the current Mule Runtime version into your component. This annotation can be applied to fields of type `org.mule.runtime.api.meta.MuleVersion`.
+Use the `@RuntimeVersion` annotation to inject the current Mule Runtime version into your component. You can apply this annotation to fields of type `org.mule.runtime.api.meta.MuleVersion`.
 
 NOTE: The `mule-sdk-api` artifact has a dependency on `mule-api` for basic APIs that are not intended to evolve over time. `MuleVersion` is one of these stable APIs, so there is no `org.mule.sdk.api` counterpart for it. You can safely use `org.mule.runtime.api.meta.MuleVersion` in forward compatible modules.
 
@@ -34,18 +34,28 @@ public class MyOperations {
 
 The `MuleVersion` class provides methods to compare versions:
 
-* `atLeast(String version)` — returns `true` if the runtime version is equal to or greater than the specified version
-* `atLeastBase(String version)` — returns `true` if the runtime base version (ignoring patch level) is equal to or greater
+[%header,cols="1,2"]
+|===
+| Method | Description
 
-Since the runtime version is the same across your entire module, `@RuntimeVersion` is only applicable at the field level. This encourages centralizing version-dependent logic rather than scattering checks throughout individual operations.
+| `atLeast(String version)`
+| Returns `true` if the Mule runtime version is equal to or greater than the specified version.
 
-== Consuming New Methods in Existing APIs
+| `atLeastBase(String version)`
+| Returns `true` if the base version (ignoring patch level) is equal to or greater than the specified version.
+|===
 
-When an SDK API adds a new method in a later version, you can use it conditionally by checking the runtime version first. Failure to check the version before calling a method that doesn't exist will result in a `NoSuchMethodError`.
+The runtime version is constant across your module, so @RuntimeVersion applies only at the field level. Centralize your version-dependent logic in a shared field rather than checking in every operation.
 
-Consider the following example: the `StreamingHelper` interface exists since Mule 4.4.0 (it is annotated with `@MinMuleVersion("4.4.0")`). Suppose a new `reset()` method is added to this interface in Mule 4.12.0, annotated with `@MinMuleVersion("4.12.0")`.
+== Call New Methods in Existing APIs
 
-IMPORTANT: The SDK does not perform introspection to detect which methods your code actually calls. This means the `@MinMuleVersion("4.12.0")` on the `reset()` method does not automatically propagate to your component's Minimum Mule Version. You must check the runtime version yourself and provide fallback behavior for older runtimes. Alternatively, if no fallback is possible or acceptable for your module's business logic, you can explicitly annotate your operation with `@MinMuleVersion("4.12.0")` to restrict it to runtimes where the method exists.
+SDK APIs may add new methods in later versions. If you call a method that doesn't exist on an earlier Mule runtime version, you get a `NoSuchMethodError`.
+
+The SDK doesn't introspect which methods your code actually calls. Even if a method has `@MinMuleVersion("4.12.0")`, using it doesn't automatically raise your component's Minimum Mule Version. You are able to deploy a module to earlier versions where the method doesn't exist. For this reason, you must check the Mule runtime version before calling new methods, and provide fallback behavior for older versions.
+
+=== Example: Using a New Method with Fallback
+
+The following example shows how to conditionally call a method that exists in Mule 4.12.0 and later:
 
 [source,java,linenums]
 ----
@@ -74,9 +84,11 @@ public class MyOperations {
 }
 ----
 
-== Combining with @DoNotEnforceMinMuleVersion
+If no fallback is possible, explicitly annotate your operation with `@MinMuleVersion` to restrict it to compatible versions.
 
-When you use a newer API but provide fallback behavior, you may want to prevent that API from raising your component's Minimum Mule Version. Combine runtime version checking with `@DoNotEnforceMinMuleVersion` to achieve this.
+== Use Newer APIs Without Raising Minimum Version
+
+If you use a newer API but provide fallback behavior for older Mule runtime versions, you can prevent that API from raising your component's Minimum Mule Version. Combine Mule version checking with `@DoNotEnforceMinMuleVersion` to keep your component available on earlier versions while using new features when available.
 
 [source,java,linenums]
 ----
@@ -93,21 +105,37 @@ public class MyOperations {
     if (runtimeVersion.atLeast("4.12.0") && input != null) {
       // Use new feature when available
     } else {
-      // Fallback behavior
+      // Fallback behavior for earlier versions
     }
   }
 }
 ----
 
-== Best Practices
+The `input != null` check is necessary because parameters with types from `org.mule.sdk.api` resolve to `null` on earlier versions that don't recognize the type. By combining the version check with `@DoNotEnforceMinMuleVersion`, you:
 
-* **Always check versions before calling new methods**: Failing to do so causes `NoSuchMethodError` at runtime.
-* **Test on multiple runtime versions**: Verify your fallback logic works correctly on the oldest runtime you support.
-* **Centralize version checks**: Use a shared field annotated with `@RuntimeVersion` rather than checking in every method.
-* **Document runtime-specific behavior**: If a feature behaves differently on older runtimes, document this for your users.
+* Prevent the API from raising your component's Minimum Mule Version
+* Safely use the feature on later Mule versions
+* Provide fallback behavior when the feature isn't available
+
+== Best Practices for Forward-Compatible Code
+
+Follow these guidelines when implementing version-dependent behavior:
+
+* Check versions before calling new methods
++
+Failing to do so causes `NoSuchMethodError` at runtime.
+* Centralize version checks
++
+Use a shared field annotated with `@RuntimeVersion` rather than checking in every method.
+* Test on multiple Mule runtime versions
++
+Verify your fallback logic works correctly on the earliest Mule version you support.
+* Document runtime-specific behavior
++
+If a feature behaves differently on earlier versions, document this for your users.
 
 == See Also
 
-* xref:forward-compatibility-enforcement.adoc[Controlling Version Propagation]
-* xref:forward-compatibility-min-mule-version.adoc[Working with Minimum Mule Versions]
-* xref:forward-compatibility.adoc[SDK Forward Compatibility]
+* xref:forward-compatibility-enforcement.adoc[]
+* xref:forward-compatibility-min-mule-version.adoc[]
+* xref:forward-compatibility.adoc[]

@@ -4,26 +4,27 @@ include::_attributes.adoc[]
 endif::[]
 :keywords: mule, sdk, extensions api, deprecated, legacy
 
-IMPORTANT: This page documents the legacy approach to SDK versioning using `mule-modules-parent`. For new modules, use xref:forward-compatibility.adoc[Forward Compatibility] with `mule-java-extension-parent` instead.
+[.notice-banner]
+This page documents the legacy approach to SDK versioning using `mule-modules-parent`. For new modules, see xref:forward-compatibility.adoc[Forward Compatibility] with `mule-java-extension-parent` instead.
 
-== Overview
+In traditional SDK development, the SDK version is tightly coupled to the Mule runtime engine version. When you develop with the SDK, you use the Extensions API. Whenever you annotate a field or method with SDK annotations, or implement any interface, you are using parts of this Extensions API. 
 
-In traditional SDK development, the SDK version is tightly coupled to the Mule Runtime version. When you develop with the SDK, you use the Extensions API. Whenever you annotate a field or method with SDK annotations, or implement any interface, you are using parts of this Extensions API. The module you ship contains only your code—the gap between your module and the Mule Runtime internals is bridged by the Extensions API implementation in the runtime.
+The module you ship contains only your code—the gap between your module and the Mule runtime internals is bridged by the Extensions API implementation in the runtime.
 
 == SDK Version and Mule Runtime Compatibility
 
-Each version of the Mule Runtime ships with support for one particular version of the Extensions API, plus all previous versions.
+Each Mule runtime version ships with support for one particular version of the Extensions API, plus all previous versions.
 
 For example:
 
 * Mule `4.1` ships with SDK version `1.1`
 * Mule `4.2` ships with SDK version `1.2`
 
-Mule `4.2` fully supports modules developed with SDK versions `1.2`, `1.1`, and `1.0`. However, a module built with SDK `1.2` will not work in Mule `4.1`.
+Mule 4.2 fully supports modules developed with SDK versions 1.2, 1.1, and 1.0. However, a module built with SDK 1.2 requires at least Mule 4.2, it won't work in Mule 4.1.
 
 This concept works both ways:
 
-* Any Mule Runtime version supports all earlier SDK versions, so a module built for Mule 4.1 works with any later Mule 4.x version
+* Any Mule runtime version supports all earlier SDK versions, so a module built for Mule 4.1 works with any later Mule 4.x version
 * If a module is built using SDK `1.2`, it only works in runtimes that support that SDK version
 
 == Choosing a Version
@@ -33,9 +34,9 @@ When using the legacy approach, use the oldest SDK version that includes all the
 * If you need only basic connectivity and DataSense, use version `1.0`
 * If you need `PollingSource`, use SDK `1.1` which introduced that feature
 
-This ensures your module is compatible with the widest range of Mule Runtime versions.
+This ensures your module is compatible with the widest range of Mule runtime versions.
 
-== Changing Version
+== Change the Version
 
 The SDK version is specified in the `parent` element of your `pom.xml`:
 
@@ -48,11 +49,11 @@ The SDK version is specified in the `parent` element of your `pom.xml`:
 </parent>
 ----
 
-To change versions, update the parent version. The Mule Runtime version you target determines which `mule-modules-parent` version to use.
+To change versions, update the `<version>` in the parent element. Choose the `mule-modules-parent` version that corresponds to your target Mule runtime version.
 
 == Bug Fixes
 
-The Extensions API implementation resides in the Mule Runtime, so most SDK-related bug fixes are released in patch releases and service packs for the Mule Runtime, not through new SDK versions.
+The Extensions API implementation resides in Mule runtime, so most SDK-related bug fixes are released in patch releases and service packs for Mule, not through new SDK versions.
 
 In some cases where the issue is in the API definition, a patch release of the SDK is made available (for example, `1.1.2`). Always choose the higher bug fix version—between `1.0.0` and `1.0.4`, pick `1.0.4`.
 

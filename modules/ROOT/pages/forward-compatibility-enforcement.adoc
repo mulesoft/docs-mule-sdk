@@ -4,21 +4,31 @@ include::_attributes.adoc[]
 endif::[]
 :keywords: mule, sdk, forward compatibility, DoNotEnforceMinMuleVersion, version propagation
 
-By default, when a component uses an SDK API, it inherits that API's Minimum Mule Version requirement. However, some APIs are designed to enhance functionality without affecting runtime compatibility. This page explains how version propagation works and how you can control it.
+By default, when a component uses an SDK API, it inherits that API's Minimum Mule Version requirement. However, some APIs are designed to enhance functionality without affecting runtime compatibility, and in some cases you can override this inheritance behavior using the `@DoNotEnforceMinMuleVersion` annotation.
 
-== APIs That Don't Propagate Their Version
+== APIs That Don't Affect Minimum Mule Version
 
 Some SDK APIs are annotated with `@DoNotEnforceMinMuleVersion`, which means using them does not raise your component's Minimum Mule Version. These are typically APIs that:
 
 * Provide design-time enhancements (sample data, metadata)
 * Add semantic information for tooling (semantic terms, display annotations)
-* Enable optional features that gracefully degrade on older runtimes
+* Enable optional features that gracefully degrade on earlier Mule runtime versions
 
 For example, annotations like `@SampleData`, `@DisplayName`, and semantic annotations such as `@Url` or `@Password` do not affect your component's Minimum Mule Version, even though they were introduced in specific runtime versions.
 
-== Using @DoNotEnforceMinMuleVersion in Your Module
+== When to Prevent Version Propagation
 
-In some cases, you may want to use an SDK API that would normally raise your component's Minimum Mule Version, but you have implemented fallback behavior for older runtimes. You can use `@DoNotEnforceMinMuleVersion` to prevent the version propagation.
+Consider using `@DoNotEnforceMinMuleVersion` to prevent version propagation when:
+
+* You use a newer API but provide equivalent fallback behavior for earlier Mule runtime versions
+* You use runtime version checking to conditionally enable features (see xref:forward-compatibility-patterns.adoc[Forward Compatibility Patterns])
+* The API you're using is optional and its absence doesn't break core functionality
+
+Do not use this annotation to lower your component's Minimum Mule Version without implementing proper fallback behavior. Doing so can cause runtime errors when users deploy to earlier Mule runtime versions.
+
+== Prevent Version Propagation With @DoNotEnforceMinMuleVersion
+
+Some SDK APIs automatically raise your component's Minimum Mule Version when used. If you've implemented fallback behavior for earlier Mule runtime versions, use `@DoNotEnforceMinMuleVersion` to prevent version propagation.
 
 [source,java,linenums]
 ----
@@ -34,20 +44,10 @@ public class MyOperations {
 }
 ----
 
-IMPORTANT: Use this annotation only when you have verified that your component works correctly on older runtimes. If the component depends on the API being fully functional, do not suppress the version propagation.
-
-== When to Use This Annotation
-
-Consider using `@DoNotEnforceMinMuleVersion` when:
-
-* You use a newer API but provide equivalent fallback behavior for older runtimes
-* You use runtime version checking to conditionally enable features (see xref:forward-compatibility-patterns.adoc[Forward Compatibility Patterns])
-* The API you're using is optional and its absence doesn't break core functionality
-
-Do not use this annotation simply to lower your component's Minimum Mule Version without implementing proper fallback behavior. Doing so can cause runtime errors when users deploy to older Mule versions.
+IMPORTANT: Do not use this annotation if you haven't verified that your component works correctly on earlier Mule runtime versions. If the component depends on the API being fully functional, do not suppress the version propagation.
 
 == See Also
 
-* xref:forward-compatibility-min-mule-version.adoc[Working with Minimum Mule Versions]
-* xref:forward-compatibility-patterns.adoc[Forward Compatibility Patterns]
-* xref:forward-compatibility.adoc[SDK Forward Compatibility]
+* xref:forward-compatibility-min-mule-version.adoc[]
+* xref:forward-compatibility-patterns.adoc[]
+* xref:forward-compatibility.adoc[]
