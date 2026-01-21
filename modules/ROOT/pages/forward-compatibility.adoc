@@ -46,9 +46,9 @@ To enable forward compatibility in an existing module, change the parent POM in 
 
 == Next Steps
 
-* xref:forward-compatibility-setup.adoc[] - Configure your project for forward compatible development
-* xref:forward-compatibility-min-mule-version.adoc[] - Understand how minimum versions are determined and controlled
-* xref:forward-compatibility-patterns.adoc[] - Common patterns for writing forward compatible code
+* See xref:forward-compatibility-setup.adoc[] for instructions to configure your project for forward compatible development.
+* See xref:forward-compatibility-min-mule-version.adoc[] to understand how minimum versions are determined and controlled.
+* See xref:forward-compatibility-patterns.adoc[] to learn common patterns for writing forward compatible code.
 
 == See Also
 
