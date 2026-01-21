@@ -16,10 +16,18 @@ When you build your module, the SDK tooling analyzes which APIs each component u
 
 == Benefits
 
-* **Flexibility**: Introduce new features leveraging newer runtime capabilities while maintaining existing functionality on older runtimes. Application developers who don't need the new features can continue using your module on their current runtime, while those who want them can target a newer runtime.
-* **Simplified maintenance**: No need to maintain separate module versions for different runtimes—a single release serves all supported Mule versions.
+Forward compatibility provides the following advantages:
+
+* Flexibility 
++
+Introduce new features leveraging newer runtime capabilities while maintaining existing functionality on older runtimes. Application developers who don't need the new features can continue using your module on their current runtime, while those who want them can target a newer runtime.
+* Simplified maintenance
++
+No need to maintain separate module versions for different runtimes—a single release serves all supported Mule versions.
 
 == Getting Started
+
+You can enable forward compatibility when creating a new module or by upgrading an existing one.
 
 [[create-module-archetype]]
 === Create a New Module With the Maven Archetype
@@ -35,8 +43,6 @@ When prompted, select a parent POM version of 1.11.x or later. The generated pro
 === Upgrade an Existing Module
 
 To enable forward compatibility in an existing module, change the parent POM in your `pom.xml` to use `mule-java-extension-parent` version 1.11.0 or later. See xref:forward-compatibility-setup.adoc#upgrading-existing-modules[Upgrading Existing Modules] for detailed instructions and considerations.
-
-
 
 == Next Steps
 
