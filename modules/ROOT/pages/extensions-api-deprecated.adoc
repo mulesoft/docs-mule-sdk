@@ -20,7 +20,7 @@ For example:
 * Mule `4.1` ships with SDK version `1.1`
 * Mule `4.2` ships with SDK version `1.2`
 
-Mule 4.2 fully supports modules developed with SDK versions 1.2, 1.1, and 1.0. However, a module built with SDK 1.2 requires at least Mule 4.2, it won't work in Mule 4.1.
+Mule `4.2` fully supports modules developed with SDK versions `1.2`, `1.1`, and `1.0`. However, a module built with SDK `1.2` requires at least Mule `4.2`, it won't work in Mule `4.1`.
 
 This concept works both ways:
 
