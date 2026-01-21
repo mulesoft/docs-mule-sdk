@@ -24,7 +24,7 @@ Mule `4.2` fully supports modules developed with SDK versions `1.2`, `1.1`, and 
 
 This concept works both ways:
 
-* Any Mule runtime version supports all earlier SDK versions, so a module built for Mule 4.1 works with any later Mule 4.x version
+* Any Mule runtime version supports all earlier SDK versions, so a module built for Mule `4.1` works with any later Mule 4.x version
 * If a module is built using SDK `1.2`, it only works in runtimes that support that SDK version
 
 == Choosing a Version
