@@ -1,23 +1,23 @@
-= Implicit Parameters and Forward Compatibility
+= Implicit Parameters
 ifndef::env-site,env-github[]
 include::_attributes.adoc[]
 endif::[]
 :keywords: mule, sdk, forward compatibility, implicit parameters
 
-Implicit parameters are parameters that the Mule Runtime automatically injects without requiring configuration from the application developer. Examples include `StreamingHelper`, `ComponentLocation`, and `CorrelationInfo`. These parameters do not appear in the Extension Model.
+Implicit parameters are parameters that the Mule runtime engine automatically injects without requiring configuration from the application developer. Examples include `StreamingHelper`, `ComponentLocation`, and `CorrelationInfo`. These parameters do not appear in the Extension Model.
 
 == Implicit Parameter Types from org.mule.sdk.api
 
-Starting with Mule 4.5, parameters whose types belong to the `org.mule.sdk.api` package (and its subpackages) are automatically treated as implicit by the runtime. This enables forward compatibility for newly introduced implicit parameter types.
+Starting with Mule 4.5, the runtime automatically treats parameters with types from `org.mule.sdk.api` and its subpackages as implicit, enabling forward compatibility for new implicit parameter types.
 
 When you use a new implicit parameter type that was introduced in a later Mule version:
 
 * On runtimes that support the type, the parameter is injected normally
-* On older runtimes that don't recognize the type, the parameter is still treated as implicit (it does not appear in the Extension Model and cannot be configured by the application developer), but it resolves to `null`
+* On earlier Mule runtime versions that don't recognize the type, the parameter resolves to `null` and the runtime treats the parameter as implicit (it doesn't appear in the Extension Model and can't be configured by the application developer).
 
-== Handling Null Values
+== Handle Null Values
 
-Because implicit parameters from `org.mule.sdk.api` may resolve to `null` on older runtimes, your code must handle this possibility:
+Implicit parameters from `org.mule.sdk.api` resolve to null on earlier Mule runtime versions. Your code must handle this possibility:
 
 [source,java,linenums]
 ----
@@ -40,6 +40,6 @@ IMPORTANT: If the implicit parameter is essential to your operation and no fallb
 
 == See Also
 
-* xref:forward-compatibility-patterns.adoc[Forward Compatibility Patterns]
-* xref:forward-compatibility-min-mule-version.adoc[Working with Minimum Mule Versions]
-* xref:forward-compatibility.adoc[SDK Forward Compatibility]
+* xref:forward-compatibility-patterns.adoc[]
+* xref:forward-compatibility-min-mule-version.adoc[]
+* xref:forward-compatibility.adoc[]

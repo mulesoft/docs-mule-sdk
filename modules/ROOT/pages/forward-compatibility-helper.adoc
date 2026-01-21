@@ -1,22 +1,23 @@
-= Using ForwardCompatibilityHelper
+= Accessing New Features from Legacy Modules	
+
 ifndef::env-site,env-github[]
 include::_attributes.adoc[]
 endif::[]
 :keywords: mule, sdk, forward compatibility, ForwardCompatibilityHelper, DistributedTraceContextManager
 
-The `ForwardCompatibilityHelper` interface provides access to features that are normally exposed as implicit parameters, but in a way that allows modules using older SDK APIs to consume them without breaking compatibility with older runtimes.
+The `ForwardCompatibilityHelper` interface enables modules using legacy `org.mule.runtime.extension.api` types to access features normally exposed as implicit parameters, such as distributed tracing, without breaking compatibility with earlier Mule runtime versions. For new modules built entirely with `org.mule.sdk.api`, consume these features directly through implicit parameters instead.
 
-== Purpose
+`ForwardCompatibilityHelper` is defined in the `org.mule.sdk:mule-sdk-compatibility-api` artifact, in the `org.mule.sdk.compatibility.api.utils` package. This artifact supports both the legacy `org.mule.runtime.extension.api` types and the new `org.mule.sdk.api` types, which allows translations between them.
 
-Some runtime features, such as distributed tracing, are naturally exposed through implicit parameters. For new modules using `org.mule.sdk.api`, these features can be consumed directly. However, existing modules that use `org.mule.runtime.extension.api` types cannot directly use the new implicit parameters without breaking compatibility.
+== When to Use the Compatibility Helper
 
-`ForwardCompatibilityHelper` bridges this gap by accepting the legacy API types and providing access to the new features.
+Use `ForwardCompatibilityHelper` when:
 
-== The sdk-compatibility-api Artifact
+* Your module uses legacy `org.mule.runtime.extension.api` types
+* You want to add support for new features (like distributed tracing) without forcing users to upgrade their Mule Runtime
+* You need to bridge between legacy API types and new SDK API types
 
-`ForwardCompatibilityHelper` is defined in the `org.mule.sdk:mule-sdk-compatibility-api` artifact, in the `org.mule.sdk.compatibility.api.utils` package. This artifact knows both the legacy `org.mule.runtime.extension.api` types and the new `org.mule.sdk.api` types, allowing it to perform translations between them.
-
-== Injecting ForwardCompatibilityHelper
+== Inject ForwardCompatibilityHelper
 
 To use `ForwardCompatibilityHelper`, inject it as an `Optional` in your component:
 
@@ -44,28 +45,28 @@ public class MyOperations {
 }
 ----
 
-The `Optional` will contain an instance on Mule 4.5.0 and later. On older runtimes, the `Optional` will be empty.
+The `Optional` contains an instance on Mule 4.5.0 and later. On earlier Mule runtime versions, the `Optional` is empty.
 
 == Available Methods
 
-`ForwardCompatibilityHelper` provides methods to access the `DistributedTraceContextManager` for distributed tracing:
+`ForwardCompatibilityHelper` provides the following methods to access the `DistributedTraceContextManager` for distributed tracing:
 
-* `getDistributedTraceContextManager(CorrelationInfo correlationInfo)` — for use in operations, accepts the legacy `org.mule.runtime.extension.api.runtime.parameter.CorrelationInfo`
-* `getDistributedTraceContextManager(org.mule.sdk.api.runtime.parameter.CorrelationInfo correlationInfo)` — for use in operations, accepts the new SDK API `CorrelationInfo`
-* `getDistributedTraceContextManager(SourceCallbackContext sourceCallbackContext)` — for use in sources
+[%header,cols="a,a"]
+|===
+| Method | Usage
 
-== When to Use ForwardCompatibilityHelper
+| `getDistributedTraceContextManager(CorrelationInfo correlationInfo)`
+| For use in operations. Accepts the legacy `org.mule.runtime.extension.api.runtime.parameter.CorrelationInfo` parameter type.
 
-Use `ForwardCompatibilityHelper` when:
+| `getDistributedTraceContextManager(org.mule.sdk.api.runtime.parameter.CorrelationInfo correlationInfo)`
+| For use in operations. Accepts the new SDK API `CorrelationInfo` parameter type.
 
-* Your module uses legacy `org.mule.runtime.extension.api` types
-* You want to add support for new features (like distributed tracing) without forcing users to upgrade their Mule Runtime
-* You need to bridge between legacy API types and new SDK API types
-
-For new modules built entirely with `org.mule.sdk.api`, you can typically consume these features directly through implicit parameters instead.
+| `getDistributedTraceContextManager(SourceCallbackContext sourceCallbackContext)`
+| For use in sources.
+|===
 
 == See Also
 
-* xref:forward-compatibility-patterns.adoc[Forward Compatibility Patterns]
-* xref:forward-compatibility-implicit-params.adoc[Implicit Parameters and Forward Compatibility]
-* xref:forward-compatibility.adoc[SDK Forward Compatibility]
+* xref:forward-compatibility-patterns.adoc[]
+* xref:forward-compatibility-implicit-params.adoc[]
+* xref:forward-compatibility.adoc[]
