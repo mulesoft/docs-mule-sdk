@@ -4,7 +4,7 @@ include::_attributes.adoc[]
 endif::[]
 :keywords: mule, sdk, create, new, project, getting, started, version
 
-Starting with mule-java-extension-parent version 1.11.0, the SDK supports forward compatibility. The SDK decouples the SDK version from the Minimum Mule Version your module requires, so you can always use the latest SDK version while controlling runtime compatibility independently.
+Starting with `mule-java-extension-parent` version 1.11.0, the SDK supports forward compatibility. The SDK decouples the SDK version from the Minimum Mule Version your module requires, so you can always use the latest SDK version while controlling runtime compatibility independently.
 
 == Recommended Approach
 
