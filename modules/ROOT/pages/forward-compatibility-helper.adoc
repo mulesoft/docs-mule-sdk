@@ -9,15 +9,15 @@ The `ForwardCompatibilityHelper` interface enables modules using legacy `org.mul
 
 `ForwardCompatibilityHelper` is defined in the `org.mule.sdk:mule-sdk-compatibility-api` artifact, in the `org.mule.sdk.compatibility.api.utils` package. This artifact supports both the legacy `org.mule.runtime.extension.api` types and the new `org.mule.sdk.api` types, which allows translations between them.
 
-== When to Use the Compatibility Helper
+== Use the Compatibility Helper
 
-Use `ForwardCompatibilityHelper` when:
+Use `ForwardCompatibilityHelper` if:
 
 * Your module uses legacy `org.mule.runtime.extension.api` types
 * You want to add support for new features (like distributed tracing) without forcing users to upgrade their Mule Runtime
 * You need to bridge between legacy API types and new SDK API types
 
-== Inject ForwardCompatibilityHelper
+=== Inject ForwardCompatibilityHelper
 
 To use `ForwardCompatibilityHelper`, inject it as an `Optional` in your component:
 
@@ -45,7 +45,7 @@ public class MyOperations {
 }
 ----
 
-The `Optional` contains an instance on Mule 4.5.0 and later. On earlier Mule runtime versions, the `Optional` is empty.
+The `Optional` field contains an instance on Mule 4.5.0 and later. On earlier Mule runtime versions, the `Optional` field is empty.
 
 == Available Methods
 

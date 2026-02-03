@@ -10,7 +10,7 @@ When building forward-compatible modules, you often need to use newer SDK featur
 
 Use the `@RuntimeVersion` annotation to inject the current Mule Runtime version into your component. You can apply this annotation to fields of type `org.mule.runtime.api.meta.MuleVersion`.
 
-NOTE: The `mule-sdk-api` artifact has a dependency on `mule-api` for basic APIs that are not intended to evolve over time. `MuleVersion` is one of these stable APIs, so there is no `org.mule.sdk.api` counterpart for it. You can safely use `org.mule.runtime.api.meta.MuleVersion` in forward compatible modules.
+NOTE: The `mule-sdk-api` artifact has a dependency on `mule-api` for basic APIs that aren't intended to evolve over time. `MuleVersion` is one of these stable APIs, so there's no `org.mule.sdk.api` counterpart for it. You can safely use `org.mule.runtime.api.meta.MuleVersion` in forward compatible modules.
 
 [source,java,linenums]
 ----
@@ -49,7 +49,7 @@ The runtime version is constant across your module, so @RuntimeVersion applies o
 
 == Call New Methods in Existing APIs
 
-SDK APIs may add new methods in later versions. If you call a method that doesn't exist on an earlier Mule runtime version, you get a `NoSuchMethodError`.
+SDK APIs can add new methods in later versions. If you call a method that doesn't exist on an earlier Mule runtime version, you get a `NoSuchMethodError`.
 
 The SDK doesn't introspect which methods your code actually calls. Even if a method has `@MinMuleVersion("4.12.0")`, using it doesn't automatically raise your component's Minimum Mule Version. You are able to deploy a module to earlier versions where the method doesn't exist. For this reason, you must check the Mule runtime version before calling new methods, and provide fallback behavior for older versions.
 

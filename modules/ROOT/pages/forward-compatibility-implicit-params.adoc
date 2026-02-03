@@ -4,7 +4,7 @@ include::_attributes.adoc[]
 endif::[]
 :keywords: mule, sdk, forward compatibility, implicit parameters
 
-Implicit parameters are parameters that the Mule runtime engine automatically injects without requiring configuration from the application developer. Examples include `StreamingHelper`, `ComponentLocation`, and `CorrelationInfo`. These parameters do not appear in the Extension Model.
+Implicit parameters are parameters that the Mule runtime engine automatically injects without requiring configuration from the application developer. Examples include `StreamingHelper`, `ComponentLocation`, and `CorrelationInfo`. These parameters don't appear in the Extension Model.
 
 == Implicit Parameter Types from org.mule.sdk.api
 
@@ -13,7 +13,7 @@ Starting with Mule 4.5, the runtime automatically treats parameters with types f
 When you use a new implicit parameter type that was introduced in a later Mule version:
 
 * On runtimes that support the type, the parameter is injected normally
-* On earlier Mule runtime versions that don't recognize the type, the parameter resolves to `null` and the runtime treats the parameter as implicit (it doesn't appear in the Extension Model and can't be configured by the application developer).
+* On earlier Mule runtime versions that don't recognize the type, the parameter resolves to `null` and the runtime treats the parameter as implicit, meaning it doesn't appear in the Extension Model and can't be configured by the application developer.
 
 == Handle Null Values
 

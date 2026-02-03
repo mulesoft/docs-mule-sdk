@@ -4,7 +4,7 @@
 ** xref:customer-connector-upgrade.adoc[Upgrading Java for Custom Connectors (Customers)]
 * xref:getting-started.adoc[Java SDK]
  ** xref:choosing-version.adoc[Choosing the SDK version]
-  *** xref:extensions-api-deprecated.adoc[Extensions API (Deprecated)]
+  *** xref:extensions-api-deprecated.adoc[]
  ** xref:forward-compatibility.adoc[]
   *** xref:forward-compatibility-setup.adoc[]
   *** xref:forward-compatibility-min-mule-version.adoc[]

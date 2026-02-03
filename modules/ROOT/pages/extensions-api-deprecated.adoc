@@ -9,7 +9,7 @@ This page documents the legacy approach to SDK versioning using `mule-modules-pa
 
 In traditional SDK development, the SDK version is tightly coupled to the Mule runtime engine version. When you develop with the SDK, you use the Extensions API. Whenever you annotate a field or method with SDK annotations, or implement any interface, you are using parts of this Extensions API. 
 
-The module you ship contains only your code—the gap between your module and the Mule runtime internals is bridged by the Extensions API implementation in the runtime.
+The module you ship contains only your code. The Extensions API implementation in the runtime bridges the gap between your module and the Mule runtime internals.
 
 == SDK Version and Mule Runtime Compatibility
 

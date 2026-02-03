@@ -4,7 +4,7 @@ include::_attributes.adoc[]
 endif::[]
 :keywords: mule, sdk, create, new, project, getting, started, version
 
-Starting with `mule-java-extension-parent` version 1.11.0, the SDK supports forward compatibility. The SDK version is now decoupled from the Minimum Mule Version your module requires, so you can always use the latest SDK version while controlling runtime compatibility independently.
+Starting with `mule-java-extension-parent` version 1.11.0, the SDK supports forward compatibility. The SDK version is now decoupled from the minimum Mule version your module requires, so you can always use the latest SDK version while controlling runtime compatibility independently.
 
 
 For new modules, use the latest version of `mule-java-extension-parent`:
@@ -21,13 +21,13 @@ For new modules, use the latest version of `mule-java-extension-parent`:
 With forward compatibility, you can:
 
 * Compile against the latest SDK APIs
-* Control your module's Minimum Mule Version through the `min.mule.version` property
+* Control your module's minimum Mule version through the `min.mule.version` property
 * Use new SDK features for users on recent Mule runtime versions while maintaining compatibility with earlier Mule runtime versions.
 
-See xref:forward-compatibility.adoc[Forward Compatibility] for detailed information on how to configure and use this feature.
+See xref:forward-compatibility.adoc[] for detailed information on how to configure and use this feature.
 
 == See Also
 
-* xref:forward-compatibility.adoc[Forward Compatibility]
-* xref:forward-compatibility-setup.adoc[Setting Up Forward Compatibility]
-* xref:extensions-api-deprecated.adoc[Extensions API (Deprecated)] — legacy approach for modules using `mule-modules-parent`
+* xref:forward-compatibility.adoc[]
+* xref:forward-compatibility-setup.adoc[]
+* xref:extensions-api-deprecated.adoc[]

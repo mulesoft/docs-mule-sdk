@@ -24,7 +24,7 @@ This parent POM includes the `mule-sdk-api` artifact and configures the build to
 [[upgrading-existing-modules]]
 == Upgrade Existing Modules
 
-IMPORTANT: All forward compatible APIs in `org.mule.sdk.api` require Mule 4.5.0 or later. Before upgrading, consider whether having 4.5.0 as your module's Minimum Mule Version is acceptable. If your module must support runtimes older than 4.5.0, you cannot use forward compatibility.
+IMPORTANT: All forward compatible APIs in `org.mule.sdk.api` require Mule 4.5.0 or later. Before upgrading, consider whether having 4.5.0 as your module's Minimum Mule Version is acceptable. If your module must support runtimes older than 4.5.0, you can't use forward compatibility.
 
 To upgrade an existing module, change the parent POM in your `pom.xml` to use `mule-java-extension-parent` version 1.11.0 or later.
 
@@ -44,7 +44,7 @@ When writing new code or migrating existing code, use APIs from the `org.mule.sd
 
 == Configure the Minimum Mule Version
 
-Unlike previous SDK versions, the parent POM version and the `mule-sdk-api` version do not directly determine your module's minimum Mule version. Instead, the Minimum Mule Version is calculated per component based on the APIs it uses.
+Unlike previous SDK versions, the parent POM version and the `mule-sdk-api` version don't directly determine your module's minimum Mule version. Instead, the minimum Mule version is calculated per component based on the APIs it uses.
 
 === Baseline Minimum Mule Version
 
