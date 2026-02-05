@@ -1,0 +1,45 @@
+= Implicit Parameters
+ifndef::env-site,env-github[]
+include::_attributes.adoc[]
+endif::[]
+:keywords: mule, sdk, forward compatibility, implicit parameters
+
+Implicit parameters are parameters that the Mule runtime engine automatically injects without requiring configuration from the application developer. Examples include `StreamingHelper`, `ComponentLocation`, and `CorrelationInfo`. These parameters don't appear in the Extension Model.
+
+== Implicit Parameter Types from org.mule.sdk.api
+
+Starting with Mule 4.5, the runtime automatically treats parameters with types from `org.mule.sdk.api` and its subpackages as implicit, enabling forward compatibility for new implicit parameter types.
+
+When you use a new implicit parameter type that was introduced in a later Mule version:
+
+* On runtimes that support the type, the parameter is injected normally
+* On earlier Mule runtime versions that don't recognize the type, the parameter resolves to `null` and the runtime treats the parameter as implicit, meaning it doesn't appear in the Extension Model and can't be configured by the application developer.
+
+== Handle Null Values
+
+Implicit parameters from `org.mule.sdk.api` resolve to null on earlier Mule runtime versions. Your code must handle this possibility:
+
+[source,java,linenums]
+----
+import org.mule.sdk.api.runtime.SomeNewHelper;
+
+public class MyOperations {
+
+  public void myOperation(String input, SomeNewHelper helper) {
+    if (helper != null) {
+      // Use the helper on runtimes that support it
+      helper.doSomething();
+    } else {
+      // Fallback for older runtimes
+    }
+  }
+}
+----
+
+IMPORTANT: If the implicit parameter is essential to your operation and no fallback is possible, annotate the operation with `@MinMuleVersion` to restrict it to runtimes that support the parameter type.
+
+== See Also
+
+* xref:forward-compatibility-patterns.adoc[]
+* xref:forward-compatibility-min-mule-version.adoc[]
+* xref:forward-compatibility.adoc[]

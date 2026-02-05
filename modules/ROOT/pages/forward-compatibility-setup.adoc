@@ -1,0 +1,66 @@
+= Setting Up Forward Compatibility
+ifndef::env-site,env-github[]
+include::_attributes.adoc[]
+endif::[]
+:keywords: mule, sdk, forward compatibility, setup, mule-sdk-api, parent pom
+
+Configure your module project for forward compatibility by updating the parent POM and using the new SDK API artifact.
+
+== Configure the Parent POM
+
+To enable forward compatibility, your module must use the new `mule-java-extension-parent`:
+
+[source,xml,linenums]
+----
+<parent>
+  <groupId>org.mule.extensions</groupId>
+  <artifactId>mule-java-extension-parent</artifactId>
+  <version>1.11.0</version>
+</parent>
+----
+
+This parent POM includes the `mule-sdk-api` artifact and configures the build tooling for forward compatibility.
+
+[[upgrading-existing-modules]]
+== Upgrade Existing Modules
+
+IMPORTANT: All forward compatible APIs in `org.mule.sdk.api` require Mule 4.5.0 or later. Before upgrading, consider whether having 4.5.0 as your module's Minimum Mule Version is acceptable. If your module must support runtimes older than 4.5.0, you can't use forward compatibility.
+
+To upgrade an existing module, change the parent POM in your `pom.xml` to use `mule-java-extension-parent` version 1.11.0 or later.
+
+The new parent POM removes provided-scope dependencies on `org.mule.runtime` modules. Possible issues appear as compilation errors, resolve them by replacing `org.mule.runtime` imports with their `org.mule.sdk.api` counterparts.
+
+== Include the SDK API Artifact in Your Module
+
+The `org.mule.sdk:mule-sdk-api` artifact provides a new package namespace: `org.mule.sdk.api`. This package contains all the SDK annotations, interfaces, and classes needed for module development.
+
+The key difference from traditional `org.mule.runtime` artifacts is that `mule-sdk-api` can be bundled with your module. This enables your module to compile against newer SDK features while still supporting older Mule Runtime versions.
+
+When writing new code or migrating existing code, use APIs from the `org.mule.sdk.api` package. For example:
+
+* `org.mule.sdk.api.annotation.param.Parameter`
+* `org.mule.sdk.api.runtime.streaming.StreamingHelper`
+* `org.mule.sdk.api.metadata.MetadataContext`
+
+== Configure the Minimum Mule Version
+
+Unlike previous SDK versions, the parent POM version and the `mule-sdk-api` version don't directly determine your module's minimum Mule version. Instead, the minimum Mule version is calculated per component based on the APIs it uses.
+
+=== Baseline Minimum Mule Version
+
+When creating a new module with the archetype, the `min.mule.version` property is added to your POM with `4.11.0` as the default:
+
+[source,xml,linenums]
+----
+<properties>
+  <min.mule.version>4.11.0</min.mule.version>
+</properties>
+----
+
+See xref:forward-compatibility-min-mule-version.adoc[] for details on how versions are calculated.
+
+== See Also
+
+* xref:forward-compatibility.adoc[]
+* xref:forward-compatibility-min-mule-version.adoc[]
+* xref:getting-started.adoc[]

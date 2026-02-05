@@ -1,0 +1,56 @@
+= SDK Forward Compatibility
+ifndef::env-site,env-github[]
+include::_attributes.adoc[]
+endif::[]
+:keywords: mule, sdk, forward compatibility, minMuleVersion, versioning
+
+In traditional SDK development, each SDK version is strictly tied to a specific Mule runtime version. Using any new SDK feature requires bumping the SDK version, which automatically increases your module's minimum Mule version (`minMuleVersion`). This forces application developers to upgrade their entire Mule runtime engine just to use a newer version of your module.
+
+Starting with Mule 4.11.0 and using the new `mule-java-extension-parent`, the SDK introduces forward compatibility, which decouples the SDK version you compile against from the minimum Mule version your module requires. This enables your module to offer new features for later runtimes while continuing to support earlier runtimes with existing functionality.
+
+== How Forward Compatibility Works
+
+Forward compatibility relies on a new artifact: `org.mule.sdk:mule-sdk-api`. This artifact can be bundled as a dependency of your module, unlike the traditional `org.mule.runtime:mule-extensions-api` and `org.mule.runtime:mule-api`. The new artifact contains all SDK annotations, interfaces, and classes, each annotated with the minimum Mule version it requires.
+
+When you build your module, the SDK tooling analyzes which APIs each component uses and calculates the minimum Mule version for each operation, source, and configuration. This information is stored in the Extension Model, making it available to design-time tools like Anypoint Studio and Anypoint Code Builder. These tools can then filter components or display warnings based on the application's target Mule version.
+
+== Benefits of Implementing Forward Compatibility
+
+Forward compatibility provides the following advantages:
+
+* Flexibility 
++
+Introduce new features leveraging newer runtime capabilities while maintaining existing functionality on older runtimes. Application developers who don't need the new features can continue using your module on their current runtime, while those who want them can target a newer runtime.
+* Simplified maintenance
++
+No need to maintain separate module versions for different runtimes—a single release serves all supported Mule versions.
+
+== Getting Started With Forward Compatibility
+
+You can enable forward compatibility when creating a new module or by upgrading an existing one.
+
+[[create-module-archetype]]
+=== Create a New Module With the Maven Archetype
+
+To create a new module with forward compatibility enabled, use the Maven archetype:
+
+----
+mvn org.mule.extensions:mule-extensions-archetype-maven-plugin:generate
+----
+
+When prompted, select a parent POM version of 1.11.x or later. The generated project will be configured for forward compatibility.
+
+=== Upgrade an Existing Module
+
+To enable forward compatibility in an existing module, change the parent POM in your `pom.xml` to use `mule-java-extension-parent` version 1.11.0 or later. See xref:forward-compatibility-setup.adoc#upgrading-existing-modules[Upgrading Existing Modules] for detailed instructions and considerations.
+
+== Next Steps
+
+* See xref:forward-compatibility-setup.adoc[] for instructions to configure your project for forward compatible development.
+* See xref:forward-compatibility-min-mule-version.adoc[] to understand how minimum versions are determined and controlled.
+* See xref:forward-compatibility-patterns.adoc[] to learn common patterns for writing forward compatible code.
+
+== See Also
+
+* xref:choosing-version.adoc[Choosing the SDK Version]
+* xref:module-structure.adoc[Module Structure]

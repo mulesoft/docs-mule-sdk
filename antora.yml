@@ -1,6 +1,6 @@
 name: mule-sdk
 title: Mule SDK
-version: '1.10'
+version: '1.11'
 nav:
 - modules/ROOT/nav.adoc
 asciidoc:
