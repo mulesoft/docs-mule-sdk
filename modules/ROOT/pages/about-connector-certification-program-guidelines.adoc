@@ -73,5 +73,5 @@ Tell MuleSoft about the connector you want to develop, and get certified by cont
 
 * xref:certification-guidelines-for-connectors.adoc[Technical Guidelines for Connector Certifications]
 * xref:license.adoc#custom-module-license[Custom Module License]
-* https://forums.mulesoft.com[MuleSoft Forum]
+* https://help.mulesoft.com/s/forum[MuleSoft Forum]
 * mailto:isv@mulesoft.com[Contact MuleSoft]

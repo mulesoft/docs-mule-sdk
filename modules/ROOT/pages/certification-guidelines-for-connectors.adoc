@@ -236,13 +236,13 @@ xref:mule-runtime::index.adoc[About Mule Runtime]
 
 xref:index.adoc[Mule SDKs]
 
-https://youtu.be/qdOXKj8V9Lc[Mule 4 SDK] (video)
+https://www.youtube.com/watch?v=qdOXKj8V9Lc&feature=youtu.be[Mule 4 SDK] (video)
 
-https://forums.mulesoft.com/spaces/14/anypoint-connectors.html[Connector/DevKit/SDK Forum]
+https://help.mulesoft.com/s/forum[Connector/DevKit/SDK Forum]
 
 xref:best-practices.adoc[Best Practices]
 
-https://github.com/mulesoft-emu/mule4-slack-connector[Slack Connector]
+https://github.com/enterprises/salesforce-emu/sso?return_to=https://github.com/mulesoft-emu/mule4-slack-connector[Slack Connector]
 
 https://github.com/mulesoft/mule-http-connector/tree/1.2.0[HTTP Connector]
 

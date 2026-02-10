@@ -39,7 +39,7 @@ See xref:general::java-support.adoc[] to decide which Java version to use based 
 
 ==== Java 11 Compatibility
 
-Starting with Mule 4.2.0, JDK 11 is also supported. That means that when depending on native Java APIs, the module *must* account for the fact that the needed API might not be available given Java’s new modular architecture (also known as https://openjdk.java.net/projects/jigsaw/[Project Jigsaw], first introduced in Java 9).
+Starting with Mule 4.2.0, JDK 11 is also supported. That means that when depending on native Java APIs, the module *must* account for the fact that the needed API might not be available given Java’s new modular architecture (also known as https://openjdk.org/projects/jigsaw/[Project Jigsaw], first introduced in Java 9).
 
 For example, if your module requires the Java Transaction API (JTA), the module *must* declare the following dependency in its pom.xml file:
 
