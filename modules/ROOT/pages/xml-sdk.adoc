@@ -226,7 +226,7 @@ Properties are similar to the parameters exposed by operations, but they act at 
 [TIP]
 To avoid confusing end users of the XML SDK module, only expose the properties that they might need to edit. For example, do not expose internal values that they cannot or should not change.
 
-The following XML SDK module sends requests to https://developer.github.com/v3/users/#get-the-authenticated-user[GitHub API V3] to retrieve an authenticated user:
+The following XML SDK module sends requests to https://docs.github.com/en/rest/users[GitHub API V3] to retrieve an authenticated user:
 
 ////
 TODO: VERIFY THAT THIS WORKS
