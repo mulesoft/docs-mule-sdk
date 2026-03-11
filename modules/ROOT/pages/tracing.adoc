@@ -2,7 +2,7 @@
 
 Tracing in the Mule Java SDK enables SDK-developed components to contribute telemetry data to the Mule runtime engine. Sources and operations can customize spans by defining span names, adding attributes, and setting the OpenTelemetry span kind.
 
-Tracing also supports trace context propagation, integrating the mule Java SDK to a distributed tracing system.
+Tracing also supports trace context propagation, which integrates the Mule Java SDK with distributed tracing systems.
 
 == Implementing Tracing Features
 
@@ -31,7 +31,7 @@ public class FooModule {
 }
 ----
 
-This operation customized the span:
+This operation customizes the span:
 
 [source,java,linenums]
 ----
@@ -98,7 +98,7 @@ traceparent: 00-0af7651916cd43dd8448eb211c80319c-b7ad6b7169203331-01
 tracestate: congo=t61rcWkgMzE
 ----
 
-This representation enables trace context propagation across systems that supports the standard.
+This representation enables trace context propagation across systems that support the standard.
 
 == Example: Trace Context Propagation in Sources and Connectors
 
@@ -132,7 +132,7 @@ public class HttpListener extends Source<InputStream, HttpRequestAttributes> {
 }
 ----
 
-A requester retrieves the current W3C trace context as part of the request operation by using `getRemoteTraceContextMap()`, and then propagates it:
+The HTTP Requester retrieves the current W3C trace context during request operations by using `getRemoteTraceContextMap()`, and then propagates it:
 
 [source,java,linenums]
 ----
@@ -170,7 +170,7 @@ This table shows the distributed trace context manager methods:
 |===
 
 [NOTE]
-`setRemoteTraceContextMap()` is intended to be called by sources only. Mule silently ignores calls when done from a connector operation.
+`setRemoteTraceContextMap()` is intended for sources only. Mule silently ignores calls made from connector operations.
 
 == See Also
 
