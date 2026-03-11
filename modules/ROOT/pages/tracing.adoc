@@ -86,11 +86,11 @@ public class HttpListener extends Source<InputStream, HttpRequestAttributes> {
 
 Sources and connectors play different roles in both Mule and distributed tracing.
 
-In the Mule paradigm, a source triggers a flow and creates the first span in its corresponding trace. Because of this role, the source must handle distributed trace context. If a trace already exists, the source must continue that trace instead of creating a new one.
+In Mule, a source triggers a flow and creates the first span in its corresponding trace. Because of this role, the source must handle distributed trace context. If a trace already exists, the source must continue that trace instead of creating a new one.
 
-The connector is on the opposite side of this paradigm: It needs to propagate the current trace for further continuation on remote systems that often cross the mule boundaries (databases, non-mule APIs, message queues, etc).
+Connectors propagate the current trace context to external systems outside Mule runtime. These systems can include databases, non-Mule APIs, and message queues.
 
-The Mule runtime Java SDK supports the W3C trace context propagation standard, which defines a https://www.w3.org/TR/trace-context/#trace-context-http-headers-format[trace context] consisting of a trace parent and a trace state:
+The Mule runtime Java SDK supports the W3C trace context propagation standard. This standard defines a https://www.w3.org/TR/trace-context/#trace-context-http-headers-format[trace context] that consists of a `traceparent` and a `tracestate`:
 
 [source,text]
 ----
@@ -98,13 +98,13 @@ traceparent: 00-0af7651916cd43dd8448eb211c80319c-b7ad6b7169203331-01
 tracestate: congo=t61rcWkgMzE
 ----
 
-This standard representation allows trace context propagation across any system that supports it.
+This representation enables trace context propagation across systems that supports the standard.
 
-== Example: Trace context propagation at a sources and connectors.
+== Example: Trace Context Propagation in Sources and Connectors
 
-We can use the HTTP listener and the HTTP requester as examples of this feature:
+This example uses the HTTP Listener and the HTTP Requester to demonstrate trace context propagation.
 
-When the HTTP listener receives W3C trace context headers as part of a request, it must indicate where to retrieve the W3C trace context using the DistributedTraceContextManager:
+When the HTTP Listener receives W3C trace context headers in a request, use the `DistributedTraceContextManager` to indicate where to retrieve the W3C trace context:
 
 [source,java,linenums]
 ----
@@ -132,7 +132,7 @@ public class HttpListener extends Source<InputStream, HttpRequestAttributes> {
 }
 ----
 
-The requester must retrieve the current W3C trace context as part of the request operation using `getRemoteTraceContextMap` instead, and then propagate it:
+A requester retrieves the current W3C trace context as part of the request operation by using `getRemoteTraceContextMap()`, and then propagates it:
 
 [source,java,linenums]
 ----
@@ -154,23 +154,24 @@ public class HttpRequestOperations implements Initialisable, Disposable {
 
 == Distributed Trace Context API
 
-The following table shows the distributed trace context manager methods:
+This table shows the distributed trace context manager methods:
 
 |===
 |Method | Parameter | Description
-|`void setRemoteTraceContextMap(Map<String, String> contextMap)` |`contextMap` |The `Map<String, String>` representing the key-value pairs that store the information of the remote trace context.
-|`void setCurrentSpanName(String name)` |`name` |The name of the current span.
-|`Map<String, String> getRemoteTraceContextMap()` |  N/A  |Returns the context map corresponding to the remote trace context.
+|`void setRemoteTraceContextMap(Map<String, String> contextMap)` |`contextMap` |A `Map<String, String>` that contains the key-value pairs that store the information of the remote trace context.
+|`void setCurrentSpanName(String name)` |`name` |Sets the name of the current span.
+|`Map<String, String> getRemoteTraceContextMap()` |  N/A  |Returns the context map for the remote trace context.
 |`void addCurrentSpanAttribute(String key, String value)` a|
 * `key`
 * `value` a|
-* The key for the span attribute.
-* The value for the span attribute. `span.kind.override` as key overrides the span kind.
-|`void addCurrentSpanAttributes(Map<String, String> attributes)` |`attributes` |A `Map<String, String>` representing the attributes to add to the current span. `span.kind.override` as key overrides the span kind.
+* Key of the span attribute.
+* Value of the span attribute. Use `span.kind.override` as the key to override the span kind.
+|`void addCurrentSpanAttributes(Map<String, String> attributes)` |`attributes` |A `Map<String, String>` that contains the attributes to add to the current span. Use `span.kind.override` as the key to override the span kind.
 |===
 
-Note: setRemoteTraceContextMap is meant to be called by sources only. For this reason, the call will be silently ignored when done has part of a connector operation.
+[NOTE]
+`setRemoteTraceContextMap()` is intended to be called by sources only. Mule silently ignores calls when done from a connector operation.
 
 == See Also
 
-* https://docs.mulesoft.com/mule-runtime/latest/otel-support[OpenTelemetry support in Mule Runtime]
+* xref:mule-runtime::otel-support.adoc[]
