@@ -75,6 +75,7 @@
   *** xref:subtypes-mapping.adoc[Using Generic Parameters For Extended Behavior]
   *** xref:value-providers.adoc[Value Providers]
  ** xref:transactions.adoc[Transactions]
+ ** xref:tracing.adoc[Tracing Features]
  ** xref:external-libs.adoc[External Libraries]
  ** xref:best-practices.adoc[Best Practices]
   *** xref:general-coding-rules.adoc[General Coding Rules]
