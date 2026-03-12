@@ -15,5 +15,5 @@ In particular, the following *should* be given special consideration:
 
 == See Also
 
-* https://help.mulesoft.com[MuleSoft Help Center]
+* https://help.salesforce.com[Salesforce Help]
 * xref:mule-sdk::best-practices.adoc[Mule SDK Development Best Practices]

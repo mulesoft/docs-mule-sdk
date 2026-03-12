@@ -140,5 +140,5 @@ public class ExampleSourceScheduler extends Source<Serializable, VMMessageAttrib
 
 == See Also
 
-* https://help.mulesoft.com[MuleSoft Help Center]
+* https://help.salesforce.com[Salesforce Help]
 * xref:mule-sdk::best-practices.adoc[Mule SDK Development Best Practices]
