@@ -578,5 +578,5 @@ You cannot add parameters or POJOs with types `org.mule.runtime.core.api.source.
 
 == See Also
 
-* https://help.mulesoft.com[MuleSoft Help Center]
+* https://help.salesforce.com[Salesforce Help]
 * xref:mule-sdk::best-practices.adoc[Mule SDK Development Best Practices]

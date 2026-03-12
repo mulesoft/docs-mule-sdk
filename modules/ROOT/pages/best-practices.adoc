@@ -45,4 +45,4 @@ The same applies to a custom Mule module or connector, which needs to be approac
 
 == See Also
 
-* https://help.mulesoft.com[MuleSoft Help Center]
+* https://help.salesforce.com[Salesforce Help]
