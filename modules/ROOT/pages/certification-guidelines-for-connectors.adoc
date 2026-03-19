@@ -238,7 +238,7 @@ xref:index.adoc[Mule SDKs]
 
 https://www.youtube.com/watch?v=qdOXKj8V9Lc&feature=youtu.be[Mule 4 SDK] (video)
 
-https://help.mulesoft.com/s/forum[Connector/DevKit/SDK Forum]
+https://trailhead.salesforce.com/trailblazer-community/neighborhoods/mulesoft[MuleSoft Trailblazer Community]
 
 xref:best-practices.adoc[Best Practices]
 
