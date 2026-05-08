@@ -13,7 +13,7 @@ Update your plugin version before you publish a new connector version. This chan
 
 Choose the approach that matches your development setup:
 
-* If you use the parent POM, update to the latest parent POM version that includes `mule-extension-plugin ` 1.9.0 or later.
+* If you use the parent POM, update to the latest parent POM version that includes `mule-extension-plugin` 1.9.0 or later.
 +
 [source,xml]
 ----
