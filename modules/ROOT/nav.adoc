@@ -2,6 +2,7 @@
 * xref:index.adoc[Overview]
 ** xref:partner-connector-upgrade.adoc[Upgrading Java for Custom Connectors (Partners)]
 ** xref:customer-connector-upgrade.adoc[Upgrading Java for Custom Connectors (Customers)]
+** xref:publishing-connectors-exchange.adoc[Publishing Connectors to Exchange]
 * xref:getting-started.adoc[Java SDK]
  ** xref:choosing-version.adoc[Choosing the SDK version]
   *** xref:extensions-api-deprecated.adoc[]
