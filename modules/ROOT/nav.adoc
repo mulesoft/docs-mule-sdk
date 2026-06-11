@@ -95,5 +95,4 @@
  ** xref:troubleshooting.adoc[Troubleshooting]
  ** xref:license.adoc[Licensing]
  ** xref:validators.adoc[Validators with Mule SDK]
- ** xref:dmt.adoc[DevKit to SDK Migration Tool]
 * xref:xml-sdk.adoc[XML SDK]

@@ -6,8 +6,6 @@ endif::[]
 
 Object streaming is similar to <<binary-streaming#, binary streaming>>, except that it streams Java objects, not a raw byte stream.
 
-Note that if you are familiar with the Devkit (for Mule 3), you can think of this feature as an evolution of the Auto Pagination feature. The main difference between this and Devkit is that the Mule SDK supports repeatable, random, and concurrent access.
-
 Here is an example that use object streaming through an oversimplified Select operation from the Database connector:
 
 [source,java,linenums]

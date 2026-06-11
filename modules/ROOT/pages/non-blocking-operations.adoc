@@ -77,7 +77,7 @@ public void foo(CompletionCallback<String, Void> callback) {
 
 == Execution Types
 
-As stated above, Mule 4 now has a reactive execution engine. Unlike Mule 3.x, where each flow had its own thread pool, SEDA queues, and so on, the Mule 4 runtime has a few global executors through which all tasks are run.
+Mule 4 now has a reactive execution engine. The runtime has a few global executors through which all tasks are run.
 
 To schedule tasks correctly, the runtime needs to know which kind of processing each operation is going to perform. The different processing types are:
 
