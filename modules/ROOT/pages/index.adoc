@@ -32,6 +32,5 @@ Although the SDK builds on the same idea of annotated Java classes, internally i
 
 == See Also
 
-* xref:dmt.adoc[DevKit to SDK Migration Tool]
 * xref:getting-started.adoc[Mule SDK for Java]
 * xref:xml-sdk.adoc[XML SDK]
