@@ -10,7 +10,7 @@ Update your connector configuration before publishing a new connector version. T
 
 == Update Your Connector
 
-Use the path that matches your connector type:
+Use the requirements that match your connector type:
 
 * Java connectors: Include the `@JavaVersionSupport` annotation when changing supported Java compatibility.
 * XML connectors: Update to `mule-extensions-maven-plugin` so Java compatibility metadata is generated at build time.
