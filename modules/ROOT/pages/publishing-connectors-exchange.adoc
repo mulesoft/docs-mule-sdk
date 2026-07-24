@@ -6,7 +6,7 @@ Starting August 1, 2026, publishing connectors and Mule plugins to Exchange requ
 Exchange reads Java compatibility from `mule-artifact.json` during publication.
 
 [NOTE]
-Update your connector configuration before publishing a new connector version. This change doesn't affect existing connectors that are already published to Exchange.
+Update your connector configuration before publishing a new connector version. This change doesn't affect connectors that are already published to Exchange.
 
 == Update Your Connector
 
