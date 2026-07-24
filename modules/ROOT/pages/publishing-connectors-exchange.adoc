@@ -58,7 +58,7 @@ mvn clean install
 ----
 . Verify that `mule-artifact.json` contains Java compatibility information.
 +
-In your connector JAR file, confirm that `mule-artifact.json` includes the `minJavaVersion` attribute.
+In your connector JAR file, confirm that `mule-artifact.json` includes the `supportedJavaVersions` attribute.
 . Test publishing to Exchange.
 +
 Publish to a test environment before publishing to production.
