@@ -30,7 +30,7 @@ Choose the approach that matches your development setup:
 
 * If you use Mule SDK, upgrade to a version that includes `mule-extensions-maven-plugin` 1.9.0 or later.
 
-* If you manually configure plugins, update your POM file to reference `mule-extensions-maven-plugin` 1.9.0 or later.
+* If you configure Maven plugins manually, update your POM file to reference `mule-extensions-maven-plugin` 1.9.0 or later.
 +
 [source,xml]
 ----
