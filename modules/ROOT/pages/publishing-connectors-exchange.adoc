@@ -15,7 +15,7 @@ Use the requirements that match your connector type:
 * Java connectors: Include the `@JavaVersionSupport` annotation when changing supported Java compatibility.
 * XML connectors: Update to `mule-extensions-maven-plugin` so Java compatibility metadata is generated at build time.
 
-Choose the approach that matches your development setup:
+For XML connectors, choose the approach that matches your development setup:
 
 * If you use the parent POM, update to a parent version that includes `mule-extensions-maven-plugin` 1.9.0 or later.
 +
