@@ -1,19 +1,23 @@
 = Publishing Connectors to Exchange
 :page-id: publishing-connectors-exchange
 
-Starting August 1, 2026, Exchange requires `mule-extensions-maven-plugin` version 1.9.0 or later to publish connectors and Mule plugins. This version writes Java compatibility metadata to `mule-artifact.json` during build time.
+Starting August 1, 2026, publishing connectors and Mule plugins to Exchange requires Java compatibility metadata in `mule-artifact.json` when publishing new versions that change supported Java compatibility.
 
-Exchange now reads Java compatibility from `mule-artifact.json` instead of the Extension Model, eliminating the need to download dependencies from Maven Central.
+Exchange reads Java compatibility from `mule-artifact.json` during publication.
 
 [NOTE]
-Update your plugin version before you publish a new connector version. This change doesn't affect existing connectors that are already published to Exchange.
-
+Update your connector configuration before publishing a new connector version. This change doesn't affect existing connectors that are already published to Exchange.
 
 == Update Your Connector
 
+Use the path that matches your connector type:
+
+* Java connectors: Include the `@JavaVersionSupport` annotation when changing supported Java compatibility.
+* XML connectors: Update to `mule-extensions-maven-plugin` so Java compatibility metadata is generated at build time.
+
 Choose the approach that matches your development setup:
 
-* If you use the parent POM, update to the latest parent POM version that includes `mule-extension-plugin` 1.9.0 or later.
+* If you use the parent POM, update to a parent version that includes `mule-extensions-maven-plugin` 1.9.0 or later.
 +
 [source,xml]
 ----
@@ -24,49 +28,51 @@ Choose the approach that matches your development setup:
 </parent>
 ----
 
-* If you use Mule SDK, upgrade to a version that includes `mule-extension-plugin` 1.9.0 or later.
+* If you use Mule SDK, upgrade to a version that includes `mule-extensions-maven-plugin` 1.9.0 or later.
 
-* If you manually configure plugins, update your POM file to reference `mule-extension-plugin` 1.9.0 or later.
+* If you manually configure plugins, update your POM file to reference `mule-extensions-maven-plugin` 1.9.0 or later.
 +
 [source,xml]
 ----
 <plugin>
-    <groupId>org.mule.tools.maven</groupId>
-    <artifactId>mule-extension-plugin</artifactId>
+    <groupId>org.mule.runtime.plugins</groupId>
+    <artifactId>mule-extensions-maven-plugin</artifactId>
     <version>1.9.0</version> <!-- or later -->
 </plugin>
 ----
 
+== Build Prerequisites
+
+* Maven 3.8.0 or later (3.9.8+ recommended)
+* JDK 17+ in the build pipeline
+
 == Verify Your Configuration
 
-After updating your POM:
+After updating your connector configuration:
 
-. Build your connector locally
+. Build your connector locally.
 +
 [source,console]
 ----
 mvn clean install
 ----
-. Verify that `mule-artifact.json` contains Java compatibility information
+. Verify that `mule-artifact.json` contains Java compatibility information.
 +
 In your connector JAR file, confirm that `mule-artifact.json` includes the `minJavaVersion` attribute.
-. Test publishing to Exchange
+. Test publishing to Exchange.
 +
-Publish to a test environment before you publish to production.
+Publish to a test environment before publishing to production.
 
 == Troubleshooting
 
-Publishing Fails After May 18, 2026::
+Publishing Fails After August 1, 2026::
 +
-If Exchange rejects your connector with an error about missing Java compatibility information. verify your `mule-extension-plugin` version:
+If Exchange rejects your connector with an error about missing Java compatibility information, verify your `mule-extensions-maven-plugin` version:
 +
-. Check your POM file for `mule-extension-plugin`
-. Ensure the version is 1.9.0 or higher
-. Rebuild and republish your connector
+. Check your POM file for `mule-extensions-maven-plugin`.
+. Ensure the version is 1.9.0 or higher.
+. Rebuild and republish your connector.
 
 The Build Fails After You Update the Plugin::
 +
-If the Maven build fails after you update to `mule-extension-plugin` 1.9.0 or later, update Maven to version 3.8.0 or later.
-
-
-
+If the Maven build fails after you update to `mule-extensions-maven-plugin` 1.9.0 or later, use Maven 3.8.0 or later (3.9.8+ recommended) and JDK 17+ in your build pipeline.
