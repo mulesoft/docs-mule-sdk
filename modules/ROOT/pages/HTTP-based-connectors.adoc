@@ -15,6 +15,136 @@ For example, the Amazon AWS connectors work by consuming an HTTP API that requir
 
 However, a client library that does nothing but wrap an HTTP client for convenience (like the Google clients) is not a valid exception to this rule.
 
+=== Create the HTTP Client
+
+There are two APIs for creating a Mule `HttpClient`:
+
+* The `org.mule.sdk.api.http` API (recommended). Its entry point is `HttpService.client(Consumer<HttpClientConfigurer>)`. Because `mule-sdk-api` is bundled with your connector and isn't coupled to the Mule Runtime lifecycle, a connector can use this API to consume newer HTTP features without raising its Minimum Mule Version. Use this API for new connectors and when migrating an existing connector that needs newer HTTP capabilities. See xref:forward-compatibility.adoc[] for more about forward compatibility.
+* The legacy `org.mule.runtime.http.api` API, whose `HttpClient` is created from an `HttpClientConfiguration` builder through `httpService.getClientFactory().create(...)`. This API remains fully supported and is a valid choice when your connector's Minimum Mule Version already permits it. See <<legacy-http-client>>.
+
+==== Use the org.mule.sdk.api HTTP Client
+
+Inject the `org.mule.sdk.api.http.HttpService` and call `client(...)` with a callback that configures the client through an `HttpClientConfigurer`:
+
+[source,java,linenums]
+----
+@Inject
+private HttpService httpService;
+
+HttpClient client = httpService.client(configurer -> configurer
+    .setName("client-name")
+    // other setters...
+);
+----
+
+The `HttpService.client(...)` method returns an `org.mule.sdk.api.http.client.HttpClient` and throws a `ClientCreationException` if the client can't be created.
+
+==== Configure the Client
+
+The `HttpClientConfigurer` passed to the callback exposes these methods. Each one returns the same configurer, so you can chain the calls:
+
+[%header,cols="1,3"]
+|===
+| Method | Description
+
+| `setName(String)`
+| Sets the name of the `HttpClient`. Base it on the name of the owning configuration (see <<set-the-http-client-name>>).
+
+| `setTlsContextFactory(TlsContextFactory)`
+| Required for HTTPS. Provides the TLS data used to establish secure connections.
+
+| `setMaxConnections(int)`
+| Maximum number of outbound connections kept open at the same time. Unlimited by default.
+
+| `setUsePersistentConnections(boolean)`
+| Whether connections are kept open after a request completes. `true` by default.
+
+| `setConnectionIdleTimeout(int)`
+| Number of milliseconds a connection can remain idle before being closed.
+
+| `setResponseBufferSize(int)`
+| Size, in bytes, of the buffer used to store the HTTP response. Defaults to 10 KB.
+
+| `setStreaming(boolean)`
+| Whether the HTTP response is streamed, so processing continues as the body arrives.
+
+| `setDecompress(Boolean)`
+| Whether responses are decompressed automatically. `false` by default.
+
+| `configProxy(Consumer<ProxyConfigurer>)`
+| Configures a proxy for the client. See <<provide-http-proxy-configuration>>.
+
+| `configHttp1(Consumer<Http1ProtocolConfigurer>)`
+| Enables, disables, and configures HTTP/1-specific parameters.
+
+| `configHttp2(Consumer<Http2ProtocolConfigurer>)`
+| Enables, disables, and configures HTTP/2-specific parameters.
+
+| `configClientSocketProperties(Consumer<TcpSocketPropertiesConfigurer>)`
+| Configures TCP-specific properties, such as the socket connection timeout.
+|===
+
+For the complete reference, see the `HttpClientConfigurer` interface (package `org.mule.sdk.api.http.client`) in the `mule-sdk-api` javadoc.
+
+==== Send a Request
+
+The `HttpClient` implements `Startable` and `Stoppable`, so it *must* be started before use and stopped when you no longer need it. Build requests with `HttpService.requestBuilder()` and send them without blocking through `sendAsync(...)`, which returns a `CompletableFuture<HttpResponse>`:
+
+[source,java,linenums]
+----
+client.start();
+
+HttpRequest request = httpService.requestBuilder()
+    .method(GET)
+    .uri("https://api.example.com/resource")
+    .build();
+
+CompletableFuture<HttpResponse> future = client.sendAsync(request, options -> options
+    .setResponseTimeout(5000)
+    .setFollowsRedirect(true));
+
+// ... use the response, then stop the client during the stop() phase
+client.stop();
+----
+
+Because `sendAsync(...)` defers response body processing, handle the response on a different thread when you need the full body right away — for example, with `CompletableFuture.whenCompleteAsync(...)`. This avoids blocking the client's I/O threads.
+
+==== Migrate from the Legacy HTTP Client
+
+If your connector currently creates its client with the legacy `org.mule.runtime.http.api.client.HttpClient` and the `HttpClientConfiguration` builder, you can move to the configurer-based API as follows:
+
+* Replace the injected `org.mule.runtime.http.api.HttpService` with `org.mule.sdk.api.http.HttpService`.
+* Replace `httpService.getClientFactory().create(new HttpClientConfiguration.Builder()...build())` with `httpService.client(configurer -> ...)`, mapping each builder setter to the equivalent configurer method (for example, `.setName(...)`).
+* Update the imports of `HttpClient`, `HttpRequest`, `HttpResponse`, and related types to their `org.mule.sdk.api.http` counterparts.
+
+Note these points about this migration:
+
+* The new API delegates to the legacy one and *does not* deprecate it.
+* The legacy API remains valid. You can keep using it when your connector's Minimum Mule Version already permits it.
+* Moving to the new API is the recommended path when a connector wants access to newer HTTP features without raising its Minimum Mule Version.
+
+Because the new HTTP types come from `org.mule.sdk.api`, follow the guidance in xref:forward-compatibility-patterns.adoc[] when you need to call newer methods conditionally and provide fallback behavior for older runtimes.
+
+[[legacy-http-client]]
+==== Use the Legacy org.mule.runtime.http.api HTTP Client
+
+The legacy API creates the `HttpClient` from an `HttpClientConfiguration` builder:
+
+[source,java,linenums]
+----
+httpClient = httpService.getClientFactory()
+    .create(new HttpClientConfiguration.Builder()
+        .setName(configName)
+        .build());
+httpClient.start();
+----
+
+This API is still fully supported. Use it when your connector's Minimum Mule Version already covers it and you don't need the newer HTTP features exposed by `org.mule.sdk.api.http`.
+
+=== Manage the Client in a Connection Provider
+
+Regardless of which API creates the `HttpClient`, the connector's `ConnectionProvider` is responsible for managing it according to these rules.
+
 * Handle the HTTP Client Lifecycle
 +
 The ConnectionProvider that creates the HttpClient is responsible for managing its lifecycle.
@@ -41,10 +171,15 @@ public class HttpConnectionProvider implements CachedConnectionProvider<HttpConn
         @Parameter
         private TlsContextFactory tlsContext;
 
+        @RefName
+        private String configName;
+
         @Override
    public void start() throws MuleException {
        initialiseIfNeeded(tlsContext);
-       httpClient = httpService.getClientFactory().create(getHttpClientConfiguration());
+       httpClient = httpService.client(configurer -> configurer
+               .setName(configName)
+               .setTlsContextFactory(tlsContext));
        httpClient.start();
    }
 
@@ -60,6 +195,7 @@ public class HttpConnectionProvider implements CachedConnectionProvider<HttpConn
 }
 ----
 +
+[[set-the-http-client-name]]
 * Set the HTTP Client Name
 +
 The HttpClient created by each ConnectionProvider *must* have a name which is based on (or simply matches) the name of the configuration that owns that ConnectionProvider.
@@ -79,14 +215,11 @@ public class HttpConnectionProvider implements
         private HttpService httpService;
 
         @RefName
-        private String configName
+        private String configName;
 
         @Override
    public void start() throws MuleException {
-       httpClient = httpService.getClientFactory().
-       	create(new HttpClientConfiguration.Builder()
-                       .setName(configName)
-                       .build());
+       httpClient = httpService.client(configurer -> configurer.setName(configName));
        httpClient.start();
    }
 
@@ -105,6 +238,7 @@ The HttpService allows you to obtain the HttpClient associated with a separate <
 +
 All connectors in need of a HttpClient instance, *must* create and manage their own.
 +
+[[provide-http-proxy-configuration]]
 * Provide HTTP Proxy Configuration
 +
 Connectors using HTTP Client instances must provide the ability to configure a

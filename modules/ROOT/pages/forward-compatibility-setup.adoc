@@ -64,3 +64,4 @@ See xref:forward-compatibility-min-mule-version.adoc[] for details on how versio
 * xref:forward-compatibility.adoc[]
 * xref:forward-compatibility-min-mule-version.adoc[]
 * xref:getting-started.adoc[]
+* xref:HTTP-based-connectors.adoc[HTTP-Based Connectors] for the forward-compatible `org.mule.sdk.api.http` client API
