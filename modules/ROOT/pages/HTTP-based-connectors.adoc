@@ -117,11 +117,14 @@ If your connector currently creates its client with the legacy `org.mule.runtime
 * Replace `httpService.getClientFactory().create(new HttpClientConfiguration.Builder()...build())` with `httpService.client(configurer -> ...)`, mapping each builder setter to the equivalent configurer method (for example, `.setName(...)`).
 * Update the imports of `HttpClient`, `HttpRequest`, `HttpResponse`, and related types to their `org.mule.sdk.api.http` counterparts.
 
-Note these points about this migration:
+[NOTE]
+====
+Keep these points in mind during the migration:
 
 * The new API delegates to the legacy one and *does not* deprecate it.
 * The legacy API remains valid. You can keep using it when your connector's Minimum Mule Version already permits it.
 * Moving to the new API is the recommended path when a connector wants access to newer HTTP features without raising its Minimum Mule Version.
+====
 
 Because the new HTTP types come from `org.mule.sdk.api`, follow the guidance in xref:forward-compatibility-patterns.adoc[] when you need to call newer methods conditionally and provide fallback behavior for older runtimes.
 
