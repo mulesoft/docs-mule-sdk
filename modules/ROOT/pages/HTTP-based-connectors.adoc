@@ -119,8 +119,6 @@ If your connector currently creates its client with the legacy `org.mule.runtime
 
 [NOTE]
 ====
-Keep these points in mind during the migration:
-
 * The new API delegates to the legacy one and *does not* deprecate it.
 * The legacy API remains valid. You can keep using it when your connector's Minimum Mule Version already permits it.
 * Moving to the new API is the recommended path when a connector wants access to newer HTTP features without raising its Minimum Mule Version.
