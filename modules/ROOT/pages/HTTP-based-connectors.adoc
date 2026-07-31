@@ -107,7 +107,7 @@ CompletableFuture<HttpResponse> future = client.sendAsync(request, options -> op
 client.stop();
 ----
 
-Because `sendAsync(...)` defers response body processing, handle the response on a different thread when you need the full body right away.  For example, with `CompletableFuture.whenCompleteAsync(...)`. This avoids blocking the client's I/O threads.
+Because `sendAsync(...)` defers response body processing, handle the response on a different thread when you need the full body right away. For example, with `CompletableFuture.whenCompleteAsync(...)`. This avoids blocking the client's I/O threads.
 
 ==== Migrate from the Legacy HTTP Client
 
