@@ -139,3 +139,4 @@ If a feature behaves differently on earlier versions, document this for your use
 * xref:forward-compatibility-enforcement.adoc[]
 * xref:forward-compatibility-min-mule-version.adoc[]
 * xref:forward-compatibility.adoc[]
+* xref:HTTP-based-connectors.adoc[HTTP-Based Connectors] for the forward-compatible `org.mule.sdk.api.http` client API
