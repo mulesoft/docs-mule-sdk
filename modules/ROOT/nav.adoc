@@ -85,7 +85,7 @@
   *** xref:define-parameters.adoc[Define Parameters]
   *** xref:define-sources.adoc[Define Sources]
   *** xref:error-handling.adoc[Error Handling]
-  *** xref:HTTP-based-connectors.adoc[HTTP-Based Connectors]
+  *** xref:http-based-connectors.adoc[HTTP-Based Connectors]
   *** xref:sample-data.adoc[Sample Data]
   *** xref:security-best-practices.adoc[Security]
   *** xref:threading-asynchronous-processing.adoc[Threading and Asynchronous Processing]
