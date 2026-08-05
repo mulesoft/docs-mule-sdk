@@ -196,8 +196,7 @@ public class HttpConnectionProvider implements CachedConnectionProvider<HttpConn
 }
 ----
 +
-[[set-the-http-client-name]]
-* Set the HTTP Client Name
+* [[set-the-http-client-name]]Set the HTTP Client Name
 +
 The HttpClient created by each ConnectionProvider *must* have a name which is based on (or simply matches) the name of the configuration that owns that ConnectionProvider.
 +
@@ -239,8 +238,7 @@ The HttpService allows you to obtain the HttpClient associated with a separate <
 +
 All connectors in need of a HttpClient instance, *must* create and manage their own.
 +
-[[provide-http-proxy-configuration]]
-* Provide HTTP Proxy Configuration
+* [[provide-http-proxy-configuration]]Provide HTTP Proxy Configuration
 +
 Connectors using HTTP Client instances must provide the ability to configure a
 proxy, similar to HTTP Connector. Common reasons to use proxy configuration
